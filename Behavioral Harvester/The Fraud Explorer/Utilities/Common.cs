@@ -179,9 +179,9 @@ namespace TFE_core.Config
                 Common.RegisterApp();
                 AppSourceFile.Protect();
 
-                // The software starts at second try, not at the first execution
+                // The software starts at second try if the execMode is "msi", not at the first execution
 
-                Environment.Exit(0);
+                if (App.execMode == "msi") Environment.Exit(0);
             }
         }
 

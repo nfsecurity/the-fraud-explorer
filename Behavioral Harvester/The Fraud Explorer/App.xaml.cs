@@ -50,6 +50,8 @@ namespace TFE_core
 
         #region Application start
 
+        public static string execMode = null;
+
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // Prevent multiple executions
@@ -61,6 +63,10 @@ namespace TFE_core
                 // Database initialization
 
                 SQLStorage.DBInitializationChecks();
+
+                // Define "msi" or "standalone" mode
+
+                execMode = "standalone";
 
                 // Registry preparation
 
