@@ -56,9 +56,20 @@ include "inc/open-db-connection.php";
     padding: 0px 0px 0px 0px;
 }
 
+.div-container
+{
+    margin: 20px;
+}
+
 </style>
 
-<form id="formConfig" name="formConfig" method="post" action="<?php echo 'configParameters?key=yes&changepassword=yes&iv=yes&encryption=yes' ?>">
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title window-title" id="myModalLabel">Main Configuration</h4>
+</div>
+
+<div class="div-container">
+    <form id="formConfig" name="formConfig" method="post" action="<?php echo 'configParameters?key=yes&changepassword=yes&iv=yes&encryption=yes' ?>">
 
 	<p class="title-config">Specify/change the key/password for agents connection</p><br>
 	<input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key/password here <?php 
@@ -85,7 +96,8 @@ include "inc/open-db-connection.php";
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <input type="submit" class="btn btn-danger setup" value="Set values">
         </div>
-</form> 
+    </form>
+</div> 
 	
 <?php
 	include "inc/close-db-connection.php";

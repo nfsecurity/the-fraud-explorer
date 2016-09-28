@@ -92,4 +92,24 @@
 	if (strpos($status[0], "OK") != false) return true;
  }
 
+ /* Get entry for agentid Data */
+
+ function getAgentIdData($agentID, $index, $alertType)
+ {
+        $matchesParams = [
+        'index' => $index,
+        'type' => $alertType,
+        'body' => [
+                'size' => 10000,
+                'query' => [
+                	'term' => [ 'agentId.raw' => $agentID ] 
+			]
+                ]
+        ];
+
+        $client = Elasticsearch\ClientBuilder::create()->build();
+        $agentIdData = $client->search($matchesParams);
+
+        return $agentIdData;
+ }
 ?>

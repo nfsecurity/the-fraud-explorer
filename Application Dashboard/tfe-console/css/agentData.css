@@ -46,28 +46,6 @@ a
 {
     color: black;
 }
-
-a:link 
-{
-    color: black;
-}
-
-a:visited 
-{
-    color: black;
-}
-
-a:hover 
-{
-    color: green;
-    text-decoration: none;
-}
-
-a:active 
-{
-    color: green;
-    text-decoration: none;
-}
 	
 .content 
 {
@@ -77,7 +55,7 @@ a:active
 .table-holder
 {
     position: absolute; 
-    bottom: 190px; 
+    bottom: 80px; 
     top: 53px; 
     left: 8px;
     right: 8px; 
@@ -124,13 +102,14 @@ th.header
 
 td
 {
-    padding:15px 0px 15px 0px;
+    padding:10px 0px 10px 0px;
     opacity: 30;
-    height: 80px;
+    height: 70px;
     vertical-align: middle;
-    border-top:0px solid #e0e0e0;
+    border-top:1px solid #e0e0e0;
     border-right:0px solid #F8F8F8;
     border-bottom:1px solid #F8F8F8;
+    border-left:0px solid #F8F8F8;
     background: white;
     width: 100%;
 }
@@ -144,41 +123,33 @@ th
     text-align: center;
     border:0px solid #d3d3d3;
     width: 100%;
+    height: 90px;
 }
 
-.selectth
+.timestampth
 {
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 50px;
-    width: 50px;
+    min-width: 200px;
+    width: 200px;
     display: table-cell;
     white-space: nowrap;
 }
 
-.osth      
-{ 
+.applicationtitleth
+{
+    max-width: 300px; 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
     color: #474747;
-    min-width: 70px;
-    width: 70px; 
+    padding: 0px 0px 0px 20px;
     display: table-cell;
     white-space: nowrap;
-}
-
-.agentth   
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
     text-align: left;
-    display: table-cell;
-    white-space: nowrap;
 }
 
-.compth    
+.ipaddressth
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
@@ -189,140 +160,80 @@ th
     white-space: nowrap;
 }
 
-.verth     
+.computernameth
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
     color: #474747;
-    min-width: 100px;
-    width: 100px;
+    min-width: 150px;
+    width: 150px;
     display: table-cell;
     white-space: nowrap;
 }
 
-.stateth   
+.usernameth
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
     color: #474747;
-    width: 100px;
-    min-width: 100px;
+    min-width: 150px;
+    width: 150px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.typedwordth 
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 200px;
+    min-width: 200px;
     display: table-cell;
     white-space: nowrap; 
 }
 
-.lastth    
-{ 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 90px;
-    min-width: 90px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.countpth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 60px;
-    min-width: 60px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.countoth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 60px;
-    min-width: 60px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.countrth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 60px;
-    min-width: 60px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.countcth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 70px;
-    min-width: 70px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.scoreth   
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 100px;
-    min-width: 100px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.specialth 
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 75px;
-    min-width: 75px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.selecttd
+.timestamptd
 {
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    border-right:1px solid #F8F8F8;
     text-align: center;
     vertical-align: middle;
-    width: 50px;
-    min-width: 50px;
+    width: 200px;
+    min-width: 200px;
 }
 
-.ostd    
+.applicationtitletd
 { 
-    overflow: hidden; 
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     display: table-cell; 
     white-space: nowrap; 
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
+    padding: 0px 20px 0px 20px;
 }
 
-.agenttd
+.ipaddresstd
 {
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
-    padding-left: 20px;
+    min-width: 150px;
+    width: 150px;
+    background:#f7f7f7;
 }
 
-.comptd  
+.computernametd
 { 
     overflow: hidden; 
     display: table-cell; 
@@ -334,116 +245,35 @@ th
     min-width: 150px;
     border-right:0px solid #F8F8F8;
     border-left:1px solid #F8F8F8;
+    background:#f7f7f7;
 }
 
-.vertd   
+.usernametd
 { 
     overflow: hidden; 
     display: table-cell; 
     white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747; 
     text-align: center;
     vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
+    width: 150px;
+    min-width: 150px;
+    background:#f2f2f2;
 }
 
-.statetd 
-{ 
+.typedwordtd
+{
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     display: table-cell; 
-    white-space: nowrap; 
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
     text-align: center;
     vertical-align: middle; 
-    width: 100px;
-    min-width: 100px;
-}
-
-.lasttd  
-{
-    display: table-cell; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 90px;
-    min-width: 90px;
-}
-
-.countptd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
+    width: 200px;
+    min-width: 200px;
     background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 60px;
-    min-width: 60px;
-}
-
-.countotd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 60px;
-    min-width: 60px;
-}
-
-.countrtd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 60px;
-    min-width: 60px;
-}
-
-.countctd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
-}
-
-.scoretd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f2f2f2;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
-}
-
-.specialtd 
-{ 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    background:#f7f7f7;
-    text-align: center;
-    vertical-align: middle;
-    width: 75px;
-    min-width: 75px;
 }
 
 .ul 
@@ -547,41 +377,6 @@ li a:hover:not(.active)
     font-family: 'FFont', sans-serif; font-size:9px; color: white;
 }
 
-.command-console-container
-{
-    width: 100%;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    height: 190px;
-    margin-bottom: 0px;
-    border-top: 15px double #ededed;
-}
-
-.command-console
-{
-    width:50%;
-    height: 129px;
-    overflow: hidden;
-    float: left;
-    border:1px solid #d3d3d3;
-    background: #fefefe;
-    border-spacing: 0px; text-align: left;
-    padding: 10px 10px 10px 10px;
-}
-
-.command-cli
-{
-    font-family: Courier new; 
-    font-size: 25px; 
-    width: 100%; 
-    padding: 5px; 
-    border: solid 2px #c9c9c9; 
-    transition: border 0.3s;
-    outline: none;
-}
-
 #footer
 {
     background-color: #13923D;
@@ -594,50 +389,10 @@ li a:hover:not(.active)
     margin-bottom: 0px;
 }
 
-input[type=checkbox] 
-{
-    visibility: hidden;
-}
-
-.checkboxAgent
-{
-    width: 15px;
-    height: 15px;
-    background: #ddd;
-    margin: 20px 20px;
-    position: relative;
-}
-
-.checkboxAgent label 
-{
-    display: block;
-    width: 11px;
-    height: 11px;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -o-transition: all .5s ease;
-    -ms-transition: all .5s ease;
-    transition: all .5s ease;
-    cursor: pointer;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    z-index: 1;
-    background: #FFFFFF;
-}
-
-.checkboxAgent input[type=checkbox]:checked + label 
-{
-    background: #13923D;
-}
-
 .vertical-alignment-helper 
 {
     display:table;
     height: 100%;
-    width: 100%;
     pointer-events:none;
 }
 
@@ -646,112 +401,6 @@ input[type=checkbox]
     display: table-cell;
     vertical-align: middle;
     pointer-events:none;
-}
-
-.modal-content 
-{
-    width:inherit;
-    height:inherit;
-    margin: 0 auto;
-    pointer-events:all;
-}
-
-.gender-image
-{
-    vertical-align:middle; 
-    width: 40px; 
-    height: 40px;
-}
-
-.footer-row-select
-{
-    width: 50px; 
-    height: 90px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-os
-{
-    width: 70px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-people
-{
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-group
-{
-    width: 150px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-ver
-{
-    width: 100px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-state
-{
-    width: 100px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-last
-{
-    width: 90px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-pressure
-{
-    width: 60px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-opportunity
-{
-    width: 60px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-rationalization
-{
-    width: 60px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-level
-{
-    width: 70px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-score
-{
-    width: 100px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
-}
-
-.footer-row-commands
-{
-    width: 75px; 
-    background-image: url(../images/pattern-6j3d.png); 
-    border-bottom: none;
 }
 
 .window-title
@@ -816,6 +465,76 @@ input[type=checkbox]
 {
     color: white !important; 
     text-decoration: none !important;
+}
+
+.pager-layout
+{
+    position: relative;
+    height: 30px;
+    bottom: 15px;
+    width: 100%; 
+    border: 1px solid #d3d3d3; 
+    background: #FFFFFF;
+}
+
+.pager-inside
+{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    height: 19px;
+    width: 100%;
+    border: 0px solid red;
+}
+
+.pager-inside-agent
+{
+    display: table-cell;
+    padding: 0px 0px 0px 25px;
+    float: left;
+}
+
+.pager-inside-pager
+{
+    display: table-cell;
+    padding: 0px 25px 0px 0px;
+    float: right;	
+}
+
+.select-styled 
+{
+    position: relative;
+    border: 1px solid #ccc;
+    width: 150px;
+    height: 20px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.select-styled:before 
+{
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 5px 0 5px;
+    border-color: #000000 transparent transparent transparent;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+.select-styled select 
+{
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    appearance: none;
 }
 
 .tablesorter-default .header,

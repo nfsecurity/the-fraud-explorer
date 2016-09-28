@@ -33,13 +33,6 @@ function isConnected($update_date, $now)
  	return $minutes<1; 
 } 
 
-function getImgSist($system)
-{ 
- 	if($system=='5.1') return '/images/tag.svg';
- 	if($system=='6.1') return '/images/tag.svg'; 
- 	else return '/images/tag.svg'; 
-} 
-
 function getTextSist($system)
 { 
  	if($system=='5.1') return ' WiXP';

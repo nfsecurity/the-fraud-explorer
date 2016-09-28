@@ -52,6 +52,10 @@ error_reporting(0);
 
 	<link rel="stylesheet" type="text/css" href="css/mainMenu.css" media="screen" />
 
+	<!-- Font Awesome -->
+
+        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+
 	<!-- Table sorting -->
 
 	<script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
@@ -83,45 +87,40 @@ error_reporting(0);
 
 	<!-- Modal for deletion -->
 
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="vertical-alignment-helper"> 
-		<div class="modal-dialog vertical-align-center">
-  			<div class="modal-content">
-   				<div class="modal-header">
-    					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    					<h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
-   				</div>
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        	<div class="vertical-alignment-helper">
+                	<div class="modal-dialog vertical-align-center">
+                        	<div class="modal-content">
+                                	<div class="modal-header">
+                                        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
+                                        </div>
 
-   				<div class="modal-body">
-    					<p style="text-align:left; font-size: 12px;"><br>You are about to delete the agent, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
-    					<p class="debug-url window-debug"></p>
-   				</div>
+                                        <div class="modal-body">
+                                        	<p style="text-align:left; font-size: 12px;"><br>You are about to delete the agent, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                                                <p class="debug-url window-debug"></p>
+                                       	</div>
 
-	   			<div class="modal-footer">
-   		 			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    					<a href="#" class="btn btn-danger danger">Delete</a>
-   				</div>
-			</div>
-  		</div>
-		</div>
- 	</div>
+                                        <div class="modal-footer">
+                                        	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-danger delete">Delete</a>
+                                        </div>
+                        	</div>
+                	</div>
+        	</div>  
+        </div>
 
 	<!-- Modal for agent setup -->
 
         <div class="modal fade" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                                <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title window-title" id="myModalLabel">Agent setup</h4>
-                                </div>
-
-                                <div class="modal-body">
-                                        <p class="debug-url window-debug"></p>
-                                </div>
-                        </div>
-                </div>
+	                <div class="modal-dialog vertical-align-center">
+        	                <div class="modal-content">
+                               	 	<div class="modal-body">
+                                        	<p class="debug-url window-debug"></p>
+                                	</div>
+                        	</div>
+                	</div>
 		</div>
         </div>
 

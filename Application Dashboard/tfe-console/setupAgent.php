@@ -61,9 +61,20 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
     padding: 0px 0px 0px 0px;
 }
 
+.div-container
+{
+    margin: 20px;
+}
+
 </style>
 
-<form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc.'&alias=yes&owner=yes&gender=yes' ?>">
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title window-title" id="myModalLabel">Agent setup</h4>
+</div>
+
+<div class="div-container">
+    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc.'&alias=yes&owner=yes&gender=yes' ?>">
 	<p class="title">Agent alias</p><br>
         <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php
         $aliasquery = mysql_query(sprintf("SELECT name FROM t_agents WHERE agent='%s'",$agent_dec)); $alias = mysql_fetch_array($aliasquery);
@@ -89,7 +100,8 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <input type="submit" class="btn btn-danger setup" value="Set values">
         </div>
-</form>
+    </form>
+</div>
 
 <?php
 	include "inc/close-db-connection.php";

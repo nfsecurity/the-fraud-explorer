@@ -21,7 +21,7 @@ include "inc/close-db-connection.php";
 		<a href="mainMenu">Dashboard</a>
 	</li>
   	<li class="li">
-		<a href="mainAnalytics">Analytics</a>
+		<a href="mainChart">Analytics</a>
 	</li>
 	<li class="li">
                 <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#">Configuration</a>
@@ -62,11 +62,6 @@ include "inc/close-db-connection.php";
 	<div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
-                                <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title window-title" id="myModalLabel">Main Configuration</h4>
-                                </div>
-
                                 <div class="modal-body">
                                         <p class="debug-url window-debug"></p>
                                 </div>

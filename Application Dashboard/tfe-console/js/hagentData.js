@@ -34,23 +34,8 @@ $(function()
 $(function()
 {
     $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>"
-    ).load("getTableX.php"); 
+    ).load("getTableHAnalytics.php"); 
 });
-
-/* Code for refresh XML Table using AJAX */
-
-$(document).ready(function()
-{
-    refreshXML();
-});
-
-function refreshXML()
-{
-    $('#tableHolderXML').load('getXMLfile.php', function()
-    {
-        setTimeout(refreshXML, 2000);
-    });
-}
 
 /* Code for html footer include */
 

@@ -54,6 +54,10 @@ if ($row = mysql_fetch_array($order))
 	while ($row = mysql_fetch_array($order));
 }
 
+echo '<style>';
+echo '.font-icon-color { color: #B4BCC2; }';
+echo '</style>';
+
 /* Elasticsearch querys for fraud triangle counts and score */
 
 $client = Elasticsearch\ClientBuilder::create()->build();
@@ -70,9 +74,9 @@ else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, st
 /* Main Table */
 
 echo '<table summary="Dashboard table" id="tblData">';
-echo '<thead><tr><th class="selectth"><b><img src="images/selection.svg" style="vertical-align: middle;"></b></th><th class="osth"><b>OS</b></th><th class="agentth"><b>PEOPLE REGISTERED</b></th><th class="compth"><b>GROUP</b></th>
-<th class="verth"><b>VER</b></th><th class="stateth"><b>STT</b></th><th class="lastth"><b>LAST</b></th><th class="countpth"><b>P</b></th><th class="countoth"><b>O</b></th><th class="countrth"><b>R</b></th><th class="countcth"><b>L</b></th>
-<th class="scoreth"><b>SCORE</b></th><th class="specialth"><b>CMD</b></th><th class="specialth"><b>DEL</b></th><th class="specialth"><b>SET</b></th></tr>
+echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">GROUP</th>
+<th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th>
+<th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr>
 </thead><tbody>';
 
 if ($row_a = mysql_fetch_array($result_a))
@@ -91,23 +95,23 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Operating system */
 
-  		echo '<td class="ostd"><img src="'. getImgSist($row_a["system"]) .'"align="center"/><br>'. getTextSist($row_a["system"]) .'</td>';
+  		echo '<td class="ostd"><span class="fa fa-windows fa-lg font-icon-color">&nbsp;&nbsp;</span>'. getTextSist($row_a["system"]) .'</td>';
 
 		/* Gender identification */
 
 		if ($row_a["name"] == NULL) 
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["agent"] . '</td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["agent"] . '</td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["agent"] . "</td>";
+			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbspe<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
 		}
 		else
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["name"] . '</td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["name"] . '</td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;' . $row_a["name"] . '</td>';
+			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
 		}
 
 		/* Company, department or group */
@@ -117,7 +121,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Agent software version */
 
- 	 	echo '<td class="vertd">' .$row_a["version"] .'</td>';
+ 	 	echo '<td class="vertd"><span class="fa fa-codepen font-icon-color">&nbsp;&nbsp;</span>' .$row_a["version"] .'</td>';
 
 		/* Agent status */
 
@@ -186,7 +190,7 @@ if ($row_a = mysql_fetch_array($result_a))
 		echo '<td class="countotd">'.$countOpportunity.'</td>';
 		echo '<td class="countrtd">'.$countRationalization.'</td>';
 		echo '<td class="countctd">'.$level.'</td>';
-		echo '<td class="scoretd"><b>'.round($score, 1).'</b></td>';  
+		echo '<td class="scoretd"><a href=hAnalyticsData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';  
 
 		unset($GLOBALS['numberOfRMatches']);
 		unset($GLOBALS['numberOfOMatches']);
@@ -242,10 +246,10 @@ if ($row_a = mysql_fetch_array($result_a))
 <!-- Modal for delete dialog -->
 
 <script>
- 	$('#confirm-delete').on('show.bs.modal', function(e) 
-	{
-  		$(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
- 	}); 
+	$('#confirm-delete').on('show.bs.modal', function(e) 
+        {
+        	$(this).find('.delete').attr('href', $(e.relatedTarget).data('href'));
+        }); 
 </script>
 
 <!-- Modal for setup dialog -->
@@ -297,9 +301,9 @@ if ($row_a = mysql_fetch_array($result_a))
 				14: 
                                 {
                                         sorter: false
-                                }
- 
-			} 
+                                } 
+			},
+			sortList: [[11,1]]
 		}); 
     	} 
 	); 
