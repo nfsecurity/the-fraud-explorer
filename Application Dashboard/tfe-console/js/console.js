@@ -51,7 +51,7 @@ $(document).ready(function()
         command = command.replace(" ","");
         if(command.substring(0,5)=="reset")
         {
-            location.href="mainMenu";
+            location.href="dashBoard";
         }
         if(command.substring(0,5)=="clear")
         {

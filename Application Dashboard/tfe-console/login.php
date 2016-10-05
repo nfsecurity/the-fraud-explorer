@@ -46,7 +46,7 @@ if ($row = mysql_fetch_array($result_b))
     			$_SESSION['user_con']=$user;
 			$_SESSION['user_scope']=$rowUser[2];
 			$_SESSION['user_permissions']=$rowUser[3];
-    			Header("Location: mainMenu");
+    			Header("Location: dashBoard");
   		}
   		else
   		{

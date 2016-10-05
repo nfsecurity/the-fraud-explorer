@@ -56,6 +56,7 @@ if ($row = mysql_fetch_array($order))
 
 echo '<style>';
 echo '.font-icon-color { color: #B4BCC2; }';
+echo '.font-icon-color-green { color: #1E9141; }';
 echo '</style>';
 
 /* Elasticsearch querys for fraud triangle counts and score */
@@ -73,7 +74,7 @@ else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, st
 
 /* Main Table */
 
-echo '<table summary="Dashboard table" id="tblData">';
+echo '<table id="tblData" class="tablesorter">';
 echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">GROUP</th>
 <th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th>
 <th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr>
@@ -102,16 +103,16 @@ if ($row_a = mysql_fetch_array($result_a))
 		if ($row_a["name"] == NULL) 
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbspe<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbspe<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
 		}
 		else
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=agentData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
 		}
 
 		/* Company, department or group */
@@ -127,11 +128,11 @@ if ($row_a = mysql_fetch_array($result_a))
 
   		if($row_a["status"] == "active") 
 		{ 
-			echo '<td class="statetd"><img src="images/agentOnline.svg"></td>'; 
+			echo '<td class="statetd"><span class="fa fa-power-off fa-lg font-icon-color-green"></span></td>'; 
 		}
   		else 
 		{ 
-			echo '<td class="statetd"><img src="images/agentOffline.svg"/></td>'; 
+			echo '<td class="statetd"><span class="fa fa-power-off fa-lg"></span></td>'; 
 		}
 
 		/* Last connection to the server */
@@ -190,7 +191,7 @@ if ($row_a = mysql_fetch_array($result_a))
 		echo '<td class="countotd">'.$countOpportunity.'</td>';
 		echo '<td class="countrtd">'.$countRationalization.'</td>';
 		echo '<td class="countctd">'.$level.'</td>';
-		echo '<td class="scoretd"><a href=hAnalyticsData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';  
+		echo '<td class="scoretd"><a href=alertData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';  
 
 		unset($GLOBALS['numberOfRMatches']);
 		unset($GLOBALS['numberOfOMatches']);
@@ -203,10 +204,10 @@ if ($row_a = mysql_fetch_array($result_a))
   		{
 			if(isset($_SESSION['agentchecked']))
                         {
-				if($_SESSION['agentchecked'] == $row_a["agent"]) echo '<td class="specialtd"><a href="mainMenu?agent='.$agent_enc.'"><img src="images/cmd-ok.svg" onmouseover="this.src=\'images/cmd-mo-ok.svg\'" onmouseout="this.src=\'images/cmd-ok.svg\'" alt="" title="" /></a></td>';
-				else echo '<td class="specialtd"><a href="mainMenu?agent='.$agent_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';  
+				if($_SESSION['agentchecked'] == $row_a["agent"]) echo '<td class="specialtd"><a href="dashBoard?agent='.$agent_enc.'"><img src="images/cmd-ok.svg" onmouseover="this.src=\'images/cmd-mo-ok.svg\'" onmouseout="this.src=\'images/cmd-ok.svg\'" alt="" title="" /></a></td>';
+				else echo '<td class="specialtd"><a href="dashBoard?agent='.$agent_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';  
 			}
-			else echo '<td class="specialtd"><a href="mainMenu?agent='.$agent_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';
+			else echo '<td class="specialtd"><a href="dashBoard?agent='.$agent_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';
 		}
   		else
   		{	if(isset($_SESSION['agentchecked']))
@@ -229,19 +230,76 @@ if ($row_a = mysql_fetch_array($result_a))
  	} 
  	while ($row_a = mysql_fetch_array($result_a));
 
-	/* Table footer */
-
-	echo '<tr><td class="footer-row-select"></td><td class="footer-row-os"></td><td class="footer-row-people"></td>';
-	echo '<td class="footer-row-group"></td><td class="footer-row-ver"></td><td class="footer-row-state"></td>';
-	echo '<td class="footer-row-last"></td><td class="footer-row-pressure"></td><td class="footer-row-opportunity"></td>';
-	echo '<td class="footer-row-rationalization"></td><td class="footer-row-level"></td><td class="footer-row-score"></td>';
-	echo '<td class="footer-row-commands"></td><td class="footer-row-commands"></td><td class="footer-row-commands"></td></tr>';
-
  	echo '</tbody></table>';
- 	echo '</div>';
 }
 
 ?>
+
+<!-- Pager bottom -->
+
+<div id="pager" class="pager">
+
+    <div class="pager-layout">
+        <div class="pager-inside">
+                <div class="pager-inside-agent">
+
+			<?php
+				$urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_stats/docs";
+				$urlAlerts="http://localhost:9200/logstash-alerter-*/_stats/docs";
+				$urlSize="http://localhost:9200/_all/_stats";
+
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_URL,$urlWords);
+				$resultWords=curl_exec($ch);
+				curl_close($ch);
+
+				$ch = curl_init();
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_URL,$urlAlerts);
+                                $resultAlerts=curl_exec($ch);
+                                curl_close($ch);
+
+				$ch = curl_init();
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_URL,$urlSize);
+                                $resultSize=curl_exec($ch);
+                                curl_close($ch);
+
+				$resultWords = json_decode($resultWords, true);
+				$resultAlerts = json_decode($resultAlerts, true);
+				$resultSize = json_decode($resultSize, true);
+				$dataSize = ($resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024);	
+
+				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.').' words collected and ';
+				echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultAlerts['_all']['primaries']['docs']['count'], 0, ',', '.').' fraud triangle alerts triggered, ';
+				echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
+			?>
+
+                </div>
+
+                <div class="pager-inside-pager">
+                <form>
+                        <span class="fa fa-fast-backward fa-lg first"></span>
+                        <span class="fa fa-arrow-circle-o-left fa-lg prev"></span>
+                        <span class="pagedisplay"></span>
+                        <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
+                        <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
+                        <select class="pagesize select-styled">
+                                <option value="20"> by 20 rows</option>
+                                <option value="50"> by 50 rows</option>
+                                <option value="100"> by 100 rows</option>
+                                <option value="1000"> by 1000 rows</option>
+                                <option value="all"> All Rows</option>
+                        </select>
+                </form>
+                </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal for delete dialog -->
 
@@ -304,9 +362,13 @@ if ($row_a = mysql_fetch_array($result_a))
                                 } 
 			},
 			sortList: [[11,1]]
-		}); 
-    	} 
-	); 
+		})
+		.tablesorterPager({
+                	container: $("#pager"),
+                	size: 20
+ 		});
+ 
+    	}); 
 </script>
 
 <!-- Table search -->

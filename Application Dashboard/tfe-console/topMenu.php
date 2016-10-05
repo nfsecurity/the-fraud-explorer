@@ -18,10 +18,10 @@ include "inc/close-db-connection.php";
 		&nbsp;&nbsp;<img src=images/nftop.png class="main-logo">
 	</li>
 	<li class="li">
-		<a href="mainMenu">Dashboard</a>
+		<a href="dashBoard">Dashboard</a>
 	</li>
   	<li class="li">
-		<a href="mainChart">Analytics</a>
+		<a href="analyticsData">Analytics</a>
 	</li>
 	<li class="li">
                 <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#">Configuration</a>
@@ -30,7 +30,7 @@ include "inc/close-db-connection.php";
                 <a href="eraseCommands">Queue reset</a>
         </li>
 	<li class="li">
-                <a href="mainMenu?agent=<?php echo base64_encode(base64_encode("all")); ?>">Universal command</a>
+                <a href="dashBoard?agent=<?php echo base64_encode(base64_encode("all")); ?>">Universal command</a>
         </li>
 	<li class="li">
                 <a href="https://www.thefraudexplorer.com/#contact" target="_blank">Help</a>

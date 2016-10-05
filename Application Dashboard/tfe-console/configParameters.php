@@ -57,7 +57,7 @@ if (isset($_GET['iv']))
 }
 
 
-header ("location: mainMenu");
+header ("location: dashBoard");
 include "inc/close-db-connection.php";
 
 ?>

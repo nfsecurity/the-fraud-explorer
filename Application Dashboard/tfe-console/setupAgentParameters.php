@@ -53,7 +53,7 @@ if (isset($_GET['gender']))
         mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent='%s'",$gender,$agent_dec));
 }
 
-header ("location:  mainMenu");
+header ("location:  dashBoard");
 
 include "inc/close-db-connection.php";
 

@@ -38,8 +38,8 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>TFE - Agent Data</title>
-	<meta http-equiv="X-Frame-Options" content="deny">
+	<title>Agent Data &raquo; The Fraud Explorer</title>
+	<link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<!-- JQuery 11 inclusion -->
@@ -48,7 +48,7 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
 
 	<!-- JS functions -->
 
-	<script type="text/javascript" src="js/hagentData.js"></script>
+	<script type="text/javascript" src="js/alertData.js"></script>
 	
 	<!-- Styles and JS for modal dialogs -->
 
@@ -57,7 +57,7 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
 
 	<!-- Finish code for modal dialogs -->
 
-	<link rel="stylesheet" type="text/css" href="css/hAnalytics.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/alertData.css" media="screen" />
 
 	<!-- Font Awesome -->
 
@@ -81,6 +81,35 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
 			include "inc/close-db-connection.php";
 		?>
 	</div>
+
+	<!-- Modal for reg deletion -->
+
+	<center>
+        <div class="modal fade" id="delete-reg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                        <div class="modal-dialog vertical-align-center">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                                <p style="text-align:left; font-size: 12px;"><br>You are about to delete the row, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                                                <p class="debug-url window-debug"></p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-danger delete-reg-button">Delete</a>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+	</center>
+
+	<!-- Footer -->
 
         <div id="footer">
 	       	<p class="footer-container">&nbsp;</p>

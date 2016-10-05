@@ -12,7 +12,7 @@
  * Date: 2016-07
  * Revision: v0.9.7-beta
  *
- * Description: Code for refresh XML file under mainMenu
+ * Description: Code for refresh XML file under dashBoard
 */
 
 session_start();
@@ -34,26 +34,37 @@ $id = $xml->token[0]['id'];
 $agt = $xml->token[0]['agt'];
 $version = $xml->version[0]['num'];
 
+echo '<style>';
+echo '.font-icon-color-gray { color: #B4BCC2; }';
+echo '.font-icon-color-green { color: #1E9141; }';
+echo '</style>';
+
 ?>
 
+<!-- XML CSS -->
+
 <link rel="stylesheet" type="text/css" href="css/xmlConsole.css">
+
+<!-- Font Awesome -->
+
+<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
 <div class="table">
 <div class="tablerow">
 	<div class="commandh">
-		<center><b>COMMAND</b></center>
+		<center><span class="fa fa-cogs font-icon-color-gray">&nbsp;&nbsp;</span>COMMAND</center>
 	</div>
 	<div class="uniqueidh">
-                <center><b>ID</b></center>
+                <center><span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>ID</center>
         </div>
 	<div class="agenth">
-                <center><b>AGENT</b></center>
+                <center><span class="fa fa-user font-icon-color-gray">&nbsp;&nbsp;</span>AGENT</center>
         </div>
 	<div class="eventh">
-                <center><b>NUM</b></center>
+                <center><span class="fa fa-hashtag font-icon-color-gray">&nbsp;&nbsp;</span>NUM</center>
         </div>
 	<div class="paramh">
-                <center><b>PARAMETERS AND ARGUMENTS</b></center>
+                <center><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>PARAMETERS AND ARGUMENTS</center>
         </div>
 </div>
 	

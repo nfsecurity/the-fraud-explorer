@@ -37,7 +37,7 @@ body
     src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
 }
 
-html,body 
+html, body 
 { 
     height:100%; 
 }
@@ -54,9 +54,9 @@ a
 
 .table-holder
 {
-    position: absolute; 
+    position: fixed; 
     bottom: 80px; 
-    top: 53px; 
+    top: 90px; 
     left: 8px;
     right: 8px; 
 }
@@ -72,9 +72,14 @@ table
     height: 100%;
 }
 
-table thead
+tbody tr:nth-child(even)
 {
-   height: 90px;
+    background: #f7f7f7;
+}
+
+tbody tr:nth-child(odd)
+{
+    background: white;
 }
 
 table tbody 
@@ -83,7 +88,7 @@ table tbody
     overflow-x: hidden;
     background-image: url(../images/pattern-6j3d.png);
     width: 100%;
-    height: 100%;
+    height: calc(100% - 50px);
 }
 
 thead, tbody
@@ -97,33 +102,42 @@ th.header
     cursor: pointer; 
     background-repeat: no-repeat; 
     background-position: center right; 
-    padding-left: 20px; 
 }  
 
 td
 {
-    padding:10px 0px 10px 0px;
+    padding:7px 0px 7px 0px;
     opacity: 30;
-    height: 70px;
+    height: 40px;
     vertical-align: middle;
     border-top:1px solid #e0e0e0;
     border-right:0px solid #F8F8F8;
     border-bottom:1px solid #F8F8F8;
     border-left:0px solid #F8F8F8;
-    background: white;
     width: 100%;
 }
 
 th
 {
-    padding:25px 12px 25px 12px;
     text-shadow: 1px 1px 1px #fff;
     background:#e8eaeb;
     font:11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
     text-align: center;
     border:0px solid #d3d3d3;
     width: 100%;
-    height: 90px;
+    height: 50px;
+}
+
+.selectth
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
 }
 
 .timestampth
@@ -131,15 +145,16 @@ th
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 200px;
-    width: 200px;
+    min-width: 160px;
+    width: 160px;
     display: table-cell;
     white-space: nowrap;
 }
 
-.applicationtitleth
+.alerttypeth
 {
-    max-width: 300px; 
+    width: 150px; 
+    min-width: 150px;
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
     color: #474747;
@@ -149,48 +164,68 @@ th
     text-align: left;
 }
 
-.ipaddressth
+.windowtitleth
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
     color: #474747;
-    min-width: 150px;
-    width: 150px;
+    max-width: 300px;
     display: table-cell;
-    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
 }
 
-.computernameth
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+.phrasedictionaryth
+{
+    overflow: hidden;
+    font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 150px;
-    width: 150px;
+    min-width: 300px;
+    width: 300px;
     display: table-cell;
     white-space: nowrap;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
 }
 
-.usernameth
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+.phrasetypedth
+{
+    overflow: hidden;
+    font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 150px;
-    width: 150px;
+    min-width: 160px;
+    width: 160px;
     display: table-cell;
     white-space: nowrap;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
 }
 
-.typedwordth 
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 200px;
-    min-width: 200px;
+.deleteth
+{
+    overflow: hidden;
     display: table-cell;
-    white-space: nowrap; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    white-space: nowrap;
+    color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
+}
+
+.selecttd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
+    border-right:1px solid #F2F2F2;
 }
 
 .timestamptd
@@ -202,78 +237,83 @@ th
     border-right:1px solid #F8F8F8;
     text-align: center;
     vertical-align: middle;
-    width: 200px;
-    min-width: 200px;
+    width: 160px;
+    min-width: 160px;
 }
 
-.applicationtitletd
+.alerttypetd
 { 
-    max-width: 300px;
+    width: 150px;
+    min-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: table-cell; 
     white-space: nowrap; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747; 
+    text-align: left;
+    vertical-align: middle;
+    padding: 0px 0px 0px 20px;
+}
+
+.windowtitletd
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
     text-align: left;
     vertical-align: middle;
+    max-width: 300px;
+    border-right:0px solid #F8F8F8;
+    border-left:1px solid #F8F8F8;
     padding: 0px 20px 0px 20px;
 }
 
-.ipaddresstd
+.phrasedictionarytd
 {
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
-    min-width: 150px;
-    width: 150px;
-    background:#f7f7f7;
-}
-
-.computernametd
-{ 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 150px;
-    min-width: 150px;
-    border-right:0px solid #F8F8F8;
-    border-left:1px solid #F8F8F8;
-    background:#f7f7f7;
-}
-
-.usernametd
-{ 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 150px;
-    min-width: 150px;
+    max-width: 300px;
+    min-width: 300px;
+    width: 300px;
     background:#f2f2f2;
+    text-overflow: ellipsis;
+    padding: 0px 20px 0px 20px;
 }
 
-.typedwordtd
+.phrasetypedtd
 {
-    max-width: 200px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    display: table-cell;
     white-space: nowrap;
-    display: table-cell; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle; 
-    width: 200px;
-    min-width: 200px;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: left;
+    vertical-align: middle;
+    min-width: 160px;
+    max-width: 160px;
+    width: 160px;
     background:#f7f7f7;
+    text-overflow: ellipsis;
+    padding: 0px 20px 0px 20px;
+}
+
+.deletetd
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    white-space: nowrap;
+    background:#f7f7f7;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
 }
 
 .ul 
@@ -393,41 +433,12 @@ li a:hover:not(.active)
 {
     display:table;
     height: 100%;
-    pointer-events:none;
 }
 
 .vertical-align-center 
 {
     display: table-cell;
     vertical-align: middle;
-    pointer-events:none;
-}
-
-.window-title
-{
-    text-align: center; 
-    font-family: Verdana; font-size: 24px;
-}
-
-.window-debug
-{
-    text-align:left; 
-    font-family: Verdana; 
-    font-size: 12px;
-}
-
-.console-title
-{
-    font-family: 'FFont', sans-serif; 
-    font-size: 14px; 
-    color: #474747;
-}
-
-.window-command-status
-{
-    font-family: Courier new; 
-    font-size: 13px; 
-    color: #474747;
 }
 
 .footer-container
@@ -477,6 +488,17 @@ li a:hover:not(.active)
     background: #FFFFFF;
 }
 
+.pager-top-layout
+{
+    position: fixed;
+    height: 30px;
+    top: 53px;
+    left: 8px;
+    right: 8px;
+    border: 1px solid #d3d3d3;
+    background: #FFFFFF;
+}
+
 .pager-inside
 {
     position: absolute;
@@ -490,7 +512,7 @@ li a:hover:not(.active)
 .pager-inside-agent
 {
     display: table-cell;
-    padding: 0px 0px 0px 25px;
+    padding: 0px 0px 0px 15px;
     float: left;
 }
 
@@ -565,4 +587,43 @@ li a:hover:not(.active)
 {
     background-image: none;
     cursor: default;
+}
+
+input[type=checkbox]
+{
+    visibility: hidden;
+}
+
+.checkboxRow
+{
+    width: 15px;
+    height: 15px;
+    background: #ddd;
+    position: relative;
+    margin-left: 17px;
+}
+
+.checkboxRow label
+{
+    display: block;
+    width: 11px;
+    height: 11px;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    z-index: 1;
+    background: #FFFFFF;
+}
+
+.checkboxRow input[type=checkbox]:checked + label
+{
+    background: #13923D;
 }

@@ -34,8 +34,8 @@ include "inc/elasticsearch.php";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>TFE - Chart</title>
-	<meta http-equiv="X-Frame-Options" content="deny">
+	<title>Analytics &raquo; The Fraud Explorer</title>
+	<link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<!-- JQuery 11 inclusion -->
@@ -56,8 +56,8 @@ include "inc/elasticsearch.php";
 
 	<!-- JS functions -->
 
-	<script type="text/javascript" src="js/mainChart.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/mainChart.css"/>
+	<script type="text/javascript" src="js/analyticsData.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/analyticsData.css"/>
 
 	<!-- Load ScatterPlotChart -->
 
@@ -67,6 +67,10 @@ include "inc/elasticsearch.php";
 	<!-- Charts CSS -->
 
         <link rel="stylesheet" type="text/css" href="css/chartAnalytics.css" media="screen" />
+
+	<!-- Font Awesome -->
+
+        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 </head>
 <body>
 	<div align="center">
@@ -74,6 +78,15 @@ include "inc/elasticsearch.php";
 		<!-- Top main menu -->
 
 		<div id="includedTopMenu"></div>
+
+		<!-- Styles -->
+
+		<style>
+			.font-icon-color 
+			{ 
+			    color: #B4BCC2; 
+			}
+		</style>
 
 		<!-- Chart -->
 
@@ -84,7 +97,7 @@ include "inc/elasticsearch.php";
 				<!-- Leyend -->
 
 				<table class="table-leyend">
-				<th colspan=2 class="table-leyend-header">Score leyend</th>
+				<th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-icon-color">&nbsp;&nbsp;</span>Score leyend</th>
 				<tr>
 					<td class="table-leyend-point"><span class="point-red"></span><br>31></td>
 					<td class="table-leyend-point"><span class="point-green"></span><br>21-30</td>
@@ -96,7 +109,7 @@ include "inc/elasticsearch.php";
 				</table>
 				<br>
 				<table class="table-leyend">
-                                <th colspan=2 class="table-leyend-header">Opportunity</th>
+                                <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-icon-color">&nbsp;&nbsp;</span>Opportunity</th>
                                 <tr>
                                         <td class="table-leyend-point"><span class="point-opportunity-0-10"></span><br>0-10</td>
                                         <td class="table-leyend-point"><span class="point-opportunity-11-30"></span><br>11-30</td>
@@ -151,7 +164,7 @@ include "inc/elasticsearch.php";
                                         else $countPressureTotal = 0;
 
 					echo '<table class="table-insights">';
-                                	echo '<th colspan=2 class="table-insights-header">Phrase counts</th>';
+                                	echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-icon-color">&nbsp;&nbsp;</span>Phrase counts</th>';
                                		echo '<tr>';
                                         echo '<td class="table-insights-triangle">Pressure</td>';
                                         echo '<td class="table-insights-score">'.$countPressureTotal.'</td>';
@@ -185,7 +198,7 @@ include "inc/elasticsearch.php";
 					}
 
                                 	echo '<table class="table-dictionary">';
-                                	echo '<th colspan=2 class="table-dictionary-header">Dictionary phrases</th>';
+                                	echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-icon-color">&nbsp;&nbsp;</span>Dictionary DB</th>';
                                		echo ' <tr>';
                                         echo '<td class="table-dictionary-triangle">Pressure</td>';
                                         echo '<td class="table-dictionary-score">'.$dictionaryCount['pressure'].'</td>';
@@ -204,10 +217,10 @@ include "inc/elasticsearch.php";
 				?>
 
 			 	<div class="y-axis-line"></div>
-				<div class="y-axis-leyend"><b>Incentive, Pressure to commit Fraud</b></div>
+				<div class="y-axis-leyend"><span class="fa fa-bar-chart font-icon-color">&nbsp;&nbsp;</span>Incentive, Pressure to commit Fraud</div>
 
 				<div class="x-axis-line-leyend">
-                                	<br><b>Unethical behavior, Rationalization</b>
+                                	<br><span class="fa fa-line-chart font-icon-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization
 				</div>
 
                         <div id="scatterplot">

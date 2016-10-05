@@ -56,5 +56,5 @@ unset($_SESSION['waiting_command']);
 unset($_SESSION['NRF_CMD']);
 unset($_SESSION['agentchecked']);
 
-header("Location: ".$serverURL."/mainMenu"); 
+header("Location: ".$serverURL."/dashBoard"); 
 ?>

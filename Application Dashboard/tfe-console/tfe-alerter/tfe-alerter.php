@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2016-07
- * Revision: v0.9.7-beta
+ * Date: 2016-06-30 15:12:41 -0500 (Wed, 30 Jun 2016)
+ * Revision: v0.9.6-beta
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
@@ -76,9 +76,35 @@
 		if ($typedWords['hits']['total'] == 0) continue;  
 		else
 		{
-	     		getArrayData($typedWords, "typedWord", $agentID."_typedWords");
-        		$stringOfWords = implode(" ", $GLOBALS[$agentID."_typedWords"]);
-			parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, "matchesGlobalCount", $configFile, $jsonFT);
+	     		getMultiArrayData($typedWords, "typedWord", "applicationTitle", $agentID."_typedWords");
+			$arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
+
+			$lastWindowTitle = null;
+			$stringOfWords = null;
+			$counter = 0;
+
+			foreach($arrayOfWordsAndWindows as $key=>$value)
+			{
+				$windowTitle = $value[1];
+
+				if ($windowTitle == $lastWindowTitle) 
+				{
+					$stringOfWords = $stringOfWords . " " .$value[0];
+				}
+				else if ($counter == 0) 
+				{
+					$stringOfWords = $value[0];
+				}
+				else 
+				{
+					parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, "matchesGlobalCount", $configFile, $jsonFT);
+					$counter = 0;
+					$stringOfWords = $value[0];	
+				}
+
+				$counter++;
+				$lastWindowTitle = $windowTitle;
+    			}	
 		}
 	}
  }
@@ -111,5 +137,4 @@
  socket_close($sockAlerter);
 
  logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
-
 ?>

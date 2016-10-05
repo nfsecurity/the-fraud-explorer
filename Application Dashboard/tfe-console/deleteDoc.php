@@ -12,7 +12,7 @@
  * Date: 2016-07
  * Revision: v0.9.7-beta
  *
- * Description: Code for agent deletion
+ * Description: Code for Elasticsearch row deletions
  */
 
 session_start();
@@ -25,26 +25,19 @@ if(empty($_SESSION['connected']))
  	exit;
 }
 
-include "inc/open-db-connection.php";
-
 function filter($variable)
 {
 	return addcslashes(mysql_real_escape_string($variable),',-<>"');
 }
 
-$agent_enc=filter($_GET['agent']);
-$agent_dec=base64_decode(base64_decode($agent_enc));
-$maq=str_replace(array("."),array("_"),$agent_dec);
-
-/* Delete agent tables */
- 
-mysql_query(sprintf("DROP TABLE t_%s",$maq));
-mysql_query(sprintf("DELETE FROM t_agents WHERE agent='%s'",$maq));
+$regid=$_GET['regid'];
+$agent=$_GET['agent'];
+$index=$_GET['index'];
 
 /* Delete agent elasticsearch documents */
 
 $ch = curl_init(); 
-curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/_all/_query?q=agentId:".$maq); 
+curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/logstash-".$index."-*/_query?q=_id:".$regid); 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 curl_exec($ch); 
@@ -52,9 +45,7 @@ curl_close($ch);
 
 /* Return to home */
 
-header ("location:  dashBoard");
-
-include "inc/close-db-connection.php";
+header ("location: alertData?agent=".$agent);
 
 ?>
 
