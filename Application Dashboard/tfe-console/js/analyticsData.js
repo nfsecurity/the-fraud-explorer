@@ -13,17 +13,13 @@
  * Description: Code for Chart
  */
 
-/* Tooltipster */
+/* Code for include the chart-holder */
 
-$(document).ready(function() 
+$(function()
 {
-    	$('.tooltip').tooltipster(
-	{
-		theme: 'tooltipster-light',
-		contentAsHTML: true
-	});	
+    $("#chartHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; font-size: 11px; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>"
+    ).load("analyticsHolder.php");
 });
-
 
 /* Code for html footer include */
 

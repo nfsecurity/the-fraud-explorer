@@ -35,6 +35,7 @@
  $GLOBALS['matchesGlobalCount'] = 0;
  $startTime = microtime(true);
  $ESindex = $configFile['es_words_index'];
+ $fistTimeIndex = true;
 
  $AgentParams = [
  'index' => $ESindex, 
@@ -61,6 +62,7 @@
 
  if (indexExist($configFile['es_alerter_status_index'], $configFile))
  {
+	$firstTimeIndex = false;
 	logToFile($configFile['log_file'], "[INFO] - The alerter index already exist, continue with data range matching ...");
 
  	$endDate = extractEndDateFromAlerter($configFile['es_alerter_status_index'], "AlertStatus");
@@ -76,16 +78,18 @@
 		if ($typedWords['hits']['total'] == 0) continue;  
 		else
 		{
-	     		getMultiArrayData($typedWords, "typedWord", "applicationTitle", $agentID."_typedWords");
+	     		getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
 			$arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
 
 			$lastWindowTitle = null;
+			$lastTimeStamp = null;
 			$stringOfWords = null;
 			$counter = 0;
 
 			foreach($arrayOfWordsAndWindows as $key=>$value)
 			{
 				$windowTitle = $value[1];
+				$timeStamp = $value[2];
 
 				if ($windowTitle == $lastWindowTitle) 
 				{
@@ -97,14 +101,15 @@
 				}
 				else 
 				{
-					parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, "matchesGlobalCount", $configFile, $jsonFT);
+					parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
 					$counter = 0;
 					$stringOfWords = $value[0];	
 				}
 
 				$counter++;
 				$lastWindowTitle = $windowTitle;
-    			}	
+    				$lastTimeStamp = $timeStamp;
+			}	
 		}
 	}
  }
@@ -115,9 +120,43 @@
  	foreach($GLOBALS['agentList'] as $agentID)
  	{	
 		$typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
-		getArrayData($typedWords, "typedWord", $agentID."_typedWords");	
-		$stringOfWords = implode(" ", $GLOBALS[$agentID."_typedWords"]);
-		parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, "matchesGlobalCount", $configFile, $jsonFT);
+
+		if ($typedWords['hits']['total'] == 0) continue;
+                else
+                {
+                        getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
+                        $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
+
+                        $lastWindowTitle = null;
+			$lastTimeStamp = null;
+                        $stringOfWords = null;
+                        $counter = 0;
+
+                        foreach($arrayOfWordsAndWindows as $key=>$value)
+                        {
+                                $windowTitle = $value[1];
+				$timeStamp = $value[2];
+
+                                if ($windowTitle == $lastWindowTitle)
+                                {
+                                        $stringOfWords = $stringOfWords . " " .$value[0];
+                                }
+                                else if ($counter == 0)
+                                {
+                                        $stringOfWords = $value[0];
+                                }
+                                else
+                                {
+                                        parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
+                                        $counter = 0;
+                                        $stringOfWords = $value[0];
+                                }
+
+                                $counter++;
+                                $lastWindowTitle = $windowTitle;
+				$lastTimeStamp = $timeStamp;
+                        }
+                }
         }
  }
 
@@ -131,7 +170,10 @@
  $sockAlerter = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
  $timeTaken = microtime(true) - $startTime;
  $timeTaken = floor($timeTaken * 100) / 100;
+
+ if ($firstTimeIndex = true) $GLOBALS['lastAlertDate'][0] = $endTime;
  $msgData = $endTime." - ".$GLOBALS['lastAlertDate'][0]." TextEvent ".$timeTaken." ".$GLOBALS['matchesGlobalCount'];
+
  $lenData = strlen($msgData);
  socket_sendto($sockAlerter, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_status_port']);
  socket_close($sockAlerter);

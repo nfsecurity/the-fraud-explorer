@@ -77,9 +77,8 @@ foreach ($agentData['hits']['hits'] as $result)
 
 	/* Checking */
 
-        $date = $result['_source']['sourceTimestamp'];
-        $date = substr($date, 0, strpos($date, "."));
-	$date = str_replace("T", " ", $date);
+        $date = $result['_source']['eventTime'];
+        $date = substr($date, 0, strpos($date, ","));
 
         echo '<td class="selecttd">';
         echo '<div class="checkboxRow"><input type="checkbox" value="" id="'.$date.'" name=""/><label for="'.$date.'"></label></div>';
@@ -92,52 +91,38 @@ foreach ($agentData['hits']['hits'] as $result)
 	echo '</td>';
 
 	/* AlertType */
-        
+       
+	$windowTitle = htmlentities($result['_source']['windowTitle']);
+	$wordTyped = $result['_source']['wordTyped'];
+	$searchValue = "/".$result['_source']['phraseMatch']."/";
+        $searchResult = searchJsonFT($jsonFT, $searchValue);
+        $regExpression = htmlentities($result['_source']['phraseMatch']);      
+
         echo '<td class="alerttypetd">';
-        echo '<span class="fa fa-tags">&nbsp;&nbsp;</span>'.ucfirst($result['_source']['alertType']);
+        echo '<span class="fa fa-tags">&nbsp;&nbsp;</span><div class="tooltip-custom tooltip-father" 
+	title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div>
+	<div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div>
+	<div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div>
+	<div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>
+        ">'.ucfirst($result['_source']['alertType']).'</div>';
         echo '</td>';
 
 	/* Window title */
 
-	if (isset($result['_source']['windowTitle']))
-        {
-                $windowTitle = $result['_source']['windowTitle'];
-
-                echo '<td class="windowtitletd" title="'.$windowTitle.'">';
-                echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>'.$windowTitle;
-                echo '</td>';
-        }
-        else
-        {
-                echo '<td class="windowtitletd" title="Unavailable window title">';
-                echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>Unavailable window title';
-                echo '</td>';
-        }
+        echo '<td class="windowtitletd">';
+        echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>'.$windowTitle;
+        echo '</td>';
 
 	/* Phrase typed */
 
-	if (isset($result['_source']['wordTyped']))
-	{
-		$wordTyped = $result['_source']['wordTyped'];
-
-		echo '<td class="phrasetypedtd" title="'.$wordTyped.'">';
-	        echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>'.$wordTyped;
-		echo '</td>';
-	}
-	else
-	{
-		echo '<td class="phrasetypedtd" title="Unavailable">';
-	        echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>Unavailable';
-		echo '</td>';
-	}
+	echo '<td class="phrasetypedtd">';
+	echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>'.$wordTyped;
+	echo '</td>';
 
 	/* Regular expression dictionary */
 
-	$searchValue = "/".$result['_source']['phraseMatch']."/";
-	$searchResult = searchJsonFT($jsonFT, $searchValue);
-	$regExpression = htmlentities($result['_source']['phraseMatch']);	
-
-	echo '<td class="phrasedictionarytd" title="'.$regExpression.'">';
+	echo '<td class="phrasedictionarytd">';
         echo '<span class="fa fa-font font-icon-gray">&nbsp;&nbsp;</span>'.$searchResult;
         echo '</td>';
 
@@ -294,4 +279,18 @@ $(function()
 			}
 		});
 	}
+</script>
+
+<!-- Tooltipster -->
+
+<script>
+        $(document).ready(function()
+        {
+                $('.tooltip-custom').tooltipster(
+                {
+                        theme: 'tooltipster-light',
+                        contentAsHTML: true,
+			side: 'right'
+                });
+        });
 </script>

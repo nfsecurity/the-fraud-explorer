@@ -53,7 +53,7 @@
         ]];
 
         $client = Elasticsearch\ClientBuilder::create()->build();
-        $countMatches = $client->search($matchesParams);
+        $countMatches = $client->count($matchesParams);
 
         return $countMatches;
  }
@@ -78,7 +78,32 @@
 	]];
         
 	$client = Elasticsearch\ClientBuilder::create()->build();
-        $agentIdMatches = $client->search($matchesParams);
+        $agentIdMatches = $client->count($matchesParams);
+
+        return $agentIdMatches;
+ }
+
+ /* Count Words typed by agent */
+
+ function countWordsTypedByAgent($agentID, $alertType, $index)
+ {
+        $matchesParams = [
+        'index' => $index,
+        'type' => 'TextEvent',
+        'body' => [
+                'size' => 1000000,
+                'query' => [
+                        'bool' => [
+                                'must' => [
+                                                [ 'term' => [ 'agentId.raw' => $agentID ] ],
+                                                [ 'term' => [ 'eventType.raw' => $alertType ] ]
+                                ]
+                        ]
+                ]
+        ]];
+
+        $client = Elasticsearch\ClientBuilder::create()->build();
+        $agentIdMatches = $client->count($matchesParams);
 
         return $agentIdMatches;
  }

@@ -67,6 +67,53 @@ $ESindex = $configFile['es_words_index'];
 $ESalerterIndex = $configFile['es_alerter_index'];
 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
 
+/* Global data variables */
+
+$urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_stats/docs";
+$urlAlerts="http://localhost:9200/logstash-alerter-*/_stats/docs";
+$urlSize="http://localhost:9200/_all/_stats";
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL,$urlWords);
+$resultWords=curl_exec($ch);
+curl_close($ch);
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL,$urlAlerts);
+$resultAlerts=curl_exec($ch);
+curl_close($ch);
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL,$urlSize);
+$resultSize=curl_exec($ch);
+curl_close($ch);
+
+$resultWords = json_decode($resultWords, true);
+$resultAlerts = json_decode($resultAlerts, true);
+$resultSize = json_decode($resultSize, true);
+$dataSize = ($resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024);
+$totalSystemWords = $resultWords['_all']['primaries']['docs']['count'];
+
+/* Funtion to handle data insights */
+
+function agentInsights($gender, $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName)
+{
+	echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">&nbsp;&nbsp;<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' 
+        title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Total words typed</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Fraud score</div><div class=tooltip-value>'.round($score, 1).'</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation,0).' %</div></div>
+        </div>">' . $agentName . '</a></td>';
+}
+
 /* Show main table and telemetry with the agent list */
 
 if ($userConnected != 'admin') $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents WHERE owner='".$userScope."' ORDER BY FIELD(status, 'active','inactive'), agent ASC");
@@ -98,21 +145,33 @@ if ($row_a = mysql_fetch_array($result_a))
 
   		echo '<td class="ostd"><span class="fa fa-windows fa-lg font-icon-color">&nbsp;&nbsp;</span>'. getTextSist($row_a["system"]) .'</td>';
 
-		/* Gender identification */
+		/* Agent name and gender identification */
+
+		$totalWordCount = countWordsTypedByAgent($row_a["agent"], "TextEvent", $ESindex);
+		$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
+                $matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
+                $matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+
+                $countRationalization = $matchesRationalization['count'];
+                $countOpportunity = $matchesOpportunity['count'];
+                $countPressure = $matchesPressure['count'];
+		$totalWordHits = $totalWordCount['count'];
+		$score=($countPressure+$countOpportunity+$countRationalization)/3;
+		$dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
 
 		if ($row_a["name"] == NULL) 
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbspe<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["agent"] . '</a></td>';
+			if ($row_a["gender"] == "male") echo agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["agent"]);
+			else if ($row_a["gender"] == "female") echo agentInsights("female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["agent"]);
+			else agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["agent"]);
 		}
 		else
 		{
 			echo '<td class="agenttd">';
-			if ($row_a["gender"] == "male") echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
-			else if ($row_a["gender"] == "female") echo '<img src="images/female-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
-			else echo '<img src="images/male-agent.gif" class="gender-image">&nbsp;&nbsp;<a href=alertData?agent='.$agent_enc.'>' . $row_a["name"] . '</a></td>';
+			if ($row_a["gender"] == "male") agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["name"]);
+			else if ($row_a["gender"] == "female") agentInsights("female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["name"]);
+			else echo agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $row_a["name"]);
 		}
 
 		/* Company, department or group */
@@ -145,58 +204,15 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Fraud triangle counts and score */
 		
-		$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                $matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-                $matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
-                $matchesCustom = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['c'], $configFile['es_alerter_index']);
-
-		if ($matchesRationalization['hits']['total'] != 0)
-		{
-			$GLOBALS['arrayPosition'] = 0;
-			getArrayData($matchesRationalization, "matchNumber", 'numberOfRMatches');
-        		$countRationalization = array_sum($GLOBALS['numberOfRMatches']);
-		} 
-		else $countRationalization = 0;
-
-  	        if ($matchesOpportunity['hits']['total'] != 0) 
-		{
-			$GLOBALS['arrayPosition'] = 0;
-			getArrayData($matchesOpportunity, "matchNumber", 'numberOfOMatches');
-			$countOpportunity = array_sum($GLOBALS['numberOfOMatches']);
-		}
-		else $countOpportunity = 0; 
-
-                if ($matchesPressure['hits']['total'] != 0) 
-		{
-			$GLOBALS['arrayPosition'] = 0;
-			getArrayData($matchesPressure, "matchNumber", 'numberOfPMatches');
-			$countPressure = array_sum($GLOBALS['numberOfPMatches']);
-		}
-		else $countPressure = 0;
-
-		if ($matchesCustom['hits']['total'] != 0) 
-		{
-			$GLOBALS['arrayPosition'] = 0;
-			getArrayData($matchesCustom, "matchNumber", 'numberOfCMatches');
-			$countCustom = array_sum($GLOBALS['numberOfCMatches']);
-		}
-		else $countCustom = 0;
-	
-	 	$score=($countPressure+$countOpportunity+$countRationalization)/3;
                 $level="low";
                 if ($score >= 6 && $score <= 15) $level="medium";
                 if ($score >= 15) $level="high";
 	
-		echo '<td class="countptd">'.$countPressure.'</td>';
-		echo '<td class="countotd">'.$countOpportunity.'</td>';
-		echo '<td class="countrtd">'.$countRationalization.'</td>';
+		echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countPressure.'</td>';
+		echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countOpportunity.'</td>';
+		echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countRationalization.'</td>';
 		echo '<td class="countctd">'.$level.'</td>';
 		echo '<td class="scoretd"><a href=alertData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';  
-
-		unset($GLOBALS['numberOfRMatches']);
-		unset($GLOBALS['numberOfOMatches']);
-		unset($GLOBALS['numberOfPMatches']);
-		unset($GLOBALS['numberOfCMatches']);
 
 		/* Agent selection for command retrieval */
 
@@ -244,36 +260,6 @@ if ($row_a = mysql_fetch_array($result_a))
                 <div class="pager-inside-agent">
 
 			<?php
-				$urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_stats/docs";
-				$urlAlerts="http://localhost:9200/logstash-alerter-*/_stats/docs";
-				$urlSize="http://localhost:9200/_all/_stats";
-
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_URL,$urlWords);
-				$resultWords=curl_exec($ch);
-				curl_close($ch);
-
-				$ch = curl_init();
-                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                curl_setopt($ch, CURLOPT_URL,$urlAlerts);
-                                $resultAlerts=curl_exec($ch);
-                                curl_close($ch);
-
-				$ch = curl_init();
-                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                curl_setopt($ch, CURLOPT_URL,$urlSize);
-                                $resultSize=curl_exec($ch);
-                                curl_close($ch);
-
-				$resultWords = json_decode($resultWords, true);
-				$resultAlerts = json_decode($resultAlerts, true);
-				$resultSize = json_decode($resultSize, true);
-				$dataSize = ($resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024);	
-
 				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.').' words collected and ';
 				echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultAlerts['_all']['primaries']['docs']['count'], 0, ',', '.').' fraud triangle alerts triggered, ';
 				echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
@@ -410,3 +396,18 @@ if ($row_a = mysql_fetch_array($result_a))
 		});
 	}
 </script>
+
+<!-- Tooltipster -->
+
+<script>
+        $(document).ready(function()
+        {
+                $('.tooltip-custom').tooltipster(
+                {
+                        theme: 'tooltipster-light',
+                        contentAsHTML: true,
+			side: 'right'
+                });
+        });
+</script>
+

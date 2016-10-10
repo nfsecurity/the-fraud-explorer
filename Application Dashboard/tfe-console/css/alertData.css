@@ -181,8 +181,8 @@ th
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 300px;
-    width: 300px;
+    min-width: 240px;
+    width: 240px;
     display: table-cell;
     white-space: nowrap;
     text-align: left;
@@ -279,9 +279,9 @@ th
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
     text-align: left;
     vertical-align: middle;
-    max-width: 300px;
-    min-width: 300px;
-    width: 300px;
+    max-width: 240px;
+    min-width: 240px;
+    width: 240px;
     background:#f2f2f2;
     text-overflow: ellipsis;
     padding: 0px 20px 0px 20px;
@@ -627,3 +627,47 @@ input[type=checkbox]
 {
     background: #13923D;
 }
+
+.tooltip-father
+{
+    display: inline;
+}
+
+.tooltip-container
+{
+    display: table;
+    border-spacing: 2px;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-title
+{
+    padding: 5px 0px 5px 0px;
+    font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-row
+{
+    display: table-row;
+}
+
+.tooltip-item
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.tooltip-value
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
