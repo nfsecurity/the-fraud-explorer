@@ -76,42 +76,8 @@
 		$typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
 		if ($typedWords['hits']['total'] == 0) continue;  
-		else
-		{
-	     		getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
-			$arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
-
-			$lastWindowTitle = null;
-			$lastTimeStamp = null;
-			$stringOfWords = null;
-			$counter = 0;
-
-			foreach($arrayOfWordsAndWindows as $key=>$value)
-			{
-				$windowTitle = $value[1];
-				$timeStamp = $value[2];
-
-				if ($windowTitle == $lastWindowTitle) 
-				{
-					$stringOfWords = $stringOfWords . " " .$value[0];
-				}
-				else if ($counter == 0) 
-				{
-					$stringOfWords = $value[0];
-				}
-				else 
-				{
-					parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
-					$counter = 0;
-					$stringOfWords = $value[0];	
-				}
-
-				$counter++;
-				$lastWindowTitle = $windowTitle;
-    				$lastTimeStamp = $timeStamp;
-			}	
-		}
-	}
+		else startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT);
+ 	}
  }
  else
  {
@@ -122,41 +88,7 @@
 		$typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
 		if ($typedWords['hits']['total'] == 0) continue;
-                else
-                {
-                        getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
-                        $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
-
-                        $lastWindowTitle = null;
-			$lastTimeStamp = null;
-                        $stringOfWords = null;
-                        $counter = 0;
-
-                        foreach($arrayOfWordsAndWindows as $key=>$value)
-                        {
-                                $windowTitle = $value[1];
-				$timeStamp = $value[2];
-
-                                if ($windowTitle == $lastWindowTitle)
-                                {
-                                        $stringOfWords = $stringOfWords . " " .$value[0];
-                                }
-                                else if ($counter == 0)
-                                {
-                                        $stringOfWords = $value[0];
-                                }
-                                else
-                                {
-                                        parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
-                                        $counter = 0;
-                                        $stringOfWords = $value[0];
-                                }
-
-                                $counter++;
-                                $lastWindowTitle = $windowTitle;
-				$lastTimeStamp = $timeStamp;
-                        }
-                }
+                else startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT);
         }
  }
 

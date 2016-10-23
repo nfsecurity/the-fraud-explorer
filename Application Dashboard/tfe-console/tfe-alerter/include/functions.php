@@ -35,17 +35,18 @@
 
  /* Get multi array data in form field1 => value, field2 => value */
 
- function getMultiArrayData($array, $field1, $field2, $globalVar)
+ function getMultiArrayData($array, $field1, $field2, $field3, $globalVar)
  {
         foreach($array as $key => $value)
         {
-                if (is_array($value)) getMultiArrayData($value, $field1, $field2, $globalVar);
+                if (is_array($value)) getMultiArrayData($value, $field1, $field2, $field3, $globalVar);
                 else
                 {
                         if ($key == $field1 && $key != "sort")
                         {
                                 $GLOBALS[$globalVar][$GLOBALS['arrayPosition']][0] = $value;
 				$GLOBALS[$globalVar][$GLOBALS['arrayPosition']][1] = $array[$field2];
+				$GLOBALS[$globalVar][$GLOBALS['arrayPosition']][2] = $array[$field3];
                                 $GLOBALS['arrayPosition']++;
                         }
                 }
@@ -60,7 +61,7 @@
 	'index' => $index,
 	'type' => 'TextEvent',
 	'body' => [
-		'size' => 10000,
+		'size' => 1000000,
 		'query' => [
 			'term' => [ 'agentId.raw' => $agentID ]
 		],
@@ -83,7 +84,7 @@
 	'index' => $index, 
 	'type' => 'TextEvent',
 	'body' =>[
-		'size' => 10000,
+		'size' => 1000000,
 		'query' => [
 			'filtered' => [
 				'query' => [
@@ -139,9 +140,47 @@
 	return $lastAlertTime;
  }
  
+ /* Start data procesing */ 
+
+ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT)
+ {
+ 	getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
+        $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
+
+        $lastWindowTitle = null;
+        $lastTimeStamp = null;
+        $stringOfWords = null;
+        $counter = 0;
+
+        foreach($arrayOfWordsAndWindows as $key=>$value)
+        {
+        	$windowTitle = $value[1];
+                $timeStamp = $value[2];
+
+                if ($windowTitle == $lastWindowTitle)
+                {
+                	$stringOfWords = $stringOfWords . " " .$value[0];
+                }
+                else if ($counter == 0)
+                {
+                	$stringOfWords = $value[0];
+                }
+                else
+                {
+                	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
+                        $counter = 0;
+                        $stringOfWords = $value[0];
+                }
+
+                $counter++;
+                $lastWindowTitle = $windowTitle;
+                $lastTimeStamp = $timeStamp;
+	}
+ }
+
  /* Parse Fraud Triangle phrases */
 
- function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $matchesGlobalCount, $configFile, $jsonFT)
+ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT)
  {
 	foreach ($fraudTriangleTerms as $term => $value)
         {
@@ -153,12 +192,13 @@
 				$end = $now->format("Y-m-d\TH:i:s.u");
  				$end = substr($end, 0, -3);
  				$matchTime = (string)$end."Z";
-                                $msgData = $matchTime." ".$agentID." TextEvent - ".$term." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle;
+                                $msgData = $matchTime." ".$agentID." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".$stringOfWords;
                                 $lenData = strlen($msgData);
                                 socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                                 $GLOBALS[$matchesGlobalCount]++;
  
-				logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
+				logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0].
+				"] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 		      } 
                 }
         }

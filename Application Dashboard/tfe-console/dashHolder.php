@@ -122,7 +122,7 @@ else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, st
 /* Main Table */
 
 echo '<table id="tblData" class="tablesorter">';
-echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">GROUP</th>
+echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="totalwordsth"></th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">GROUP</th>
 <th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th>
 <th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr>
 </thead><tbody>';
@@ -145,7 +145,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
   		echo '<td class="ostd"><span class="fa fa-windows fa-lg font-icon-color">&nbsp;&nbsp;</span>'. getTextSist($row_a["system"]) .'</td>';
 
-		/* Agent name and gender identification */
+		/* Agent data */
 
 		$totalWordCount = countWordsTypedByAgent($row_a["agent"], "TextEvent", $ESindex);
 		$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
@@ -158,6 +158,12 @@ if ($row_a = mysql_fetch_array($result_a))
 		$totalWordHits = $totalWordCount['count'];
 		$score=($countPressure+$countOpportunity+$countRationalization)/3;
 		$dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
+
+		/* Total words (hidden) sorting purpose */
+
+		echo '<td class="totalwordstd">'.$totalWordHits.'</td>';
+
+		/* Agent name */
 
 		if ($row_a["name"] == NULL) 
 		{
@@ -330,11 +336,7 @@ if ($row_a = mysql_fetch_array($result_a))
 				{
 					sorter: false
 				},
-				4: 
-                                {
-                                        sorter: false
-                                },
-				12: 
+				5: 
                                 {
                                         sorter: false
                                 },
@@ -345,9 +347,13 @@ if ($row_a = mysql_fetch_array($result_a))
 				14: 
                                 {
                                         sorter: false
+                                },
+				15: 
+                                {
+                                        sorter: false
                                 } 
 			},
-			sortList: [[11,1]]
+			sortList: [[12,1], [2,1]]
 		})
 		.tablesorterPager({
                 	container: $("#pager"),

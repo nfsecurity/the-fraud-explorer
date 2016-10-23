@@ -631,6 +631,7 @@ input[type=checkbox]
 .tooltip-father
 {
     display: inline;
+    cursor: pointer;
 }
 
 .tooltip-container
@@ -645,7 +646,7 @@ input[type=checkbox]
 {
     padding: 5px 0px 5px 0px;
     font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
-    text-align: center;
+    text-align: left;
 }
 
 .tooltip-row

@@ -169,6 +169,13 @@ th
     white-space: nowrap;
 }
 
+.totalwordsth
+{
+    display: none;
+    min-width: 1px;
+    width: 1px;
+}
+
 .agentth   
 { 
     overflow: hidden; 
@@ -310,6 +317,13 @@ th
     vertical-align: middle;
     width: 70px;
     min-width: 70px;
+}
+
+.totalwordstd
+{
+    display: none;
+    min-width: 1px;
+    width: 1px;
 }
 
 .agenttd
@@ -841,7 +855,7 @@ input[type=checkbox]
 {
     padding: 5px 0px 5px 0px;
     font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
-    text-align: center;
+    text-align: left;
 }
 
 .tooltip-row

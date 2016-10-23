@@ -96,7 +96,35 @@ foreach ($agentData['hits']['hits'] as $result)
 	$wordTyped = $result['_source']['wordTyped'];
 	$searchValue = "/".$result['_source']['phraseMatch']."/";
         $searchResult = searchJsonFT($jsonFT, $searchValue);
-        $regExpression = htmlentities($result['_source']['phraseMatch']);      
+        $regExpression = htmlentities($result['_source']['phraseMatch']);
+	$stringHistory = htmlentities($result['_source']['stringHistory']);
+
+	/* Phrase zoom */
+
+	$pieces = explode(" ", $stringHistory);
+
+	foreach($pieces as $key => $value)
+	{
+		if($pieces[$key] == $wordTyped)
+		{
+			if (array_key_exists($key-1, $pieces))
+			{  
+				if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
+				else $leftWords = $pieces[$key-1];
+			}
+			else $leftWords = "";				
+			
+			if (array_key_exists($key+1, $pieces)) 
+                        {
+                                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];        
+                                else $rightWords = $pieces[$key+1];      
+                        }
+                        else $rightWords = "";           
+
+			$phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
+			break;
+		}
+	}
 
         echo '<td class="alerttypetd">';
         echo '<span class="fa fa-tags">&nbsp;&nbsp;</span><div class="tooltip-custom tooltip-father" 
@@ -104,6 +132,7 @@ foreach ($agentData['hits']['hits'] as $result)
         <div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div>
 	<div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div>
 	<div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div>
+	<div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div>
 	<div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>
         ">'.ucfirst($result['_source']['alertType']).'</div>';
         echo '</td>';
