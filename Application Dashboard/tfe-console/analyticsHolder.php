@@ -199,50 +199,50 @@ include "inc/elasticsearch.php";
 	
 					if ($countOpportunity >= 0 && $countOpportunity <= 10)
 					{
-                                                if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-0-10-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-0-10-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-0-10-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 31) paintScatter($counter, "point-opportunity-0-10-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-0-10-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-0-10-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-0-10-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= 31.0) paintScatter($counter, "point-opportunity-0-10-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
 					}
 											
 					if ($countOpportunity >= 11 && $countOpportunity <= 30)
                                         {
-						if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-11-30-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-11-30-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-11-30-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31) paintScatter($counter, "point-opportunity-11-30-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-11-30-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-11-30-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-11-30-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-11-30-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 			
 					if ($countOpportunity >= 31 && $countOpportunity <= 60)
                                         {
-						if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-31-60-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-31-60-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-31-60-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31) paintScatter($counter, "point-opportunity-31-60-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-31-60-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-31-60-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-31-60-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-31-60-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
 					if ($countOpportunity >= 61 && $countOpportunity <= 100)
                                         {
-						if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-61-100-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-61-100-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-61-100-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31) paintScatter($counter, "point-opportunity-61-100-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-61-100-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-61-100-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-61-100-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-61-100-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
 					if ($countOpportunity >= 101 && $countOpportunity <= 500)
                                         {
-						if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-101-500-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-101-500-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-101-500-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31) paintScatter($counter, "point-opportunity-101-500-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-101-500-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-101-500-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-101-500-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-101-500-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
 					if ($countOpportunity >= 501 && $countOpportunity <= 1000)
                                         {
-						if ($score > 0 && $score <= 10) paintScatter($counter, "point-opportunity-501-1000-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11 && $score <= 20) paintScatter($counter, "point-opportunity-501-1000-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21 && $score <= 30) paintScatter($counter, "point-opportunity-501-1000-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31) paintScatter($counter, "point-opportunity-501-1000-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-501-1000-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-501-1000-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-501-1000-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-501-1000-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
 					$counter++;
@@ -333,50 +333,50 @@ $(document).ready(function () {
 
                         if ($countOpportunity >= 0 && $countOpportunity <= 10)
                         {
-       		                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+       		                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         if ($countOpportunity >= 11 && $countOpportunity <= 30)
                         {
-                                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         if ($countOpportunity >= 31 && $countOpportunity <= 60)
                         {
-                                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 		
 			if ($countOpportunity >= 61 && $countOpportunity <= 100)
                         {
-                                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         if ($countOpportunity >= 101 && $countOpportunity <= 500)
                         {
-                                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         if ($countOpportunity >= 501 && $countOpportunity <= 1000)
                         {
-                                 if ($score > 0 && $score <= 10) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11 && $score <= 20) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21 && $score <= 30) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         $counter++;
