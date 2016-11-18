@@ -86,14 +86,35 @@ include "inc/elasticsearch.php";
                 $ESindex = $configFile['es_words_index'];
                 $ESalerterIndex = $configFile['es_alerter_index'];
                 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
+		$APCttl = $configFile['apc_ttl'];
 
-                $matchesRationalizationCount = countAllFraudTriangleMatches($fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                $matchesOpportunityCount = countAllFraudTriangleMatches($fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-                $matchesPressureCount = countAllFraudTriangleMatches($fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+		/* Matches data with APC caching */
 
-                $countRationalizationTotal = $matchesRationalizationCount['count'];
-                $countOpportunityTotal = $matchesOpportunityCount['count'];
-                $countPressureTotal = $matchesPressureCount['count'];
+		$matchesRationalizationCount_CACHED = "matchesRationalizationCount";
+		$matchesOpportunityCount_CACHED = "matchesOpportunityCount";
+		$matchesPressureCount_CACHED = "matchesPressureCount";
+
+		$matchesRationalizationCount_FETCH = apc_fetch($matchesRationalizationCount_CACHED);
+		$matchesOpportunityCount_FETCH = apc_fetch($matchesOpportunityCount_CACHED);
+		$matchesPressureCount_FETCH = apc_fetch($matchesPressureCount_CACHED);
+
+		if(!$matchesRationalizationCount_FETCH || !$matchesOpportunityCount_FETCH || !$matchesPressureCount_FETCH) 
+		{
+			$matchesRationalizationCount = countAllFraudTriangleMatches($fraudTriangleTerms['r'], $configFile['es_alerter_index']);
+                	$matchesOpportunityCount = countAllFraudTriangleMatches($fraudTriangleTerms['o'], $configFile['es_alerter_index']);
+                	$matchesPressureCount = countAllFraudTriangleMatches($fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+
+			apc_store($matchesRationalizationCount_CACHED, $matchesRationalizationCount, $APCttl);
+			apc_store($matchesOpportunityCount_CACHED, $matchesOpportunityCount, $APCttl);
+			apc_store($matchesPressureCount_CACHED, $matchesPressureCount, $APCttl);
+		}
+
+		$CcountRationalizationTotal = apc_fetch($matchesRationalizationCount_CACHED);
+		$countRationalizationTotal = $CcountRationalizationTotal['count'];
+		$CcountOpportunityTotal = apc_fetch($matchesOpportunityCount_CACHED);		
+                $countOpportunityTotal = $CcountOpportunityTotal['count'];
+		$CcountPressureTotal = apc_fetch($matchesPressureCount_CACHED);
+                $countPressureTotal = $CcountPressureTotal['count'];
 
 		echo '<table class="table-insights">';
                 echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-icon-color">&nbsp;&nbsp;</span>Phrase counts</th>';
@@ -181,15 +202,35 @@ include "inc/elasticsearch.php";
 			{
 				do
 				{
-					$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                			$matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-                			$matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+					/* Agent data with APC caching */
 
-                       			$countRationalization = $matchesRationalization['count'];
-                       			$countOpportunity = $matchesOpportunity['count'];
-                       			$countPressure = $matchesPressure['count'];
-				
-					$score= ($countPressure+$countOpportunity+$countRationalization)/3;		
+					$matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
+					$matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
+	 				$matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';	
+
+					$matchesRationalization_FETCH = apc_fetch($matchesRationalization_CACHED);
+					$matchesOpportunity_FETCH = apc_fetch($matchesOpportunity_CACHED);
+					$matchesPressure_FETCH = apc_fetch($matchesPressure_CACHED);
+
+					if(!$matchesRationalization_FETCH || !$matchesOpportunity_FETCH || !$matchesPressure_FETCH) 
+					{
+						$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
+						$matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
+						$matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+
+						apc_store($matchesRationalization_CACHED, $matchesRationalization, $APCttl);
+						apc_store($matchesOpportunity_CACHED, $matchesOpportunity, $APCttl);
+						apc_store($matchesPressure_CACHED, $matchesPressure, $APCttl);
+					}
+                
+					$Rationalization = apc_fetch($matchesRationalization_CACHED);
+					$countRationalization = $Rationalization['count'];
+					$Opportunity = apc_fetch($matchesOpportunity_CACHED); 
+					$countOpportunity = $Opportunity['count'];
+					$Pressure = apc_fetch($matchesPressure_CACHED);
+                			$countPressure = $Pressure['count'];
+	
+					$score=($countPressure+$countOpportunity+$countRationalization)/3;
 					$score = round($score, 1);	
 
 					unset($GLOBALS['numberOfRMatches']);
@@ -277,13 +318,18 @@ $(document).ready(function () {
         {
         	do
                	{
-			$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                        $matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-                        $matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+			/* Agent data with APC caching */
+		
+                        $matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
+                        $matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
+                        $matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';
 
-                        $countRationalization = $matchesRationalization['count'];
-                        $countOpportunity = $matchesOpportunity['count'];
-                        $countPressure = $matchesPressure['count'];
+                        $Rationalization = apc_fetch($matchesRationalization_CACHED);
+                        $countRationalization = $Rationalization['count'];
+                        $Opportunity = apc_fetch($matchesOpportunity_CACHED);
+                        $countOpportunity = $Opportunity['count'];
+                        $Pressure = apc_fetch($matchesPressure_CACHED);
+                        $countPressure = $Pressure['count'];
 
 			/*  Draw axis units */
 
@@ -297,11 +343,15 @@ $(document).ready(function () {
         			{
                 			do
                 			{
-                        			$matchesRationalizationT = countFraudTriangleMatches($row_aT["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                        			$matchesPressureT = countFraudTriangleMatches($row_aT["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+						/* Agent data with APC caching */
+                
+			                        $matchesRationalizationT_CACHED = $row_aT["agent"].'-matchesRationalization';
+                        			$matchesPressureT_CACHED = $row_aT["agent"].'-matchesPressure';
 
-                                		$countRationalizationT[$subCounter] = $matchesRationalizationT['count'];
-                                		$countPressureT[$subCounter] = $matchesPressureT['count'];
+                        			$RationalizationT = apc_fetch($matchesRationalizationT_CACHED);
+                        			$PressureT = apc_fetch($matchesPressureT_CACHED);
+                                		$countRationalizationT[$subCounter] = $RationalizationT['count'];
+                                		$countPressureT[$subCounter] = $PressureT['count'];
 	
 						$subCounter++;
 					}

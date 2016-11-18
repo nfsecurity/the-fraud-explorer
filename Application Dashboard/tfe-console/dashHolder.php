@@ -66,6 +66,7 @@ $configFile = parse_ini_file("config.ini");
 $ESindex = $configFile['es_words_index'];
 $ESalerterIndex = $configFile['es_alerter_index'];
 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
+$APCttl = $configFile['apc_ttl'];
 
 /* Global data variables */
 
@@ -145,17 +146,39 @@ if ($row_a = mysql_fetch_array($result_a))
 
   		echo '<td class="ostd"><span class="fa fa-windows fa-lg font-icon-color">&nbsp;&nbsp;</span>'. getTextSist($row_a["system"]) .'</td>';
 
-		/* Agent data */
+		/* Agent data with APC caching */
 
-		$totalWordCount = countWordsTypedByAgent($row_a["agent"], "TextEvent", $ESindex);
-		$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-                $matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-                $matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+		$totalWordCount_CACHED = $row_a["agent"].'-totalwordCount';
+		$matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
+		$matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
+	 	$matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';	
 
-                $countRationalization = $matchesRationalization['count'];
-                $countOpportunity = $matchesOpportunity['count'];
-                $countPressure = $matchesPressure['count'];
-		$totalWordHits = $totalWordCount['count'];
+		$totalWordCount_FETCH = apc_fetch($totalWordCount_CACHED);
+		$matchesRationalization_FETCH = apc_fetch($matchesRationalization_CACHED);
+		$matchesOpportunity_FETCH = apc_fetch($matchesOpportunity_CACHED);
+		$matchesPressure_FETCH = apc_fetch($matchesPressure_CACHED);
+
+		if(!$totalWordCount_FETCH || !$matchesRationalization_FETCH || !$matchesOpportunity_FETCH || !$matchesPressure_FETCH) 
+		{
+			$totalWordCount = countWordsTypedByAgent($row_a["agent"], "TextEvent", $ESindex);
+			$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
+			$matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
+			$matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
+
+			apc_store($totalWordCount_CACHED, $totalWordCount, $APCttl);
+			apc_store($matchesRationalization_CACHED, $matchesRationalization, $APCttl);
+			apc_store($matchesOpportunity_CACHED, $matchesOpportunity, $APCttl);
+			apc_store($matchesPressure_CACHED, $matchesPressure, $APCttl);
+		}
+                
+		$Rationalization = apc_fetch($matchesRationalization_CACHED);
+		$countRationalization = $Rationalization['count'];
+		$Opportunity = apc_fetch($matchesOpportunity_CACHED); 
+		$countOpportunity = $Opportunity['count'];
+		$Pressure = apc_fetch($matchesPressure_CACHED);
+                $countPressure = $Pressure['count'];
+		$WordHits = apc_fetch($totalWordCount_CACHED);
+		$totalWordHits = $WordHits['count'];
 		$score=($countPressure+$countOpportunity+$countRationalization)/3;
 		$dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
 
