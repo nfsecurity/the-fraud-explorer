@@ -10,7 +10,7 @@
  * http://www.thefraudexplorer.com/License
  *
  * Date: 2016-06-30 15:12:41 -0500 (Wed, 30 Jun 2016)
- * Revision: v0.9.6-beta
+ * Revision: v0.9.7-beta
  *
  * Description: Functions extension file
  */
@@ -53,7 +53,7 @@
         }
  }
 
- /* Extract all words typed by an agent */
+ /* Extract all words typed by agent */
 
  function extractTypedWordsFromAgentID($agentID, $index)
  {
@@ -76,7 +76,7 @@
         return $agentIdTypedWords;
  }
 
- /* Extract words typed by an agent depending of the last date */
+ /* Extract words typed by agent depending of the last date */
 
  function extractTypedWordsFromAgentIDWithDate($agentID, $index, $from, $to)
  {
@@ -142,7 +142,7 @@
  
  /* Start data procesing */ 
 
- function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT)
+ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset)
  {
  	getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
         $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
@@ -167,7 +167,7 @@
                 }
                 else
                 {
-                	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT);
+                	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
                         $counter = 0;
                         $stringOfWords = $value[0];
                 }
@@ -180,11 +180,11 @@
 
  /* Parse Fraud Triangle phrases */
 
- function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT)
+ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT, $ruleset)
  {
 	foreach ($fraudTriangleTerms as $term => $value)
         {
-        	foreach ($jsonFT['dictionary'][$term] as $field => $termPhrase) 
+        	foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase) 
                 {
                 	if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
                         {
@@ -202,6 +202,18 @@
 		      } 
                 }
         }
+ }
+
+ /* Get ruleset from agent */
+
+ function getRuleset($agentID)
+ {
+ 	$rulesetQuery = sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'", $agentID);
+        $rulesetExecution = mysql_query($rulesetQuery);
+        $rowRuleset = mysql_fetch_assoc($rulesetExecution);
+        $ruleset = $rowRuleset['ruleset'];
+ 
+ 	return $ruleset;
  }
 
  /* Send log data to external file */

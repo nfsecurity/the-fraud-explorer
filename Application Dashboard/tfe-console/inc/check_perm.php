@@ -15,22 +15,10 @@
  */
 
 $userConnected=$_SESSION['user_con'];
-$userScope=$_SESSION['user_scope'];
-$userPermissions=$_SESSION['user_permissions'];
 
 function whatUser()
 {
 	return $userConnected;
-}
-
-function whatUserScope()
-{
- 	return $userScope; 
-}
-
-function whatUserPermissions()
-{
-	return $userPermissions;
 }
 
 ?>

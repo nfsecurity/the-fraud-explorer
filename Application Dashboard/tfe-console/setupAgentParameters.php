@@ -38,19 +38,19 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 if (isset($_GET['alias'])) 
 {
 	$alias=filter($_POST['alias']);
-	mysql_query(sprintf("UPDATE t_agents SET name='%s' WHERE agent='%s'",$alias,$agent_dec));
+	if (!empty($alias)) mysql_query(sprintf("UPDATE t_agents SET name='%s' WHERE agent='%s'",$alias,$agent_dec));
 }
 
-if (isset($_GET['owner'])) 
+if (isset($_GET['ruleset'])) 
 {
-        $owner=filter($_POST['owner']);
-        mysql_query(sprintf("UPDATE t_agents SET owner='%s' WHERE agent='%s'",$owner,$agent_dec));
+        $ruleset=filter($_POST['ruleset']);
+        if (!empty($ruleset)) mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent='%s'",$ruleset,$agent_dec));
 }
 
 if (isset($_GET['gender']))
 {
         $gender=filter($_POST['gender']);
-        mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent='%s'",$gender,$agent_dec));
+        if (!empty($gender)) mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent='%s'",$gender,$agent_dec));
 }
 
 header ("location:  dashBoard");

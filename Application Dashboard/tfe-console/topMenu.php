@@ -24,6 +24,9 @@ include "inc/close-db-connection.php";
 		<a href="analyticsData">Analytics</a>
 	</li>
 	<li class="li">
+                <a href="setupRuleset">Ruleset</a>
+        </li>
+	<li class="li">
                 <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#">Configuration</a>
         </li>
 	<li class="li">

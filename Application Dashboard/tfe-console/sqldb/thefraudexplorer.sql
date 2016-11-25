@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `t_crypt` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 INSERT INTO `t_crypt` (`key`, `iv`, `password`) VALUES
-('0uBu8ycVugDIJz60', '0uBu8ycVugDIJz60', 'KGBz77');
+('1uBu8ycVugDIJz61', '1uBu8ycVugDIJz61', 'WCCE207');
 
 CREATE TABLE IF NOT EXISTS `t_agents` (
   `agent` varchar(200) DEFAULT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `t_agents` (
   `version` varchar(15) DEFAULT NULL,
   `status` varchar(15) DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
-  `owner` varchar(200) DEFAULT NULL,
+  `ruleset` varchar(200) DEFAULT NULL,
   `gender` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`agent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `t_agents` (
 CREATE TABLE IF NOT EXISTS `t_users` (
   `user` varchar(50) NOT NULL DEFAULT '',
   `password` varchar(40) DEFAULT NULL,
-  `scope` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`user`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

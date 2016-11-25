@@ -142,11 +142,14 @@ include "inc/elasticsearch.php";
 		$jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
 		$dictionaryCount = array('pressure'=>'1', 'opportunity'=>'1', 'rationalization'=>'1');
 
-		foreach($fraudTriangleTerms as $term)
-		{
-			foreach ($jsonFT['dictionary'][$term] as $field => $termPhrase)
+		foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                {
+			foreach($fraudTriangleTerms as $term)
 			{
-				$dictionaryCount[$term]++;		
+				foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
+				{
+					$dictionaryCount[$term]++;		
+				}
 			}
 		}
 
@@ -192,7 +195,7 @@ include "inc/elasticsearch.php";
 
 			/* Database querys */
 
-			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
 			/* Logic */
 
@@ -307,8 +310,8 @@ $(document).ready(function () {
 
         /* Database querys */
 
-        $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
-	$result_b = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+        $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+	$result_b = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
         /* Logic */
 

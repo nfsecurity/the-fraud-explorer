@@ -86,7 +86,7 @@ include "inc/open-db-connection.php";
         $keyquery = mysql_query("SELECT iv FROM t_crypt"); $keypass = mysql_fetch_array($keyquery);
         echo '(current value:'.$keypass[0].')'; ?>" padding: 5px; border: solid 2px #c9c9c9;">
 
-	<br><p class="title-config">Admin password modification (mandatory)</p><br>
+	<br><p class="title-config">Admin password modification</p><br>
         <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" 
 	placeholder=":new password here" padding: 5px; border: solid 2px #c9c9c9;">
 

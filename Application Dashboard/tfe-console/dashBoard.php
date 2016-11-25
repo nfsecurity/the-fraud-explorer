@@ -85,12 +85,10 @@ error_reporting(0);
 
 				echo '<div id="tableHolder" class="table-holder"></div>';
 			}
+
+			include "inc/close-db-connection.php";
 		?>
 	</div>
-
-	<?php
-		include "inc/close-db-connection.php";
-	?>
 
 	<!-- Modal for deletion -->
 

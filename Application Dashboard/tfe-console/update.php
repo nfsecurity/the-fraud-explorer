@@ -48,20 +48,16 @@ if ($key == $keypass[0])
  	$result=mysql_query("SELECT count(*) FROM t_agents WHERE agent='".$agent."'");
  	if ($row_a = mysql_fetch_array($result)) { $count = $row_a[0]; }
  	$date=date('Y-M-d H:i:s');
- 	$countcalendar = null;
 
  	if($count[0]>0)
  	{
   		date_default_timezone_set($configFile['php_timezone']);
   		$datecalendar=date('Y-m-d');
   		$result=mysql_query("Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "' where agent='".$agent."'");
-  		$todaycalendar=mysql_query("SELECT * from t_calendar_".$agent." WHERE event_date = '".$datecalendar."';");
-  		if ($row_date = mysql_fetch_array($todaycalendar)) $countcalendar = $row_date[0];
-  		if($countcalendar[0]==0) $calendar=mysql_query("INSERT INTO t_calendar_".$agent." (event_date, title, description) VALUES ('".$datecalendar."','Connection','The agent was connected this day')");
  	}
  	else
  	{
-  		if(strlen($macAgent)<50)
+  		if(strlen($macAgent)<60)
   		{
    			/* Send message alert for first agent connection */
 
@@ -70,7 +66,7 @@ if ($key == $keypass[0])
 
    			/* Heartbeat data */
 
-   			$query="INSERT INTO t_agents (agent, heartbeat, system, version) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "')";
+   			$query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "','GENERIC')";
    			queryOrDie($query);
 
    			/* Primary agent table */

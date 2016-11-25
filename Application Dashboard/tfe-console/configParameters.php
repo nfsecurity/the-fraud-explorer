@@ -33,27 +33,27 @@ function filter($variable)
 
 if (isset($_GET['key'])) 
 {
-	$password=filter($_POST['key']);
-	mysql_query(sprintf("UPDATE t_crypt SET password='%s'", $password));
+	$keyPass=filter($_POST['key']);
+	if (!empty($keyPass)) mysql_query(sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
 }
 
 if (isset($_GET['changepassword']))
 {
         $username="admin";
         $password=sha1(filter($_POST['password']));
-        mysql_query(sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
+        if (!empty($password)) mysql_query(sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
 }
 
 if (isset($_GET['encryption']))
 {
         $encryption=filter($_POST['encryption']);
-        mysql_query(sprintf("UPDATE t_crypt SET `key`='%s'", $encryption));
+        if (!empty($encryption)) mysql_query(sprintf("UPDATE t_crypt SET `key`='%s'", $encryption));
 }
 
 if (isset($_GET['iv']))
 {
         $iv=filter($_POST['iv']);
-        mysql_query(sprintf("UPDATE t_crypt SET iv='%s'", $iv));
+        if (!empty($iv)) mysql_query(sprintf("UPDATE t_crypt SET iv='%s'", $iv));
 }
 
 

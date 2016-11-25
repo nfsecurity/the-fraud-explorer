@@ -19,8 +19,8 @@ session_start();
 
 require 'vendor/autoload.php';
 include "inc/global-vars.php";
-include "inc/open-db-connection.php";
 include "inc/agent_methods.php";
+include "inc/open-db-connection.php";
 include "inc/check_perm.php";
 include "inc/elasticsearch.php";
 
@@ -117,13 +117,13 @@ function agentInsights($gender, $agent_enc, $totalWordHits, $countPressure, $cou
 
 /* Show main table and telemetry with the agent list */
 
-if ($userConnected != 'admin') $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents WHERE owner='".$userScope."' ORDER BY FIELD(status, 'active','inactive'), agent ASC");
-else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, owner, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+if ($userConnected != 'admin') $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
 /* Main Table */
 
 echo '<table id="tblData" class="tablesorter">';
-echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="totalwordsth"></th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">GROUP</th>
+echo '<thead><tr><th class="selectth"><img src="images/selection.svg" style="vertical-align: middle;"></th><th class="osth">OS</th><th class="totalwordsth"></th><th class="agentth">PEOPLE REGISTERED</th><th class="compth">RULE SET</th>
 <th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th>
 <th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr>
 </thead><tbody>';
@@ -205,8 +205,8 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Company, department or group */
 
-		if ($row_a["owner"] == NULL) echo '<td class="comptd">NYET</td>';
-                else echo '<td class="comptd">' . $row_a["owner"] . "</td>";
+		if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd">GENERIC</td>';
+                else echo '<td class="comptd">' . $row_a["ruleset"] . "</td>";
 
 		/* Agent software version */
 
@@ -245,7 +245,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Agent selection for command retrieval */
 
-		if(isConnected($row_a["heartbeat"], $row_a[2]) && $userPermissions != "view")
+		if(isConnected($row_a["heartbeat"], $row_a[2]))
   		{
 			if(isset($_SESSION['agentchecked']))
                         {

@@ -44,8 +44,6 @@ if ($row = mysql_fetch_array($result_b))
   		{
     			$_SESSION['connected']=1;
     			$_SESSION['user_con']=$user;
-			$_SESSION['user_scope']=$rowUser[2];
-			$_SESSION['user_permissions']=$rowUser[3];
     			Header("Location: dashBoard");
   		}
   		else

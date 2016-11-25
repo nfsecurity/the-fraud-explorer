@@ -66,6 +66,42 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
     margin: 20px;
 }
 
+.select-ruleset-styled
+{
+    position: relative;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 30px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.select-ruleset-styled:before
+{
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 5px 0 5px;
+    border-color: #000000 transparent transparent transparent;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+.select-ruleset-styled select
+{
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    appearance: none;
+}
+
 </style>
 
 <div class="modal-header">
@@ -74,24 +110,48 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 </div>
 
 <div class="div-container">
-    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc.'&alias=yes&owner=yes&gender=yes' ?>">
+    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc.'&alias=yes&ruleset=yes&gender=yes' ?>">
 	<p class="title">Agent alias</p><br>
         <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php
         $aliasquery = mysql_query(sprintf("SELECT name FROM t_agents WHERE agent='%s'",$agent_dec)); $alias = mysql_fetch_array($aliasquery);
         if ($alias[0] == NULL) echo '(current value: Not alias yet)';
         else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
 
-        <br><br><p class="title">Company or group name</p><br>
-        <input type="text" name="owner" id="owner" autocomplete="off" placeholder=":owner/company name here <?php
-        $ownerquery = mysql_query(sprintf("SELECT owner FROM t_agents WHERE agent='%s'",$agent_dec)); $owner = mysql_fetch_array($ownerquery);
-        if ($owner[0] == NULL) echo '(current value: Not company yet)';
-        else echo '(current value: '.$owner[0].')'; ?>" class="input-value-text">
+        <br><br><p class="title">Ruleset or Dictionary</p><br>
+
+	<select class="select-ruleset-styled" name="ruleset" id="ruleset">
+  		<option selected="selected">Choose the ruleset <?php
+        		$rulesetquery = mysql_query(sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'",$agent_dec)); $ruleset = mysql_fetch_array($rulesetquery);
+        		if ($ruleset[0] == NULL) echo '(current dictionary: GENERIC)';
+        		else echo '(current dictionary: '.$ruleset[0].')'; ?> 
+		</option>
+		
+		<?php
+
+			$configFile = parse_ini_file("config.ini");
+			$jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+			$GLOBALS['listRuleset'] = null;
+
+			foreach ($jsonFT['dictionary'] as $ruleset => $value)
+			{ 
+				echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+			}
+		?>
+
+	</select> 
 
         <br><br><p class="title">Agent gender</p><br>
-        <input type="text" name="gender" id="gender" autocomplete="off" placeholder=":gender here (male/female) <?php
-        $genderquery = mysql_query(sprintf("SELECT gender FROM t_agents WHERE agent='%s'",$agent_dec)); $gender = mysql_fetch_array($genderquery);
-        if ($gender[0] == NULL) echo '(current value: Not gender yet)';
-        else echo '(current value: '.$gender[0].')'; ?>" class="input-value-text">
+
+	<select class="select-ruleset-styled" name="gender" id="gender">
+                <option selected="selected">Choose the gender <?php
+               		$genderquery = mysql_query(sprintf("SELECT gender FROM t_agents WHERE agent='%s'",$agent_dec)); $gender = mysql_fetch_array($genderquery);
+        		if ($gender[0] == NULL) echo '(current value: Not gender yet)';
+        		else echo '(current value: '.$gender[0].')'; ?>
+		</option>
+
+                <option value="male">Male</option>
+		<option value="female">Female</option>
+        </select>
 
 	<br><br>
 

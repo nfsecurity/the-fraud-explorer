@@ -10,10 +10,14 @@
  * http://www.thefraudexplorer.com/License
  *
  * Date: 2016-06-30 15:12:41 -0500 (Wed, 30 Jun 2016)
- * Revision: v0.9.6-beta
+ * Revision: v0.9.7-beta
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
+
+ /* External includes */
+
+ include "../inc/open-db-connection.php";
 
  /* Current time */
 
@@ -76,8 +80,12 @@
 		$typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
 		if ($typedWords['hits']['total'] == 0) continue;  
-		else startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT);
- 	}
+		else 
+		{
+			$ruleset = getRuleset($agentID);
+			startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset);
+		}
+	}
  }
  else
  {
@@ -88,8 +96,12 @@
 		$typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
 		if ($typedWords['hits']['total'] == 0) continue;
-                else startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT);
-        }
+                else 
+		{
+			$ruleset = getRuleset($agentID);
+			startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset);
+        	}
+	}
  }
 
  /* Close Alerter UDP socket */
@@ -111,4 +123,6 @@
  socket_close($sockAlerter);
 
  logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
+ include "../inc/close-db-connection.php";
+
 ?>
