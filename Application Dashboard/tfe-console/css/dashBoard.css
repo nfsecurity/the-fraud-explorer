@@ -13,7 +13,6 @@ table, caption, tbody, tfoot, thead, tr, th, td
     border:0;
     outline:0;
     font-size:100%;
-    background:transparent;
 }
 
 @font-face 
@@ -131,7 +130,6 @@ td
     border-top:0px solid #e0e0e0;
     border-right:0px solid #F8F8F8;
     border-bottom:1px solid #F8F8F8;
-    background: white;
     width: 100%;
 }
 
@@ -305,6 +303,7 @@ th
     vertical-align: middle;
     width: 50px;
     min-width: 50px;
+    background: white;
 }
 
 .ostd    
@@ -317,6 +316,7 @@ th
     vertical-align: middle;
     width: 70px;
     min-width: 70px;
+    background: white;
 }
 
 .totalwordstd
@@ -324,6 +324,7 @@ th
     display: none;
     min-width: 1px;
     width: 1px;
+    background: white;
 }
 
 .agenttd
@@ -335,6 +336,7 @@ th
     text-align: left;
     vertical-align: middle;
     padding-left: 20px;
+    background: white;
 }
 
 .comptd  
@@ -349,6 +351,7 @@ th
     min-width: 150px;
     border-right:0px solid #F8F8F8;
     border-left:1px solid #F8F8F8;
+    background: white;
 }
 
 .vertd   
@@ -361,6 +364,7 @@ th
     vertical-align: middle;
     width: 100px;
     min-width: 100px;
+    background: white;
 }
 
 .statetd 
@@ -372,6 +376,7 @@ th
     vertical-align: middle; 
     width: 100px;
     min-width: 100px;
+    background: white;
 }
 
 .lasttd  
@@ -382,6 +387,7 @@ th
     vertical-align: middle;
     width: 90px;
     min-width: 90px;
+    background: white;
 }
 
 .countptd
@@ -880,5 +886,3 @@ input[type=checkbox]
     font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
     text-align: center;
 }
-
-

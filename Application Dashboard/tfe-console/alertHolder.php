@@ -49,13 +49,15 @@ echo '</style>';
 
 $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
 
-function searchJsonFT($jsonFT, $searchValue)
+function searchJsonFT($jsonFT, $searchValue, $agent_dec)
 {
+	$rulesetquery = mysql_query(sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'",$agent_dec));
+	$ruleset = mysql_fetch_array($rulesetquery);
 	$fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
 
 	foreach($fraudTriangleTerms as $term)
         {	
-        	foreach($jsonFT->dictionary->$term as $keyName => $value)
+        	foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value)
         	{
 			if(strcmp($value, $searchValue) == 0) return $keyName;
 		}
@@ -95,7 +97,7 @@ foreach ($agentData['hits']['hits'] as $result)
 	$windowTitle = htmlentities($result['_source']['windowTitle']);
 	$wordTyped = $result['_source']['wordTyped'];
 	$searchValue = "/".$result['_source']['phraseMatch']."/";
-        $searchResult = searchJsonFT($jsonFT, $searchValue);
+        $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_dec);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
 	$stringHistory = htmlentities($result['_source']['stringHistory']);
 

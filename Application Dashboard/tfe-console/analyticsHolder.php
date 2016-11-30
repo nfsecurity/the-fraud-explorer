@@ -34,10 +34,12 @@ include "inc/elasticsearch.php";
 <!-- Styles -->
 
 <style>
-	.font-icon-color 
-	{ 
-	    color: #B4BCC2; 
-	}
+
+.font-icon-color 
+{ 
+    color: #B4BCC2; 
+}
+
 </style>
 
 <!-- Chart -->
@@ -45,7 +47,33 @@ include "inc/elasticsearch.php";
 <center>
 	<div class="content-graph">
 	<div class="graph-insights">
-				
+		
+	<!-- Graph scope -->
+	
+	<form name="scope" method="post">
+
+		<select class="select-scope-styled" name="ruleset" id="ruleset">
+                	<option selected="selected"> <?php echo $_SESSION['rulesetScope']; ?></option>
+
+                	<?php	
+
+                        	$configFile = parse_ini_file("config.ini");
+                        	$jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                        	$GLOBALS['listRuleset'] = null;
+
+                        	foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                        	{
+                                	echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        	}
+                	?>
+
+        	</select>
+		<br><br>	
+		<input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%;" />
+		<br>
+		<br>
+	</form>
+		
 	<!-- Leyend -->
 
 	<table class="table-leyend">
@@ -140,7 +168,7 @@ include "inc/elasticsearch.php";
 	<?php
 		$fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
 		$jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
-		$dictionaryCount = array('pressure'=>'1', 'opportunity'=>'1', 'rationalization'=>'1');
+		$dictionaryCount = array('pressure'=>'0', 'opportunity'=>'0', 'rationalization'=>'0');
 
 		foreach ($jsonFT['dictionary'] as $ruleset => $value)
                 {
@@ -195,7 +223,7 @@ include "inc/elasticsearch.php";
 
 			/* Database querys */
 
-			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."' ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
 			/* Logic */
 

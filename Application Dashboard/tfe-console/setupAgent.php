@@ -72,7 +72,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
     border: 1px solid #ccc;
     width: 100%;
     height: 30px;
-    overflow: hidden;
+    overflow: scroll;
     background-color: #fff;
 }
 

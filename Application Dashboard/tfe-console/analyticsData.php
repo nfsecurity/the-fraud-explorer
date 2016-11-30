@@ -80,6 +80,11 @@ include "inc/elasticsearch.php";
 
 		<!-- Code for paint chart -->
 
+		<?php
+		        if (isset($_POST["ruleset"])) $_SESSION['rulesetScope'] = $_POST["ruleset"];
+        		else $_SESSION['rulesetScope'] = "GENERIC";
+		?>
+
                 <div id="chartHolder" class="chart-holder"></div>
 
 	</div>

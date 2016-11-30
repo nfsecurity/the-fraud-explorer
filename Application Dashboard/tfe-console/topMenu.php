@@ -24,7 +24,7 @@ include "inc/close-db-connection.php";
 		<a href="analyticsData">Analytics</a>
 	</li>
 	<li class="li">
-                <a href="setupRuleset">Ruleset</a>
+                <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#">Ruleset</a>
         </li>
 	<li class="li">
                 <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#">Configuration</a>
@@ -72,4 +72,19 @@ include "inc/close-db-connection.php";
                 </div>
         </div>
 </div>
+
+<!-- Modal for Ruleset -->
+
+<div class="modal fade" id="ruleset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                                <div class="modal-body">
+                                        <p class="debug-url window-debug"></p>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
+
 
