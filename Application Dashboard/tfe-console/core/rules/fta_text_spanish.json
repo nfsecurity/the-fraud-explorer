@@ -69,7 +69,7 @@
     "cometer, cometiendo" : "/\\bcomet[^\\s]+/",
     "fecha tope, limite" : "/\\bfecha (limit|top)[^\\s]+/",
     "maniobra, chanchullo" : "/\\b(intrig|chanchull|maniobr)[^\\s]+/",
-    "hipoteca, deuda" : "/\\b(hipotec|deud|credit|obligac)[^\\s]+/",
+    "hipoteca, deuda" : "/\\b(hipotec|deud|credit)[^\\s]+/",
     "destruir, esconder" : "/\\b(escond|destru)[^\\s]+/",
     "queja, protesta" : "/\\b(queja|reclam|protest|demand)[^\\s]+/",
     "critico, esencial" : "/\\b(crucia|decisiv|critic|trascendent|esenci)[^\\s]+/",
@@ -85,7 +85,6 @@
     "falacia, falsedad" : "/\\b(falsed|falaci)[^\\s]+/",
     "calumnia, chisme" : "/\\b(calumni|chism)[^\\s]+/",
     "truco, confusion" : "/\\b(truc|confusi)[^\\s]+/",  
-    "extrano, receloso" : "/\\b(extran|recelos)[^\\s]+/",
     "mal visto" : "/\\bmal vist[^\\s]+/",
     "plagiar, falsificar" : "/\\b(plagi|falsifi)[^\\s]+/",
     "imitacion, adulteracion" : "/\\b(imita|adultera)[^\\s]+/",
@@ -571,6 +570,246 @@
   },
  
   "PURCHASES": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "TECHNOLOGY": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "LEGAL": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "OPERATIONS": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "HUMAN": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "AUDIT": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "SALES": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "PRODUCTION": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "SUPPORT": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "CUSTOMER": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "MARKETING": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "FINANCE": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "ACCOUNTING": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "ADMIN": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "SECURITY": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "DESIGN": {
+
+   "pressure": {
+
+   },
+
+   "opportunity": {
+
+   },
+
+   "rationalization": {
+
+   }
+  },
+
+  "PLANING": {
 
    "pressure": {
 

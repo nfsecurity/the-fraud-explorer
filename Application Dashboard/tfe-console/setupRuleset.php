@@ -209,7 +209,7 @@ form
 	<div class="modal-footer window-footer-config">
                 <br>
 
-		<a href="authAccess?file=tfe-alerter/rules/fta_text_spanish.json" class="btn btn-default">Download JSON file</a>
+		<a href="authAccess?file=core/rules/fta_text_spanish.json" class="btn btn-default">Download JSON file</a>
 
 		<form action="rulesetUpload.php" id="rulesetUpload" method="post" enctype="multipart/form-data">
 			<div class="fileUpload btn btn-default">

@@ -26,7 +26,7 @@ if(empty($_SESSION['connected']))
         exit;
 }
 
-$target_dir = "tfe-alerter/rules/";
+$target_dir = "core/rules/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
 

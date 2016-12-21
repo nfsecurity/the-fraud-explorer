@@ -17,7 +17,7 @@
 
  /* External includes */
 
- include "../inc/open-db-connection.php";
+ include "/var/www/html/tfe-console/inc/open-db-connection.php";
 
  /* Current time */
 
@@ -40,6 +40,7 @@
  $startTime = microtime(true);
  $ESindex = $configFile['es_words_index'];
  $fistTimeIndex = true;
+ $APCttl = $configFile['apc_ttl'];
 
  $AgentParams = [
  'index' => $ESindex, 
@@ -74,6 +75,7 @@
         getArrayData($endDate, "endTime", 'lastAlertDate');
 
 	logToFile($configFile['log_file'], "[INFO] - Checking events from last date: ".$GLOBALS['lastAlertDate'][0]."  ...");
+	populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
 	
 	foreach($GLOBALS['agentList'] as $agentID)
         {  
@@ -90,9 +92,10 @@
  else
  {
 	logToFile($configFile['log_file'], "[INFO] - Alerter index not found, continue with all data matching ...");
+	populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
 
  	foreach($GLOBALS['agentList'] as $agentID)
- 	{	
+ 	{
 		$typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
 		if ($typedWords['hits']['total'] == 0) continue;
@@ -123,6 +126,6 @@
  socket_close($sockAlerter);
 
  logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
- include "../inc/close-db-connection.php";
+ include "/var/www/html/tfe-console/inc/close-db-connection.php";
 
 ?>

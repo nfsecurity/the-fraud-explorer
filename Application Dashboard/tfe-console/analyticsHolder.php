@@ -223,7 +223,7 @@ include "inc/elasticsearch.php";
 
 			/* Database querys */
 
-			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."' ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+			$result_a = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, pressure, opportunity, rationalization FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."' ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
 			/* Logic */
 
@@ -235,32 +235,9 @@ include "inc/elasticsearch.php";
 				{
 					/* Agent data with APC caching */
 
-					$matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
-					$matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
-	 				$matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';	
-
-					$matchesRationalization_FETCH = apc_fetch($matchesRationalization_CACHED);
-					$matchesOpportunity_FETCH = apc_fetch($matchesOpportunity_CACHED);
-					$matchesPressure_FETCH = apc_fetch($matchesPressure_CACHED);
-
-					if(!$matchesRationalization_FETCH || !$matchesOpportunity_FETCH || !$matchesPressure_FETCH) 
-					{
-						$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-						$matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-						$matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
-
-						apc_store($matchesRationalization_CACHED, $matchesRationalization, $APCttl);
-						apc_store($matchesOpportunity_CACHED, $matchesOpportunity, $APCttl);
-						apc_store($matchesPressure_CACHED, $matchesPressure, $APCttl);
-					}
-                
-					$Rationalization = apc_fetch($matchesRationalization_CACHED);
-					$countRationalization = $Rationalization['count'];
-					$Opportunity = apc_fetch($matchesOpportunity_CACHED); 
-					$countOpportunity = $Opportunity['count'];
-					$Pressure = apc_fetch($matchesPressure_CACHED);
-                			$countPressure = $Pressure['count'];
-	
+					$countRationalization = $row_a['rationalization'];
+			                $countOpportunity = $row_a['opportunity'];
+                			$countPressure = $row_a['pressure'];
 					$score=($countPressure+$countOpportunity+$countRationalization)/3;
 					$score = round($score, 1);	
 
@@ -338,8 +315,8 @@ $(document).ready(function () {
 
         /* Database querys */
 
-        $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
-	$result_b = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+        $result_a = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, pressure, opportunity, rationalization FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+	$result_b = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, pressure, opportunity, rationalization FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
         /* Logic */
 
@@ -351,16 +328,9 @@ $(document).ready(function () {
                	{
 			/* Agent data with APC caching */
 		
-                        $matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
-                        $matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
-                        $matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';
-
-                        $Rationalization = apc_fetch($matchesRationalization_CACHED);
-                        $countRationalization = $Rationalization['count'];
-                        $Opportunity = apc_fetch($matchesOpportunity_CACHED);
-                        $countOpportunity = $Opportunity['count'];
-                        $Pressure = apc_fetch($matchesPressure_CACHED);
-                        $countPressure = $Pressure['count'];
+			$countRationalization = $row_a['rationalization'];
+                        $countOpportunity = $row_a['opportunity'];
+                        $countPressure = $row_a['pressure'];
 
 			/*  Draw axis units */
 
@@ -375,14 +345,9 @@ $(document).ready(function () {
                 			do
                 			{
 						/* Agent data with APC caching */
-                
-			                        $matchesRationalizationT_CACHED = $row_aT["agent"].'-matchesRationalization';
-                        			$matchesPressureT_CACHED = $row_aT["agent"].'-matchesPressure';
 
-                        			$RationalizationT = apc_fetch($matchesRationalizationT_CACHED);
-                        			$PressureT = apc_fetch($matchesPressureT_CACHED);
-                                		$countRationalizationT[$subCounter] = $RationalizationT['count'];
-                                		$countPressureT[$subCounter] = $PressureT['count'];
+                                		$countRationalizationT[$subCounter] = $row_aT['rationalization'];
+                                		$countPressureT[$subCounter] = $row_aT['pressure'];
 	
 						$subCounter++;
 					}

@@ -29,6 +29,10 @@ CREATE TABLE IF NOT EXISTS `t_agents` (
   `name` varchar(200) DEFAULT NULL,
   `ruleset` varchar(200) DEFAULT NULL,
   `gender` varchar(200) DEFAULT NULL,
+  `totalwords` int DEFAULT NULL,
+  `pressure` int DEFAULT NULL,
+  `opportunity` int DEFAULT NULL,
+  `rationalization` int DEFAULT NULL, 
   PRIMARY KEY (`agent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

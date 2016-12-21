@@ -216,6 +216,82 @@
  	return $ruleset;
  }
 
+ /* Count Fraud Triangle matches by Agent */
+
+ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
+ {
+        $matchesParams = [
+	'index' => $index, 
+	'type' => 'AlertEvent', 
+	'body' => [ 
+		'size' => 10000,
+		'query' => [
+			'bool' => [
+				'must' => [
+						[ 'term' => [ 'agentId.raw' => $agentID ] ],
+						[ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+				]
+			]
+		]
+	]];
+        
+	$client = Elasticsearch\ClientBuilder::create()->build();
+        $agentIdMatches = $client->count($matchesParams);
+
+        return $agentIdMatches;
+ }
+
+ /* Count Words typed by agent */
+
+ function countWordsTypedByAgent($agentID, $alertType, $index)
+ {
+        $matchesParams = [
+        'index' => $index,
+        'type' => 'TextEvent',
+        'body' => [
+                'size' => 1000000,
+                'query' => [
+                        'bool' => [
+                                'must' => [
+                                                [ 'term' => [ 'agentId.raw' => $agentID ] ],
+                                                [ 'term' => [ 'eventType.raw' => $alertType ] ]
+                                ]
+                        ]
+                ]
+        ]];
+
+        $client = Elasticsearch\ClientBuilder::create()->build();
+        $agentIdMatches = $client->count($matchesParams);
+
+        return $agentIdMatches;
+ }
+
+ /* Query agent data with APC caching */
+
+ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
+ {
+	$resultQuery = mysql_query("SELECT agent FROM t_agents");
+	if ($row_a = mysql_fetch_array($resultQuery))
+	{
+        	do
+        	{
+			$fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
+        		$totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);
+                	$matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
+               	 	$matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);
+               	 	$matchesPressure = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['p'], $configFile_es_alerter_index);
+		
+			$totalWords = $totalWordCount['count'];
+			$totalPressure = $matchesPressure['count'];
+			$totalOpportunity = $matchesOpportunity['count'];
+			$totalRationalization = $matchesRationalization['count'];
+
+			$result=mysql_query("Update t_agents set totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' where agent='".$row_a['agent']."'");
+		}
+        	while ($row_a = mysql_fetch_array($resultQuery));
+ 	}
+ }
+
  /* Send log data to external file */
 
  function logToFile($filename, $msg)

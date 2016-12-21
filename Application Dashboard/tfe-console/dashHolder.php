@@ -66,7 +66,6 @@ $configFile = parse_ini_file("config.ini");
 $ESindex = $configFile['es_words_index'];
 $ESalerterIndex = $configFile['es_alerter_index'];
 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
-$APCttl = $configFile['apc_ttl'];
 
 /* Global data variables */
 
@@ -106,19 +105,18 @@ $totalSystemWords = $resultWords['_all']['primaries']['docs']['count'];
 function agentInsights($gender, $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName)
 {
 	echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">&nbsp;&nbsp;<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' 
-        title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Total words typed</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div>
+        title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div>
         <div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div>
         <div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div>
         <div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div>
         <div class=tooltip-row><div class=tooltip-item>Fraud score</div><div class=tooltip-value>'.round($score, 1).'</div></div>
-        <div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation,0).' %</div></div>
+        <div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div>
         </div>">' . $agentName . '</a></td>';
 }
 
 /* Show main table and telemetry with the agent list */
 
-if ($userConnected != 'admin') $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
-else $result_a = mysql_query("SELECT agent,heartbeat, now(), system, version, status, name, ruleset, gender FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+$result_a = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
 
 /* Main Table */
 
@@ -146,39 +144,12 @@ if ($row_a = mysql_fetch_array($result_a))
 
   		echo '<td class="ostd"><span class="fa fa-windows fa-lg font-icon-color">&nbsp;&nbsp;</span>'. getTextSist($row_a["system"]) .'</td>';
 
-		/* Agent data with APC caching */
-
-		$totalWordCount_CACHED = $row_a["agent"].'-totalwordCount';
-		$matchesRationalization_CACHED = $row_a["agent"].'-matchesRationalization';
-		$matchesOpportunity_CACHED = $row_a["agent"].'-matchesOpportunity';
-	 	$matchesPressure_CACHED = $row_a["agent"].'-matchesPressure';	
-
-		$totalWordCount_FETCH = apc_fetch($totalWordCount_CACHED);
-		$matchesRationalization_FETCH = apc_fetch($matchesRationalization_CACHED);
-		$matchesOpportunity_FETCH = apc_fetch($matchesOpportunity_CACHED);
-		$matchesPressure_FETCH = apc_fetch($matchesPressure_CACHED);
-
-		if(!$totalWordCount_FETCH || !$matchesRationalization_FETCH || !$matchesOpportunity_FETCH || !$matchesPressure_FETCH) 
-		{
-			$totalWordCount = countWordsTypedByAgent($row_a["agent"], "TextEvent", $ESindex);
-			$matchesRationalization = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['r'], $configFile['es_alerter_index']);
-			$matchesOpportunity = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['o'], $configFile['es_alerter_index']);
-			$matchesPressure = countFraudTriangleMatches($row_a["agent"], $fraudTriangleTerms['p'], $configFile['es_alerter_index']);
-
-			apc_store($totalWordCount_CACHED, $totalWordCount, $APCttl);
-			apc_store($matchesRationalization_CACHED, $matchesRationalization, $APCttl);
-			apc_store($matchesOpportunity_CACHED, $matchesOpportunity, $APCttl);
-			apc_store($matchesPressure_CACHED, $matchesPressure, $APCttl);
-		}
-                
-		$Rationalization = apc_fetch($matchesRationalization_CACHED);
-		$countRationalization = $Rationalization['count'];
-		$Opportunity = apc_fetch($matchesOpportunity_CACHED); 
-		$countOpportunity = $Opportunity['count'];
-		$Pressure = apc_fetch($matchesPressure_CACHED);
-                $countPressure = $Pressure['count'];
-		$WordHits = apc_fetch($totalWordCount_CACHED);
-		$totalWordHits = $WordHits['count'];
+		/* Agent data retrieval */
+		
+		$countRationalization = $row_a['rationalization'];
+		$countOpportunity = $row_a['opportunity'];
+                $countPressure = $row_a['pressure'];
+		$totalWordHits = $row_a['totalwords'];
 		$score=($countPressure+$countOpportunity+$countRationalization)/3;
 		$dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
 
@@ -289,7 +260,7 @@ if ($row_a = mysql_fetch_array($result_a))
                 <div class="pager-inside-agent">
 
 			<?php
-				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.').' words collected and ';
+				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.').' records collected and ';
 				echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultAlerts['_all']['primaries']['docs']['count'], 0, ',', '.').' fraud triangle alerts triggered, ';
 				echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
 			?>
