@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * http://www.thefraudexplorer.com/
  *
- * Copyright (c) 2016 The Fraud Explorer
+ * Copyright (c) 2017 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2016-07
- * Revision: v0.9.7-beta
+ * Date: 2017-02
+ * Revision: v0.9.8-beta
  *
  * Description: Analytics Helpers
  */
@@ -74,7 +74,8 @@ namespace TFE_core.Analytics
                                                "Separator", "Sleep", "Subtract", "VolumeDown", "VolumeMute", "VolumeUp", "Zoom", "Up", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14",
                                                "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "NumPad0", "NumPad1", "NumPad2", "NumPad3", "NumPad4", "NumPad5", "NumPad6", "NumPad7", "NumPad8", "NumPad9",
                                                "OemClear", "OemCloseBrackets", "OemComma", "OemCopy", "OemMinus", "OemOpenBrackets", "OemPeriod", "OemPipe", "OemPlus", "OemQuestion", "OemQuotes", "OemSemicolon", "OemTilde",
-                                               "Oem1", "Oem2", "Oem3", "Oem4", "Oem5", "Oem6", "Oem7", "Oem8", "Oem9", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9"
+                                               "Oem1", "Oem2", "Oem3", "Oem4", "Oem5", "Oem6", "Oem7", "Oem8", "Oem9", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "Capital", "Shift", "Cancel", "ShiftKey",
+                                               "Control", "ControlKey"
                                              };
 
         public static bool KeysSanitizer(string sourceKey)
