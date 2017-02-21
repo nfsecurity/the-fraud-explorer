@@ -15,11 +15,9 @@
  * Description: Code for get data from the agent
  */
 
-include "inc/global-vars.php";
-include $documentRoot."inc/open-db-connection.php";
-include $documentRoot."inc/cryptography.php";
-
-error_reporting(0);
+include "lbs/global-vars.php";
+include $documentRoot."lbs/open-db-connection.php";
+include $documentRoot."lbs/cryptography.php";
 
 function queryOrDie($query)
 {
@@ -85,6 +83,6 @@ else
  	}
 }
 
-include $documentRoot."inc/close-db-connection.php";
+include $documentRoot."lbs/close-db-connection.php";
 
 ?>

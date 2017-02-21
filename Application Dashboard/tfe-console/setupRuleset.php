@@ -15,19 +15,16 @@
  * Description: Code for ruleset setup
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/check_perm.php";
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 ?>
 
@@ -185,14 +182,14 @@ form
                         		{
                                 		foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
                                 		{
-                                        		$dictionaryCount[$ruleset][$term]++;
+                                        		@$dictionaryCount[$ruleset][$term]++;
                                 		}
 						
 						if (empty($dictionaryCount[$ruleset][$term])) echo '<td class="table-td-ruleset">0</td>';				
 						else echo '<td class="table-td-ruleset">'.$dictionaryCount[$ruleset][$term].'</td>';
                         		}
 		
-					$total = $dictionaryCount[$ruleset]['pressure'] + $dictionaryCount[$ruleset]['opportunity'] + $dictionaryCount[$ruleset]['rationalization'];	
+					$total = @$dictionaryCount[$ruleset]['pressure'] + @$dictionaryCount[$ruleset]['opportunity'] + @$dictionaryCount[$ruleset]['rationalization'];	
 					echo '<td class="table-td-ruleset" style="border-left: 2px solid white;">'.$total.'</td>';	
 	
 					$rulesetQuery = mysql_query(sprintf("SELECT count(*) FROM t_agents WHERE ruleset='%s'",$ruleset));
@@ -227,8 +224,3 @@ form
     	document.getElementById("rulesetUpload").submit();
 }
 </script>
-
-<?php
-	include "inc/close-db-connection.php";
-?>
-

@@ -15,17 +15,16 @@
  * Description: Code for agent deletion
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 function filter($variable)
 {
@@ -54,7 +53,7 @@ curl_close($ch);
 
 header ("location:  dashBoard");
 
-include "inc/close-db-connection.php";
+include "lbs/close-db-connection.php";
 
 ?>
 

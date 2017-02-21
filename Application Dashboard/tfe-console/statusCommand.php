@@ -15,17 +15,18 @@
  * Description: Code for showing the status of a executed command
  */
 
-session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate");
-include "inc/global-vars.php";
-include "inc/cryptography.php";
 
-if(empty($_SESSION['connected']))
+include "lbs/login/session.php";
+
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
-}
-error_reporting(0);
+        header ("Location: index");
+        exit;
+}  
+
+include "lbs/global-vars.php";
+include "lbs/cryptography.php";
 
 function filter($variable)
 {
@@ -66,13 +67,20 @@ if (!isset($_SESSION['seconds_waiting'])) $_SESSION['seconds_waiting']=0;
 $agent = $_GET['agent'];
 $agent_dec = base64_decode(base64_decode($_GET['agent']));
 
-$_SESSION['new_command']=$_SESSION['id_command'];
-if ($_SESSION['new_command'] != $_SESSION['waiting_command'])
+if (isset($_SESSION['id_command']))
 {
- 	$_SESSION['seconds_waiting']=0;
+	$_SESSION['new_command']=$_SESSION['id_command'];
+
+	if ($_SESSION['new_command'] != $_SESSION['waiting_command']) $_SESSION['seconds_waiting']=0;
+}
+else
+{
+	echo "<b>STATUS:</b> Ready, enter a *valid* command to execute ...";
+        unset($_SESSION['seconds_waiting']);
+	exit;
 }
 
-if($_SESSION['id_command'] == 0 || !isset($_SESSION['id_command']) || $_SESSION['NRF'] == 1)
+if($_SESSION['id_command'] == 0 || $_SESSION['NRF'] == 1)
 {
  	if ($_SESSION['NRF'] == 1) 
  	{
@@ -90,14 +98,27 @@ else
 	
  	if($id>0)
 	{
-  		include "inc/open-db-connection.php";
+  		include "lbs/open-db-connection.php";
 
   		$xml=simplexml_load_file('update.xml');
   		$type = decRijndael($xml->token[0]['type']);
   		$result_a=mysql_query("SELECT finished, response FROM t_" .$agent_dec. " WHERE id_uniq_command=" . $id);
-  		$data = mysql_fetch_array($result_a);
 
-		if ($agent_dec == "all") echo "<b>STATUS:</b> command sent to all online agents! with id ".$id.". Check each reply.";
+  		if($result_a != FALSE) $data = mysql_fetch_array($result_a);
+		else $result_a = "";
+
+		if ($agent_dec == "all")
+		{
+			if(!in_array($type,$cmds_srv))
+			{
+				$nrf_cmd=$type;
+                                $_SESSION['NRF_CMD']=(string)$nrf_cmd;
+                                echo "<b>WARNING:</b> The command &lt;".$_SESSION['NRF_CMD']."&gt; was not recognized, please try again!";          
+                                $_SESSION['NRF']=1;
+                                unset($_SESSION['id_command']);    
+			} 
+			else echo "<b>STATUS:</b> command sent to all online agents! with id ".$id.". Check each reply.";
+		}
   		else if(empty($data['finished']) && !empty($type)) 
   		{
    			if (!empty($type) && !in_array($type,$cmds_srv))
@@ -129,7 +150,7 @@ else
    			if ($type == "update") clear_xml_updater($_SESSION['id_command']);
    			unset($_SESSION['seconds_waiting']);
   		}
-  		include "inc/close-db-connection.php";
+  		include "lbs/close-db-connection.php";
  	}
 }
 

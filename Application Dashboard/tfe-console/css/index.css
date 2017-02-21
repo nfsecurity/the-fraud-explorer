@@ -28,7 +28,8 @@ html, body
     margin:0;
     padding:0;
     color: #555;
-    background:#f5f5f5 url(images/simpletable/bg.jpg);
+    background:#f5f5f5;
+    font-family: 'FFont', sans-serif;
 }
 
 html 
@@ -41,6 +42,21 @@ body
 {
     display: table-cell;
     vertical-align: middle;
+}
+
+.failed-attempts
+{
+    font: 16px 'FFont', "Helvetica Neue",Arial, Helvetica, sans-serif;
+    font-family: 'FFont', sans-serif;
+    font-size: 12px;
+}
+
+.failed-logins
+{
+    font: 16px 'FFont', "Helvetica Neue",Arial, Helvetica, sans-serif;
+    font-family: 'FFont', sans-serif;
+    color: red;
+    font-size: 12px;
 }
 
 a 

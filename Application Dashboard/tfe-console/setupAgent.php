@@ -15,19 +15,16 @@
  * Description: Code for setup agent
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/check_perm.php";
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 function filter($variable)
 {
@@ -110,10 +107,12 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 </div>
 
 <div class="div-container">
-    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc.'&alias=yes&ruleset=yes&gender=yes' ?>">
+    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'setupAgentParameters?agent='.$agent_enc; ?>">
 	<p class="title">Agent alias</p><br>
         <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php
-        $aliasquery = mysql_query(sprintf("SELECT name FROM t_agents WHERE agent='%s'",$agent_dec)); $alias = mysql_fetch_array($aliasquery);
+        $aliasquery = mysql_query(sprintf("SELECT name FROM t_agents WHERE agent='%s'",$agent_dec)); 
+	$alias = mysql_fetch_array($aliasquery);
+
         if ($alias[0] == NULL) echo '(current value: Not alias yet)';
         else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
 
@@ -164,6 +163,6 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 </div>
 
 <?php
-	include "inc/close-db-connection.php";
+	include "lbs/close-db-connection.php";
 ?>
 

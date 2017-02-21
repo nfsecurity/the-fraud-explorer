@@ -12,45 +12,44 @@
  * Revision: v0.9.8-beta
  *
  * Description: Code for general setup
-*/
+ */
 
-session_start();
-include "inc/global-vars.php";
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 function filter($variable)
 {
 	return addcslashes(mysql_real_escape_string($variable),',-<>"');
 }
 
-if (isset($_GET['key'])) 
+if (isset($_POST['key'])) 
 {
 	$keyPass=filter($_POST['key']);
 	if (!empty($keyPass)) mysql_query(sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
 }
 
-if (isset($_GET['changepassword']))
+if (isset($_POST['changepassword']))
 {
         $username="admin";
         $password=sha1(filter($_POST['password']));
         if (!empty($password)) mysql_query(sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
 }
 
-if (isset($_GET['encryption']))
+if (isset($_POST['encryption']))
 {
         $encryption=filter($_POST['encryption']);
         if (!empty($encryption)) mysql_query(sprintf("UPDATE t_crypt SET `key`='%s'", $encryption));
 }
 
-if (isset($_GET['iv']))
+if (isset($_POST['iv']))
 {
         $iv=filter($_POST['iv']);
         if (!empty($iv)) mysql_query(sprintf("UPDATE t_crypt SET iv='%s'", $iv));
@@ -58,7 +57,7 @@ if (isset($_GET['iv']))
 
 
 header ("location: dashBoard");
-include "inc/close-db-connection.php";
+include "lbs/close-db-connection.php";
 
 ?>
 </body>

@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 /*
- * The Fraud Explorer
+ * The Fraud Explorer 
  * http://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
@@ -10,55 +10,59 @@
  * http://www.thefraudexplorer.com/License
  *
  * Date: 2017-02
- * Revision: v0.9.8-beta
+ * Revision: v0.9.67-beta
  *
- * Description: Code for login control
+ * Description: Code for login
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/global-vars.php";
-include "inc/open-db-connection.php";
-
-function filter($variable)
+class Process
 {
- 	return addcslashes(mysql_real_escape_string($variable),',<>');
-}
+  	function Process()
+	{
+      		global $session;
 
-$user = filter($_POST["user"]);
-$pass = sha1(filter($_POST["pass"]));
-$captcha = filter($_POST["captcha"]);
+      		if(isset($_POST['sublogin']))
+		{
+         		$this->procLogin();
+      		}
+      		else if($session->logged_in)
+		{
+         		$this->procLogout();
+      		}
+      		else
+		{
+          		header("Location: index");
+       		}
+   	}
 
-$sql = "SELECT * FROM t_users WHERE user='".($user)."' AND password='".($pass)."'";
-$result_a = mysql_query($sql);
-$rowUser = mysql_fetch_row($result_a);
+   	function procLogin()
+	{
+      		global $session, $form;
+      		$retval = $session->login($_POST['user'], $_POST['pass'], $_POST["captcha"]);
 
-$sql2 = "SELECT count(*) FROM t_captcha WHERE captcha='".($captcha)."'";
-$result_b = mysql_query($sql2);
+      		if($retval)
+		{
+        		header("Location: ".$session->referrer);
+      		}
+      		else
+		{
+         		$_SESSION['value_array'] = $_POST;
+         		$_SESSION['error_array'] = $form->getErrorArray();
+      			header("Location: index");
+		}
+   	}
+   
+   	function procLogout()
+	{
+      		global $session;
+      		$retval = $session->logout();
+      		header("Location: index");
+   	}
+};
 
-if ($row = mysql_fetch_array($result_b))
-{
- 	if($row[0]>0)
- 	{
-  		if($rowUser != FALSE)
-  		{
-    			$_SESSION['connected']=1;
-    			$_SESSION['user_con']=$user;
-    			Header("Location: dashBoard");
-  		}
-  		else
-  		{
-   			header ("Location: index");
-   			exit;
-  		}
- 	}
- 	else
- 	{
-  		header ("Location: index");
-  		exit;
- 	}
-}
-
-include "inc/close-db-connection.php";
+$process = new Process;
 
 ?>
+

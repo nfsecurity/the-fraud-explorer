@@ -15,15 +15,15 @@
  * Description: Code for Elasticsearch row deletions
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
+
+include "lbs/global-vars.php";
 
 function filter($variable)
 {

@@ -13,19 +13,18 @@
  * Revision: v0.9.8-beta
  *
  * Description: Code for refresh XML file under dashBoard
-*/
+ */
 
-session_start();
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: index");
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-include "inc/global-vars.php";
-include $documentRoot."inc/cryptography.php";
-include $documentRoot."inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include $documentRoot."lbs/cryptography.php";
 
 $xml=simplexml_load_file('update.xml');
 $type = $xml->token[0]['type'];
@@ -109,8 +108,6 @@ echo '</style>';
                 echo '<center>blank or none at the moment</center>';
                 echo '</div>';
 	}
-
-	include $documentRoot."inc/close-db-connection.php";
 
 ?>
 </div>

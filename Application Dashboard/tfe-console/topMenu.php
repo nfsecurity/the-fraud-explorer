@@ -1,10 +1,33 @@
 <?php
 
-include "inc/open-db-connection.php";
+/*
+ * The Fraud Explorer
+ * http://www.thefraudexplorer.com/
+ *
+ * Copyright (c) 2017 The Fraud Explorer
+ * email: customer@thefraudexplorer.com
+ * Licensed under GNU GPL v3
+ * http://www.thefraudexplorer.com/License
+ *
+ * Date: 2017-02
+ * Revision: v0.9.8-beta
+ *
+ * Description: Code for top menu
+ */
+
+include "lbs/login/session.php";
+
+if(!$session->logged_in)
+{
+        header ("Location: index");
+        exit;
+}
+
+include "lbs/open-db-connection.php";
 $count_all = mysql_fetch_assoc(mysql_query("SELECT count(*) AS total FROM t_agents"));
 $count_online = mysql_fetch_assoc(mysql_query("SELECT count(*) AS total FROM t_agents WHERE status='active'"));
 $count_offline = mysql_fetch_assoc(mysql_query("SELECT count(*) AS total FROM t_agents WHERE status='inactive'"));
-include "inc/close-db-connection.php";
+include "lbs/close-db-connection.php";
 
 ?>
 

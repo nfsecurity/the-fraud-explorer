@@ -15,26 +15,25 @@
  * Description: Code for paint main table
  */
 
-session_start();
+include "lbs/login/session.php";
+
+if(!$session->logged_in)
+{
+        header ("Location: index");
+        exit;
+}
 
 require 'vendor/autoload.php';
-include "inc/global-vars.php";
-include "inc/agent_methods.php";
-include "inc/open-db-connection.php";
-include "inc/check_perm.php";
-include "inc/elasticsearch.php";
-
-if(empty($_SESSION['connected']))
-{
- 	header ("Location: ".$serverURL);
- 	exit;
-}
+include "lbs/global-vars.php";
+include "lbs/agent_methods.php";
+include "lbs/elasticsearch.php";
+include "lbs/open-db-connection.php";
 
 $_SESSION['id_uniq_command']=null;
 
 /* Order the dashboard agent list */
 
-$order = mysql_query("SELECT agent,heartbeat, now() FROM t_agents");
+$order = mysql_query("SELECT agent, heartbeat, now() FROM t_agents", $connection);
 
 if ($row = mysql_fetch_array($order))
 {
@@ -97,8 +96,10 @@ curl_close($ch);
 $resultWords = json_decode($resultWords, true);
 $resultAlerts = json_decode($resultAlerts, true);
 $resultSize = json_decode($resultSize, true);
-$dataSize = ($resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024);
-$totalSystemWords = $resultWords['_all']['primaries']['docs']['count'];
+$dataSize = $resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024;
+
+if (isset($resultWords['_all']['primaries']['docs']['count'])) $totalSystemWords = $resultWords['_all']['primaries']['docs']['count'];
+else $totalSystemWords= "0"; 
 
 /* Funtion to handle data insights */
 
@@ -146,12 +147,21 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Agent data retrieval */
 		
-		$countRationalization = $row_a['rationalization'];
-		$countOpportunity = $row_a['opportunity'];
-                $countPressure = $row_a['pressure'];
-		$totalWordHits = $row_a['totalwords'];
+		if($row_a['rationalization'] == NULL) $countRationalization = 0;
+		else $countRationalization = $row_a['rationalization'];
+
+		if($row_a['opportunity'] == NULL) $countOpportunity = 0;
+                else $countOpportunity = $row_a['opportunity'];
+
+		if($row_a['pressure'] == NULL) $countPressure = 0;
+                else $countPressure = $row_a['pressure'];
+
+		if($row_a['totalwords'] == NULL) $totalWordHits = 0;
+                else $totalWordHits = $row_a['totalwords'];
+
 		$score=($countPressure+$countOpportunity+$countRationalization)/3;
-		$dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
+		if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords; 
+		else $dataRepresentation = "0";
 
 		/* Total words (hidden) sorting purpose */
 
@@ -260,8 +270,14 @@ if ($row_a = mysql_fetch_array($result_a))
                 <div class="pager-inside-agent">
 
 			<?php
-				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.').' records collected and ';
-				echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.number_format($resultAlerts['_all']['primaries']['docs']['count'], 0, ',', '.').' fraud triangle alerts triggered, ';
+				if (isset($resultWords['_all']['primaries']['docs']['count'])) $recordsCollected = number_format($resultWords['_all']['primaries']['docs']['count'], 0, ',', '.');
+				else $recordsCollected = "0";
+
+				if (isset($resultAlerts['_all']['primaries']['docs']['count'])) $fraudAlerts = number_format($resultAlerts['_all']['primaries']['docs']['count'], 0, ',', '.');	
+				else $fraudAlerts = "0";
+
+				echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.$recordsCollected.' records collected and ';
+				echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudAlerts.' fraud triangle alerts triggered, ';
 				echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
 			?>
 

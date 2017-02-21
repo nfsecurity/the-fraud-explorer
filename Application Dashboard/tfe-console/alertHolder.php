@@ -15,20 +15,19 @@
  * Description: Code for paint agent data table
  */
 
-session_start();
+include "lbs/login/session.php";
+
+if(!$session->logged_in)
+{
+        header ("Location: index");
+        exit;
+}
 
 require 'vendor/autoload.php';
-include "inc/global-vars.php";
-include "inc/open-db-connection.php";
-include "inc/agent_methods.php";
-include "inc/check_perm.php";
-include "inc/elasticsearch.php";
-
-if(empty($_SESSION['connected']))
-{
- 	header ("Location: ".$serverURL);
- 	exit;
-}
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
+include "lbs/agent_methods.php";
+include "lbs/elasticsearch.php";
 
 /* Elasticsearch querys for fraud triangle counts and score */
 

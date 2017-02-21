@@ -15,18 +15,15 @@
  * Description: Code for refresh agents state
  */
 
-function isConnected($update_date, $now)
-{ 
- 	$date_1 = strtotime($update_date); 
- 	$date_2 = strtotime($now);
- 	$dife= $date_2 - $date_1;
- 	$minutesstr = ($dife/60); 
- 	$minutes = (INT)($minutesstr);
- 	if ($minutes<0) $minutes = $minutes * -1; 
- 	return $minutes<1; 
-} 
+include "lbs/login/session.php";
 
-include "inc/open-db-connection.php";
+if(!$session->logged_in)
+{
+        header ("Location: index");
+        exit;
+}
+
+include "lbs/agent_methods.php";
 
 function filter($variable)
 {
@@ -37,7 +34,7 @@ $_SESSION['id_uniq_command']=null;
 $agent = filter($_GET['agent']);
 $agent_dec = base64_decode(base64_decode(filter($_GET['agent'])));
 
-$query="SELECT agent,heartbeat,now() FROM t_agents WHERE agent = \"" .$agent_dec. "\"";
+$query="SELECT agent, heartbeat, now() FROM t_agents WHERE agent = \"" .$agent_dec. "\"";
 $result_a = mysql_query($query);
 
 if ($row_a = mysql_fetch_array($result_a))
@@ -45,7 +42,5 @@ if ($row_a = mysql_fetch_array($result_a))
   	if(isConnected($row_a["heartbeat"], $row_a[2])) echo '<img src="images/on.png" border="0">';
   	else echo '<img src="images/off.png" border="0">';
 }
-
-include "inc/close-db-connection.php";
 
 ?>

@@ -15,16 +15,13 @@
  * Description: Code for horizontal analytics data
  */
 
-session_start();
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- header ("Location: index");
- exit;
+        header ("Location: index");
+        exit;
 }
-
-include "inc/check_perm.php";
-error_reporting(0);
 
 function filter($variable)
 {
@@ -82,9 +79,9 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
 		<div id="includedTopMenu"></div>
 
 		<?php
-			include "inc/open-db-connection.php";
+			include "lbs/open-db-connection.php";
 			echo '<div id="tableHolder" class="table-holder"></div>';
-			include "inc/close-db-connection.php";
+			include "lbs/close-db-connection.php";
 		?>
 	</div>
 

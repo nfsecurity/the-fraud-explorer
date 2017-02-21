@@ -15,16 +15,13 @@
  * Description: Code for dashboard
  */
 
-session_start();
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- header ("Location: index");
- exit;
+	header ("Location: index");
+	exit;
 }
-
-include "inc/check_perm.php";
-error_reporting(0);
 
 ?>
 
@@ -75,9 +72,9 @@ error_reporting(0);
 		<div id="includedTopMenu"></div>
 
 		<?php
-			include "inc/open-db-connection.php";
+			include "lbs/open-db-connection.php";
 			$_SESSION['id_uniq_command']=null;
-			$result_a = mysql_query("SELECT agent,heartbeat, now(), system, version FROM t_agents ORDER BY heartbeat DESC");
+			$result_a = mysql_query("SELECT agent, heartbeat, now(), system, version FROM t_agents ORDER BY heartbeat DESC", $connection);
 
 			if ($row_a = mysql_fetch_array($result_a))
 			{
@@ -85,8 +82,12 @@ error_reporting(0);
 
 				echo '<div id="tableHolder" class="table-holder"></div>';
 			}
+			else
+			{	
+				echo '<script type="text/javascript"> $(document).ready(function(){$(\'#noAgentsYet\').modal(\'show\');});</script>';
+			}
 
-			include "inc/close-db-connection.php";
+			include "lbs/close-db-connection.php";
 		?>
 	</div>
 
@@ -127,6 +128,32 @@ error_reporting(0);
                         	</div>
                 	</div>
 		</div>
+        </div>
+
+	<!-- Modal for no-agents-yet message -->
+
+        <div class="modal fade" id="noAgentsYet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                        <div class="modal-dialog vertical-align-center">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title window-title" id="myModalLabel">Welcome to The Fraud Explorer</h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                                <p style="text-align:left; font-size: 12px;"><br>At this time there is no agents connected to The Fraud Explorer, maybe because it's the first time you are using the software or you are near to deploy the agents.
+						If you need help, please refer to the Wiki at www.thefraudexplorer.com/es/wiki.</p>
+                                                <p class="debug-url window-debug"></p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
         </div>
 
 	<!-- ConsoleJS functions -->

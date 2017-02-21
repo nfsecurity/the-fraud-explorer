@@ -144,8 +144,12 @@
 
  function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset)
  {
+	echo "[INFO] Starting Fraud Triangle Analytics phrase matching for [".$agentID."] ...\n\n";
+
  	getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
         $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
+
+	foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) echo "\t* Window [".$arrayValue[1]."] - Word [".$arrayValue[0]."] Date [".$arrayValue[2]."]\n";
 
         $lastWindowTitle = null;
         $lastTimeStamp = null;
@@ -167,9 +171,18 @@
                 }
                 else
                 {
+			echo "\n[INFO] Parsing fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestam [".$lastTimeStamp."] for agent [".$agentID."]";
                 	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
+
                         $counter = 0;
-                        $stringOfWords = $value[0];
+			$stringOfWords = $value[0];
+                }
+		if ($key == count($arrayOfWordsAndWindows))
+                {  
+			$lastWindowTitle = $windowTitle;
+                	$lastTimeStamp = $timeStamp; 
+                        echo "\n[INFO] Parsing last fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestamp [".$lastTimeStamp."] for agent [".$agentID."]";
+                        parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
                 }
 
                 $counter++;
@@ -182,12 +195,16 @@
 
  function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT, $ruleset)
  {
+	$matched = FALSE;
+
 	foreach ($fraudTriangleTerms as $term => $value)
         {
         	foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase) 
                 {
                 	if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
                         {
+				$matched = TRUE;
+
 				$now = DateTime::createFromFormat('U.u', microtime(true));
 				$end = $now->format("Y-m-d\TH:i:s.u");
  				$end = substr($end, 0, -3);
@@ -197,11 +214,15 @@
                                 socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                                 $GLOBALS[$matchesGlobalCount]++;
  
+				echo "\n\n\t* Matching for agent [".$agentID."] with term [".$term."] at window [".$windowTitle."] with word [".$matches[0][0]."] in phrase [".str_replace('/', '', $termPhrase)."] - score [".$value."], total matches [".count($matches[0])."]\n";
+
 				logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0].
 				"] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
-		      } 
+		      	} 
                 }
         }
+
+	if ($matched == FALSE) echo "\n\n\t* There is no matching phrases for agent [".$agentID."] at this time on this window [".$windowTitle."].\n";
  }
 
  /* Get ruleset from agent */
@@ -270,6 +291,8 @@
 
  function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
  {
+	echo "[INFO] Populating SQL-Database with Fraud Triangle Analytics Insights by agent ...\n";
+
 	$resultQuery = mysql_query("SELECT agent FROM t_agents");
 	if ($row_a = mysql_fetch_array($resultQuery))
 	{

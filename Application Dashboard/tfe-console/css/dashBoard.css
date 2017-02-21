@@ -563,7 +563,7 @@ li a:hover:not(.active)
     padding: 0;
     text-align: center;
     height: 35px;
-    cursor: pointer;
+    cursor: default;
     margin: 4px;
     font-family: 'FFont', sans-serif; font-size:9px; color: white;
 }

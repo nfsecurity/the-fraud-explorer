@@ -4,22 +4,20 @@
  * The Fraud Explorer
  * http://www.thefraudexplorer.com/
  *
- * Copyright (c) 2016 The Fraud Explorer
+ * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2016-07
- * Revision: v0.9.7-beta
+ * Date: 2017-02
+ * Revision: v0.9.8-beta
  *
  * Description: Code for get data from the agent
  */
 
-include "inc/global-vars.php";
-include $documentRoot."inc/open-db-connection.php";
-include $documentRoot."inc/cryptography.php";
-
-error_reporting(0);
+include "lbs/global-vars.php";
+include $documentRoot."lbs/open-db-connection.php";
+include $documentRoot."lbs/cryptography.php";
 
 function queryOrDie($query)
 {
@@ -85,6 +83,6 @@ else
  	}
 }
 
-include $documentRoot."inc/close-db-connection.php";
+include $documentRoot."lbs/close-db-connection.php";
 
 ?>

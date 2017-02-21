@@ -26,6 +26,21 @@
 		<link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
 	</head>
 	<body>
+
+	<?php	
+		if($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+    			if(!isset($_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf'])
+        		throw new RuntimeException('CSRF');
+		}
+ 
+		$key = sha1(microtime());
+		$_SESSION['csrf'] = $key;
+	?>
+
+	<?php
+		include("lbs/login/session.php");
+	?>
 	
 	<div align="center">
 		<table>
@@ -34,14 +49,15 @@
    			<tr>
     				<td class="login-container">
      					<form id="formLogin" name="formLogin" method="post" action="login">
-    					<center><br>
+    					<input type="hidden" name="csrf" value="<?php echo $key; ?>" />
+					<center><br>
      					<table class="sub-container">
      						<tr>
       						<td>
        							Login
       						</td>
       						<td>
-       							<input type="text" name="user" id="user" autocomplete="off" placeholder=":enter your username" class="input-login">
+       							<input type="text" name="user" id="user" autofocus="autofocus" autocomplete="off" tabindex=1 placeholder=":enter your username" class="input-login" maxlength="30" value="<?php echo $form->value("user"); ?>">
       						</td>
       						<td rowspan="3" style="border-top:0px solid #e0e0e0; border-right:0px solid #e0e0e0;">
        							<center><img src="captcha"/></center><br>
@@ -53,7 +69,7 @@
        							Password&nbsp;&nbsp;
       						</td>
       						<td>
-       							<input type="password" name="pass" id="pass" placeholder=":enter your password" class="input-login">
+       							<input type="password" name="pass" id="pass" tabindex=2 placeholder=":enter your password" class="input-login" maxlength="60" value="<?php echo $form->value("pass"); ?>">
       						</td>
      						</tr>
     						<tr>
@@ -61,8 +77,9 @@
       							Captcha&nbsp;&nbsp;
      						</td>
      						<td>
-      							<input type="captcha" name="captcha" id="captcha" placeholder=":enter captcha value" class="input-login"> 
+      							<input type="captcha" name="captcha" id="captcha" autocomplete="off" tabindex=3 placeholder=":enter captcha value" class="input-login" maxlength="10" value="<?php echo $form->value("captcha"); ?>"> 
      						</td>
+						<input type="hidden" name="sublogin" value="1">
     						</tr>
     					</table><br>
     					</center>
@@ -72,6 +89,14 @@
   			</tbody>
 		</table>
 	<br>
+	
+	<?php
+		if($form->num_errors > 0) echo "<div class=\"failed-logins\">".$form->error("access")." ".$form->error("attempt")."</div>";
+	?>
+
+	<div class="failed-attempts"><p>
+		<?php $database->displayAttempts($session->ip);?>
+	</p></div>
 	</div>
 	</body>
 </html>

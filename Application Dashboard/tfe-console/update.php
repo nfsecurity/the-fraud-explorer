@@ -15,9 +15,9 @@
  * Description: Code for update machine status
  */
 
-include "inc/global-vars.php";
-include $documentRoot."inc/open-db-connection.php";
-include $documentRoot."inc/cryptography.php";
+include "lbs/global-vars.php";
+include $documentRoot."lbs/open-db-connection.php";
+include $documentRoot."lbs/cryptography.php";
 
 function filter($variable)
 {
@@ -61,7 +61,7 @@ if ($key == $keypass[0])
   		{
    			/* Send message alert for first agent connection */
 
-   			include $documentRoot."inc/mail-event.php";
+   			include $documentRoot."lbs/mail-event.php";
    			mail($to, $subject, $message, $headers);
 
    			/* Heartbeat data */
@@ -77,6 +77,6 @@ if ($key == $keypass[0])
  	}
 }
 
-include $documentRoot."inc/close-db-connection.php";
+include $documentRoot."lbs/close-db-connection.php";
 
 ?>

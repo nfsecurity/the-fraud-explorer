@@ -15,16 +15,15 @@
  * Description: Code for ruleset file upload
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/check_perm.php";
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
-        header ("Location: ".$serverURL);
+        header ("Location: index");
         exit;
 }
+
+include "lbs/global-vars.php";
 
 $target_dir = "core/rules/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);

@@ -15,29 +15,26 @@
  * Description: Code for erase commands
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
+include "lbs/global-vars.php";
 
 function filter($variable)
 {
  	return addcslashes(mysql_real_escape_string($variable),',<>');
 }
 
-$com = filter($_POST['commands']);
 $xml = simplexml_load_file('update.xml');
 
 foreach ($xml->version as $version)
 {
- 	$numVersion = (int) $version['num'];
+	$numVersion = (int) $version['num'];
 }
 
 $numVersion++;

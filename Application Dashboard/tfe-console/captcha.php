@@ -49,10 +49,10 @@ imagefttext($image,22,rand(-10,15),12,37,$RandomColorInverted,$ttf,$random);
 /* Insert in database current captcha value */
 
 error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/open-db-connection.php";
 $result=mysql_query("DELETE from t_captcha",$connection);
 $result=mysql_query("INSERT INTO t_captcha (captcha) VALUES ('" . $random . "')",$connection);
-include "inc/close-db-connection.php";
+include "lbs/close-db-connection.php";
 
 for ($i=0;$i<=700;$i++)
 {

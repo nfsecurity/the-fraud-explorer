@@ -15,19 +15,18 @@
  * Description: Code for Chart
  */
 
-session_start();
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- header ("Location: index");
- exit;
+        header ("Location: index");
+        exit;
 }
 
 require 'vendor/autoload.php';
-include "inc/open-db-connection.php";
-include "inc/agent_methods.php";
-include "inc/check_perm.php";
-include "inc/elasticsearch.php";
+include "lbs/open-db-connection.php";
+include "lbs/agent_methods.php";
+include "lbs/elasticsearch.php";
 
 ?>
 
@@ -367,8 +366,12 @@ $(document).ready(function () {
 			/* Scoring calculation */
 
 			$score=($countPressure+$countOpportunity+$countRationalization)/3;
-                        $xAxis = ($countPressure*100)/$GLOBALS['maxXAxis'];
-                        $yAxis = ($countRationalization*100)/$GLOBALS['maxYAxis'];
+		
+			if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countPressure*100)/1;
+			else $xAxis = ($countPressure*100)/$GLOBALS['maxXAxis'];
+                       
+			if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countRationalization*100)/1;
+			else $yAxis = ($countRationalization*100)/$GLOBALS['maxYAxis'];
 
 			/* Fix corners */
 

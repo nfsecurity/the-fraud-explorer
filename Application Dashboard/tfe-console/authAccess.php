@@ -15,9 +15,16 @@
  * Description: Code for download and view authorization
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/global-vars.php";
+if(!$session->logged_in)
+{
+        header ("Location: index");
+        exit;
+}
+
+include "lbs/global-vars.php";
+
 $file=$_GET['file'];
 $ext = substr($file, strrpos($file, '.')+1);
 

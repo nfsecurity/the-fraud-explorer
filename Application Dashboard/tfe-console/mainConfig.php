@@ -15,19 +15,16 @@
  * Description: Code for main config
  */
 
-session_start();
+include "lbs/login/session.php";
 
-include "inc/check_perm.php";
-include "inc/global-vars.php";
-
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 ?>
 
@@ -69,10 +66,11 @@ include "inc/open-db-connection.php";
 </div>
 
 <div class="div-container">
-    <form id="formConfig" name="formConfig" method="post" action="<?php echo 'configParameters?key=yes&changepassword=yes&iv=yes&encryption=yes' ?>">
+    <form id="formConfig" name="formConfig" method="post" action="configParameters">
 
 	<p class="title-config">Specify/change the key/password for agents connection</p><br>
 	<input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key/password here <?php 
+
 	$keyquery = mysql_query("SELECT password FROM t_crypt"); $keypass = mysql_fetch_array($keyquery); 
 	echo '(current value:'.$keypass[0].')'; ?>" padding: 5px; border: solid 2px #c9c9c9;">
 
@@ -98,8 +96,3 @@ include "inc/open-db-connection.php";
         </div>
     </form>
 </div> 
-	
-<?php
-	include "inc/close-db-connection.php";
-?>
-

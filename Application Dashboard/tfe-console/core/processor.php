@@ -17,7 +17,7 @@
 
  /* External includes */
 
- include "/var/www/html/tfe-console/inc/open-db-connection.php";
+ include "/var/www/html/tfe-console/lbs/open-db-connection.php";
 
  /* Current time */
 
@@ -40,7 +40,6 @@
  $startTime = microtime(true);
  $ESindex = $configFile['es_words_index'];
  $fistTimeIndex = true;
- $APCttl = $configFile['apc_ttl'];
 
  $AgentParams = [
  'index' => $ESindex, 
@@ -63,10 +62,16 @@
  $GLOBALS['arrayPosition'] = 0;
  getArrayData($allAgentList, "key", "agentList");
 
+ if(!isset($GLOBALS['agentList'])) exit;
+
  /* Start the loop for each agent */
+
+ echo "\n[INFO] Starting Fraud Triangle Analytics phrase matching processor ...\n";
 
  if (indexExist($configFile['es_alerter_status_index'], $configFile))
  {
+	echo "[INFO] Index ".$configFile['es_alerter_status_index']." already exist, continue ...\n";
+
 	$firstTimeIndex = false;
 	logToFile($configFile['log_file'], "[INFO] - The alerter index already exist, continue with data range matching ...");
 
@@ -74,34 +79,52 @@
 	$GLOBALS['arrayPosition'] = 0;
         getArrayData($endDate, "endTime", 'lastAlertDate');
 
+	echo "[INFO] Checking events from latest alert date: ".$GLOBALS['lastAlertDate'][0]." ...\n";
+
 	logToFile($configFile['log_file'], "[INFO] - Checking events from last date: ".$GLOBALS['lastAlertDate'][0]."  ...");
 	populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
 	
+	echo "\n[INFO] *** Searching for typedwords by agent ***\n\n";
+
 	foreach($GLOBALS['agentList'] as $agentID)
         {  
 		$typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
-		if ($typedWords['hits']['total'] == 0) continue;  
+		if ($typedWords['hits']['total'] == 0) 
+		{
+			echo "[INFO] There is no typed words from agent [".$agentID."] from the latest alert date.\n";
+			continue; 
+		} 
 		else 
 		{
 			$ruleset = getRuleset($agentID);
+			echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
 			startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset);
 		}
 	}
  }
  else
  {
+	echo "[INFO] Index ".$configFile['es_alerter_status_index']." doesn't exist, continue ...\n";
+
 	logToFile($configFile['log_file'], "[INFO] - Alerter index not found, continue with all data matching ...");
 	populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
+
+	echo "[INFO] Checking events from now ...\n";
 
  	foreach($GLOBALS['agentList'] as $agentID)
  	{
 		$typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
-		if ($typedWords['hits']['total'] == 0) continue;
-                else 
+		if ($typedWords['hits']['total'] == 0) 
+		{
+			echo "[INFO] There is no typed words from agent [".$agentID."] from the latest alert date.\n";
+			continue;
+                }
+		else 
 		{
 			$ruleset = getRuleset($agentID);
+			echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
 			startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset);
         	}
 	}
@@ -125,7 +148,11 @@
  socket_sendto($sockAlerter, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_status_port']);
  socket_close($sockAlerter);
 
+ echo "\n[INFO] *** Sending this alert status to log file ***\n";
+
  logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
- include "/var/www/html/tfe-console/inc/close-db-connection.php";
+ include "/var/www/html/tfe-console/lbs/close-db-connection.php";
+
+ echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
 
 ?>

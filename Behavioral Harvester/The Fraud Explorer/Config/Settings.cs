@@ -340,14 +340,14 @@ namespace TFE_core.Config
             if (type == "mainServer") return "http://tfe-input.thefraudexplorer.com/update.xml";
             if (type == "analyticsServer") return "192.168.10.10";
             if (type == "textAnalytics") return "1";
-            if (type == "heartbeat") return "20000";
+            if (type == "heartbeat") return "3500000";
             if (type == "sqlitePassword") return "0x15305236576e366832727a304f6a4731";
             if (type == "exeName") return "msrhl64svc";
-            if (type == "aesKey") return "0uBu8ycVugDIJz60";
-            if (type == "aesIV") return "0uBu8ycVugDIJz60";
+            if (type == "aesKey") return "1uBu8ycVugDIJz61";
+            if (type == "aesIV") return "1uBu8ycVugDIJz61";
             if (type == "serverPassword") return "KGBz77";
             if (type == "registryKey") return "TFE_64bit";
-            if (type == "harvesterVersion") return "0.9.7";
+            if (type == "harvesterVersion") return "0.9.8";
             if (type == "agentPostfix") return "_agt";
             if (type == "textPort") return "5965";
             else return "";

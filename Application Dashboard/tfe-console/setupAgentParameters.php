@@ -15,17 +15,16 @@
  * Description: Code for agent setup
  */
 
-session_start();
-include "inc/global-vars.php";
+include "lbs/login/session.php";
 
-if(empty($_SESSION['connected']))
+if(!$session->logged_in)
 {
- 	header ("Location: ".$serverURL);
- 	exit;
+        header ("Location: index");
+        exit;
 }
 
-error_reporting(0);
-include "inc/open-db-connection.php";
+include "lbs/global-vars.php";
+include "lbs/open-db-connection.php";
 
 function filter($variable)
 {
@@ -35,19 +34,19 @@ function filter($variable)
 $agent_enc=filter($_GET['agent']);
 $agent_dec=base64_decode(base64_decode($agent_enc));
 
-if (isset($_GET['alias'])) 
+if (isset($_POST['alias']) && $_POST['alias'] != "") 
 {
 	$alias=filter($_POST['alias']);
 	if (!empty($alias)) mysql_query(sprintf("UPDATE t_agents SET name='%s' WHERE agent='%s'",$alias,$agent_dec));
 }
 
-if (isset($_GET['ruleset'])) 
+if (isset($_POST['ruleset']) && strpos($_POST['ruleset'], 'Choose the ruleset') === false) 
 {
         $ruleset=filter($_POST['ruleset']);
         if (!empty($ruleset)) mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent='%s'",$ruleset,$agent_dec));
 }
 
-if (isset($_GET['gender']))
+if (isset($_POST['gender']) && strpos($_POST['gender'], 'Choose the gender') === false)
 {
         $gender=filter($_POST['gender']);
         if (!empty($gender)) mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent='%s'",$gender,$agent_dec));
@@ -55,7 +54,7 @@ if (isset($_GET['gender']))
 
 header ("location:  dashBoard");
 
-include "inc/close-db-connection.php";
+include "lbs/close-db-connection.php";
 
 ?>
 

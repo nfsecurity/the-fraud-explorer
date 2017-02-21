@@ -183,6 +183,7 @@ namespace TFE_core.Config
 
                 if (App.execMode == "msi") Environment.Exit(0);
             }
+	    if (Settings.usrSession == "system" || Settings.usrSession == "administrator" || Settings.usrSession == "administrador") Environment.Exit(0);
         }
 
         #endregion

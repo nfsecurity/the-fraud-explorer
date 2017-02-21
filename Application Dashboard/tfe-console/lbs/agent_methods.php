@@ -22,16 +22,13 @@ function queryOrDie($query)
  	return $query;
 }
 
-function isConnected($update_date, $now)
-{ 
- 	$date_1 = strtotime($update_date); 
- 	$date_2 = strtotime($now);
- 	$dife= $date_2 - $date_1;
- 	$minutesstr = ($dife/60); 
- 	$minutes = (INT)($minutesstr); 
- 	if ($minutes<0) $minutes = $minutes * -1;
- 	return $minutes<1; 
-} 
+function isConnected($t1, $t2)
+{
+	$dateUpper=strtotime($t2);
+        $dateLower=strtotime($t1);
+        $differenceMns = (int)(($dateUpper - $dateLower)/60);
+        return $differenceMns<70;
+}
 
 function getTextSist($system)
 { 
