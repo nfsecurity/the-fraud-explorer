@@ -15,6 +15,8 @@
  * Description: Code for cryptography
  */
 
+include "/var/www/html/tfe-console/lbs/open-db-connection.php";
+
 function encRijndael($unencrypted)
 {
  $result_key=mysql_query("SELECT * FROM t_crypt");
