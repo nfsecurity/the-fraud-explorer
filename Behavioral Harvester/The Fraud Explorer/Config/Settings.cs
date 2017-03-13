@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2017-02
- * Revision: v0.9.8-beta
+ * Date: 2017-04
+ * Revision: v0.9.9-beta
  *
  * Description: Internal configuration
  */
@@ -125,20 +125,22 @@ namespace TFE_core.Config
 
         #region Network variables and methods
 
-        public static string Domain = "http://" + Network.ExtractDomainFromURL(SQLStorage.retrievePar(Settings.SRFLAG));
+        public static string Domain = "https://" + Network.ExtractDomainFromURL(SQLStorage.retrievePar(Settings.SRFLAG));
+        public static string userDomain = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
         public static string OnlineCheck = Domain + "/online.html";
         public static string XML = SQLStorage.retrievePar(Settings.SRFLAG);
         public static string AnalyticsServerIP = SQLStorage.retrievePar(Settings.ANFLAG);
         public static string usrSession = Environment.UserName.ToLower().Replace(" ", string.Empty);
         public static string AgentID = usrSession + SQLStorage.retrievePar(UNIQUEGUID);
         public static bool use_proxy = false;
-        public static string proxy_url_with_port = "http://localhost:8080";
+        public static string proxy_url_with_port = "https://localhost:8080";
         public static string proxy_usr = "test";
         public static string proxy_pwd = "test";
         public static string systemVersion = Cryptography.EncRijndael(Common.OSVersion());
         public static string AgentIDEncoded = Cryptography.EncRijndael(Settings.AgentID);
         public static string AppURL = Domain + "/update.php?token=" + System.Net.WebUtility.HtmlEncode(AgentIDEncoded) +
-        "&s=" + System.Net.WebUtility.HtmlEncode(systemVersion) + "&v=" + Cryptography.EncRijndael(Settings.thefraudexplorer_version()) + "&k=" + AppSERVERRegisterKeyPass();
+        "&s=" + System.Net.WebUtility.HtmlEncode(systemVersion) + "&v=" + Cryptography.EncRijndael(Settings.thefraudexplorer_version()) + "&k=" + AppSERVERRegisterKeyPass() +
+        "&d=" + Cryptography.EncRijndael(Settings.userDomain);
 
         public static string AppDataURL(String info, string command, string uniqueID, int lastPacket)
         {
@@ -330,14 +332,14 @@ namespace TFE_core.Config
     class Initialization
     {
         /// <summary>
-        /// Load external variables from the same exe file
+        /// Load specific company parameters
         /// </summary
 
         #region Load external variables from Binary
 
         public static string parametersFromBinary(string type)
         {  
-            if (type == "mainServer") return "http://tfe-input.thefraudexplorer.com/update.xml";
+            if (type == "mainServer") return "https://tfe-console.mydomain.com/update.xml";
             if (type == "analyticsServer") return "192.168.10.10";
             if (type == "textAnalytics") return "1";
             if (type == "heartbeat") return "3500000";
@@ -347,7 +349,7 @@ namespace TFE_core.Config
             if (type == "aesIV") return "1uBu8ycVugDIJz61";
             if (type == "serverPassword") return "KGBz77";
             if (type == "registryKey") return "TFE_64bit";
-            if (type == "harvesterVersion") return "0.9.8";
+            if (type == "harvesterVersion") return "0.9.9";
             if (type == "agentPostfix") return "_agt";
             if (type == "textPort") return "5965";
             else return "";

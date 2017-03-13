@@ -1,0 +1,48 @@
+.fixed-space
+{
+    line-height: 4px;
+}
+
+.main-logo
+{
+    width:35px; 
+    height:35px; 
+    float: right;
+}
+
+.logout-button, logout-button:hover
+{
+    font-family: 'FFont', sans-serif; 
+    font-size:12px; 
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.search-input
+{
+    float:right !important;
+}
+
+.counters
+{
+    float: right;
+}
+
+.window-title
+{
+    text-align:center; 
+    font-family:Verdana; 
+    font-size: 24px;
+}
+
+.window-debug
+{
+    text-align:left; 
+    font-family:Verdana; 
+    font-size: 12px;
+}
+
+.input-search, .button-totals
+{
+    outline: 0 !important;
+}

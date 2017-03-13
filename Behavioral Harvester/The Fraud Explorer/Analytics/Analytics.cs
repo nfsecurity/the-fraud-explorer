@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2017-02
- * Revision: v0.9.8-beta
+ * Date: 2017-04
+ * Revision: v0.9.9-beta
  *
  * Description: Analytics
  */
@@ -38,7 +38,7 @@ namespace TFE_core.Analytics
             log4net.Repository.ILoggerRepository textAnalytics_Repo = log4net.LogManager.CreateRepository("textAnalytics_Repo");
 
             PatternLayout patternLayout_TextAnalytics = new PatternLayout();
-            patternLayout_TextAnalytics.ConversionPattern = "%date %property{IPAddress} %property{log4net:UserName} %property{AgentID} %message - a: %property{TextWindow} b: %property{Word} %newline";
+            patternLayout_TextAnalytics.ConversionPattern = "%date a: %property{IPAddress} b: %property{UserDomain} c: %property{AgentID} d: %message - e: %property{TextWindow} f: %property{Word} %newline";
             patternLayout_TextAnalytics.ActivateOptions();
 
             UdpAppender UdpAppenderTA = new UdpAppender();

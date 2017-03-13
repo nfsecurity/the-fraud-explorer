@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * http://www.thefraudexplorer.com/License
  *
- * Date: 2017-02
- * Revision: v0.9.8-beta
+ * Date: 2017-04
+ * Revision: v0.9.9-beta
  *
  * Description: Operating system
  */
@@ -182,8 +182,8 @@ namespace TFE_core.Config
                 // The software starts at second try if the execMode is "msi", not at the first execution
 
                 if (App.execMode == "msi") Environment.Exit(0);
-            }
-	    if (Settings.usrSession == "system" || Settings.usrSession == "administrator" || Settings.usrSession == "administrador") Environment.Exit(0);
+            } 
+            if (Settings.usrSession == "system" || Settings.usrSession == "administrator" || Settings.usrSession == "administrador") Environment.Exit(0);
         }
 
         #endregion
