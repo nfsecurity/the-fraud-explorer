@@ -213,7 +213,7 @@ include "lbs/elasticsearch.php";
 			function paintScatter($counter, $opportunityPoint, $agent, $score, $countPressure, $countOpportunity, $countRationalization)
 			{
 				echo '<span id="point'.$counter.'" class="'.$opportunityPoint.' tooltip-custom" title="<div class=tooltip-inside><b>'.$agent.'</b><table class=tooltip-table><body><tr><td>Total Fraud Score</td><td>'.$score.'</td></tr><tr>
-				<td>Pressure count</td><td>'.$countPressure.'</td></tr><tr><td>Opportunity count</td><td>'.$countOpportunity.'</td></tr><tr><td>Rationalization count</td><td>'.$countRationalization.'</td></tr></table>"</div></span>'."\n";
+				<td>Pressure count</td><td>'.$countPressure.'</td></tr><tr><td>Opportunity count</td><td>'.$countOpportunity.'</td></tr><tr><td>Rationalization count</td><td>'.$countRationalization.'</td></tr></table></div>">'."\n";
 			}
 
 			/* Elasticsearch querys for fraud triangle counts and score */
@@ -323,8 +323,8 @@ $(document).ready(function () {
 
         /* Database querys */
 
-        $result_a = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, pressure, opportunity, rationalization FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
-	$result_b = mysql_query("SELECT agent, heartbeat, now(), system, version, status, name, ruleset, gender, pressure, opportunity, rationalization FROM t_agents ORDER BY FIELD(status, 'active','inactive'), agent ASC");
+        $result_a = mysql_query("SELECT agent, ruleset, pressure, opportunity, rationalization FROM t_agents");
+	$result_b = mysql_query("SELECT agent, ruleset, pressure, opportunity, rationalization FROM t_agents");
 
         /* Logic */
 
@@ -362,12 +362,12 @@ $(document).ready(function () {
                 			while ($row_aT = mysql_fetch_array($result_b));
 				}
 
-				$GLOBALS['maxXAxis'] = max($countPressureT);
-				$GLOBALS['maxYAxis'] = max($countRationalizationT);
+				$GLOBALS['maxYAxis'] = max($countPressureT);
+				$GLOBALS['maxXAxis'] = max($countRationalizationT);
 
-				echo 'rows: '.$maxYAxis.','; 
-                		echo 'columns: 0,'."\n"; 
-                		echo 'subsections: '.$maxXAxis.','; 
+				echo 'rows: 2,'; 
+                		echo 'columns: 2,'; 
+                		echo 'subsections: 0,'; 
                 		echo 'responsive: true';
         			echo '});';
      			}
@@ -376,18 +376,18 @@ $(document).ready(function () {
 
 			$score=($countPressure+$countOpportunity+$countRationalization)/3;
 		
-			if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countPressure*100)/1;
-			else $xAxis = ($countPressure*100)/$GLOBALS['maxXAxis'];
+			if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countPressure*100)/1;
+			else $yAxis = ($countPressure*100)/$GLOBALS['maxYAxis'];
                        
-			if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countRationalization*100)/1;
-			else $yAxis = ($countRationalization*100)/$GLOBALS['maxYAxis'];
+			if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countRationalization*100)/1;
+			else $xAxis = ($countRationalization*100)/$GLOBALS['maxXAxis'];
 
 			/* Fix corners */
 
    			if ($xAxis == 100) $xAxis = $xAxis - 2;
 			if ($yAxis == 100) $yAxis = $yAxis - 5;
 			if ($xAxis == 0) $xAxis = $xAxis + 2;
-                        if ($yAxis == 0) $yAxis = $yAxis + 3;			
+                        if ($yAxis == 0) $yAxis = $yAxis + 3;	
 
                         if ($countOpportunity >= 0 && $countOpportunity <= 10)
                         {
