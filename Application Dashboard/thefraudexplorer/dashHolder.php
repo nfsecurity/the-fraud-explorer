@@ -253,9 +253,14 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Fraud triangle counts and score */
 		
-                $level="low";
-                if ($score >= 6 && $score <= 15) $level="medium";
-                if ($score >= 15) $level="high";
+		$scoreQuery = mysql_query("SELECT * FROM t_config");
+                $scoreResult = mysql_fetch_array($scoreQuery);
+
+		$level = "low";
+                if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']) $level="low";
+                if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']) $level="medium";
+    		if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']) $level="high";
+	        if ($score >= $scoreResult['score_ts_critic_from']) $level="critic";
 	
 		echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countPressure.'</td>';
 		echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countOpportunity.'</td>';

@@ -34,9 +34,9 @@ include "lbs/elasticsearch.php";
 
 <style>
 
-.font-icon-color 
+.font-aw-color
 { 
-    color: #B4BCC2; 
+    color: #B4BCC2;
 }
 
 </style>
@@ -76,32 +76,33 @@ include "lbs/elasticsearch.php";
 		
 	<!-- Leyend -->
 
+	<?php
+		$scoreQuery = mysql_query("SELECT * FROM t_config");
+                $scoreResult = mysql_fetch_array($scoreQuery);
+	?>
+
 	<span style="line-height: 0.3"><br></span>
 	<table class="table-leyend">
-		<th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-icon-color">&nbsp;&nbsp;</span>Score leyend</th>
+		<th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Score leyend</th>
 			<tr>
-				<td class="table-leyend-point"><span class="point-red"></span><br>31></td>
-				<td class="table-leyend-point"><span class="point-green"></span><br>21-30</td>
+				<td class="table-leyend-point"><span class="point-red"></span><br><?php echo $scoreResult['score_ts_critic_from'].">"; ?></td>
+				<td class="table-leyend-point"><span class="point-green"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_high_to']; ?></td>
 			</tr>
 			<tr>
-				<td class="table-leyend-point"><span class="point-blue"></span><br>11-20</td>
-				<td class="table-leyend-point"><span class="point-yellow"></span><br>0-10</td>
+				<td class="table-leyend-point"><span class="point-blue"></span><br><?php echo $scoreResult['score_ts_medium_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
+				<td class="table-leyend-point"><span class="point-yellow"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_low_to']; ?></td>
 			</tr>
 	</table>
 	<span style="line-height: 0.1"><br></span>
 	<table class="table-leyend">
-        	<th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-icon-color">&nbsp;&nbsp;</span>Opportunity</th>
+        	<th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Opportunity</th>
                 	<tr>
-                                <td class="table-leyend-point"><span class="point-opportunity-0-10"></span><br>0-10</td>
-                                <td class="table-leyend-point"><span class="point-opportunity-11-30"></span><br>11-30</td>
+                                <td class="table-leyend-point"><span class="point-opportunity-low"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_low_to']; ?></td>
+                                <td class="table-leyend-point"><span class="point-opportunity-medium"></span><br><?php echo $scoreResult['score_ts_medium_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
                         </tr>
                         <tr>
-                                <td class="table-leyend-point"><span class="point-opportunity-31-60"></span><br>31-60</td>
-                                <td class="table-leyend-point"><span class="point-opportunity-61-100"></span><br>61-100</td>
-                        </tr>
-			<tr>
-                                <td class="table-leyend-point"><span class="point-opportunity-101-500"></span><br>101-500</td>
-                                <td class="table-leyend-point"><span class="point-opportunity-501-1000"></span><br>501-1000</td>
+                                <td class="table-leyend-point"><span class="point-opportunity-high"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_high_to']; ?></td>
+                                <td class="table-leyend-point"><span class="point-opportunity-critic"></span><br><?php echo $scoreResult['score_ts_critic_from'].">"; ?></td>
                         </tr>
 	</table>
 	<span style="line-height: 0.1"><br></span>
@@ -146,7 +147,7 @@ include "lbs/elasticsearch.php";
                 $countPressureTotal = $CcountPressureTotal['count'];
 
 		echo '<table class="table-insights">';
-                echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-icon-color">&nbsp;&nbsp;</span>Phrase counts</th>';
+                echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Phrase counts</th>';
                 echo '<tr>';
                 echo '<td class="table-insights-triangle">Pressure</td>';
                 echo '<td class="table-insights-score">'.$countPressureTotal.'</td>';
@@ -181,7 +182,7 @@ include "lbs/elasticsearch.php";
 		}
 
                 echo '<table class="table-dictionary">';
-                echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-icon-color">&nbsp;&nbsp;</span>Dictionary DB</th>';
+                echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Dictionary DB</th>';
                 echo ' <tr>';
                 echo '<td class="table-dictionary-triangle">Pressure</td>';
                 echo '<td class="table-dictionary-score">'.$dictionaryCount['pressure'].'</td>';
@@ -200,10 +201,10 @@ include "lbs/elasticsearch.php";
 	?>
 
 	<div class="y-axis-line"></div>
-	<div class="y-axis-leyend"><span class="fa fa-bar-chart font-icon-color">&nbsp;&nbsp;</span>Incentive, Pressure to commit Fraud</div>
+	<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Incentive, Pressure to commit Fraud</div>
 
 	<div class="x-axis-line-leyend">
-        	<br><span class="fa fa-line-chart font-icon-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization
+        	<br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization
 	</div>
 
         <div id="scatterplot">
@@ -254,52 +255,36 @@ include "lbs/elasticsearch.php";
                                         unset($GLOBALS['numberOfPMatches']);
                                         unset($GLOBALS['numberOfCMatches']);
 	
-					if ($countOpportunity >= 0 && $countOpportunity <= 10)
+					if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
 					{
-                                                if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-0-10-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-0-10-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-0-10-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-						if ($score >= 31.0) paintScatter($counter, "point-opportunity-0-10-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-low-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-low-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-low-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-low-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
 					}
 											
-					if ($countOpportunity >= 11 && $countOpportunity <= 30)
+					if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
                                         {
-						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-11-30-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-11-30-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-11-30-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-11-30-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-medium-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-medium-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-medium-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-medium-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 			
-					if ($countOpportunity >= 31 && $countOpportunity <= 60)
+					if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
                                         {
-						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-31-60-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-31-60-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-31-60-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-31-60-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-high-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-high-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-high-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-high-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
-					if ($countOpportunity >= 61 && $countOpportunity <= 100)
+					if ($countOpportunity >= $scoreResult['score_ts_critic_from'])
                                         {
-						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-61-100-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-61-100-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-61-100-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-61-100-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                        }
-
-					if ($countOpportunity >= 101 && $countOpportunity <= 500)
-                                        {
-						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-101-500-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-101-500-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-101-500-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-101-500-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                        }
-
-					if ($countOpportunity >= 501 && $countOpportunity <= 1000)
-                                        {
-						if ($score > 0.0 && $score <= 10.9) paintScatter($counter, "point-opportunity-501-1000-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 11.0 && $score <= 20.9) paintScatter($counter, "point-opportunity-501-1000-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 21.0 && $score <= 30.9) paintScatter($counter, "point-opportunity-501-1000-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                                                if ($score >= 31.0) paintScatter($counter, "point-opportunity-501-1000-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+						if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-critic-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-critic-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-critic-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
+                                                if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-critic-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
                                         }
 
 					$counter++;
@@ -385,56 +370,40 @@ $(document).ready(function () {
 			/* Fix corners */
 
    			if ($xAxis == 100) $xAxis = $xAxis - 2;
-			if ($yAxis == 100) $yAxis = $yAxis - 5;
-			if ($xAxis == 0) $xAxis = $xAxis + 2;
+			if ($yAxis == 100) $yAxis = $yAxis - 4.5;
+			if ($xAxis == 0) $xAxis = $xAxis + 1.5;
                         if ($yAxis == 0) $yAxis = $yAxis + 3;	
 
-                        if ($countOpportunity >= 0 && $countOpportunity <= 10)
+                        if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
                         {
-       		                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+       		                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
-                        if ($countOpportunity >= 11 && $countOpportunity <= 30)
+                        if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
                         {
-                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
-                        if ($countOpportunity >= 31 && $countOpportunity <= 60)
+                        if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
                         {
-                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 		
-			if ($countOpportunity >= 61 && $countOpportunity <= 100)
+			if ($countOpportunity >= $scoreResult['score_ts_critic_from'] && $countOpportunity <= $scoreResult['score_ts_critic_to'])
                         {
-                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
-
-                        if ($countOpportunity >= 101 && $countOpportunity <= 500)
-                        {
-                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
-
-                        if ($countOpportunity >= 501 && $countOpportunity <= 1000)
-                        {
-                                 if ($score > 0.0 && $score <= 10.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 11.0 && $score <= 20.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 21.0 && $score <= 30.9) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= 31.0) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
                         }
 
                         $counter++;

@@ -45,11 +45,34 @@ CREATE TABLE IF NOT EXISTS `t_users` (
   PRIMARY KEY (`user`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+INSERT INTO `t_users` (`user`, `password`) VALUES
+('admin', 'e731a7b612ab389fcb7f973c452f33df3eb69c99');
+
 CREATE TABLE t_login_attempts (
  ip varchar(20),
  attempts int default 0,
  lastlogin datetime default NULL	
 );
 
-INSERT INTO `t_users` (`user`, `password`) VALUES
-('admin', 'e731a7b612ab389fcb7f973c452f33df3eb69c99');
+CREATE TABLE IF NOT EXISTS `t_config` (
+  `score_ts_low_from` int DEFAULT NULL,
+  `score_ts_low_to` int DEFAULT NULL,
+  `score_ts_medium_from` int DEFAULT NULL,
+  `score_ts_medium_to` int DEFAULT NULL,
+  `score_ts_high_from` int DEFAULT NULL,
+  `score_ts_high_to` int DEFAULT NULL,
+  `score_ts_critic_from` int DEFAULT NULL,
+  `score_ts_critic_to` int DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `t_config` (
+  `score_ts_low_from`, 
+  `score_ts_low_to`, 
+  `score_ts_medium_from`, 
+  `score_ts_medium_to`, 
+  `score_ts_high_from`, 
+  `score_ts_high_to`, 
+  `score_ts_critic_from`, 
+  `score_ts_critic_to`
+) VALUES ('0', '10', '11', '20', '21', '30', '31', '100');
+

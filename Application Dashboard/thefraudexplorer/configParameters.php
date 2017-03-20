@@ -30,6 +30,11 @@ function filter($variable)
 	return addcslashes(mysql_real_escape_string($variable),',-<>"');
 }
 
+function notempty($var) 
+{
+	return ($var==="0"||$var);
+}
+
 if (isset($_POST['key'])) 
 {
 	$keyPass=filter($_POST['key']);
@@ -46,15 +51,26 @@ if (isset($_POST['changepassword']))
 if (isset($_POST['encryption']))
 {
         $encryption=filter($_POST['encryption']);
-        if (!empty($encryption)) mysql_query(sprintf("UPDATE t_crypt SET `key`='%s'", $encryption));
+        if (!empty($encryption)) mysql_query(sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
 }
 
-if (isset($_POST['iv']))
+if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfrom']) && isset($_POST['mediumto']) && isset($_POST['highfrom']) && isset($_POST['highto']) && isset($_POST['criticfrom']) && isset($_POST['criticto']))
 {
-        $iv=filter($_POST['iv']);
-        if (!empty($iv)) mysql_query(sprintf("UPDATE t_crypt SET iv='%s'", $iv));
+        $lowFrom=filter($_POST['lowfrom']);
+	$lowTo=filter($_POST['lowto']);
+	$mediumFrom=filter($_POST['mediumfrom']);
+	$mediumTo=filter($_POST['mediumto']);
+	$highFrom=filter($_POST['highfrom']);
+	$highTo=filter($_POST['highto']);
+	$criticFrom=filter($_POST['criticfrom']);
+	$criticTo=filter($_POST['criticto']);
+	
+        if (notempty($lowFrom) && notempty($lowTo) && notempty($mediumFrom) && notempty($mediumTo) && notempty($highFrom) && notempty($highTo) && notempty($criticFrom) && notempty($criticTo)) 
+	{
+		mysql_query(sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', 
+		score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
+	}
 }
-
 
 header ("location: dashBoard");
 include "lbs/close-db-connection.php";

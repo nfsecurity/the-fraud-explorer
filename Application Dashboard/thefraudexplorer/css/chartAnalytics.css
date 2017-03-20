@@ -93,7 +93,7 @@ html,body
     background: #2ECC40;
 }
 
-.point-opportunity-0-10, .point-opportunity-11-30, .point-opportunity-31-60, .point-opportunity-61-100, .point-opportunity-101-500, .point-opportunity-501-1000 
+.point-opportunity-low, .point-opportunity-medium, .point-opportunity-high, .point-opportunity-critic 
 {
     display: inline-block;
     width: 25px;
@@ -107,37 +107,31 @@ html,body
     -webkit-transition: opacity .25s ease-in-out;
 }
 
-.point-opportunity-11-30
+.point-opportunity-low
 {
     width: 27px;
     height: 27px;
 }
 
-.point-opportunity-31-60
+.point-opportunity-medium
 {
     width: 29px;
     height: 29px;
 }
 
-.point-opportunity-61-100
+.point-opportunity-high
 {
     width: 31px;
     height: 31px;
 }
 
-.point-opportunity-101-500
+.point-opportunity-critic
 {
     width: 33px;
     height: 33px;
 }
 
-.point-opportunity-501-1000
-{
-    width: 35px;
-    height: 35px;
-}
-
-.point-opportunity-0-10-red, .point-opportunity-0-10-green, .point-opportunity-0-10-blue, .point-opportunity-0-10-yellow 
+.point-opportunity-low-red, .point-opportunity-low-green, .point-opportunity-low-blue, .point-opportunity-low-yellow 
 {
     width: 25px;
     border-radius: 50%;
@@ -149,7 +143,7 @@ html,body
     -webkit-transition: opacity .25s ease-in-out;
 }
 
-.point-opportunity-11-30-red, .point-opportunity-11-30-green, .point-opportunity-11-30-blue, .point-opportunity-11-30-yellow
+.point-opportunity-medium-red, .point-opportunity-medium-green, .point-opportunity-medium-blue, .point-opportunity-medium-yellow
 {
     width: 27px;
     border-radius: 50%;
@@ -161,7 +155,7 @@ html,body
     -webkit-transition: opacity .25s ease-in-out;
 }
 
-.point-opportunity-31-60-red, .point-opportunity-31-60-green, .point-opportunity-31-60-blue, .point-opportunity-31-60-yellow
+.point-opportunity-high-red, .point-opportunity-high-green, .point-opportunity-high-blue, .point-opportunity-high-yellow
 {
     width: 29px;
     border-radius: 50%;
@@ -173,7 +167,7 @@ html,body
     -webkit-transition: opacity .25s ease-in-out;
 }
 
-.point-opportunity-61-100-red, .point-opportunity-61-100-green, .point-opportunity-61-100-blue, .point-opportunity-61-100-yellow
+.point-opportunity-critic-red, .point-opportunity-critic-green, .point-opportunity-critic-blue, .point-opportunity-critic-yellow
 {
     width: 31px;
     border-radius: 50%;
@@ -185,49 +179,25 @@ html,body
     -webkit-transition: opacity .25s ease-in-out;
 }
 
-.point-opportunity-101-500-red, .point-opportunity-101-500-green, .point-opportunity-101-500-blue, .point-opportunity-101-500-yellow
-{
-    width: 33px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-501-1000-red, .point-opportunity-501-1000-green, .point-opportunity-501-1000-blue, .point-opportunity-501-1000-yellow
-{
-    width: 35px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-0-10-green, .point-opportunity-11-30-green, .point-opportunity-31-60-green, .point-opportunity-61-100-green, .point-opportunity-101-500-green, .point-opportunity-501-1000-green 
+.point-opportunity-low-green, .point-opportunity-medium-green, .point-opportunity-high-green, .point-opportunity-critic-green 
 {
     background: #2ECC40;
 }
 
-.point-opportunity-0-10-blue, .point-opportunity-11-30-blue, .point-opportunity-31-60-blue, .point-opportunity-61-100-blue, .point-opportunity-101-500-blue, .point-opportunity-501-1000-blue
+.point-opportunity-low-blue, .point-opportunity-medium-blue, .point-opportunity-high-blue, .point-opportunity-critic-blue
 {
     background: #0074D9;
 }
 
-.point-opportunity-0-10-yellow, .point-opportunity-11-30-yellow, .point-opportunity-31-60-yellow, .point-opportunity-61-100-yellow, .point-opportunity-101-500-yellow, .point-opportunity-501-1000-yellow
+.point-opportunity-low-yellow, .point-opportunity-medium-yellow, .point-opportunity-high-yellow, .point-opportunity-critic-yellow
 {
     background: #FFDC00;
 }
 
-.point-opportunity-0-10-red:hover, .point-opportunity-11-30-red:hover, .point-opportunity-31-60-red:hover, .point-opportunity-61-100-red:hover, .point-opportunity-101-500-red:hover, .point-opportunity-501-1000-red:hover,
-.point-opportunity-0-10-green:hover, .point-opportunity-11-30-green:hover, .point-opportunity-31-60-green:hover, .point-opportunity-61-100-green:hover, .point-opportunity-101-500-green:hover, .point-opportunity-501-1000-green:hover,
-.point-opportunity-0-10-blue:hover, .point-opportunity-11-30-blue:hover, .point-opportunity-31-60-blue:hover, .point-opportunity-61-100-blue:hover, .point-opportunity-101-500-blue:hover, .point-opportunity-501-1000-blue:hover,
-.point-opportunity-0-10-yellow:hover, .point-opportunity-11-30-yellow:hover, .point-opportunity-31-60-yellow:hover, .point-opportunity-61-100-yellow:hover, .point-opportunity-101-500-yellow:hover, .point-opportunity-501-1000-yellow:hover
+.point-opportunity-low-red:hover, .point-opportunity-medium-red:hover, .point-opportunity-high-red:hover, .point-opportunity-critic-red:hover,
+.point-opportunity-low-green:hover, .point-opportunity-medium-green:hover, .point-opportunity-high-green:hover, .point-opportunity-critic-green:hover,
+.point-opportunity-low-blue:hover, .point-opportunity-medium-blue:hover, .point-opportunity-high-blue:hover, .point-opportunity-critic-blue:hover,
+.point-opportunity-low-yellow:hover, .point-opportunity-medium-yellow:hover, .point-opportunity-high-yellow:hover, .point-opportunity-critic-yellow:hover,
 {
     opacity: 0.9;
 }
