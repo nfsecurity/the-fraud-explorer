@@ -54,8 +54,6 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 $resultDelete=curl_exec($ch);
 curl_close($ch);
 
-var_dump($resultDelete);
-
 /* Return to home */
 
 header ("location:  dashBoard");
