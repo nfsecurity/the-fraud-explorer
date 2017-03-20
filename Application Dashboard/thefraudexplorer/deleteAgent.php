@@ -33,21 +33,28 @@ function filter($variable)
 
 $agent_enc=filter($_GET['agent']);
 $agent_dec=base64_decode(base64_decode($agent_enc));
-$maq=str_replace(array("."),array("_"),$agent_dec);
+$agentID=str_replace(array("."),array("_"),$agent_dec);
 
 /* Delete agent tables */
  
-mysql_query(sprintf("DROP TABLE t_%s",$maq));
-mysql_query(sprintf("DELETE FROM t_agents WHERE agent='%s'",$maq));
+mysql_query(sprintf("DROP TABLE t_%s",$agentID));
+mysql_query(sprintf("DELETE FROM t_agents WHERE agent='%s'",$agentID));
 
 /* Delete agent elasticsearch documents */
 
-$ch = curl_init(); 
-curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/_all/_query?q=agentId:".$maq); 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-curl_exec($ch); 
-curl_close($ch);   
+$urlDelete = "http://localhost:9200/_all/_delete_by_query?pretty";
+$params = '{ "query": { "match" : { "agentId" : "'.$agentID.'" } } }';
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL, $urlDelete);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+$resultDelete=curl_exec($ch);
+curl_close($ch);
+
+var_dump($resultDelete);
 
 /* Return to home */
 

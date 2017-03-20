@@ -158,7 +158,7 @@ foreach ($agentData['hits']['hits'] as $result)
 
 	/* Delete row */
 
-	echo '<td class="deletetd"><a data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index=alerter" data-toggle="modal" data-target="#delete-reg" href="#">';
+	echo '<td class="deletetd"><a data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
 	echo '<img src="images/delete-button-analytics.svg" onmouseover="this.src=\'images/delete-button-analytics-mo.svg\'" onmouseout="this.src=\'images/delete-button-analytics.svg\'" alt="" title=""/></a></td>';
 
 	echo '</tr>';

@@ -156,6 +156,10 @@
         $stringOfWords = null;
         $counter = 0;
 
+	$configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+        $dictLan = $configFile['wc_language'];
+        $dictEna = $configFile['wc_enabled'];
+
         foreach($arrayOfWordsAndWindows as $key=>$value)
         {
         	$windowTitle = $value[1];
@@ -171,6 +175,8 @@
                 }
                 else
                 {
+			if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+
 			echo "\n[INFO] Parsing fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestam [".$lastTimeStamp."] for agent [".$agentID."]";
                 	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
 
@@ -181,6 +187,9 @@
                 {  
 			$lastWindowTitle = $windowTitle;
                 	$lastTimeStamp = $timeStamp; 
+
+			if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+
                         echo "\n[INFO] Parsing last fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestamp [".$lastTimeStamp."] for agent [".$agentID."]";
                         parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
                 }
@@ -319,6 +328,40 @@
   	$result = mysql_query("SELECT domain FROM t_agents WHERE agent='".$agentID."'");
 	$row = mysql_fetch_array($result);
 	return $row['domain'];
+ }
+
+ /* Word Correction */
+
+ function checkPhrases($string, $language)
+ {
+ 	$unwanted_chars = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+               	                'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+               	        	'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                               	'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                               	'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+
+        $config_dic = pspell_config_create($language);
+        pspell_config_mode($config_dic, PSPELL_FAST);
+        $dictionary = pspell_new_config($config_dic);
+        $replacement_suggest = false;
+	$string = explode(' ', trim(str_replace(',', ' ', $string)));
+
+        foreach ($string as $key => $value)
+        {
+               	if(!pspell_check($dictionary, $value))
+               	{
+                       	$suggestion = pspell_suggest($dictionary, $value);
+
+                       	if(strtolower($suggestion[0]) != strtolower($value))
+                       	{
+                               	$string[$key] = $suggestion[0];
+                               	$replacement_suggest = true;
+                       	}
+               	}
+        }
+
+        if ($replacement_suggest) return strtr(implode(' ', $string), $unwanted_chars);
+        else return $string;
  }
 
  /* Send log data to external file */

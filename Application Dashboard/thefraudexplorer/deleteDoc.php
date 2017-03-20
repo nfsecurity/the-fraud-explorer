@@ -33,11 +33,12 @@ function filter($variable)
 $regid=$_GET['regid'];
 $agent=$_GET['agent'];
 $index=$_GET['index'];
+$type=$_GET['type'];
 
 /* Delete agent elasticsearch documents */
 
 $ch = curl_init(); 
-curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/logstash-".$index."-*/_query?q=_id:".$regid); 
+curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/".$index."/".$type."/".$regid); 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
 curl_exec($ch); 
