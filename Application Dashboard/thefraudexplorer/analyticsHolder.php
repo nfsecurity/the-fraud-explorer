@@ -71,7 +71,7 @@ include "lbs/elasticsearch.php";
         	</select>
 		
 		<span style="line-height: 0.7"><br><br></span>	
-		<input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%;" />
+		<input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important;" />
 	</form>
 		
 	<!-- Leyend -->
@@ -242,7 +242,7 @@ include "lbs/elasticsearch.php";
 			{
 				do
 				{
-					/* Agent data with APC caching */
+					/* Agent data */
 
 					$countRationalization = $row_a['rationalization'];
 			                $countOpportunity = $row_a['opportunity'];
@@ -307,109 +307,131 @@ $(document).ready(function () {
 	<?php
 
         /* Database querys */
-
-        $result_a = mysql_query("SELECT agent, ruleset, pressure, opportunity, rationalization FROM t_agents");
-	$result_b = mysql_query("SELECT agent, ruleset, pressure, opportunity, rationalization FROM t_agents");
+	
+	if($session->domain == "all")
+        {
+        	if ($_SESSION['rulesetScope'] == "ALL") 
+		{
+			$result_a = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents");
+			$result_b = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents");
+		}                        
+        	else 
+		{
+			$result_a = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."'");
+			$result_b = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."'");
+		}                 
+        }
+        else
+        {
+                if ($_SESSION['rulesetScope'] == "ALL") 
+		{
+			$result_a = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE domain='".$session->domain."'");
+                 	$result_b = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE domain='".$session->domain."'");
+		}
+        	else 
+		{
+			$result_a = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."' AND domain='".$session->domain."'");
+			$result_b = mysql_query("SELECT agent, name, ruleset, pressure, opportunity, rationalization FROM t_agents WHERE ruleset = '".$_SESSION['rulesetScope']."' AND domain='".$session->domain."'");
+		}               
+        }
 
         /* Logic */
 
         $counter = 1;
 	
-	if ($row_a = mysql_fetch_array($result_a))
+	$row_a = mysql_fetch_array($result_a);
+        
+	do
         {
-        	do
-               	{
-			/* Agent data with APC caching */
+		/* Agent data */
 		
-			$countRationalization = $row_a['rationalization'];
-                        $countOpportunity = $row_a['opportunity'];
-                        $countPressure = $row_a['pressure'];
+		$countRationalization = $row_a['rationalization'];
+                $countOpportunity = $row_a['opportunity'];
+                $countPressure = $row_a['pressure'];
 
-			/*  Draw axis units */
+		/*  Draw axis units */
 
-			if ($counter == 1)
-			{
-				$subCounter = 1;
+		if ($counter == 1)
+		{
+			$subCounter = 1;
 
-				/* Get max count value for both axis */
-			
-				if ($row_aT = mysql_fetch_array($result_b))
-        			{
-                			do
-                			{
-						/* Agent data with APC caching */
+			/* Get max count value for both axis */
+		
+			$row_aT = mysql_fetch_array($result_b);
+                			
+			do
+                	{
+				/* Agent data with APC caching */
 
-                                		$countRationalizationT[$subCounter] = $row_aT['rationalization'];
-                                		$countPressureT[$subCounter] = $row_aT['pressure'];
+                        	$countRationalizationT[$subCounter] = $row_aT['rationalization'];
+                                $countPressureT[$subCounter] = $row_aT['pressure'];
 	
-						$subCounter++;
-					}
-                			while ($row_aT = mysql_fetch_array($result_b));
-				}
+				$subCounter++;
+			}
+                	while ($row_aT = mysql_fetch_array($result_b));
 
-				$GLOBALS['maxYAxis'] = max($countPressureT);
-				$GLOBALS['maxXAxis'] = max($countRationalizationT);
+			$GLOBALS['maxYAxis'] = max($countPressureT);
+			$GLOBALS['maxXAxis'] = max($countRationalizationT);
 
-				echo 'rows: 2,'; 
-                		echo 'columns: 2,'; 
-                		echo 'subsections: 0,'; 
-                		echo 'responsive: true';
-        			echo '});';
-     			}
+			echo 'rows: 2,'; 
+                	echo 'columns: 2,'; 
+                	echo 'subsections: 0,'; 
+                	echo 'responsive: true';
+        		echo '});';
+     		}
 
-			/* Scoring calculation */
+		/* Scoring calculation */
 
-			$score=($countPressure+$countOpportunity+$countRationalization)/3;
+		$score=($countPressure+$countOpportunity+$countRationalization)/3;
 		
-			if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countPressure*100)/1;
-			else $yAxis = ($countPressure*100)/$GLOBALS['maxYAxis'];
+		if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countPressure*100)/1;
+		else $yAxis = ($countPressure*100)/$GLOBALS['maxYAxis'];
                        
-			if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countRationalization*100)/1;
-			else $xAxis = ($countRationalization*100)/$GLOBALS['maxXAxis'];
+		if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countRationalization*100)/1;
+		else $xAxis = ($countRationalization*100)/$GLOBALS['maxXAxis'];
 
-			/* Fix corners */
+		/* Fix corners */
 
-   			if ($xAxis == 100) $xAxis = $xAxis - 2;
-			if ($yAxis == 100) $yAxis = $yAxis - 4.5;
-			if ($xAxis == 0) $xAxis = $xAxis + 1.5;
-                        if ($yAxis == 0) $yAxis = $yAxis + 3;	
+   		if ($xAxis == 100) $xAxis = $xAxis - 2;
+		if ($yAxis == 100) $yAxis = $yAxis - 4.5;
+		if ($xAxis == 0) $xAxis = $xAxis + 1.5;
+                if ($yAxis == 0) $yAxis = $yAxis + 3;	
 
-                        if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
-                        {
-       		                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
+                {
+       			if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                }
 
-                        if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
-                        {
-                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
+                {
+                        if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                }
 
-                        if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
-                        {
-                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
+                {
+                        if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                }
 		
-			if ($countOpportunity >= $scoreResult['score_ts_critic_from'] && $countOpportunity <= $scoreResult['score_ts_critic_to'])
-                        {
-                                 if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                                 if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                        }
+		if ($countOpportunity >= $scoreResult['score_ts_critic_from'] && $countOpportunity <= $scoreResult['score_ts_critic_to'])
+                {
+                        if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                        if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
+                }
 
-                        $counter++;
-		}
-		while ($row_a = mysql_fetch_array($result_a));
+                $counter++;
 	}
+	while ($row_a = mysql_fetch_array($result_a));
 	?>
 });
 </script>

@@ -313,6 +313,7 @@ table
     height: 30px;
     overflow: scroll;
     background-color: #fff;
+    outline: 0 !important;
 }
 
 .select-scope-styled:before
@@ -328,7 +329,8 @@ table
     border-color: #000000 transparent transparent transparent;
     z-index: 5;
     pointer-events: none;
-  }
+    outline: 0 !important;
+}
 
 .select-scope-styled select
 {
@@ -339,5 +341,6 @@ table
     background-color: transparent;
     background-image: none;
     appearance: none;
+    outline: 0 !important;
 }
 

@@ -206,16 +206,16 @@ form
 	<div class="modal-footer window-footer-config">
                 <br>
 
-		<a href="authAccess?file=core/rules/fta_text_spanish.json" class="btn btn-default">Download JSON file</a>
+		<a href="authAccess?file=core/rules/fta_text_spanish.json" class="btn btn-default" style="outline: 0 !important;">Download JSON file</a>
 
 		<form action="rulesetUpload.php" id="rulesetUpload" method="post" enctype="multipart/form-data">
-			<div class="fileUpload btn btn-default">
+			<div class="fileUpload btn btn-default" style="outline: 0 !important;">
     				<span>Upload JSON file</span>
     				<input type="file" name="fileToUpload" id="fileToUpload" class="upload" />
 			</div>
 		</form>
 		
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
         </div>
 </div> 
 

@@ -121,7 +121,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 	<select class="select-ruleset-styled" name="ruleset" id="ruleset">
   		<option selected="selected">Choose the ruleset <?php
         		$rulesetquery = mysql_query(sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'",$agent_dec)); $ruleset = mysql_fetch_array($rulesetquery);
-        		if ($ruleset[0] == NULL) echo '(current dictionary: GENERIC)';
+        		if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)';
         		else echo '(current dictionary: '.$ruleset[0].')'; ?> 
 		</option>
 		
@@ -156,8 +156,8 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 
 	<div class="modal-footer window-footer">
 		<br>
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <input type="submit" class="btn btn-danger setup" value="Set values">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+                <input type="submit" class="btn btn-danger setup" value="Set values" style="outline: 0 !important;">
         </div>
     </form>
 </div>

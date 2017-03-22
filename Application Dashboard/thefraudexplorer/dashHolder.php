@@ -225,7 +225,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
 		/* Company, department or group */
 
-		if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd">GENERIC</td>';
+		if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd">BASELINE</td>';
                 else echo '<td class="comptd">' . $row_a["ruleset"] . "</td>";
 
 		/* Agent software version */

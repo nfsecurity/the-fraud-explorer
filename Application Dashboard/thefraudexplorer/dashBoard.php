@@ -116,8 +116,8 @@ if(!$session->logged_in)
                                        	</div>
 
                                         <div class="modal-footer">
-                                        	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                <a class="btn btn-danger delete">Delete</a>
+                                        	<button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+                                                <a class="btn btn-danger delete" style="outline: 0 !important;">Delete</a>
                                         </div>
                         	</div>
                 	</div>
@@ -156,8 +156,8 @@ if(!$session->logged_in)
                                         </div>
 
                                         <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-success" data-dismiss="modal">Accept</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Accept</button>
                                         </div>
                                 </div>
                         </div>

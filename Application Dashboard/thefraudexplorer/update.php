@@ -82,7 +82,7 @@ if ($key == $keypass[0])
 
    			/* Heartbeat data */
 
-   			$query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "','GENERIC','" . $domain ."','" . $ipAddress ."')";
+   			$query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
    			queryOrDie($query);
 
    			/* Primary agent table */

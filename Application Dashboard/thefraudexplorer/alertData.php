@@ -107,8 +107,8 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
                                         </div>
 
                                         <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                <a class="btn btn-danger delete-reg-button">Delete</a>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+                                                <a class="btn btn-danger delete-reg-button" style="outline: 0 !important;">Delete</a>
                                         </div>
                                 </div>
                         </div>

@@ -200,8 +200,8 @@ input[type="number"].mod::-webkit-inner-spin-button:hover, input[type="number"].
 
         <div class="modal-footer window-footer-config">
                 <br>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <input type="submit" class="btn btn-danger setup" value="Set values">
+                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+                <input type="submit" class="btn btn-danger setup" value="Set values" style="outline: 0 !important;">
         </div>
     </form>
 </div> 

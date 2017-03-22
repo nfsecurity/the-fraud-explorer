@@ -205,34 +205,50 @@
  function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT, $ruleset)
  {
 	$matched = FALSE;
+	$countOutput = 1;
 
 	foreach ($fraudTriangleTerms as $term => $value)
         {
-        	foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase) 
-                {
-                	if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
-                        {
-				$matched = TRUE;
+		$rule = "BASELINE";
 
-				$now = DateTime::createFromFormat('U.u', microtime(true));
-				$end = $now->format("Y-m-d\TH:i:s.u");
- 				$end = substr($end, 0, -3);
- 				$matchTime = (string)$end."Z";
-				$domain = getUserDomain($agentID);
-                                $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".$stringOfWords;
-                                $lenData = strlen($msgData);
-                                socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
-                                $GLOBALS[$matchesGlobalCount]++;
+		if ($ruleset != "BASELINE") $steps = 2;
+		else $steps = 1;
+
+		for($i=1; $i<=$steps; $i++)
+		{
+        		foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase) 
+                	{
+                		if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                        	{
+					$matched = TRUE;
+
+					$now = DateTime::createFromFormat('U.u', microtime(true));
+					$end = $now->format("Y-m-d\TH:i:s.u");
+ 					$end = substr($end, 0, -3);
+ 					$matchTime = (string)$end."Z";
+					$domain = getUserDomain($agentID);
+                                	$msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".$stringOfWords;
+                                	$lenData = strlen($msgData);
+                                	socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
+                                	$GLOBALS[$matchesGlobalCount]++;
+
+					if ($countOutput == 1) echo "\n\n";
  
-				echo "\n\n\t* Matching for agent [".$agentID."] with term [".$term."] at window [".$windowTitle."] with word [".$matches[0][0]."] in phrase [".str_replace('/', '', $termPhrase)."] - score [".$value."], total matches [".count($matches[0])."]\n\n";
+					echo "\t* Matching for agent [".$agentID."] with term [".$term."] at window [".$windowTitle."] with word [".$matches[0][0]."] in phrase [".str_replace('/', '', $termPhrase)."] - score [".$value."], total matches [".count($matches[0])."]\n";
 
-				logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0].
-				"] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
-		      	} 
-                }
+					logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0].
+					"] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
+		      		
+					$countOutput++;
+				} 
+                	}
+
+			$rule = $ruleset;
+		}
         }
 
 	if ($matched == FALSE) echo "\n\n\t* There is no matching phrases for agent [".$agentID."] at this time on this window [".$windowTitle."].\n\n";
+	else echo "\n";
  }
 
  /* Get ruleset from agent */
@@ -360,8 +376,7 @@
                	}
         }
 
-        if ($replacement_suggest) return strtr(implode(' ', $string), $unwanted_chars);
-        else return $string;
+        return strtr(implode(' ', $string), $unwanted_chars);
  }
 
  /* Send log data to external file */
