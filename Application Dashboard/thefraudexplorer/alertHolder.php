@@ -28,6 +28,7 @@ include "lbs/global-vars.php";
 include "lbs/open-db-connection.php";
 include "lbs/agent_methods.php";
 include "lbs/elasticsearch.php";
+include "lbs/cryptography.php";
 
 /* Elasticsearch querys for fraud triangle counts and score */
 
@@ -92,12 +93,12 @@ foreach ($agentData['hits']['hits'] as $result)
 
 	/* AlertType */
        
-	$windowTitle = htmlentities($result['_source']['windowTitle']);
-	$wordTyped = $result['_source']['wordTyped'];
+	$windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+	$wordTyped = decRijndael($result['_source']['wordTyped']);
 	$searchValue = "/".$result['_source']['phraseMatch']."/";
         $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_dec);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
-	$stringHistory = htmlentities($result['_source']['stringHistory']);
+	$stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
 
 	/* Phrase zoom */
 

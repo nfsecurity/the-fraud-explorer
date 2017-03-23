@@ -227,7 +227,7 @@
  					$end = substr($end, 0, -3);
  					$matchTime = (string)$end."Z";
 					$domain = getUserDomain($agentID);
-                                	$msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".$stringOfWords;
+                                	$msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords);
                                 	$lenData = strlen($msgData);
                                 	socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                                 	$GLOBALS[$matchesGlobalCount]++;
