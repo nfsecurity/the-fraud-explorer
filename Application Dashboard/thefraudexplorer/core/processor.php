@@ -17,7 +17,7 @@
 
  /* External includes */
 
- include "/var/www/html/thefraudexplorer/lbs/open-db-connection.php";
+ include "/var/www/html/thefraudexplorer/lbs/cryptography.php";
 
  /* Current time */
 

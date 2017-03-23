@@ -52,14 +52,13 @@ function searchJsonFT($jsonFT, $searchValue, $agent_dec)
 {
 	$rulesetquery = mysql_query(sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'",$agent_dec));
 	$ruleset = mysql_fetch_array($rulesetquery);
+	$baselineRuleset = "BASELINE";
 	$fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
 
 	foreach($fraudTriangleTerms as $term)
         {	
-        	foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value)
-        	{
-			if(strcmp($value, $searchValue) == 0) return $keyName;
-		}
+        	foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
+		foreach($jsonFT->dictionary->$baselineRuleset->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
 	}
 }
 

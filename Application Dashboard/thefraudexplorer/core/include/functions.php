@@ -149,7 +149,7 @@
  	getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", $agentID."_typedWords");
         $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
 
-	foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) echo "\t* Window [".$arrayValue[1]."] - Word [".$arrayValue[0]."] Date [".$arrayValue[2]."]\n";
+	foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) echo "\t* Window [".decRijndael($arrayValue[1])."] - Word [".decRijndael($arrayValue[0])."] Date [".$arrayValue[2]."]\n";
 
         $lastWindowTitle = null;
         $lastTimeStamp = null;
@@ -162,16 +162,16 @@
 
         foreach($arrayOfWordsAndWindows as $key=>$value)
         {
-        	$windowTitle = $value[1];
+        	$windowTitle = decRijndael($value[1]);
                 $timeStamp = $value[2];
 
                 if ($windowTitle == $lastWindowTitle)
                 {
-                	$stringOfWords = $stringOfWords . " " .$value[0];
+                	$stringOfWords = $stringOfWords . " " .decRijndael($value[0]);
                 }
                 else if ($counter == 0)
                 {
-                	$stringOfWords = $value[0];
+                	$stringOfWords = decRijndael($value[0]);
                 }
                 else
                 {
@@ -181,7 +181,7 @@
                 	parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset);
 
                         $counter = 0;
-			$stringOfWords = $value[0];
+			$stringOfWords = decRijndael($value[0]);
                 }
 		if ($key == count($arrayOfWordsAndWindows))
                 {  
