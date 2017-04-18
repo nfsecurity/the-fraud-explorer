@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code,
@@ -20,7 +35,7 @@ body
 {
     margin:0;
     padding:0;
-    font:11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
+    font:11px "Verdana", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color: #555;
     background:#f5f5f5 url(../images/simpletable/bg.jpg);
 }
@@ -68,7 +83,7 @@ a:active
     color: green;
     text-decoration: none;
 }
-	
+
 .content 
 {
     width:95%;
@@ -78,7 +93,7 @@ a:active
 {
     position: fixed; 
     bottom: 80px; 
-    top: 90px; 
+    top: 53px; 
     left: 8px;
     right: 8px; 
 }
@@ -367,7 +382,7 @@ li a
 
 li a:hover
 {
-  color: green;
+    color: green;
 }
 
 li a:hover:not(.active) 
@@ -417,7 +432,7 @@ li a:hover:not(.active)
 #search_button 
 {
     border: 0 none;
-    background: #13923D url(../images/search.png) center no-repeat;
+    background: #13923D url(../images/search.svg) center no-repeat;
     width: 60px;
     float: left;
     padding: 0;
@@ -511,17 +526,6 @@ li a:hover:not(.active)
     background: #FFFFFF;
 }
 
-.pager-top-layout
-{
-    position: fixed;
-    height: 30px;
-    top: 53px;
-    left: 8px;
-    right: 8px;
-    border: 1px solid #d3d3d3;
-    background: #FFFFFF;
-}
-
 .pager-inside
 {
     position: absolute;
@@ -535,7 +539,7 @@ li a:hover:not(.active)
 .pager-inside-agent
 {
     display: table-cell;
-    padding: 0px 0px 0px 15px;
+    padding: 2px 0px 0px 15px;
     float: left;
 }
 
@@ -697,4 +701,3 @@ input[type=checkbox]
     font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
     text-align: left;
 }
-

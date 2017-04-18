@@ -1,14 +1,14 @@
 /*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPLv3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Code for AJAX
  */
@@ -25,19 +25,15 @@ function iSubmitEnter(oEvent, oForm)
 
 /* Ajax for show under command line the result of the command execution */
 
-$(document).ready(function() 
-{	
-    $().ajaxStart(function() 
-    {
+$(document).ready(function() {	
+    $().ajaxStart(function() {
         $('#loading').show();
         $('#result').hide();
-    }).ajaxStop(function() 
-    {
+    }).ajaxStop(function() {
         $('#loading').hide();
         $('#result').fadeIn('slow');
     });
-    $('#form, #fat, #fo3').submit(function() 
-    {
+    $('#form, #fat, #fo3').submit(function() {
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'),
@@ -51,12 +47,11 @@ $(document).ready(function()
         command = command.replace(" ","");
         if(command.substring(0,5)=="reset")
         {
-            location.href="dashBoard";
+            location.href="endPoints";
         }
         if(command.substring(0,5)=="clear")
         {
-            $.ajax(
-            {
+            $.ajax({
                 url: "eraseCommands.php",
                 type: "POST",
                 data: ""
@@ -74,16 +69,14 @@ function getURLParameter(name)
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
-$(document).ready(function()
-{
+$(document).ready(function(){
     refreshCommandStatus();
 });
 
 function refreshCommandStatus()
 {
     myvar = getURLParameter('agent');
-    $('#commandStatus').load('statusCommand.php?agent='+myvar, function()
-    {
+    $('#commandStatus').load('statusCommand.php?agent='+myvar, function(){
         setTimeout(refreshCommandStatus, 1000);
     });
 }

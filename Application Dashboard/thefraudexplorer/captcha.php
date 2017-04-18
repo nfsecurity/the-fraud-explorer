@@ -1,16 +1,16 @@
 <?php
 
- /*
+/*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta 
+ * Revision: v1.0.0-beta 
  *
  * Description: Code for captcha on login 
  */
@@ -56,9 +56,9 @@ include "lbs/close-db-connection.php";
 
 for ($i=0;$i<=700;$i++)
 {
-	$randx=rand(0,100);
-	$randy=rand(0,55);
-	imagesetpixel($image,$randx,$randy,$RandomColorInverted);
+    $randx=rand(0,100);
+    $randy=rand(0,55);
+    imagesetpixel($image,$randx,$randy,$RandomColorInverted);
 }
 
 header("Content-type: image/png");

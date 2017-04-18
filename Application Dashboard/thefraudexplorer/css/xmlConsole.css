@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -38,17 +53,6 @@
     font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
 }
 
-.uniqueidh
-{
-    font-size: 10px;
-    background:#e8eaeb;
-    height: 35px;
-    width: 100px;
-    display: table-cell;
-    vertical-align: middle;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
-}
-
 .agenth
 {
     font-size: 10px;
@@ -60,12 +64,12 @@
     font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
 }
 
-.eventh
+.domainth
 {
     font-size: 10px;
     background:#e8eaeb;
     height: 35px;
-    width: 100px;
+    width: 200px;
     display: table-cell;
     vertical-align: middle;
     font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
@@ -92,16 +96,6 @@
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
 }
 
-.uniqueidd
-{
-    background: white;
-    height: 50px; width: 100px; display: table-cell; vertical-align: middle;
-    border-right:1px solid #F8F8F8;
-    border-top:1px solid #d3d3d3;
-    border-bottom:1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-}
-
 .agentd
 {
     background: white;
@@ -112,7 +106,7 @@
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
 }
 
-.eventd
+.domaintd
 {
     background: white;
     height: 50px; width: 100px; display: table-cell; vertical-align: middle;

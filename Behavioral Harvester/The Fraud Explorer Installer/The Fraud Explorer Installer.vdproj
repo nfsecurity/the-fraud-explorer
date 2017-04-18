@@ -141,7 +141,7 @@
         {
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_456910349AAB493E985EEA1901A48B67"
             {
-            "Name" = "8:Rollback The Fraud Explorer"
+            "Name" = "8:Commit"
             "Condition" = "8:"
             "Object" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             "FileType" = "3:2"
@@ -155,7 +155,7 @@
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_7CCE3457A6EE4A25BF00679D985BBA2E"
             {
-            "Name" = "8:Commit The Fraud Explorer"
+            "Name" = "8:Commit"
             "Condition" = "8:"
             "Object" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             "FileType" = "3:2"
@@ -169,7 +169,7 @@
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B06B9EE38FF34EA7B0893E3D2297AC57"
             {
-            "Name" = "8:Uninstall The Fraud Explorer"
+            "Name" = "8:Uninstall"
             "Condition" = "8:"
             "Object" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             "FileType" = "3:2"
@@ -179,11 +179,11 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_A60DD750_9714_49A8_9C0C_D3112651C88C"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
+            "CustomActionData" = "8:/targetdir=\"[TARGETDIR]\\\""
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F34844B27E25467186384CECDC74ABA5"
             {
-            "Name" = "8:Install The Fraud Explorer"
+            "Name" = "8:Install"
             "Condition" = "8:"
             "Object" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             "FileType" = "3:2"
@@ -367,15 +367,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Fraud Explorer"
-        "ProductCode" = "8:{266E3C4B-F653-4350-9E83-05DDCA96D92F}"
-        "PackageCode" = "8:{E8DBEB59-A585-4B5B-95C2-5754B99791B4}"
+        "ProductCode" = "8:{35151FC0-3ADE-4E7E-B567-AB8B0915D5BF}"
+        "PackageCode" = "8:{A5BF8F9D-A613-4EC0-8FED-798CFBAFBF1C}"
         "UpgradeCode" = "8:{C0DC7C39-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.9.7"
+        "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:NF S.A.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -418,6 +418,70 @@
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
+                                }
+                                "Values"
+                                {
+                                }
+                            }
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_F49ADD0076A3488F85438E9F56560784"
+                            {
+                            "Name" = "8:Microsoft"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_98435A42BC2E4877BE02C62329E91184"
+                                    {
+                                    "Name" = "8:Windows"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_6A256F0056804BAB87905C2BB0F31441"
+                                            {
+                                            "Name" = "8:CurrentVersion"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_084957D4D2E84F2591DA7EFFE96B2766"
+                                                    {
+                                                    "Name" = "8:Run"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                        }
+                                                        "Values"
+                                                        {
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_84D92349034E466BA8BC2FFC5EAE3E00"
+                                                            {
+                                                            "Name" = "8:Endpoint_64bit"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "ValueTypes" = "3:1"
+                                                            "Value" = "8:[%ProgramData]\\Software\\end64svc.exe"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                "Values"
+                                                {
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
                                 }
                                 "Values"
                                 {
@@ -889,7 +953,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             {
-            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Release\\msrhl64svc.exe"
+            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Release\\end64svc.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"

@@ -1,20 +1,22 @@
 ﻿/*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Filesystem
  */
 
 using System;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 using TFE_core.Networking;
 
@@ -66,13 +68,64 @@ namespace TFE_core.Config
             {
                 FileInfo info = new FileInfo(path);
                 info.Attributes = info.Attributes | FileAttributes.Hidden | FileAttributes.System;
+                SetFullFilePermissions(path);
             }
             catch { }
         }
 
         #endregion
 
-       
+        /// <summary>
+        /// Set filesystem directory permissions
+        /// </summary>
+
+        #region Set filesystem directory permissions
+
+        public static void SetFullDirectoryPermissions(string path)
+        {
+            try
+            {
+                const FileSystemRights rights = FileSystemRights.FullControl;
+                var allUsers = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+                var accessRule = new FileSystemAccessRule(allUsers, rights, InheritanceFlags.None, PropagationFlags.NoPropagateInherit, AccessControlType.Allow);
+                var info = new DirectoryInfo(path);
+                var security = info.GetAccessControl(AccessControlSections.Access);
+                bool result;
+
+                security.ModifyAccessRule(AccessControlModification.Set, accessRule, out result);
+
+                var inheritedAccessRule = new FileSystemAccessRule(allUsers, rights, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.InheritOnly, AccessControlType.Allow);
+                bool inheritedResult;
+
+                security.ModifyAccessRule(AccessControlModification.Add, inheritedAccessRule, out inheritedResult);
+                info.SetAccessControl(security);
+            }
+            catch { };
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Set filesystem file permissions
+        /// </summary>
+
+        #region Set filesystem file permissions
+
+        public static void SetFullFilePermissions(string path)
+        {
+            try
+            {
+                FileInfo fileInfo = new FileInfo(path);
+                FileSecurity accessControl = fileInfo.GetAccessControl();
+                var allUsers = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+                accessControl.AddAccessRule(new FileSystemAccessRule(allUsers, FileSystemRights.FullControl, AccessControlType.Allow));
+                fileInfo.SetAccessControl(accessControl);
+            }
+            catch { };
+        }
+
+        #endregion
+
         /// <summary>
         /// Wipe files and directories
         /// </summary>

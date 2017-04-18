@@ -2,15 +2,15 @@
 
 /*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Code for paint agent data table
  */
@@ -19,8 +19,8 @@ include "lbs/login/session.php";
 
 if(!$session->logged_in)
 {
-        header ("Location: index");
-        exit;
+    header ("Location: index");
+    exit;
 }
 
 require 'vendor/autoload.php';
@@ -35,9 +35,10 @@ include "lbs/cryptography.php";
 $client = Elasticsearch\ClientBuilder::create()->build();
 $configFile = parse_ini_file("config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
-$agent_dec = base64_decode(base64_decode($_SESSION['agentIDh']));
+$agent_decES = base64_decode(base64_decode($_SESSION['agentIDh']))."*";
+$agent_decSQ = base64_decode(base64_decode($_SESSION['agentIDh']));
 $agent_enc = $_SESSION['agentIDh'];
-$matchesDataAgent = getAgentIdData($agent_dec, $ESAlerterIndex, "AlertEvent");
+$matchesDataAgent = getAgentIdData($agent_decES, $ESAlerterIndex, "AlertEvent");
 $agentData = json_decode(json_encode($matchesDataAgent),true);
 
 echo '<style>';
@@ -45,126 +46,136 @@ echo '.font-icon-gray { color: #B4BCC2; }';
 echo '.font-icon-green { color: #1E9141; }';
 echo '</style>';
 
+/* SQL Queries */
+
+$queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+$queryDomain = "SELECT domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+
 /* JSON dictionary load */
 
 $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
 
-function searchJsonFT($jsonFT, $searchValue, $agent_dec)
-{
-	$rulesetquery = mysql_query(sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'",$agent_dec));
-	$ruleset = mysql_fetch_array($rulesetquery);
-	$baselineRuleset = "BASELINE";
-	$fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
+/* Endpoint domain */
 
-	foreach($fraudTriangleTerms as $term)
-        {	
-        	foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
-		foreach($jsonFT->dictionary->$baselineRuleset->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
-	}
+$domainQuery = mysql_query(sprintf($queryDomain, $agent_decSQ));
+$domain = mysql_fetch_array($domainQuery);
+
+function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
+{
+    $rulesetquery = mysql_query(sprintf($queryRuleset, $agent_decSQ));
+    $ruleset = mysql_fetch_array($rulesetquery);
+    $baselineRuleset = "BASELINE";
+    $fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
+
+    foreach($fraudTriangleTerms as $term)
+    {
+        foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
+        foreach($jsonFT->dictionary->$baselineRuleset->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
+    }
 }
 
 /* Main Table */
 
 echo '<table id="agentDataTable" class="tablesorter">';
 echo '<thead><tr><th class="selectth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="timestampth">EVENT TIMESTAMP</th><th class="alerttypeth">ALERT TYPE</th>
-<th class="windowtitleth">WINDOW TITLE</th><th class="phrasetypedth">PHRASE</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="deleteth">DELETE</th></tr>
+<th class="windowtitleth">APPLICATION CONTEXT</th><th class="phrasetypedth">PHRASE</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="deleteth">DELETE</th></tr>
 </thead><tbody>';
 
 $wordCounter = 0;
 
 foreach ($agentData['hits']['hits'] as $result)
 {
-	echo '<tr>';
+    echo '<tr>';
 
-	/* Checking */
+    /* Checking */
 
-        $date = $result['_source']['eventTime'];
-        $date = substr($date, 0, strpos($date, ","));
+    $date = $result['_source']['eventTime'];
+    $date = substr($date, 0, strpos($date, ","));
 
-        echo '<td class="selecttd">';
-        echo '<div class="checkboxRow"><input type="checkbox" value="" id="'.$date.'" name=""/><label for="'.$date.'"></label></div>';
-        echo '</td>';
+    echo '<td class="selecttd">';
+    echo '<div class="checkboxRow"><input type="checkbox" value="" id="'.$date.'" name=""/><label for="'.$date.'"></label></div>';
+    echo '</td>';
 
-	/* Timestamp */
+    /* Timestamp */
 
-	echo '<td class="timestamptd">';
-	echo '<span class="fa fa-clock-o">&nbsp;&nbsp;</span>'.$date;
-	echo '</td>';
+    echo '<td class="timestamptd">';
+    echo '<span class="fa fa-clock-o">&nbsp;&nbsp;</span>'.$date;
+    echo '</td>';
 
-	/* AlertType */
-       
-	$windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
-	$wordTyped = decRijndael($result['_source']['wordTyped']);
-	$searchValue = "/".$result['_source']['phraseMatch']."/";
-        $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_dec);
-        $regExpression = htmlentities($result['_source']['phraseMatch']);
-	$stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
+    /* AlertType */
 
-	/* Phrase zoom */
+    $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+    $wordTyped = decRijndael($result['_source']['wordTyped']);
+    $searchValue = "/".$result['_source']['phraseMatch']."/";
+    $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
+    $regExpression = htmlentities($result['_source']['phraseMatch']);
+    $stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
 
-	$pieces = explode(" ", $stringHistory);
+    /* Phrase zoom */
 
-	foreach($pieces as $key => $value)
-	{
-		if($pieces[$key] == $wordTyped)
-		{
-			if (array_key_exists($key-1, $pieces))
-			{  
-				if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
-				else $leftWords = $pieces[$key-1];
-			}
-			else $leftWords = "";				
-			
-			if (array_key_exists($key+1, $pieces)) 
-                        {
-                                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];        
-                                else $rightWords = $pieces[$key+1];      
-                        }
-                        else $rightWords = "";           
+    $pieces = explode(" ", $stringHistory);
 
-			$phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
-			break;
-		}
-	}
+    foreach($pieces as $key => $value)
+    {
+        if($pieces[$key] == $wordTyped)
+        {
+            if (array_key_exists($key-1, $pieces))
+            {
+                if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
+                else $leftWords = $pieces[$key-1];
+            }
+            else $leftWords = "";
 
-        echo '<td class="alerttypetd">';
-        echo '<span class="fa fa-tags">&nbsp;&nbsp;</span><div class="tooltip-custom tooltip-father" 
-	title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div>
-        <div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div>
-	<div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div>
-	<div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div>
-	<div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div>
-	<div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>
-        ">'.ucfirst($result['_source']['alertType']).'</div>';
-        echo '</td>';
+            if (array_key_exists($key+1, $pieces))
+            {
+                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];
+                else $rightWords = $pieces[$key+1];
+            }
+            else $rightWords = "";
 
-	/* Window title */
+            $phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
+            break;
+        }
+    }
 
-        echo '<td class="windowtitletd">';
-        echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>'.$windowTitle;
-        echo '</td>';
+    echo '<td class="alerttypetd">';
+    echo '<span class="fa fa-tags">&nbsp;&nbsp;</span><div class="tooltip-custom tooltip-father" 
+    title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div>
+    <div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div>
+    <div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div>
+    <div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div>
+    <div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div>
+    <div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>
+    ">'.ucfirst($result['_source']['alertType']).'</div>';
+    echo '</td>';
 
-	/* Phrase typed */
+    /* Window title */
 
-	echo '<td class="phrasetypedtd">';
-	echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>'.$wordTyped;
-	echo '</td>';
+    echo '<td class="windowtitletd">';
+    echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>'.$windowTitle;
+    echo '</td>';
 
-	/* Regular expression dictionary */
+    /* Phrase typed */
 
-	echo '<td class="phrasedictionarytd">';
-        echo '<span class="fa fa-font font-icon-gray">&nbsp;&nbsp;</span>'.$searchResult;
-        echo '</td>';
+    echo '<td class="phrasetypedtd">';
+    echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>'.$wordTyped;
+    echo '</td>';
 
-	/* Delete row */
+    /* Regular expression dictionary */
 
-	echo '<td class="deletetd"><a data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
-	echo '<img src="images/delete-button-analytics.svg" onmouseover="this.src=\'images/delete-button-analytics-mo.svg\'" onmouseout="this.src=\'images/delete-button-analytics.svg\'" alt="" title=""/></a></td>';
+    echo '<td class="phrasedictionarytd">';
+    echo '<span class="fa fa-font font-icon-gray">&nbsp;&nbsp;</span>'.$searchResult;
+    echo '</td>';
 
-	echo '</tr>';
+    /* Delete row */
 
-	$wordCounter++;
-} 
+    echo '<td class="deletetd"><a data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
+    echo '<img src="images/delete-button-analytics.svg" onmouseover="this.src=\'images/delete-button-analytics-mo.svg\'" onmouseout="this.src=\'images/delete-button-analytics.svg\'" alt="" title=""/></a></td>';
+
+    echo '</tr>';
+
+    $wordCounter++;
+}
 
 echo '</tbody></table>';
 
@@ -173,154 +184,117 @@ echo '</tbody></table>';
 <!-- Pager -->
 
 <div id="pager" class="pager">
-
-    <div class="pager-top-layout">
-	<div class="pager-inside">
-		<div class="pager-inside-agent">
-			There are <?php echo $wordCounter; ?> regular expressions matched by <span class="fa fa-user font-icon-color">&nbsp;&nbsp;</span><?php echo $agent_dec ?> stored in database.
-		</div>
-
-		<div class="pager-inside-pager">
-		<form>
-    			<span class="fa fa-fast-backward fa-lg first"></span>
-    			<span class="fa fa-arrow-circle-o-left fa-lg prev"></span>
-    			<span class="pagedisplay"></span>
-    			<span class="fa fa-arrow-circle-o-right fa-lg next"></span>
-    			<span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
-    			<select class="pagesize select-styled">
-      				<option value="50"> by 50 rows</option>
-      				<option value="100"> by 100 rows</option>
-      				<option value="500"> by 500 rows</option>
-      				<option value="1000"> by 1000 rows</option>
-      				<option value="all"> All Rows</option>
-    			</select>
-  		</form>
-		</div>
-	</div>
-    </div>
-
     <div class="pager-layout">
         <div class="pager-inside">
-                <div class="pager-inside-agent">
-                        There are <?php echo $wordCounter; ?> regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span><?php echo $agent_dec ?> stored in database.
-                </div>
+            <div class="pager-inside-agent">
+                There are <?php echo $wordCounter; ?> regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span><?php echo $agent_decSQ.'@'.$domain[0]; ?> stored in database
+            </div>
 
-                <div class="pager-inside-pager">
+            <div class="pager-inside-pager">
                 <form>
-                        <span class="fa fa-fast-backward fa-lg first"></span>
-                        <span class="fa fa-arrow-circle-o-left fa-lg prev"></span>
-                        <span class="pagedisplay"></span>
-                        <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
-                        <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
-                        <select class="pagesize select-styled">
-                                <option value="50"> by 50 rows</option>
-                                <option value="100"> by 100 rows</option>
-                                <option value="500"> by 500 rows</option>
-                                <option value="1000"> by 1000 rows</option>
-                                <option value="all"> All Rows</option>
-                        </select>
+                    <span class="fa fa-fast-backward fa-lg first"></span>
+                    <span class="fa fa-arrow-circle-o-left fa-lg prev"></span>
+                    <span class="pagedisplay"></span>
+                    <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
+                    <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
+                    <select class="pagesize select-styled">
+                        <option value="50"> by 50 rows</option>
+                        <option value="100"> by 100 rows</option>
+                        <option value="500"> by 500 rows</option>
+                        <option value="1000"> by 1000 rows</option>
+                        <option value="all"> All Rows</option>
+                    </select>
                 </form>
-                </div>
+            </div>
         </div>
     </div>
-
 </div>
 
 <!-- Modal for delete dialog -->
 
 <script>
-        $('#delete-reg').on('show.bs.modal', function(e) 
-        {
-                $(this).find('.delete-reg-button').attr('href', $(e.relatedTarget).data('href'));
-        }); 
+    $('#delete-reg').on('show.bs.modal', function(e){
+        $(this).find('.delete-reg-button').attr('href', $(e.relatedTarget).data('href'));
+    });
 </script>
 
 <!-- Table sorter -->
 
 <script>
-
-$(function()
-{
- $("#agentDataTable").tablesorter({
-	headers: 
-                        { 
-                                0: 
-                                {
-                                        sorter: false
-                                },
-				1:
-                                {
-                                        sorter: "shortDate", dateFormat: "yyymmdd"
-                                }, 
-				6: 
-                                {
-                                        sorter: false
-                                },
-                        },
-	sortList: [[1,1]]
-	})
- 	.tablesorterPager({
-		container: $("#pager"),
-		size: 50,
-		widgetOptions: 
-                                {
-                                        pager_removeRows: true
-                                }
- });
-});
-
+    $(function(){
+        $("#agentDataTable").tablesorter({
+            headers:
+            {
+                0:
+                {
+                    sorter: false
+                },
+                1:
+                {
+                    sorter: "shortDate", dateFormat: "yyymmdd"
+                },
+                6:
+                {
+                    sorter: false
+                },
+            },
+            sortList: [[1,1]]
+        })
+            .tablesorterPager({
+            container: $("#pager"),
+            size: 50,
+            widgetOptions:
+            {
+                pager_removeRows: true
+            }
+        });
+    });
 </script>
 
 <!-- Table search -->
 
 <script type="text/javascript">
-	$(document).ready(function()
-	{
-		$('#search-box').keyup(function()
-		{
-			searchTable($(this).val());
-		});
-	});
-		
-	function searchTable(inputVal)
-	{
-		var table = $('#agentDataTable');
+    $(document).ready(function(){
+        $('#search-box').keyup(function(){
+            searchTable($(this).val());
+        });
+    });
 
-		table.find('tr').each(function(index, row)
-		{
-			var allCells = $(row).find('td');
-					
-			if(allCells.length > 0)
-			{
-				var found = false;
-				
-				allCells.each(function(index, td)
-				{
-					var regExp = new RegExp(inputVal, 'i');
-					
-					if(regExp.test($(td).text()))
-					{
-						found = true;
-						return false;
-					}
-				});
-						
-				if(found == true)$(row).show();else $(row).hide();
-			}
-		});
-	}
+    function searchTable(inputVal)
+    {
+        var table = $('#agentDataTable');
+        table.find('tr').each(function(index, row){
+            var allCells = $(row).find('td');
+
+            if(allCells.length > 0)
+            {
+                var found = false;
+
+                allCells.each(function(index, td){
+                    var regExp = new RegExp(inputVal, 'i');
+
+                    if(regExp.test($(td).text()))
+                    {
+                        found = true;
+                        return false;
+                    }
+                });
+
+                if(found == true)$(row).show();else $(row).hide();
+            }
+        });
+    }
 </script>
 
 <!-- Tooltipster -->
 
 <script>
-        $(document).ready(function()
-        {
-                $('.tooltip-custom').tooltipster(
-                {
-                        theme: 'tooltipster-light',
-                        contentAsHTML: true,
-			side: 'right'
-                });
-        });
+    $(document).ready(function(){
+        $('.tooltip-custom').tooltipster(
+            {
+                theme: 'tooltipster-light',
+                contentAsHTML: true,
+                side: 'right'
+            });
+    });
 </script>

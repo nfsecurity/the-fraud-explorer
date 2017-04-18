@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code,
@@ -67,381 +82,387 @@ a:active
     color: green;
     text-decoration: none;
 }
-	
+
 .content 
 {
     width:95%;
 }
 
-.table-holder
+.dashboard-container
 {
-    position: fixed; 
-    bottom: 225px; 
-    top: 53px; 
-    left: 8px;
-    right: 8px; 
+    position: absolute; 
+    bottom: 50px; 
+    top: 53px;
+    left: 0px; 
+    right: 0px;
 }
 
-table 
+.container-upper-left
 {
-    overflow:hidden;
+    border: 1px solid #d3d3d3; 
+    display: block; 
+    float: left; 
+    width: -webkit-calc(50% - 12px); 
+    height: -webkit-calc(50% - 5px);
+    margin: 0 0px 0px 0px; 
+    top: 0px;
+    left: 8px;
+    position: absolute;
+    background: white;
+}
+
+.container-upper-left-sub
+{
+    position: relative; 
+    border: 0px solid red; 
+    height: calc(100% - 35px); 
+    padding: 10px 10px 10px 10px;
+}
+
+.container-upper-right
+{
+    border: 1px solid #d3d3d3; 
+    display: block; 
+    float: right; 
+    width: -webkit-calc(50% - 12px); 
+    height: -webkit-calc(50% - 5px); 
+    margin: 0 0px 10px 0px;
+    top: 0px;
+    right: 8px;
+    position: absolute;
+    background: white;
+}
+
+.container-upper-right-sub
+{
+    position: relative; 
+    border: 0px solid red; 
+    height: calc(100% - 60px); 
+    width: calc(100% - 60px);
+}
+
+.container-bottom-left
+{
+    border: 1px solid #d3d3d3;
+    display: block;
+    float: left;
+    width: -webkit-calc(50% - 12px);
+    height: -webkit-calc(50% - 5px);
+    margin: 0 0px 0px 0px;
+    left: 8px;
+    bottom: 0px;
+    position: absolute;
+    background-color: white;
+}
+
+.container-bottom-left-sub
+{
+    position: relative; 
+    border: 0px solid blue; 
+    height: calc(100% - 60px); 
+    width: calc(100% - 25px);
+}
+
+.container-bottom-left-sub-one
+{
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative; 
+    border: 0px solid red; 
+    height: 100%; 
+    width: calc(50% - 5px); 
+    float: left; 
+    text-align: center;
+}
+
+.container-bottom-left-sub-one-sub
+{
+    z-index: 1; 
+    position: absolute; 
+    border: 0px solid blue; 
+    width: 50%; 
+    text-align: center; 
+    font-family: 'FFont', sans-serif; 
+    font-size: 12px;
+}
+
+.container-bottom-left-fraud-score
+{
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 42px;
+}
+
+.container-bottom-left-sub-two
+{
+    position: relative; 
+    border:0px solid red; 
+    height: 100%; 
+    width: calc(50% - 5px); 
+    float: right;
+}
+
+.container-bottom-left-sub-two-sub
+{
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative; 
+    border: 0px solid green; 
+    height: calc(100%/3);
+}
+
+.container-bottom-left-sub-two-sub-one
+{
+    position: absolute; 
+    border: 0px solid blue; 
+    width: 100%; 
+    text-align: center; 
+    font-family: 'FFont', sans-serif; 
+    font-size: 12px;
+}
+
+.container-bottom-left-sub-two-sub-one-opportunity
+{
+    position: relative; 
+    width: 55px; 
+    background-color: #BEDAC7; 
+    height: 55px; 
+    float: left;
+    border-radius: 3px;
+}
+
+.container-bottom-left-sub-two-sub-one-pressure
+{
+    position: relative; 
+    width: 55px; 
+    background-color: #4CA86B; 
+    height: 55px; 
+    float: left;
+    border-radius: 3px;
+}
+
+.container-bottom-left-sub-two-sub-one-rational
+{
+    position: relative; 
+    width: 55px; 
+    background-color: #96C8A6; 
+    height: 55px; 
+    float: left;
+    border-radius: 3px;
+}
+
+.container-bottom-right
+{
+    border: 1px solid #d3d3d3; 
+    display: block; 
+    float: right; 
+    width: -webkit-calc(50% - 12px); 
+    height: -webkit-calc(50% - 5px); 
+    margin: 0 8px 0px 0px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    background: white;
+}
+
+.container-bottom-right-sub
+{
+    position: relative; 
+    border: 0px solid red; 
+    height: calc(100% - 33px); 
+    padding: 10px 10px 10px 10px;
+}
+
+.container-upper-left h2 
+{
+    font-family: 'FFont', sans-serif; font-size: 12px;
+    background: #e8eaeb;
+    color: #474747;
+    padding: 10px;
+    text-align: left;
+    height: 33px;
+}
+
+.container-upper-right h2 
+{
+    font-family: 'FFont', sans-serif; font-size: 12px;
+    background: #e8eaeb;
+    color: #474747;
+    padding: 10px;
+    text-align: left;
+    height: 33px;
+}
+
+.container-bottom-left h2
+{
+    font-family: 'FFont', sans-serif; font-size: 12px;
+    background: #e8eaeb;
+    color: #474747;
+    padding: 10px;
+    text-align: left;
+    height: 33px;
+}
+
+.container-bottom-right h2 
+{
+    font-family: 'FFont', sans-serif; font-size: 12px;
+    background: #e8eaeb;
+    color: #474747;
+    padding: 10px;
+    text-align: left;
+    height: 33px;
+}
+
+.container-title
+{
+    text-align: left; 
+    display: inline; 
+    float: left;
+}
+
+.container-window-icon
+{
+    text-align: right; 
+    display: inline; 
+    float: right;
+}
+
+@font-face 
+{
+    font-family: 'CFont';
+    font-size: 10px;
+    src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+.table
+{
     border: 1px solid #d3d3d3;
     background: #fefefe;
     width: 100%;
     border-spacing: 0px;
-    table-layout:fixed;
     height: 100%;
+    border-collapse: collapse;
 }
 
-table thead
-{
-   height: 50px;
+.thead, .tbody, .tr, .td, .th 
+{ 
+    box-sizing: border-box;
+    display: block; 
 }
 
-table tbody 
+.tr:after 
 {
-    overflow-y: scroll;
-    overflow-x: hidden;
-    background-image: url(../images/pattern-6j3d.png);
-    width: 100%;
-    height: calc(100% - 50px);
-}
-
-thead, tbody
-{
+    content: ' ';
     display: block;
+    visibility: hidden;
+    clear: both;
 }
 
-th.header 
+.thead th 
 { 
-    background-image: url(../images/sortable/bg.gif); 
-    cursor: pointer; 
-    background-repeat: no-repeat; 
-    background-position: center right; 
-    padding-left: 20px; 
-}  
-
-td
-{
-    padding:0px 0px 0px 0px;
-    opacity: 30;
-    height: 70px;
-    vertical-align: middle;
-    border-top:0px solid #e0e0e0;
-    border-right:0px solid #F8F8F8;
-    border-bottom:1px solid #F8F8F8;
-    width: 100%;
-}
-
-th
-{
-    padding:0px 12px 0px 12px;
+    height: 35px;
+    line-height: 35px;
     text-shadow: 1px 1px 1px #fff;
-    background:#e8eaeb;
-    font:11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
-    text-align: center;
-    border:0px solid #d3d3d3;
+    background: #e8eaeb;
+    padding-left: 10px;
+}
+
+.tbody 
+{
+    height: calc(100% - 35px);
+    overflow-y: auto;
     width: 100%;
-    height: 50px;
+    background-image: url(../images/pattern-6j3d.png);
 }
 
-.detailsth
+.tbody tr:nth-child(even), .table-body tr:nth-child(even)
 {
-    overflow: hidden;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px;
-    color: #474747;
-    min-width: 40px;
-    width: 40px;
-    display: table-cell;
-    white-space: nowrap;
+    background: #f7f7f7;
 }
 
-.totalwordsth
+.tbody tr:nth-child(odd), .table-body tr:nth-child(odd)
 {
-    display: none;
-    min-width: 1px;
-    width: 1px;
+    background: white;
 }
 
-.agentth   
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+.thead 
+{
+    width: 100%;
+}
+
+.tbody td, .thead th 
+{
+    width: 20%;
+    float: left;
+}
+
+.table-body, .table-head
+{
+    box-sizing: border-box;
+    display: block; 
+}
+
+.table-body
+{
+    height: calc(100% - 35px);
+    overflow-y: auto;
+    width: 100%;
+    background-image: url(../images/pattern-6j3d.png);
+}
+
+.table-head th
+{
+    height: 35px;
+    line-height: 35px;
+    text-shadow: 1px 1px 1px #fff;
+    background: #e8eaeb;
+    padding-left: 10px;
+}
+
+.table-body td, .table-head th
+{
+    width: calc(100% / 4);
+    float: left;    
+    padding-left: 0px;
+}
+
+.table-class 
+{
+    margin-left: auto;
+    margin-right: auto;
+    width:100%;
+}
+
+.table-class td
+{
+    vertical-align:middle;
     text-align: left;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.compth    
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    min-width: 150px;
-    width: 150px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.verth     
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    min-width: 100px;
-    width: 100px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.stateth   
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 100px;
-    min-width: 100px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.lastth    
-{ 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 90px;
-    min-width: 90px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.countpth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 70px;
-    min-width: 70px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.countoth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 70px;
-    min-width: 70px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.countrth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 70px;
-    min-width: 70px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.countcth  
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 70px;
-    min-width: 70px;
-    display: table-cell;
-    white-space: nowrap; 
-}
-
-.scoreth   
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 100px;
-    min-width: 100px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.specialth 
-{ 
-    overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
-    width: 75px;
-    min-width: 75px;
-    display: table-cell;
-    white-space: nowrap;
-}
-
-.detailstd
-{
+    padding: 10px 10px 10px 10px;
     overflow: hidden;
-    display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    padding-left: 8px;
-    width: 40px;
-    min-width: 40px;
-    background: #f2f2f2;
+    text-overflow: ellipsis;
 }
 
-.totalwordstd
+.block-with-text 
 {
-    display: none;
-    min-width: 1px;
-    width: 1px;
-    background: white;
+    position: relative; 
+    width: calc(100% - 55px);
+    line-height: 18px;
+    max-height: 55px;
+    height: 55px;
+    float: right; 
+    text-align: justify;  
+    padding: 0px 20px 0px 15px;
 }
 
-.agenttd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: left;
-    vertical-align: middle;
-    padding-left: 20px;
-    background: white;
-}
-
-.comptd  
+.font-icon-color-gray 
 { 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 150px;
-    min-width: 150px;
-    border-right:0px solid #F8F8F8;
-    border-left:1px solid #F8F8F8;
-    background: white;
-}
-
-.vertd   
-{ 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
-    background: white;
-}
-
-.statetd 
-{ 
-    display: table-cell; 
-    white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle; 
-    width: 100px;
-    min-width: 100px;
-    background: white;
-}
-
-.lasttd  
-{
-    display: table-cell; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
-    text-align: center;
-    vertical-align: middle;
-    width: 90px;
-    min-width: 90px;
-    background: white;
-}
-
-.countptd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
-}
-
-.countotd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
-}
-
-.countrtd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
-}
-
-.countctd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f7f7f7;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 70px;
-    min-width: 70px;
-}
-
-.scoretd
-{
-    overflow: hidden;
-    display: table-cell;
-    white-space: nowrap;
-    background:#f2f2f2;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
-    text-align: center;
-    vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
-}
-
-.specialtd 
-{ 
-    overflow: hidden; 
-    display: table-cell; 
-    white-space: nowrap; 
-    background:#f7f7f7;
-    text-align: center;
-    vertical-align: middle;
-    width: 75px;
-    min-width: 75px;
+    color: #B4BCC2; 
 }
 
 .ul 
@@ -523,7 +544,7 @@ li a:hover:not(.active)
 #search_button 
 {
     border: 0 none;
-    background: #13923D url(../images/search.png) center no-repeat;
+    background: #13923D url(../images/search.svg) center no-repeat;
     width: 60px;
     float: left;
     padding: 0;
@@ -546,41 +567,6 @@ li a:hover:not(.active)
     font-family: 'FFont', sans-serif; font-size:9px; color: white;
 }
 
-.command-console-container
-{
-    width: 100%;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    height: 190px;
-    margin-bottom: 0px;
-    border-top: 15px double #ededed;
-}
-
-.command-console
-{
-    width:50%;
-    height: 129px;
-    overflow: hidden;
-    float: left;
-    border:1px solid #d3d3d3;
-    background: #fefefe;
-    border-spacing: 0px; text-align: left;
-    padding: 10px 10px 10px 10px;
-}
-
-.command-cli
-{
-    font-family: Courier new; 
-    font-size: 25px; 
-    width: 100%; 
-    padding: 5px; 
-    border: solid 2px #c9c9c9; 
-    transition: border 0.3s;
-    outline: none;
-}
-
 #footer
 {
     background-color: #13923D;
@@ -591,45 +577,6 @@ li a:hover:not(.active)
     right: 0px;
     height: 40px;
     margin-bottom: 0px;
-}
-
-input[type=checkbox] 
-{
-    visibility: hidden;
-}
-
-.checkboxAgent
-{
-    width: 15px;
-    height: 15px;
-    background: #ddd;
-    margin: 10px 10px;
-    position: relative;
-}
-
-.checkboxAgent label 
-{
-    display: block;
-    width: 11px;
-    height: 11px;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -o-transition: all .5s ease;
-    -ms-transition: all .5s ease;
-    transition: all .5s ease;
-    cursor: pointer;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    z-index: 1;
-    background: #FFFFFF;
-}
-
-.checkboxAgent input[type=checkbox]:checked + label 
-{
-    background: #13923D;
 }
 
 .vertical-alignment-helper 
@@ -655,13 +602,6 @@ input[type=checkbox]
     pointer-events:all;
 }
 
-.gender-image
-{
-    vertical-align:middle; 
-    width: 35px; 
-    height: 35px;
-}
-
 .window-title
 {
     text-align: center; 
@@ -673,20 +613,6 @@ input[type=checkbox]
     text-align:left; 
     font-family: Verdana; 
     font-size: 12px;
-}
-
-.console-title
-{
-    font-family: 'FFont', sans-serif; 
-    font-size: 13px; 
-    color: #474747;
-}
-
-.window-command-status
-{
-    font-family: Courier new; 
-    font-size: 13px; 
-    color: #474747;
 }
 
 .footer-container
@@ -726,158 +652,35 @@ input[type=checkbox]
     text-decoration: none !important;
 }
 
-.tablesorter-default .header,
-.tablesorter-default .tablesorter-header 
+.fade-scale
 {
-    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
-    background-position: center right;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    white-space: normal;
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
 }
 
-.tablesorter-default thead .headerSortUp,
-.tablesorter-default thead .tablesorter-headerSortUp,
-.tablesorter-default thead .tablesorter-headerAsc 
+.fade-scale.in 
 {
-    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+    opacity: 1;
+    transform: scale(1);
 }
 
-.tablesorter-default thead .headerSortDown,
-.tablesorter-default thead .tablesorter-headerSortDown,
-.tablesorter-default thead .tablesorter-headerDesc 
+.title-text
 {
-    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 13px;
+    display: inline;
 }
 
-.tablesorter-default thead .sorter-false 
+.content-vertex-text
 {
-    background-image: none;
-    cursor: default;
+    font-family: 'FFont', sans-serif; 
+    font-size: 12px;
+    display: inline;
 }
 
-.pager-layout
-{
-    position: fixed;
-    height: 30px;
-    bottom: 190px;
-    left: 8px;
-    right: 8px;
-    border: 1px solid #d3d3d3;
-    background: #FFFFFF;
-}
-
-.pager-inside
-{
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    height: 19px;
-    width: 100%;
-    border: 0px solid red;
-}
-
-.pager-inside-agent
-{
-    display: table-cell;
-    padding: 0px 0px 0px 15px;
-    float: left;
-}
-
-.pager-inside-pager
-{
-    display: table-cell;
-    padding: 0px 15px 0px 0px;
-    float: right;
-}
-
-.select-styled 
-{
-    position: relative;
-    border: 1px solid #ccc;
-    width: 150px;
-    height: 20px;
-    overflow: hidden;
-    background-color: #fff;
-    outline: 0 !important;
-}
-
-.select-styled:before 
-{
-    content: '';
-    position: absolute;
-    right: 5px;
-    top: 7px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 7px 5px 0 5px;
-    border-color: #000000 transparent transparent transparent;
-    z-index: 5;
-    pointer-events: none;
-    outline: 0 !important;
-}
-
-.select-styled select 
-{
-    padding: 5px 8px;
-    width: 130%;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    appearance: none;
-    outline: 0 !important;
-}
-
-.tooltip-container
-{
-    display: table;
-    border-spacing: 2px;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
-    text-align: center;
-}
-
-.tooltip-title
-{
-    padding: 5px 0px 5px 0px;
-    font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
-    text-align: left;
-}
-
-.tooltip-row
-{
-    display: table-row;
-}
-
-.tooltip-item
-{
-    display: table-cell;
-    padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
-    text-align: left;
-}
-
-.tooltip-value
-{
-    display: table-cell;
-    padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
-    text-align: center;
-}
-
-.tooltip-value-lefta
-{
-    display: table-cell;
-    padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
-    text-align: left;
-}
-
-.delete-agent, .setup-agent
-{
-    outline: 0 !important;
-}

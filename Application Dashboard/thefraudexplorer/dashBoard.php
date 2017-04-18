@@ -2,15 +2,15 @@
 
 /*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Code for dashboard
  */
@@ -19,224 +19,112 @@ include "lbs/login/session.php";
 
 if(!$session->logged_in)
 {
-	header ("Location: index");
-	exit;
+    header ("Location: index");
+    exit;
 }
 
+$_SESSION['instance'] = "dashBoard";
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<title>Dashboard &raquo; The Fraud Explorer</title>
-	<link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+    <head>
+        <title>Dashboard &raquo; The Fraud Explorer</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<!-- JQuery 11 inclusion -->
+        <!-- JQuery 11 inclusion -->
 
-	<script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
 
-	<!-- JS functions -->
+        <!-- JS functions -->
 
-	<script type="text/javascript" src="js/dashBoard.js"></script>
-	
-	<!-- Styles and JS for modal dialogs -->
+        <script type="text/javascript" src="js/dashBoard.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<script src="js/bootstrap.js"></script>
+        <!-- Styles and JS for modal dialogs -->
 
-	<!-- JS/CSS for Tooltip -->
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <script src="js/bootstrap.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
-        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipster-sideTip-light.min.css">
-        <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
+        <!-- ChartJS -->
 
-	<!-- CSS -->
+        <script type="text/javascript" src="js/Chart.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/dashBoard.css" media="screen" />
+        <!-- CSS -->
 
-	<!-- Font Awesome -->
+        <link rel="stylesheet" type="text/css" href="css/dashBoard.css" media="screen" />
+
+        <!-- Font Awesome -->
 
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+        
+        <!-- JQuery DotDotDot -->
+        
+        <script src="js/jquery.dotdotdot.js" type="text/javascript"></script>
 
-	<!-- Table sorting -->
+        <!-- Footer -->
 
-	<script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
-	<script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/footer.css" />
 
-	<!-- Footer -->
+        <style>
+            .font-icon-color-white { color: #FFFFFF; }
+        </style>
+    </head>
+    <body>
+        <div align="center" style="height:100%;">
 
-	<link rel="stylesheet" type="text/css" href="css/footer.css" />
-	<style>
-    	    .font-icon-color-white { color: #FFFFFF; }
-	</style>
-</head>
-<body>
-	<div align="center" style="height:100%;">
+            <!-- Top main menu -->
 
-		<!-- Top main menu -->
+            <div id="includedTopMenu"></div>
 
-		<div id="includedTopMenu"></div>
+            <?php
+            include "lbs/open-db-connection.php";
+            $_SESSION['id_uniq_command']=null;
 
-		<?php
-			include "lbs/open-db-connection.php";
-			$_SESSION['id_uniq_command']=null;
+            echo '<div id="mainDashHolder" class="table-holder"></div>';
+            if (isset($_SESSION['welcome']) && $_SESSION['welcome'] == "enable") echo '<script type="text/javascript"> $(document).ready(function(){$(\'#welcomeScreen\').modal(\'show\');});</script>';
 
-			$result_a = mysql_query("SELECT agent FROM t_agents", $connection);
-
-			if ($row_a = mysql_fetch_array($result_a))
-			{
-				/* Code for paint the table of agents via AJAX */
-
-				echo '<div id="tableHolder" class="table-holder"></div>';
-			}
-			else
-			{	
-				echo '<script type="text/javascript"> $(document).ready(function(){$(\'#noAgentsYet\').modal(\'show\');});</script>';
-			}
-
-			include "lbs/close-db-connection.php";
-		?>
-	</div>
-
-	<!-- Modal for deletion -->
-
-        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        	<div class="vertical-alignment-helper">
-                	<div class="modal-dialog vertical-align-center">
-                        	<div class="modal-content">
-                                	<div class="modal-header">
-                                        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
-                                        </div>
-
-                                        <div class="modal-body">
-                                        	<p style="text-align:left; font-size: 12px;"><br>You are about to delete the agent, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
-                                                <p class="debug-url window-debug"></p>
-                                       	</div>
-
-                                        <div class="modal-footer">
-                                        	<button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-                                                <a class="btn btn-danger delete" style="outline: 0 !important;">Delete</a>
-                                        </div>
-                        	</div>
-                	</div>
-        	</div>  
+            $_SESSION['welcome'] = "disable";
+            include "lbs/close-db-connection.php";
+            ?>
         </div>
 
-	<!-- Modal for agent setup -->
-
-        <div class="modal fade" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="vertical-alignment-helper">
-	                <div class="modal-dialog vertical-align-center">
-        	                <div class="modal-content">
-                               	 	<div class="modal-body">
-                                        	<p class="debug-url window-debug"></p>
-                                	</div>
-                        	</div>
-                	</div>
-		</div>
+        <div id="footer">
+            <p class="main-text">&nbsp;</p>
+            <div class="logo-container">
+                &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; NF Cybersecurity & Antifraud Firm
+        </div>
+        <div class="helpers-container">
+            <span class="fa fa-bug fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-globe fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Language&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-medkit fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-building-o fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Application context [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
         </div>
 
-	<!-- Modal for no-agents-yet message -->
+    <!-- Modal for Welcome Screen -->
 
-        <div class="modal fade" id="noAgentsYet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="vertical-alignment-helper">
-                        <div class="modal-dialog vertical-align-center">
-                                <div class="modal-content">
-                                        <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title window-title" id="myModalLabel">Welcome to The Fraud Explorer</h4>
-                                        </div>
+    <div class="modal fade-scale" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title window-title" id="myModalLabel">Welcome to The Fraud Explorer</h4>
+                    </div>
 
-                                        <div class="modal-body">
-                                                <p style="text-align:left; font-size: 12px;"><br>At this time there is no agents connected to The Fraud Explorer, maybe because it's the first time you are using the software or you are near to deploy the agents.
-						If you need help, please refer to the Wiki at www.thefraudexplorer.com/es/wiki.</p>
-                                                <p class="debug-url window-debug"></p>
-                                        </div>
+                    <div class="modal-body">
+                        <p style="text-align:justify; font-size: 12px;"><br>Welcome to the realtime implementation of Fraud Triangle Analytics methodology. With this software your company will address the fraud from a new detective and preventive perspective, identifying human behaviors that conduct to a dishonest actions mapping them into a three important aspects: social or company pressures, opportunity and justification attitudes in order to commit a fraud.<br><br> Read the documentation located in the <a href="https://www.thefraudexplorer.com/es/wiki">Wiki</a> and feel free to submit requests for software improvement, methodology application or bug reports at <a href="https://github.com/nfsecurity/the-fraud-explorer/issues">Github Issues</a>. In the name of The Fraud Explorer team, we wish you a good fraud fight.</p>
+                        <p class="debug-url window-debug"></p>
+                    </div>
 
-                                        <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-						<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Accept</button>
-                                        </div>
-                                </div>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Let's begin</button>
+                    </div>
                 </div>
+            </div>
         </div>
+    </div>
 
-	<!-- ConsoleJS functions -->
-
-	<script type="text/javascript" src="js/console.js"></script>
-
-	<!-- Ajax for capture ENTER key in command line -->
-
-	<script language="JavaScript" type="text/javascript" src="js/ajax.js"></script>
-
-	<!-- TableXMLHolder AJAX funtions -->
-
-	<script type="text/javascript" src="js/xmlTableHolder.js"></script>
-
-	<div class="command-console-container">
-       	 	<div class="command-console">
-	                <?php
-        	                if(isset($_SESSION['id_command'])) unset($_SESSION['id_command']);
-                 	        if(isset($_SESSION['seconds_waiting'])) unset($_SESSION['seconds_waiting']);
-                        	if(isset($_SESSION['NRF'])) unset($_SESSION['NRF']);
-                        	if(isset($_SESSION['waiting_command'])) unset($_SESSION['waiting_command']);
-                        	if(isset($_SESSION['NRF_CMD'])) unset($_SESSION['NRF_CMD']);
-                        	if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-
-                        	$command_console_enabled = "no";
-
-             	            	if (!isset($_GET['agent']))
-                        	{
-                                	echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
-                                	$command_console_enabled = "no";
-                                	if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-                        	}
-                        	else
-                        	{
-                            		$command_console_enabled = "yes";
-                                	$agent_dec=base64_decode(base64_decode($_GET['agent']));
-                                	$agent = $agent_dec;
-                                	$_SESSION['agent']=$agent;
-                                	$_SESSION['agentchecked']=$agent_dec;
-                                	echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute on '.$agent.'</strong><br><br>';
-                        	}
-                	?>
-        		<div id="result"></div>
-                		<?php
-                        		if ($command_console_enabled == "yes")
-                      	  		{
-                                		echo '<form id="fo3" name="fo3" method="post" action="saveCommands?agent='.$agent.'">';
-                                		echo '</strong><input class="intext command-cli" type="text" autocomplete="off" placeholder=":type instruction here" name="commands" id="commands" onkeypress="iSubmitEnter(event, document.form1)" >';
-                                		echo '<br><br><div class="window-command-status" id="commandStatus"></div>';
-                                		echo '</form>';
-                        		}
-                        		else
-                        		{
-                                		echo '<form id="fo3" name="fo3" method="post" action="#">';
-                                		echo '<input class="intext command-cli" type="text" disabled autocomplete="off" placeholder=":type instruction here" name="commands" id="commands" onkeypress="iSubmitEnter(event, document.form1)" >';
-                                		echo '<br><br><div class="window-command-status" id="commandStatus"></div>';
-                                		echo '</form>';
-                        		}
-                		?>
-        		</div>
-
-		<div id="tableHolderXML"></div>
-        	<div id="footer">        	
-			<p class="main-text">&nbsp;</p>
-                	<div class="logo-container">
-                        	&nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; NF Cybersecurity & Antifraud Firm
-                	</div>
-                	<div class="helpers-container">
-                        	<span class="fa fa-bug fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                        	<span class="fa fa-file-text fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                        	<span class="fa fa-globe fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Language&nbsp;&nbsp;&nbsp;&nbsp;
-                        	<span class="fa fa-medkit fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                        	<span class="fa fa-building-o fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Application context [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                	</div>
-		</div>
-	</div>
-</body>
+    </body>
 </html>

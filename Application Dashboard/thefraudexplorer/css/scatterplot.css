@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 .point 
 {
     position: absolute;
@@ -29,16 +44,16 @@
 
 .x-Units, .y-Units 
 {
-  display: table;
-  position: absolute;
+    display: table;
+    position: absolute;
 }
 
 .x-Units > ul, .y-Units > ul 
 {
-  display: table-row;
+    display: table-row;
 }
 
 .x-Units > ul > li, .y-Units > ul > li 
 {
-  display: table-cell;
+    display: table-cell;
 }

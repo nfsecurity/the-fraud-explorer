@@ -1,14 +1,14 @@
 ﻿/*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: SQL Storage
  */
@@ -92,10 +92,10 @@ namespace TFE_core.Database
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('" + Settings.APOSTFIXFLAG + "', '" + Initialization.parametersFromBinary(Settings.APOSTFIXFLAG) + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
-                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('" + Settings.REGFLAG + "', '" + Initialization.parametersFromBinary(Settings.REGFLAG) + "')", connection);
+                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('" + Settings.TPORTFLAG + "', '" + Initialization.parametersFromBinary(Settings.TPORTFLAG) + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
-                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('" + Settings.TPORTFLAG + "', '" + Initialization.parametersFromBinary(Settings.TPORTFLAG) + "')", connection);
+                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('" + Settings.EXECUTION + "', '0')", connection);
                 insertSQL.ExecuteNonQuery();
 
                 connection.Close();

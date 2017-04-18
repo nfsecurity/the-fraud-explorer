@@ -1,14 +1,14 @@
 ﻿/*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Main Application
  */
@@ -50,8 +50,6 @@ namespace TFE_core
 
         #region Application start
 
-        public static string execMode = null;
-
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // Prevent multiple executions
@@ -64,13 +62,9 @@ namespace TFE_core
 
                 SQLStorage.DBInitializationChecks();
 
-                // Define "msi" or "standalone" mode
+                // Startup checks
 
-                execMode = "msi";
-
-                // Registry preparation
-
-                Common.registryChecks();
+                Common.startupChecks();
 
                 // Start modules
 

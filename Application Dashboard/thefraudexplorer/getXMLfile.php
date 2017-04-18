@@ -2,25 +2,25 @@
 
 /*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
- * Description: Code for refresh XML file under dashBoard
+ * Description: Code for refresh XML file
  */
 
 include "lbs/login/session.php";
 
 if(!$session->logged_in)
 {
-        header ("Location: index");
-        exit;
+    header ("Location: index");
+    exit;
 }
 
 include "lbs/global-vars.php";
@@ -32,6 +32,7 @@ $arg = $xml->token[0]['arg'];
 $id = $xml->token[0]['id'];
 $agt = $xml->token[0]['agt'];
 $version = $xml->version[0]['num'];
+$domain = $xml->token[0]['domain'];
 
 echo '<style>';
 echo '.font-icon-color-gray { color: #B4BCC2; }';
@@ -49,65 +50,58 @@ echo '</style>';
 <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
 <div class="table">
-<div class="tablerow">
-	<div class="commandh">
-		<center><span class="fa fa-cogs font-icon-color-gray">&nbsp;&nbsp;</span>COMMAND</center>
-	</div>
-	<div class="uniqueidh">
-                <center><span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>ID</center>
+    <div class="tablerow">
+        <div class="commandh">
+            <center><span class="fa fa-tasks font-icon-color-gray">&nbsp;&nbsp;</span>COMMAND</center>
         </div>
-	<div class="agenth">
-                <center><span class="fa fa-user font-icon-color-gray">&nbsp;&nbsp;</span>AGENT</center>
+        <div class="agenth">
+            <center><span class="fa fa-desktop font-icon-color-gray">&nbsp;&nbsp;</span>ENDPOINT</center>
         </div>
-	<div class="eventh">
-                <center><span class="fa fa-hashtag font-icon-color-gray">&nbsp;&nbsp;</span>NUM</center>
+        <div class="domainth">
+            <center><span class="fa fa-building font-icon-color-gray">&nbsp;&nbsp;</span>DOMAIN</center>
         </div>
-	<div class="paramh">
-                <center><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>PARAMETERS AND ARGUMENTS</center>
+        <div class="paramh">
+            <center><span class="fa fa-list-ul font-icon-color-gray">&nbsp;&nbsp;</span>PARAMETERS AND ARGUMENTS</center>
         </div>
-</div>
-	
-<?php
+    </div>
 
-	if ($type != "")
-	{
-		echo '<div class="tablerow">';
-		echo '<div class="commandd">';
- 		echo '<center>'.decRijndaelWOSC($type).'</center>';
-		echo '</div>';
-		echo '<div class="uniqueidd">';
-                echo '<center>'.$id.'</center>';
-                echo '</div>';
-		echo '<div class="agentd">';
-                echo '<center>'.decRijndaelWOSC($agt).'</center>';
-                echo '</div>';
-		echo '<div class="eventd">';
-                echo '<center>'.$version.'</center>';
-                echo '</div>';
-		echo '<div class="paramd">';
-                if ($arg != "") echo '<center>'.decRijndaelWOSC($arg).'</center>';
-         	else echo '<center>blank or none at the moment</center>';
-	        echo '</div>';
-	}
-	else
-	{
-		echo '<div class="tablerow">';
-                echo '<div class="commandd">';
-                echo '<center>Nothing yet</center>';
-                echo '</div>';
-                echo '<div class="uniqueidd">';
-                echo '<center>No ID</center>';
-                echo '</div>';
-                echo '<div class="agentd">';
-                echo '<center>No agent command</center>';
-                echo '</div>';
-                echo '<div class="eventd">';
-                echo '<center>No number</center>';
-                echo '</div>';
-                echo '<div class="paramd">';
-                echo '<center>blank or none at the moment</center>';
-                echo '</div>';
-	}
+    <?php
 
-?>
+    if ($type != "")
+    {
+        echo '<div class="tablerow">';
+        echo '<div class="commandd">';
+        echo '<center>'.decRijndaelWOSC($type).'</center>';
+        echo '</div>';
+        echo '<div class="agentd">';
+        echo '<center>'.decRijndaelWOSC($agt).'</center>';
+        echo '</div>';
+        echo '<div class="domaintd">';
+        echo '<center>'.decRijndael($domain).'</center>';
+        echo '</div>';
+        echo '<div class="paramd">';
+
+        if ($arg != "") echo '<center>'.decRijndaelWOSC($arg).'</center>';
+        else echo '<center>blank or none at the moment</center>';
+
+        echo '</div>';
+    }
+    else
+    {
+        echo '<div class="tablerow">';
+        echo '<div class="commandd">';
+        echo '<center>Nothing yet</center>';
+        echo '</div>';
+        echo '<div class="agentd">';
+        echo '<center>No agent selected</center>';
+        echo '</div>';
+        echo '<div class="domaintd">';
+        echo '<center>No domain</center>';
+        echo '</div>';
+        echo '<div class="paramd">';
+        echo '<center>Blank or none at the moment</center>';
+        echo '</div>';
+    }
+
+    ?>
 </div>

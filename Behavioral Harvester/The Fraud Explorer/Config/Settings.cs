@@ -1,20 +1,19 @@
 ﻿/*
  * The Fraud Explorer
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Internal configuration
  */
 
 using System;
-using Microsoft.Win32;
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -37,19 +36,10 @@ namespace TFE_core.Config
 
         #region Filesystem variables
 
-        public static string SoftwareBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Software";
+        public static string SoftwareBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Software";
+        public static string SoftwareDatabaseDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Software";
         public static string SoftwareUpdater = SoftwareBaseDir + "\\Updater";
-        public static string AppPath = Common.SetAndCheckDir("InstallationPath") + "\\" + Settings.thefraudexplorer_executableName();
-
-        #endregion
-
-        /// <summary>
-        /// Operating system variables
-        /// </summary>
-
-        #region Operating system variables
-
-        public static string MainDrive = "C:\\";
+        public static string AppPath = Common.SetAndCheckDir("ExecutablePath") + "\\" + Settings.thefraudexplorer_executableName();
 
         #endregion
 
@@ -63,7 +53,7 @@ namespace TFE_core.Config
 
         public static string sqlFile()
         {
-            return Common.SetAndCheckDir("InstallationPath") + "\\tfe.db3";
+            return Common.SetAndCheckDir("DatabasePath") + "\\endpoint.db3";
         }
 
         public const string HEARTBEAT = "heartbeat";
@@ -73,11 +63,11 @@ namespace TFE_core.Config
         public const string AESKEYFLAG = "aesKey";
         public const string AESIVFLAG = "aesIV";
         public const string EXEFLAG = "exeName";
-        public const string REGFLAG = "registryKey";
         public const string SRPWDFLAG = "serverPassword";
         public const string HVERFLAG = "harvesterVersion";
         public const string APOSTFIXFLAG = "agentPostfix";
         public const string TPORTFLAG = "textPort";
+        public const string EXECUTION = "numberOfExecution";
 
         // Get machine unique identification
 
@@ -154,79 +144,6 @@ namespace TFE_core.Config
         #endregion
 
         /// <summary>
-        /// Windows registry variables and methods
-        /// </summary>
-
-        #region Windows registry variables and methods
-
-        public static string RegistryKeyValue = SQLStorage.retrievePar(Settings.REGFLAG);
-        public static string HKEYLocalMachine = "HKEY_LOCAL_MACHINE";
-        public static string HCKURun = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
-
-        #endregion
-
-        /// <summary>
-        /// Uninstall procedure
-        /// </summary>
-
-        #region Uninstall procedure
-
-        public static void autodestroy(string command, string uniqueID)
-        {
-            try
-            {
-                // Registry key deletion
-
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-                {
-                    if (key == null) { }
-                    else
-                    {
-                        key.DeleteValue(Initialization.parametersFromBinary("registryKey"));
-                    }
-                }
-
-                // Self delete the excutable and database
-
-                string App = Common.SetAndCheckDir("InstallationPath") + "\\" + Settings.thefraudexplorer_executableName();
-                string Database = sqlFile();
-
-                string batchFile = "@echo off" + Environment.NewLine +
-                    ":deleApp" + Environment.NewLine +
-                    "attrib -h -r -s " + App + Environment.NewLine +
-                    "powershell -command \"& { clc '" + App + "';}\"" + Environment.NewLine +
-                    "del \"" + App + "\"" + Environment.NewLine +
-                    "if Exist \"" + App + "\" GOTO dele" + Environment.NewLine +
-                    ":deleDB" + Environment.NewLine +
-                    "powershell -command \"& { clc '" + Database + "';}\"" + Environment.NewLine +
-                    "del \"" + Database + "\"" + Environment.NewLine +
-                    "if Exist \"" + Database + "\" GOTO deleDB" + Environment.NewLine +
-                    "del %0";
-
-                StreamWriter SelfDltFile = new StreamWriter(Common.SetAndCheckDir("InstallationPath") + SelfDltFileName);
-                SelfDltFile.Write(batchFile);
-                SelfDltFile.Close();
-
-                Process proc = new Process();
-                proc.StartInfo.FileName = Common.SetAndCheckDir("InstallationPath") + SelfDltFileName;
-                proc.StartInfo.CreateNoWindow = true;
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.StartInfo.UseShellExecute = true;
-                proc.Start();
-                proc.PriorityClass = ProcessPriorityClass.Normal;
-
-                // Inform that the command was received and executed
-
-                Network.SendData("uninstalled!", command, uniqueID, 1);
-
-                Environment.Exit(0);
-            }
-            catch {};
-        }
-
-        #endregion
-
-        /// <summary>
         /// Updater procedure
         /// </summary>
 
@@ -246,7 +163,7 @@ namespace TFE_core.Config
 
                 // Self delete the excutable and copy the new one
 
-                string OldApp = Common.SetAndCheckDir("InstallationPath") + "\\" + Settings.thefraudexplorer_executableName();
+                string OldApp = Common.SetAndCheckDir("ExecutablePath") + "\\" + Settings.thefraudexplorer_executableName();
                 string NewApp = Common.SetAndCheckDir("UpdaterFolder") + "\\" + Settings.thefraudexplorer_executableName();
                 string batchFile = "@echo off" + Environment.NewLine +
                     ":deleupdate" + Environment.NewLine +
@@ -256,19 +173,19 @@ namespace TFE_core.Config
                     "if %ERRORLEVEL% EQU 0 GOTO cpy" + Environment.NewLine +
                     "if Exist \"" + OldApp + "\" GOTO deleupdate" + Environment.NewLine +
                     ":cpy" + Environment.NewLine +
-                    "copy " + NewApp + " " + Common.SetAndCheckDir("InstallationPath") + "\\" + Environment.NewLine +
+                    "copy " + NewApp + " " + Common.SetAndCheckDir("ExecutablePath") + "\\" + Environment.NewLine +
                     "attrib +h +r +s " + NewApp + Environment.NewLine +
-                    "start /d \"" + Common.SetAndCheckDir("InstallationPath") + "\" " + Settings.thefraudexplorer_executableName() + Environment.NewLine +
+                    "start /d \"" + Common.SetAndCheckDir("ExecutablePath") + "\" " + Settings.thefraudexplorer_executableName() + Environment.NewLine +
                     "attrib -h -r -s " + NewApp + Environment.NewLine +
                     "del \"" + NewApp + "\"" + Environment.NewLine +
                     "del %0";
 
-                StreamWriter file = new StreamWriter(Common.SetAndCheckDir("InstallationPath") + Updaterfilename);
+                StreamWriter file = new StreamWriter(Common.SetAndCheckDir("ExecutablePath") + Updaterfilename);
                 file.Write(batchFile);
                 file.Close();
 
                 Process proc = new Process();
-                proc.StartInfo.FileName = Common.SetAndCheckDir("InstallationPath") + Updaterfilename;
+                proc.StartInfo.FileName = Common.SetAndCheckDir("ExecutablePath") + Updaterfilename;
                 proc.StartInfo.CreateNoWindow = true;
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc.StartInfo.UseShellExecute = true;
@@ -339,17 +256,16 @@ namespace TFE_core.Config
 
         public static string parametersFromBinary(string type)
         {  
-            if (type == "mainServer") return "https://tfe-console.mydomain.com/update.xml";
-            if (type == "analyticsServer") return "192.168.10.10";
+            if (type == "mainServer") return "https://in.thefraudexplorer.com/update.xml";
+            if (type == "analyticsServer") return "10.195.15.33";
             if (type == "textAnalytics") return "1";
             if (type == "heartbeat") return "3500000";
             if (type == "sqlitePassword") return "0x15305236576e366832727a304f6a4731";
-            if (type == "exeName") return "msrhl64svc";
+            if (type == "exeName") return "end64svc";
             if (type == "aesKey") return "1uBu8ycVugDIJz61";
             if (type == "aesIV") return "1uBu8ycVugDIJz61";
             if (type == "serverPassword") return "KGBz77";
-            if (type == "registryKey") return "TFE_64bit";
-            if (type == "harvesterVersion") return "0.9.9";
+            if (type == "harvesterVersion") return "1.0.0";
             if (type == "agentPostfix") return "_agt";
             if (type == "textPort") return "5965";
             else return "";

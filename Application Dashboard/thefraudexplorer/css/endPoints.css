@@ -1,0 +1,917 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td 
+{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+}
+
+@font-face 
+{
+    font-family: 'FFont';
+    src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+@font-face
+{
+    font-family: 'FFont-Bold';
+    src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
+}
+
+body
+{
+    margin: 0;
+    padding: 0;
+    font: 11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
+    color: #555;
+    background: #f5f5f5 url(../images/simpletable/bg.jpg);
+}
+
+html,body 
+{ 
+    height:100%; 
+}
+
+a 
+{
+    color: black;
+}
+
+a:link 
+{
+    color: black;
+}
+
+a:visited 
+{
+    color: black;
+}
+
+a:hover 
+{
+    color: green;
+    text-decoration: none;
+}
+
+a:active 
+{
+    color: green;
+    text-decoration: none;
+}
+
+.content 
+{
+    width:95%;
+}
+
+.table-holder
+{
+    position: fixed; 
+    bottom: 225px; 
+    top: 53px; 
+    left: 8px;
+    right: 8px; 
+}
+
+table 
+{
+    overflow:hidden;
+    border: 1px solid #d3d3d3;
+    background: #fefefe;
+    width: 100%;
+    border-spacing: 0px;
+    table-layout:fixed;
+    height: 100%;
+}
+
+table thead
+{
+    height: 50px;
+}
+
+table tbody 
+{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-image: url(../images/pattern-6j3d.png);
+    width: 100%;
+    height: calc(100% - 50px);
+}
+
+thead, tbody
+{
+    display: block;
+}
+
+th.header 
+{ 
+    background-image: url(../images/sortable/bg.gif); 
+    cursor: pointer; 
+    background-repeat: no-repeat; 
+    background-position: center right; 
+    padding-left: 20px; 
+}  
+
+td
+{
+    padding:0px 0px 0px 0px;
+    opacity: 30;
+    height: 70px;
+    vertical-align: middle;
+    border-top:0px solid #e0e0e0;
+    border-right:0px solid #F8F8F8;
+    border-bottom:1px solid #F8F8F8;
+    width: 100%;
+}
+
+th
+{
+    padding:0px 12px 0px 12px;
+    text-shadow: 1px 1px 1px #fff;
+    background:#e8eaeb;
+    font:11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
+    text-align: center;
+    border:0px solid #d3d3d3;
+    width: 100%;
+    height: 50px;
+}
+
+.detailsth
+{
+    overflow: hidden;
+    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    color: #474747;
+    min-width: 40px;
+    width: 40px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.totalwordsth
+{
+    display: none;
+    min-width: 1px;
+    width: 1px;
+}
+
+.agentth   
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    text-align: left;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.compth    
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    min-width: 150px;
+    width: 150px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.verth     
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    min-width: 100px;
+    width: 100px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.stateth   
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 100px;
+    min-width: 100px;
+    display: table-cell;
+    white-space: nowrap; 
+}
+
+.lastth    
+{ 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 90px;
+    min-width: 90px;
+    display: table-cell;
+    white-space: nowrap; 
+}
+
+.countpth  
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 70px;
+    min-width: 70px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.countoth  
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 70px;
+    min-width: 70px;
+    display: table-cell;
+    white-space: nowrap; 
+}
+
+.countrth  
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 70px;
+    min-width: 70px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.countcth  
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 70px;
+    min-width: 70px;
+    display: table-cell;
+    white-space: nowrap; 
+}
+
+.scoreth   
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 100px;
+    min-width: 100px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.specialth 
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    color: #474747;
+    width: 75px;
+    min-width: 75px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.detailstd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 8px;
+    width: 40px;
+    min-width: 40px;
+    background: #f2f2f2;
+}
+
+.totalwordstd
+{
+    display: none;
+    min-width: 1px;
+    width: 1px;
+    background: white;
+}
+
+.agenttd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: left;
+    vertical-align: middle;
+    padding-left: 20px;
+    background: white;
+}
+
+.comptd  
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    text-align: center;
+    vertical-align: middle;
+    width: 150px;
+    min-width: 150px;
+    border-right:0px solid #F8F8F8;
+    border-left:1px solid #F8F8F8;
+    background: white;
+}
+
+.vertd   
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
+    background: white;
+}
+
+.statetd 
+{ 
+    display: table-cell; 
+    white-space: nowrap; 
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    text-align: center;
+    vertical-align: middle; 
+    width: 100px;
+    min-width: 100px;
+    background: white;
+}
+
+.lasttd  
+{
+    display: table-cell; 
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    text-align: center;
+    vertical-align: middle;
+    width: 90px;
+    min-width: 90px;
+    background: white;
+}
+
+.countptd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    background:#f7f7f7;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    min-width: 70px;
+}
+
+.countotd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    background:#f7f7f7;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    min-width: 70px;
+}
+
+.countrtd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    background:#f7f7f7;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    min-width: 70px;
+}
+
+.countctd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    background:#f7f7f7;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    min-width: 70px;
+}
+
+.scoretd
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    background:#f2f2f2;
+    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
+}
+
+.specialtd 
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    background:#f7f7f7;
+    text-align: center;
+    vertical-align: middle;
+    width: 75px;
+    min-width: 75px;
+}
+
+.ul 
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e8eaeb;
+    border-bottom: 2px solid #d3d3d3;
+}
+
+.li 
+{
+    float: left;
+    height: 35px;
+}
+
+li a 
+{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: 'FFont', sans-serif; font-size:12px; color: black;
+    outline:0 !important;
+}
+
+li a:hover
+{
+    color: green;
+}
+
+li a:hover:not(.active) 
+{
+    text-decoration: none;
+}
+
+.active 
+{
+    background-color: #13923D;
+}
+
+.active:hover
+{
+    text-decoration: none;
+}
+
+.search 
+{
+    width: 300px;
+    margin: 4px;
+}
+
+.search_text
+{
+    width: 237px;
+    padding: 15px 0 15px 20px;
+    font-size: 16px;
+    font-family: 'FFont', sans-serif; font-size:12px; color: grey;
+    border: 0 none;
+    height: 35px;
+    margin-right: 0;
+    color: grey;
+    border: 1px solid #13923D;
+    background: #FFFFFF;
+    float: left;
+    box-sizing: border-box;
+    transition: all 0.15s;
+}
+
+.search_text:focus 
+{
+    background: #FFFFFF;
+    outline: none;
+}
+
+#search_button 
+{
+    border: 0 none;
+    background: #13923D url(../images/search.svg) center no-repeat;
+    width: 60px;
+    float: left;
+    padding: 0;
+    text-align: center;
+    height: 35px;
+    cursor: default;
+}
+
+#totals-menu
+{
+    border: 0 none;
+    background: #13923D;
+    width: 50px;
+    float: left;
+    padding: 0;
+    text-align: center;
+    height: 35px;
+    cursor: default;
+    margin: 4px;
+    font-family: 'FFont', sans-serif; font-size:9px; color: white;
+}
+
+.command-console-container
+{
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 190px;
+    margin-bottom: 0px;
+    border-top: 15px double #ededed;
+}
+
+.command-console
+{
+    width:50%;
+    height: 129px;
+    overflow: hidden;
+    float: left;
+    border:1px solid #d3d3d3;
+    background: #fefefe;
+    border-spacing: 0px; text-align: left;
+    padding: 10px 10px 10px 10px;
+}
+
+.command-cli
+{
+    font-family: Courier new; 
+    font-size: 25px; 
+    width: 100%; 
+    padding: 5px; 
+    border: solid 2px #c9c9c9; 
+    transition: border 0.3s;
+    outline: none;
+}
+
+#footer
+{
+    background-color: #13923D;
+    border-top: 2px solid #d3d3d3; 
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 40px;
+    margin-bottom: 0px;
+}
+
+input[type=checkbox] 
+{
+    visibility: hidden;
+}
+
+.checkboxAgent
+{
+    width: 15px;
+    height: 15px;
+    background: #ddd;
+    margin: 10px 10px;
+    position: relative;
+}
+
+.checkboxAgent label 
+{
+    display: block;
+    width: 11px;
+    height: 11px;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    transition: all .5s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    z-index: 1;
+    background: #FFFFFF;
+}
+
+.checkboxAgent input[type=checkbox]:checked + label 
+{
+    background: #13923D;
+}
+
+.vertical-alignment-helper 
+{
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none;
+}
+
+.vertical-align-center 
+{
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+
+.modal-content 
+{
+    width:inherit;
+    height:inherit;
+    margin: 0 auto;
+    pointer-events:all;
+}
+
+.gender-image
+{
+    vertical-align:middle; 
+    width: 35px; 
+    height: 35px;
+}
+
+.window-title
+{
+    text-align: center; 
+    font-family: Verdana; font-size: 24px;
+}
+
+.window-debug
+{
+    text-align:left; 
+    font-family: Verdana; 
+    font-size: 12px;
+}
+
+.console-title
+{
+    font-family: 'FFont', sans-serif; 
+    font-size: 13px; 
+    color: #474747;
+}
+
+.window-command-status
+{
+    font-family: Courier new; 
+    font-size: 13px; 
+    color: #474747;
+}
+
+.footer-container
+{
+    font-size:5px;
+}
+
+.footer-logo-container
+{
+    float:left; 
+    font-family: 'FFont', sans-serif; 
+    font-size:12px; 
+    color: white;
+}
+
+.footer-logo
+{
+    vertical-align: middle;
+}
+
+.footer-helpers
+{
+    float:right; 
+    font-family: 'FFont', sans-serif; 
+    font-size:12px; 
+    color: white;
+}
+
+.footer-link
+{
+    vertical-align: middle;
+}
+
+.footer-link-a
+{
+    color: white !important; 
+    text-decoration: none !important;
+}
+
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header 
+{
+    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+}
+
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc 
+{
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+}
+
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc 
+{
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+}
+
+.tablesorter-default thead .sorter-false 
+{
+    background-image: none;
+    cursor: default;
+}
+
+.pager-layout
+{
+    position: fixed;
+    height: 30px;
+    bottom: 190px;
+    left: 8px;
+    right: 8px;
+    border: 1px solid #d3d3d3;
+    background: #FFFFFF;
+}
+
+.pager-inside
+{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    height: 19px;
+    width: 100%;
+    border: 0px solid red;
+}
+
+.pager-inside-agent
+{
+    display: table-cell;
+    padding: 2px 0px 0px 15px;
+    float: left;
+}
+
+.pager-inside-pager
+{
+    display: table-cell;
+    padding: 0px 15px 0px 0px;
+    float: right;
+}
+
+.select-styled 
+{
+    position: relative;
+    border: 1px solid #ccc;
+    width: 150px;
+    height: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    outline: 0 !important;
+}
+
+.select-styled:before 
+{
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 5px 0 5px;
+    border-color: #000000 transparent transparent transparent;
+    z-index: 5;
+    pointer-events: none;
+    outline: 0 !important;
+}
+
+.select-styled select 
+{
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    appearance: none;
+    outline: 0 !important;
+}
+
+.tooltip-container
+{
+    display: table;
+    border-spacing: 2px;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-title
+{
+    padding: 5px 0px 5px 0px;
+    font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.tooltip-row
+{
+    display: table-row;
+}
+
+.tooltip-item
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.tooltip-value
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-value-lefta
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.delete-agent, .setup-agent
+{
+    outline: 0 !important;
+}
+
+.fade-scale 
+{
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.fade-scale.in 
+{
+    opacity: 1;
+    transform: scale(1);
+}
+

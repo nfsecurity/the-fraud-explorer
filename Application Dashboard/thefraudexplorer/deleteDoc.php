@@ -2,15 +2,15 @@
 
 /*
  * The Fraud Explorer 
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Code for Elasticsearch row deletions
  */
@@ -19,15 +19,15 @@ include "lbs/login/session.php";
 
 if(!$session->logged_in)
 {
-        header ("Location: index");
-        exit;
+    header ("Location: index");
+    exit;
 }
 
 include "lbs/global-vars.php";
 
 function filter($variable)
 {
-	return addcslashes(mysql_real_escape_string($variable),',-<>"');
+    return addcslashes(mysql_real_escape_string($variable),',-<>"');
 }
 
 $regid=$_GET['regid'];

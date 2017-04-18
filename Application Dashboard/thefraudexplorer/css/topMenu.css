@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 .fixed-space
 {
     line-height: 4px;
@@ -5,8 +20,6 @@
 
 .main-logo
 {
-    width:35px; 
-    height:35px; 
     float: right;
 }
 
@@ -45,4 +58,22 @@
 .input-search, .button-totals
 {
     outline: 0 !important;
+}
+
+.fade-scale 
+{
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.fade-scale.in 
+{
+    opacity: 1;
+    transform: scale(1);
 }

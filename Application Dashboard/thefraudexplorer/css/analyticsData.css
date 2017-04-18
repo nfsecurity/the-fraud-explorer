@@ -1,3 +1,18 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2017 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2017-04
+* Revision: v1.0.0-beta
+*
+* Description: CSS Code
+*/
+
 @font-face 
 {
     font-family: 'FFont';
@@ -49,7 +64,7 @@ a:active
     color: green;
     text-decoration: none;
 }
-	
+
 .content 
 {
     width:95%;
@@ -84,7 +99,7 @@ li a
 
 li a:hover
 {
-  color: green;
+    color: green;
 }
 
 li a:hover:not(.active) 
@@ -134,7 +149,7 @@ li a:hover:not(.active)
 #search_button 
 {
     border: 0 none;
-    background: #13923D url(../images/search.png) center no-repeat;
+    background: #13923D url(../images/search.svg) center no-repeat;
     width: 60px;
     float: left;
     padding: 0;
@@ -190,4 +205,22 @@ li a:hover:not(.active)
     height:inherit;
     margin: 0 auto;
     pointer-events:all;
+}
+
+.fade-scale 
+{
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    transform: scale(0.7);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.fade-scale.in 
+{
+    opacity: 1;
+    transform: scale(1);
 }

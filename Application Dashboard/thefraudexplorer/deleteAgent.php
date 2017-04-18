@@ -2,15 +2,15 @@
 
 /*
  * The Fraud Explorer 
- * http://www.thefraudexplorer.com/
+ * https://www.thefraudexplorer.com/
  *
  * Copyright (c) 2017 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
- * http://www.thefraudexplorer.com/License
+ * https://www.thefraudexplorer.com/License
  *
  * Date: 2017-04
- * Revision: v0.9.9-beta
+ * Revision: v1.0.0-beta
  *
  * Description: Code for agent deletion
  */
@@ -19,8 +19,8 @@ include "lbs/login/session.php";
 
 if(!$session->logged_in)
 {
-        header ("Location: index");
-        exit;
+    header ("Location: index");
+    exit;
 }
 
 include "lbs/global-vars.php";
@@ -28,22 +28,26 @@ include "lbs/open-db-connection.php";
 
 function filter($variable)
 {
-	return addcslashes(mysql_real_escape_string($variable),',-<>"');
+    return addcslashes(mysql_real_escape_string($variable),',-<>"');
 }
 
 $agent_enc=filter($_GET['agent']);
 $agent_dec=base64_decode(base64_decode($agent_enc));
-$agentID=str_replace(array("."),array("_"),$agent_dec);
+$agentID=str_replace(array("."), array("_"), $agent_dec);
 
 /* Delete agent tables */
- 
-mysql_query(sprintf("DROP TABLE t_%s",$agentID));
-mysql_query(sprintf("DELETE FROM t_agents WHERE agent='%s'",$agentID));
+
+$queryStatement = "SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(table_name), ';') AS statement FROM information_schema.tables WHERE table_schema = 'thefraudexplorer' AND table_name LIKE 't_%s_%%'";
+$statement = mysql_query(sprintf($queryStatement, $agentID));
+$rowStatement = mysql_fetch_array($statement);
+
+mysql_query($rowStatement[0]);
+mysql_query(sprintf("DELETE FROM t_agents WHERE agent like '%s%%'", $agentID));
 
 /* Delete agent elasticsearch documents */
 
 $urlDelete = "http://localhost:9200/_all/_delete_by_query?pretty";
-$params = '{ "query": { "match" : { "agentId" : "'.$agentID.'" } } }';
+$params = '{ "query": { "wildcard" : { "agentId.raw" : "'.$agentID.'*" } } }';
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -56,7 +60,7 @@ curl_close($ch);
 
 /* Return to home */
 
-header ("location:  dashBoard");
+header ("location: endPoints");
 
 include "lbs/close-db-connection.php";
 
