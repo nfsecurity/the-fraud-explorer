@@ -234,7 +234,7 @@ function getAgentIdData($agentID, $index, $alertType)
         'body' => [
             'size' => 10000,
             'query' => [
-                'wildcard' => [ 'agentId.raw' => $agentID ] 
+                'wildcard' => [ 'agentId' => $agentID ] 
             ]
         ]
     ];
