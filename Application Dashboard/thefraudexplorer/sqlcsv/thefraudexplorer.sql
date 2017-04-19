@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS `t_users` (
     PRIMARY KEY (`user`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `t_users` (`user`, `password`) VALUES
-('admin', 'e731a7b612ab389fcb7f973c452f33df3eb69c99');
+INSERT INTO `t_users` (`user`, `password`, `domain`) VALUES
+('admin', 'e731a7b612ab389fcb7f973c452f33df3eb69c99', 'all');
 
 CREATE TABLE t_login_attempts (
     ip varchar(20),
