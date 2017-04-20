@@ -165,16 +165,18 @@ th
     height: 50px;
 }
 
-.selectth
+.detailsth
 {
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size:12px; 
+    color: #474747;
     text-align: center;
     vertical-align: middle;
-    width: 50px;
-    min-width: 50px;
+    padding-left: 8px;
+    width: 40px;
+    min-width: 40px;
 }
 
 .timestampth
@@ -231,8 +233,8 @@ th
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size:12px;
     color: #474747;
-    min-width: 160px;
-    width: 160px;
+    min-width: 240px;
+    width: 240px;
     display: table-cell;
     white-space: nowrap;
     text-align: left;
@@ -252,7 +254,7 @@ th
     min-width: 100px;
 }
 
-.selecttd
+.detailstd
 {
     overflow: hidden;
     display: table-cell;
@@ -260,9 +262,10 @@ th
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
     text-align: center;
     vertical-align: middle;
-    width: 50px;
-    min-width: 50px;
-    border-right:1px solid #F2F2F2;
+    width: 40px;
+    min-width: 40px;
+    padding-left: 8px;
+    background: #f2f2f2;
 }
 
 .timestamptd
@@ -287,10 +290,11 @@ th
     white-space: nowrap;
     display: table-cell; 
     white-space: nowrap; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747; 
+    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
     text-align: left;
     vertical-align: middle;
     padding: 0px 0px 0px 20px;
+    background:#f2f2f2;
 }
 
 .windowtitletd
@@ -328,14 +332,15 @@ th
 {
     overflow: hidden;
     display: table-cell;
+    border-right: 1px solid #f7f7f7;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
     text-align: left;
     vertical-align: middle;
-    min-width: 160px;
-    max-width: 160px;
-    width: 160px;
-    background:#f7f7f7;
+    min-width: 240px;
+    max-width: 240px;
+    width: 240px;
+    background:#f2f2f2;
     text-overflow: ellipsis;
     padding: 0px 20px 0px 20px;
 }
@@ -619,51 +624,6 @@ li a:hover:not(.active)
     cursor: default;
 }
 
-input[type=checkbox]
-{
-    visibility: hidden;
-}
-
-.checkboxRow
-{
-    width: 15px;
-    height: 15px;
-    background: #ddd;
-    position: relative;
-    margin-left: 17px;
-}
-
-.checkboxRow label
-{
-    display: block;
-    width: 11px;
-    height: 11px;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -o-transition: all .5s ease;
-    -ms-transition: all .5s ease;
-    transition: all .5s ease;
-    cursor: pointer;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    z-index: 1;
-    background: #FFFFFF;
-}
-
-.checkboxRow input[type=checkbox]:checked + label
-{
-    background: #13923D;
-}
-
-.tooltip-father
-{
-    display: inline;
-    cursor: pointer;
-}
-
 .tooltip-container
 {
     display: table;
@@ -700,4 +660,9 @@ input[type=checkbox]
     border: 1px solid #d3d3d3;
     font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
     text-align: left;
+}
+
+.delete-agent
+{
+    outline: 0 !important;
 }

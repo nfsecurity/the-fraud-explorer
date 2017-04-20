@@ -154,13 +154,7 @@ function agentInsights($gender, $agent_enc, $totalWordHits, $countPressure, $cou
 
 function agentDetails($agent_dec, $agentDomain, $osVersion, $status, $ipaddress, $sessions)
 {
-    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Agent details</div><div class=tooltip-row><div class=tooltip-item>Identification</div><div class=tooltip-value-lefta>'.$agent_dec.'</div></div> 
-    <div class=tooltip-row><div class=tooltip-item>Corporate domain</div><div class=tooltip-value-lefta>'.$agentDomain.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Operating system</div><div class=tooltip-value-lefta>'.$osVersion.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Connection status</div><div class=tooltip-value-lefta>'.$status.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>IP Address</div><div class=tooltip-value-lefta>'.$ipaddress.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Number of sessions</div><div class=tooltip-value-lefta>'.$sessions.'</div></div>
-    </div>"><span class="fa fa-building-o fa-lg font-icon-color">&nbsp;&nbsp;</span></a>';
+    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Agent details</div><div class=tooltip-row><div class=tooltip-item>Identification</div><div class=tooltip-value-lefta>'.$agent_dec.'</div></div><div class=tooltip-row><div class=tooltip-item>Corporate domain</div><div class=tooltip-value-lefta>'.$agentDomain.'</div></div><div class=tooltip-row><div class=tooltip-item>Operating system</div><div class=tooltip-value-lefta>'.$osVersion.'</div></div><div class=tooltip-row><div class=tooltip-item>Connection status</div><div class=tooltip-value-lefta>'.$status.'</div></div><div class=tooltip-row><div class=tooltip-item>IP Address</div><div class=tooltip-value-lefta>'.$ipaddress.'</div></div><div class=tooltip-row><div class=tooltip-item>Number of sessions</div><div class=tooltip-value-lefta>'.$sessions.'</div></div></div>"><span class="fa fa-building-o fa-lg font-icon-color">&nbsp;&nbsp;</span></a>';
 }
 
 /* Show main table and telemetry with the agent list */
@@ -184,7 +178,7 @@ if ($row_a = mysql_fetch_array($result_a))
         $agent_enc = base64_encode(base64_encode($row_a["agent"]));
         $domain_enc = base64_encode(base64_encode($row_a["domain"]));
 
-        /* User Domain */
+        /* Enpoint Details */
 
         echo '<td class="detailstd">';
         agentDetails($row_a['agent'], $row_a['domain'], getTextSist($row_a["system"]), $row_a['status'], $row_a['ipaddress'], $row_a['sessions']);

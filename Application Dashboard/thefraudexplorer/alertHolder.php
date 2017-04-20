@@ -74,10 +74,15 @@ function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
     }
 }
 
+function alertDetails($date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result)
+{
+    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>"><span class="fa fa-building-o fa-lg font-icon-gray">&nbsp;&nbsp;</span></a>';
+}
+
 /* Main Table */
 
 echo '<table id="agentDataTable" class="tablesorter">';
-echo '<thead><tr><th class="selectth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="timestampth">EVENT TIMESTAMP</th><th class="alerttypeth">ALERT TYPE</th>
+echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="timestampth">EVENT TIMESTAMP</th><th class="alerttypeth">ALERT TYPE</th>
 <th class="windowtitleth">APPLICATION CONTEXT</th><th class="phrasetypedth">PHRASE</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="deleteth">DELETE</th></tr>
 </thead><tbody>';
 
@@ -87,21 +92,11 @@ foreach ($agentData['hits']['hits'] as $result)
 {
     echo '<tr>';
 
-    /* Checking */
+    /* Alert Details */
 
     $date = $result['_source']['eventTime'];
     $date = substr($date, 0, strpos($date, ","));
-
-    echo '<td class="selecttd">';
-    echo '<div class="checkboxRow"><input type="checkbox" value="" id="'.$date.'" name=""/><label for="'.$date.'"></label></div>';
-    echo '</td>';
-
-    /* Timestamp */
-
-    echo '<td class="timestamptd">';
-    echo '<span class="fa fa-clock-o">&nbsp;&nbsp;</span>'.$date;
-    echo '</td>';
-
+    
     /* AlertType */
 
     $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
@@ -110,7 +105,7 @@ foreach ($agentData['hits']['hits'] as $result)
     $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
     $regExpression = htmlentities($result['_source']['phraseMatch']);
     $stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
-
+    
     /* Phrase zoom */
 
     $pieces = explode(" ", $stringHistory);
@@ -138,21 +133,24 @@ foreach ($agentData['hits']['hits'] as $result)
         }
     }
 
+    echo '<td class="detailstd">';
+    alertDetails($date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
+    echo '</td>';
+
+    /* Timestamp */
+
+    echo '<td class="timestamptd">';
+    echo '<span class="fa fa-clock-o font-icon-gray">&nbsp;&nbsp;</span>'.$date;
+    echo '</td>';
+
     echo '<td class="alerttypetd">';
-    echo '<span class="fa fa-tags">&nbsp;&nbsp;</span><div class="tooltip-custom tooltip-father" 
-    title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>
-    ">'.ucfirst($result['_source']['alertType']).'</div>';
+    echo '<span class="fa fa-tags font-icon-gray">&nbsp;&nbsp;</span>'.ucfirst($result['_source']['alertType']);
     echo '</td>';
 
     /* Window title */
 
     echo '<td class="windowtitletd">';
-    echo '<span class="fa fa-list-alt">&nbsp;&nbsp;</span>'.$windowTitle;
+    echo '<span class="fa fa-list-alt font-icon-gray">&nbsp;&nbsp;</span>'.$windowTitle;
     echo '</td>';
 
     /* Phrase typed */
@@ -169,7 +167,7 @@ foreach ($agentData['hits']['hits'] as $result)
 
     /* Delete row */
 
-    echo '<td class="deletetd"><a data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
+    echo '<td class="deletetd"><a class="delete-agent" data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
     echo '<img src="images/delete-button-analytics.svg" onmouseover="this.src=\'images/delete-button-analytics-mo.svg\'" onmouseout="this.src=\'images/delete-button-analytics.svg\'" alt="" title=""/></a></td>';
 
     echo '</tr>';
