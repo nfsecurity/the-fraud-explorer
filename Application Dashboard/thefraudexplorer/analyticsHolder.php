@@ -234,7 +234,8 @@ include "lbs/elasticsearch.php";
 
                 function paintScatter($counter, $opportunityPoint, $agent, $score, $countPressure, $countOpportunity, $countRationalization)
                 {
-                    echo '<span id="point'.$counter.'" class="'.$opportunityPoint.' tooltip-custom" title="<div class=tooltip-inside><b>'.$agent.'</b><table class=tooltip-table><tbody><tr><td>Total Fraud Score</td><td>'.$score.'</td></tr><tr><td>Pressure count</td><td>'.$countPressure.'</td></tr><tr><td>Opportunity count</td><td>'.$countOpportunity.'</td></tr><tr><td>Rationalization count</td><td>'.$countRationalization.'</td></tr></tbody></table></div>"></span>'."\n";
+                    $agentEncoded=base64_encode(base64_encode($agent));
+                    echo '<span id="point'.$counter.'" class="'.$opportunityPoint.' tooltip-custom pseudolink" title="<div class=tooltip-inside><b>'.$agent.'</b><table class=tooltip-table><tbody><tr><td>Total Fraud Score</td><td>'.$score.'</td></tr><tr><td>Pressure count</td><td>'.$countPressure.'</td></tr><tr><td>Opportunity count</td><td>'.$countOpportunity.'</td></tr><tr><td>Rationalization count</td><td>'.$countRationalization.'</td></tr></tbody></table></div>" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'"></span>'."\n";
                 }
 
                 /* Elasticsearch querys for fraud triangle counts and score */

@@ -224,3 +224,9 @@ li a:hover:not(.active)
     opacity: 1;
     transform: scale(1);
 }
+
+.pseudolink 
+{
+    outline: none;
+    cursor:pointer;
+}
