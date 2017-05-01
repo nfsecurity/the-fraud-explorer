@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -25,10 +26,10 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 
-$file=$_GET['file'];
+$file=filter($_GET['file']);
 $ext = substr($file, strrpos($file, '.')+1);
 
-if(isset($_GET['ctype'])) $contentType=$_GET['ctype']; 
+if(isset($_GET['ctype']) $contentType=filter($_GET['ctype']); 
 else $contentType="aplication/octet-stream"; 
 
 if(empty($_SESSION['connected']))

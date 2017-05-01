@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -24,11 +25,6 @@ if(!$session->logged_in)
 }
 
 include "lbs/agent_methods.php";
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',<>');
-}
 
 $_SESSION['id_uniq_command']=null;
 $agent = filter($_GET['agent']);

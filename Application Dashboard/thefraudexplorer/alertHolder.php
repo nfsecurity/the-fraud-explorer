@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -83,7 +84,7 @@ function alertDetails($date, $wordTyped, $windowTitle, $searchResult, $phraseZoo
 
 echo '<table id="agentDataTable" class="tablesorter">';
 echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="timestampth">EVENT TIMESTAMP</th><th class="alerttypeth">ALERT TYPE</th>
-<th class="windowtitleth">APPLICATION CONTEXT</th><th class="phrasetypedth">PHRASE</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="deleteth">DELETE</th></tr>
+<th class="windowtitleth">APPLICATION CONTEXT</th><th class="phrasetypedth">PHRASE TYPED</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="falseth">MARK</th></tr>
 </thead><tbody>';
 
 $wordCounter = 0;
@@ -165,10 +166,28 @@ foreach ($agentData['hits']['hits'] as $result)
     echo '<span class="fa fa-font font-icon-gray">&nbsp;&nbsp;</span>'.$searchResult;
     echo '</td>';
 
-    /* Delete row */
-
-    echo '<td class="deletetd"><a class="delete-agent" data-href="deleteDoc?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#delete-reg" href="#">';
-    echo '<img src="images/delete-button-analytics.svg" onmouseover="this.src=\'images/delete-button-analytics-mo.svg\'" onmouseout="this.src=\'images/delete-button-analytics.svg\'" alt="" title=""/></a></td>';
+    /* Mark false positive */
+    
+    $index = $result['_index'];
+    $type = $result['_type'];
+    $regid = $result['_id'];
+    
+    $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    $resultValues=curl_exec($ch);
+    curl_close($ch);
+    
+    $jsonResultValue = json_decode($resultValues);
+    $falsePositiveValue = $jsonResultValue->_source->falsePositive;
+    
+    echo '<td class="falsetd"><a class="false-positive" data-href="toggleAlertMark?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'" data-toggle="modal" data-target="#false-positive" href="#">';
+    
+    if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
+    else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
 
     echo '</tr>';
 
@@ -196,11 +215,11 @@ echo '</tbody></table>';
                     <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
                     <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
                     <select class="pagesize select-styled">
-                        <option value="50"> by 50 rows</option>
-                        <option value="100"> by 100 rows</option>
-                        <option value="500"> by 500 rows</option>
-                        <option value="1000"> by 1000 rows</option>
-                        <option value="all"> All Rows</option>
+                        <option value="20"> by 20 alerts</option>
+                        <option value="50"> by 50 alerts</option>
+                        <option value="100"> by 100 alerts</option>
+                        <option value="500"> by 500 alerts</option>
+                        <option value="all"> All Alerts</option>
                     </select>
                 </form>
             </div>
@@ -211,8 +230,8 @@ echo '</tbody></table>';
 <!-- Modal for delete dialog -->
 
 <script>
-    $('#delete-reg').on('show.bs.modal', function(e){
-        $(this).find('.delete-reg-button').attr('href', $(e.relatedTarget).data('href'));
+    $('#false-positive').on('show.bs.modal', function(e){
+        $(this).find('.false-positive-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

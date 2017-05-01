@@ -19,7 +19,7 @@ function iSubmitEnter(oEvent, oForm)
     if (oEvent.keyCode) iAscii = oEvent.keyCode; 
     else if (oEvent.which) iAscii = oEvent.which; 
     else return false; 
-    if (iAscii == 13) oForm.submit(); 
+    if (iAscii == 13) oForm.submit();
     return true; 
 } 
 
@@ -64,9 +64,9 @@ $(document).ready(function() {
 
 /* Ajax for show the status of command execution */
 
-function getURLParameter(name)
+function getURLAgentParameter()
 {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+    return location.search.split('agent=')[1]
 }
 
 $(document).ready(function(){
@@ -75,7 +75,8 @@ $(document).ready(function(){
 
 function refreshCommandStatus()
 {
-    myvar = getURLParameter('agent');
+    myvar = getURLAgentParameter();
+
     $('#commandStatus').load('statusCommand.php?agent='+myvar, function(){
         setTimeout(refreshCommandStatus, 1000);
     });

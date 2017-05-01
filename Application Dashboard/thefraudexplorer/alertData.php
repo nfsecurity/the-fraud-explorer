@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -24,13 +25,9 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "alertData";
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',-<>"');
-}
-
 $_SESSION['agentIDh']=filter($_GET['agent']);
+
+if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) header ("location: endPoints");
 
 ?>
 
@@ -84,32 +81,34 @@ $_SESSION['agentIDh']=filter($_GET['agent']);
             <div id="includedTopMenu"></div>
 
             <?php
+            
             include "lbs/open-db-connection.php";
             echo '<div id="tableHolder" class="table-holder"></div>';
             include "lbs/close-db-connection.php";
+            
             ?>
         </div>
 
-        <!-- Modal for reg deletion -->
+        <!-- Modal for false positive mark -->
 
         <center>
-            <div class="modal fade-scale" id="delete-reg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade-scale" id="false-positive" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
+                                <h4 class="modal-title window-title" id="myModalLabel">False positive marking</h4>
                             </div>
 
                             <div class="modal-body">
-                                <p style="text-align:left; font-size: 12px;"><br>You are about to delete the row, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                                <p style="text-align:left; font-size: 12px;"><br>You are about to mark this fraud triangle alert as a false positive or viceversa, this procedure disable or enable this alert in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
                                 <p class="debug-url window-debug"></p>
                             </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-                                <a class="btn btn-danger delete-reg-button" style="outline: 0 !important;">Delete</a>
+                                <a class="btn btn-success false-positive-button" style="outline: 0 !important;">Toggle mark</a>
                             </div>
                         </div>
                     </div>

@@ -298,9 +298,9 @@ table
 .y-axis-leyend
 {
     transform: rotate(-90deg); 
-    width: 250px; 
+    width: 300px; 
     bottom: 50%; 
-    left: 90px; 
+    left: 65px; 
     position: absolute;
     font-family: 'FFont-Bold', sans-serif; font-size:12px; color: #474747;
 }

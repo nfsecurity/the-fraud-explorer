@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -219,15 +220,12 @@ include "lbs/elasticsearch.php";
             echo '<br>';
             echo '</div>';
 
+            echo '<div class="y-axis-line"></div>';
+            echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$countPressureTotal.'</div>';
+            echo '<div class="x-axis-line-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$countRationalizationTotal.'</div>';
+                    
             ?>
-
-            <div class="y-axis-line"></div>
-            <div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Incentive, Pressure to commit Fraud</div>
-
-            <div class="x-axis-line-leyend">
-                <br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization
-            </div>
-
+            
             <div id="scatterplot">
 
                 <?php

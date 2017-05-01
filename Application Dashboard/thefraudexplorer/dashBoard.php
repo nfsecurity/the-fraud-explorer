@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -24,6 +25,7 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "dashBoard";
+
 ?>
 
 <html>
@@ -77,6 +79,7 @@ $_SESSION['instance'] = "dashBoard";
             <div id="includedTopMenu"></div>
 
             <?php
+            
             include "lbs/open-db-connection.php";
             $_SESSION['id_uniq_command']=null;
 
@@ -85,6 +88,7 @@ $_SESSION['instance'] = "dashBoard";
 
             $_SESSION['welcome'] = "disable";
             include "lbs/close-db-connection.php";
+            
             ?>
         </div>
 

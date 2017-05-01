@@ -50,6 +50,9 @@ function countAllFraudTriangleMatches($fraudTerm, $index, $domain, $samplerStatu
                             'must' => [
                                 [ 'term' => [ 'eventType.raw' => 'TextEvent' ] ],
                                 [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive.raw' => '1'] ]
                             ]
                         ]
                     ]
@@ -69,7 +72,8 @@ function countAllFraudTriangleMatches($fraudTerm, $index, $domain, $samplerStatu
                                 [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
                             ],
                             'must_not' => [
-                                [ 'match' => [ 'userDomain.raw' => 'thefraudexplorer.com']]
+                                [ 'match' => [ 'userDomain.raw' => 'thefraudexplorer.com'] ],
+                                [ 'match' => [ 'falsePositive.raw' => '1'] ]
                             ]
                         ]
                     ]
@@ -91,6 +95,9 @@ function countAllFraudTriangleMatches($fraudTerm, $index, $domain, $samplerStatu
                                 [ 'term' => [ 'eventType.raw' => 'TextEvent' ] ],
                                 [ 'term' => [ 'userDomain.raw' => 'thefraudexplorer.com' ] ],
                                 [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive.raw' => '1'] ]
                             ]
                         ]
                     ]
@@ -109,6 +116,9 @@ function countAllFraudTriangleMatches($fraudTerm, $index, $domain, $samplerStatu
                                 [ 'term' => [ 'eventType.raw' => 'TextEvent' ] ],
                                 [ 'term' => [ 'userDomain.raw' => $domain ] ],
                                 [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive.raw' => '1'] ]
                             ]
                         ]
                     ]
@@ -135,7 +145,14 @@ function getAllFraudTriangleMatches($index, $domain)
             'body' => [
                 'size' => 50,
                 'query' => [
-                    'match_all' => [ 'boost' => 1 ]
+                    'bool' => [
+                        'must' => [
+                            [ 'match_all' => [ 'boost' => 1 ] ]
+                        ],
+                        'must_not' => [
+                            [ 'match' => [ 'falsePositive.raw' => '1'] ]
+                        ]
+                    ]
                 ]
             ]
         ];
@@ -152,6 +169,9 @@ function getAllFraudTriangleMatches($index, $domain)
                         'should' => [
                             'match' => [ 'userDomain.raw' => $domain ],
                             'match' => [ 'userDomain.raw' => 'thefraudexplorer.com' ],
+                        ],
+                        'must_not' => [
+                            [ 'match' => [ 'falsePositive.raw' => '1'] ]
                         ]
                     ]        
                 ]       
@@ -178,6 +198,9 @@ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
                     'must' => [
                         [ 'term' => [ 'agentId.raw' => $agentID ] ],
                         [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive.raw' => '1'] ]
                     ]
                 ]
             ]
@@ -297,8 +320,9 @@ function insertAlertDocument($indexName, $type, $agentId, $alertType, $matchNumb
             'wordTyped' => $wordTyped,
             'stringHistory' =>  $stringHistory,
             'type' => $type,
+            'falsePositive' => '0',
             '@timestamp' => $dateTZ,
-            '@version' => '1' 
+            '@version' => '1'
         ]
     ];
     

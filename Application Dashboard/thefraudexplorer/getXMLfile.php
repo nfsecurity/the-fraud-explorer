@@ -25,6 +25,7 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 include $documentRoot."lbs/cryptography.php";
+include "lbs/security.php";
 
 $xml=simplexml_load_file('update.xml');
 $type = $xml->token[0]['type'];

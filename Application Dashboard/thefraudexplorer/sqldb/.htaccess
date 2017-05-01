@@ -1,3 +1,0 @@
-Options +FollowSymLinks  
-RewriteEngine on  
-RewriteRule ^(.*)$ ../authAccess.php?file=$1 [NC]

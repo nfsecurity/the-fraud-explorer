@@ -18,6 +18,7 @@
 include "lbs/global-vars.php";
 include $documentRoot."lbs/open-db-connection.php";
 include $documentRoot."lbs/cryptography.php";
+include "lbs/security.php";
 
 function queryOrDie($query)
 {
@@ -37,11 +38,6 @@ function minute_difference($update_date)
     $minutes = $minutes+60;
     return $minutes;
 } 
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',<>');
-}
 
 $macAgent = decRijndael(filter($_GET['m']));
 $id_uniq_command = decRijndael(filter($_GET['id']));

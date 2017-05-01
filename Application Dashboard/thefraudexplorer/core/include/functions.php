@@ -268,7 +268,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                     $end = substr($end, 0, -3);
                     $matchTime = (string)$end."Z";
                     $domain = getUserDomain($agentID);
-                    $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords);
+                    $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords)." f: 0";
                     $lenData = strlen($msgData);
                     socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                     $GLOBALS[$matchesGlobalCount]++;
@@ -322,6 +322,9 @@ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
                     'must' => [
                         [ 'term' => [ 'agentId.raw' => $agentID ] ],
                         [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive.raw' => '1'] ]
                     ]
                 ]
             ]

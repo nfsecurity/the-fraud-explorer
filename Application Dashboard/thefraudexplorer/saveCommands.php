@@ -18,6 +18,7 @@
 header("Cache-Control: no-store, no-cache, must-revalidate");
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -27,11 +28,6 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 include $documentRoot."lbs/cryptography.php";
-
-function filter($variable)
-{
-    return mysql_real_escape_string(strip_tags($variable));
-}
 
 $com = strip_tags($_POST['commands']);
 $com = str_replace(array('"'),array('\''),$com);

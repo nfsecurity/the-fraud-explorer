@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -147,6 +148,7 @@ $_SESSION['instance'] = "endPoints";
 
         <div class="command-console-container">
             <div class="command-console">
+                
                 <?php
                 
                 if(isset($_SESSION['id_command'])) unset($_SESSION['id_command']);
@@ -158,22 +160,38 @@ $_SESSION['instance'] = "endPoints";
 
                 $command_console_enabled = "no";
 
-                if (!isset($_GET['agent']))
+                if (!isset($_GET['agent']) && !isset($_GET['domain']))
                 {
                     echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
                     $command_console_enabled = "no";
                     if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
                 }
+                else if(isset($_GET['agent']) && isset($_GET['domain']))
+                {
+                    $agent_dec = base64_decode(base64_decode(filter($_GET['agent'])));
+                    $agent = $agent_dec;
+                    $domain_dec = base64_decode(base64_decode(filter($_GET['domain'])));
+                    $domain = $domain_dec;
+                    
+                    if (checkEndpoint($agent, $domain))
+                    {
+                        $command_console_enabled = "yes";
+                        $_SESSION['agent']=$agent;
+                        $_SESSION['agentchecked']=$agent_dec;
+                        echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute on '.$agent.'</strong><br><br>';
+                    }
+                    else
+                    {
+                        echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
+                        $command_console_enabled = "no";
+                        if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
+                    }
+                }
                 else
                 {
-                    $command_console_enabled = "yes";
-                    $agent_dec = base64_decode(base64_decode($_GET['agent']));
-                    $agent = $agent_dec;
-                    $domain_dec = base64_decode(base64_decode($_GET['domain']));
-                    $domain = $domain_dec;
-                    $_SESSION['agent']=$agent;
-                    $_SESSION['agentchecked']=$agent_dec;
-                    echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute on '.$agent.'</strong><br><br>';
+                    echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
+                    $command_console_enabled = "no";
+                    if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
                 }
                 
                 ?>

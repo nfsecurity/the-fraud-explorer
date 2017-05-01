@@ -18,6 +18,7 @@
 header("Cache-Control: no-store, no-cache, must-revalidate");
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -27,11 +28,6 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 include "lbs/cryptography.php";
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',<>');
-}
 
 function clear_xml()
 {
@@ -60,12 +56,13 @@ function clear_xml_updater($id)
 
 /* List of available and permitted commands */
 
-$cmds_srv = array("uninstall","update", "module", "killprocess");
-
+$cmds_srv = array("uninstall", "update", "module");
 $seconds_to_complete=3600;
+
 if (!isset($_SESSION['seconds_waiting'])) $_SESSION['seconds_waiting']=0;
-$agent = $_GET['agent'];
-$agent_dec = base64_decode(base64_decode($_GET['agent']));
+
+$agent = filter($_GET['agent']);
+$agent_dec = base64_decode(base64_decode($agent));
 
 if (isset($_SESSION['id_command']))
 {
@@ -94,6 +91,7 @@ if($_SESSION['id_command'] == 0 || $_SESSION['NRF'] == 1)
 else
 {
     $id=$_SESSION['id_command'];
+    
     if($id>0)
     {
         include "lbs/open-db-connection.php";
@@ -125,6 +123,7 @@ else
                 echo "<b>WARNING:</b> The command &lt;".$_SESSION['NRF_CMD']."&gt; was not recognized, please try again!";          
                 $_SESSION['NRF']=1;
                 unset($_SESSION['id_command']);
+                clear_xml();
             }
             else echo "<b>STATUS:</b> command sent to all online agents! with id ".$id.". Check each reply.";
         }
@@ -137,6 +136,7 @@ else
                 echo "<b>WARNING:</b> The command &lt;".$_SESSION['NRF_CMD']."&gt; was not recognized, please try again!";	    
                 $_SESSION['NRF']=1;
                 unset($_SESSION['id_command']);
+                clear_xml();
             }
             else if (!empty($type) && ($_SESSION['seconds_waiting'] < $seconds_to_complete)) 
             {

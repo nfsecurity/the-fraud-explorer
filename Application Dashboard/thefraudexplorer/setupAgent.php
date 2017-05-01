@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -25,11 +26,6 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 include "lbs/open-db-connection.php";
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',-<>"');
-}
 
 $agent_enc=filter($_GET['agent']);
 $agent_dec=base64_decode(base64_decode($agent_enc));

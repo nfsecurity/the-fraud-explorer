@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -334,11 +335,11 @@ if ($row_a = mysql_fetch_array($result_a))
                     <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
                     <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
                     <select class="pagesize select-styled">
-                        <option value="20"> by 20 rows</option>
-                        <option value="50"> by 50 rows</option>
-                        <option value="100"> by 100 rows</option>
-                        <option value="1000"> by 1000 rows</option>
-                        <option value="all"> All Rows</option>
+                        <option value="20"> by 20 endpoints</option>
+                        <option value="50"> by 50 endpoints</option>
+                        <option value="100"> by 100 endpoints</option>
+                        <option value="500"> by 500 endpoints</option>
+                        <option value="all"> All Endpoints</option>
                     </select>
                 </form>
             </div>
@@ -382,6 +383,10 @@ if ($row_a = mysql_fetch_array($result_a))
                     sorter: false
                 },
                 4:
+                {
+                    sorter: false
+                },
+                5:
                 {
                     sorter: false
                 },

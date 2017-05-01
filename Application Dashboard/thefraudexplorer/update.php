@@ -18,11 +18,7 @@
 include "lbs/global-vars.php";
 include $documentRoot."lbs/open-db-connection.php";
 include $documentRoot."lbs/cryptography.php";
-
-function filter($variable)
-{
-    return mysql_real_escape_string($variable);
-}
+include "lbs/security.php";
 
 function queryOrDie($query)
 {

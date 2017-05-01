@@ -241,7 +241,7 @@ th
     padding: 0px 0px 0px 20px;
 }
 
-.deleteth
+.falseth
 {
     overflow: hidden;
     display: table-cell;
@@ -345,7 +345,7 @@ th
     padding: 0px 20px 0px 20px;
 }
 
-.deletetd
+.falsetd
 {
     overflow: hidden;
     display: table-cell;
@@ -662,7 +662,7 @@ li a:hover:not(.active)
     text-align: left;
 }
 
-.delete-agent
+.false-positive
 {
     outline: 0 !important;
 }

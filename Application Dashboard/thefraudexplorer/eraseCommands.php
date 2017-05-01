@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/security.php";
 
 if(!$session->logged_in)
 {
@@ -24,12 +25,6 @@ if(!$session->logged_in)
 }
 
 include "lbs/global-vars.php";
-
-function filter($variable)
-{
-    return addcslashes(mysql_real_escape_string($variable),',<>');
-}
-
 $xml = simplexml_load_file('update.xml');
 
 foreach ($xml->version as $version)

@@ -16,6 +16,7 @@
 function ajaxObject()
 {
     var xmlhttp=false;
+    
     try 
     {
         xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
@@ -36,6 +37,7 @@ function ajaxObject()
     {
         xmlhttp = new XMLHttpRequest();
     }
+    
     return xmlhttp;
 }
 
