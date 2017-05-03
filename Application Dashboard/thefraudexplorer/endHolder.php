@@ -139,25 +139,6 @@ $dataSize = $resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0"; 
 
-/* Function to handle data insights */
-
-function agentInsights($gender, $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName)
-{
-    echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">&nbsp;&nbsp;<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' 
-    title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Fraud score</div><div class=tooltip-value>'.round($score, 1).'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div>
-    </div>">' . $agentName . '</a></td>';
-}
-
-function agentDetails($agent_dec, $agentDomain, $osVersion, $status, $ipaddress, $sessions)
-{
-    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Agent details</div><div class=tooltip-row><div class=tooltip-item>Identification</div><div class=tooltip-value-lefta>'.$agent_dec.'</div></div><div class=tooltip-row><div class=tooltip-item>Corporate domain</div><div class=tooltip-value-lefta>'.$agentDomain.'</div></div><div class=tooltip-row><div class=tooltip-item>Operating system</div><div class=tooltip-value-lefta>'.$osVersion.'</div></div><div class=tooltip-row><div class=tooltip-item>Connection status</div><div class=tooltip-value-lefta>'.$status.'</div></div><div class=tooltip-row><div class=tooltip-item>IP Address</div><div class=tooltip-value-lefta>'.$ipaddress.'</div></div><div class=tooltip-row><div class=tooltip-item>Number of sessions</div><div class=tooltip-value-lefta>'.$sessions.'</div></div></div>"><span class="fa fa-building-o fa-lg font-icon-color">&nbsp;&nbsp;</span></a>';
-}
-
 /* Show main table and telemetry with the agent list */
 
 if($session->domain == "all") $result_a = mysql_query($queryAgentsSQL);
@@ -214,17 +195,17 @@ if ($row_a = mysql_fetch_array($result_a))
         if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
         {
             echo '<td class="agenttd">';
-            if ($row_a["gender"] == "male") agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else if ($row_a["gender"] == "female") agentInsights("female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            if ($row_a["gender"] == "male") agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            else if ($row_a["gender"] == "female") agentInsights("endPoints", "female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            else agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
         }
         else
         {
             $agentName = $row_a["name"];
             echo '<td class="agenttd">';
-            if ($row_a["gender"] == "male") agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else if ($row_a["gender"] == "female") agentInsights("female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else echo agentInsights("male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            if ($row_a["gender"] == "male") agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            else if ($row_a["gender"] == "female") agentInsights("endPoints", "female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            else echo agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
         }
 
         /* Company, department or group */

@@ -684,3 +684,49 @@ li a:hover:not(.active)
     display: inline;
 }
 
+.tooltip-container
+{
+    display: table;
+    border-spacing: 2px;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-title
+{
+    padding: 5px 0px 5px 0px;
+    font-family: 'FFont-Bold', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.tooltip-row
+{
+    display: table-row;
+}
+
+.tooltip-item
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}
+
+.tooltip-value
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-value-lefta
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: left;
+}

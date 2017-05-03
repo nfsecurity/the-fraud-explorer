@@ -36,6 +36,39 @@ include "lbs/open-db-connection.php";
 $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
 insertSampleData($configFile);
 
+/* Global data variables */
+
+if ($session->domain == "all")
+{
+    $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL,$urlWords);
+    $resultWords=curl_exec($ch);
+    curl_close($ch);
+}
+else
+{
+    $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+
+    $params = '{ "query": { "term" : { "userDomain" : "'.$session->domain.'" } } }';
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL,$urlWords);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    $resultWords=curl_exec($ch);
+    curl_close($ch);
+}
+
+$resultWords = json_decode($resultWords, true);
+
+if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
+else $totalSystemWords= "0";
+
 ?>
 
 <div class="dashboard-container">
@@ -68,8 +101,8 @@ insertSampleData($configFile);
 
                     <?php
 
-                    $queryEndpointsSQL = "SELECT agent, ruleset, domain, SUM(pressure) AS pressure, SUM(opportunity) AS  opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat, domain, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent order by score desc limit 50";
-                    $queryEndpointsSQLDomain = "SELECT agent, ruleset, domain, SUM(pressure) AS pressure, SUM(opportunity) AS  opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat, domain, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' group by agent order by score desc limit 50";
+                    $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent order by score desc limit 50";
+                    $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' group by agent order by score desc limit 50";
                     
                     if ($session->domain != "all") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
                     else $queryEndpoints = mysql_query($queryEndpointsSQL);
@@ -78,9 +111,28 @@ insertSampleData($configFile);
                     {
                         do
                         {
+                            $agentName = $endpointsFraud['agent']."@".$endpointsFraud['domain'];
+                            $agent_enc = base64_encode(base64_encode($endpointsFraud['agent']));
+                            $totalWordHits = $endpointsFraud['totalwords'];
+                            $countPressure = $endpointsFraud['pressure'];
+                            $countOpportunity = $endpointsFraud['opportunity'];
+                            $countRationalization = $endpointsFraud['rationalization'];
+                            $score = $endpointsFraud['score'];
+                            
+                            if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
+                            else $dataRepresentation = "0";
+                            
                             echo '<tr class="tr">';
                             echo '<td class="td">';
-                            echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>'.$endpointsFraud['agent']."@".$endpointsFraud['domain'];
+                            echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>';
+                            
+                            if ($endpointsFraud["name"] == NULL || $endpointsFraud['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                            else 
+                            {
+                                $agentName = $endpointsFraud['name'];
+                                agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                            }
+
                             echo '</td>';
 
                             $triangleSum = $endpointsFraud['pressure']+$endpointsFraud['opportunity']+$endpointsFraud['rationalization'];
@@ -221,7 +273,7 @@ insertSampleData($configFile);
                 {
                     echo '<tr class="tr">';
                     echo '<td class="td">';
-                    echo '<center><span class="fa fa-clock-o font-icon-color-gray">&nbsp;&nbsp;</span>'.date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp'])).'</center>';
+                    echo '<span class="fa fa-clock-o font-icon-color-gray">&nbsp;&nbsp;</span>'.date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
                     echo '</td>';
                     echo '<td class="td">';
                     echo '<span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>'.$result['_source']['alertType'];
@@ -229,10 +281,29 @@ insertSampleData($configFile);
                     echo '<td class="td">';
 
                     $endPoint = explode("_", $result['_source']['agentId']);
-                    $queryUserDomain = mysql_query(sprintf("SELECT domain FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, domain FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as tbl2 WHERE agent='%s'", $endPoint[0]));
+                    $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+                    
                     $userDomain = mysql_fetch_assoc($queryUserDomain);
-
-                    echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>'.$endPoint[0]."@".$userDomain['domain'];
+                    $agentName = $userDomain['agent']."@".$userDomain['domain'];
+                    $agent_enc = base64_encode(base64_encode($userDomain['agent']));
+                    $totalWordHits = $userDomain['totalwords'];
+                    $countPressure = $userDomain['pressure'];
+                    $countOpportunity = $userDomain['opportunity'];
+                    $countRationalization = $userDomain['rationalization'];
+                    $score = $userDomain['score'];
+                            
+                    if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
+                    else $dataRepresentation = "0";
+                    
+                    echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>';
+                                    
+                    if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                    else 
+                    {
+                        $agentName = $userDomain['name'];
+                        agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                    }
+                    
                     echo '</td>';
                     echo '<td class="td">';
                     echo '<span class="fa fa-pencil-square-o font-icon-color-gray">&nbsp;&nbsp;</span>'.decRijndael($result['_source']['wordTyped']);
@@ -450,4 +521,16 @@ $(document).ready(function() {
         watch : 'window' 
     });
 });
+</script>
+
+<!-- Tooltipster -->
+
+<script>
+    $(document).ready(function(){
+        $('.tooltip-custom').tooltipster({
+            theme: 'tooltipster-light',
+            contentAsHTML: true,
+            side: 'right'
+        });
+    });
 </script>

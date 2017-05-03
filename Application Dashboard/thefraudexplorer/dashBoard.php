@@ -46,6 +46,12 @@ $_SESSION['instance'] = "dashBoard";
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <script src="js/bootstrap.js"></script>
+        
+        <!-- JS/CSS for Tooltip -->
+
+        <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
+        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipster-sideTip-light.min.css">
+        <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
 
         <!-- ChartJS -->
 
