@@ -61,25 +61,6 @@ $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
 $domainQuery = mysql_query(sprintf($queryDomain, $agent_decSQ));
 $domain = mysql_fetch_array($domainQuery);
 
-function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
-{
-    $rulesetquery = mysql_query(sprintf($queryRuleset, $agent_decSQ));
-    $ruleset = mysql_fetch_array($rulesetquery);
-    $baselineRuleset = "BASELINE";
-    $fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
-
-    foreach($fraudTriangleTerms as $term)
-    {
-        foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
-        foreach($jsonFT->dictionary->$baselineRuleset->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
-    }
-}
-
-function alertDetails($date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result)
-{
-    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value>'.$phraseZoom.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value>'.$regExpression.'</div></div>"><span class="fa fa-building-o fa-lg font-icon-gray">&nbsp;&nbsp;</span></a>';
-}
-
 /* Main Table */
 
 echo '<table id="agentDataTable" class="tablesorter">';
@@ -135,7 +116,7 @@ foreach ($agentData['hits']['hits'] as $result)
     }
 
     echo '<td class="detailstd">';
-    alertDetails($date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
+    alertDetails("alertData", $date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
     echo '</td>';
 
     /* Timestamp */

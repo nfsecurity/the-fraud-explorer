@@ -82,16 +82,13 @@ $_SESSION['instance'] = "endPoints";
             <div id="includedTopMenu"></div>
 
             <?php
-            include "lbs/open-db-connection.php";
+            
             $_SESSION['id_uniq_command']=null;
-
-            $result_a = mysql_query("SELECT agent FROM t_agents", $connection);
 
             /* Code for paint the table of agents via AJAX */
 
             echo '<div id="tableHolder" class="table-holder"></div>';
 
-            include "lbs/close-db-connection.php";
             ?>
         </div>
 

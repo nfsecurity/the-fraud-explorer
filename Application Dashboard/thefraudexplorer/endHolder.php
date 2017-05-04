@@ -36,31 +36,12 @@ $_SESSION['id_uniq_command']=null;
 /* SQL Queries */
 
 $queryConfig = "SELECT * FROM t_config";
-$orderQuery = "SELECT agent, heartbeat, now() FROM t_agents";
 $queryAgentsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
 $queryAgentsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent";
 
 /* Order the dashboard agent list */
 
-$order = mysql_query($orderQuery, $connection);
-
-if ($row = mysql_fetch_array($order))
-{
-    do
-    {
-        if(isConnected($row["heartbeat"], $row[2]))
-        {
-            $sendquery="UPDATE t_agents SET status='active' where agent='" .$row["agent"]. "'"; 
-            queryOrDie($sendquery);
-        }
-        else
-        {
-            $sendquery="UPDATE t_agents SET status='inactive' where agent='" .$row["agent"]. "'";
-            queryOrDie($sendquery);
-        }
-    }
-    while ($row = mysql_fetch_array($order));
-}
+discoverOnline();
 
 echo '<style>';
 echo '.font-icon-color { color: #B4BCC2; }';

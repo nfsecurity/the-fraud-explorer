@@ -659,6 +659,15 @@ li a:hover:not(.active)
     padding: 3px 3px 3px 3px;
     border: 1px solid #d3d3d3;
     font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    text-align: center;
+}
+
+.tooltip-value-lefta
+{
+    display: table-cell;
+    padding: 3px 3px 3px 3px;
+    border: 1px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
     text-align: left;
 }
 

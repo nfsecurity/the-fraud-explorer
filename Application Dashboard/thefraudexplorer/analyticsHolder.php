@@ -29,6 +29,10 @@ include "lbs/open-db-connection.php";
 include "lbs/agent_methods.php";
 include "lbs/elasticsearch.php";
 
+/* Discover Online Endpoints */
+
+discoverOnline();
+
 ?>
 
 <!-- Styles -->

@@ -69,6 +69,10 @@ $resultWords = json_decode($resultWords, true);
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0";
 
+/* Order connected endpoints */
+
+discoverOnline();
+
 ?>
 
 <div class="dashboard-container">
@@ -263,6 +267,7 @@ else $totalSystemWords= "0";
 
                 $configFile = parse_ini_file("config.ini");
                 $ESalerterIndex = $configFile['es_alerter_index'];
+                $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
                 
                 if ($session->domain != "all") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain);
                 else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all");
@@ -273,14 +278,56 @@ else $totalSystemWords= "0";
                 {
                     echo '<tr class="tr">';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-clock-o font-icon-color-gray">&nbsp;&nbsp;</span>'.date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                    
+                    $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                    $wordTyped = decRijndael($result['_source']['wordTyped']);
+                    $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                    $searchValue = "/".$result['_source']['phraseMatch']."/";
+                    $endPoint = explode("_", $result['_source']['agentId']);
+                    $agent_decSQ = $endPoint[0];
+                    $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
+                    $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
+                    $regExpression = htmlentities($result['_source']['phraseMatch']);
+                    $stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
+                    
+                     /* Phrase zoom */
+                    
+                    $pieces = explode(" ", $stringHistory);
+                    
+                    foreach($pieces as $key => $value)
+                    {
+                        if($pieces[$key] == $wordTyped)
+                        {
+                            if (array_key_exists($key-1, $pieces))
+                            {
+                                if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
+                                else $leftWords = $pieces[$key-1];
+                            }
+                            else $leftWords = "";
+                            
+                            if (array_key_exists($key+1, $pieces))
+                            {
+                                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];
+                                else $rightWords = $pieces[$key+1];
+                            }
+                            else $rightWords = "";
+                            
+                            $phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
+                            break;
+                        }
+                    }
+                    
+                    alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
+                    echo $date;
+                    
                     echo '</td>';
+                    
                     echo '<td class="td">';
                     echo '<span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>'.$result['_source']['alertType'];
                     echo '</td>';
                     echo '<td class="td">';
 
-                    $endPoint = explode("_", $result['_source']['agentId']);
+                    
                     $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
                     $userDomain = mysql_fetch_assoc($queryUserDomain);
@@ -306,10 +353,10 @@ else $totalSystemWords= "0";
                     
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray">&nbsp;&nbsp;</span>'.decRijndael($result['_source']['wordTyped']);
+                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray">&nbsp;&nbsp;</span>'.$wordTyped;
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-list-alt font-icon-color-gray">&nbsp;&nbsp;</span>'.decRijndael($result['_source']['windowTitle']);
+                    echo '<span class="fa fa-list-alt font-icon-color-gray">&nbsp;&nbsp;</span>'.$windowTitle;
                     echo '</td>';
                     echo '</tr>';
                 }
