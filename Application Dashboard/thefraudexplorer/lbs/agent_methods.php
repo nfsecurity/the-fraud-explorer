@@ -60,12 +60,7 @@ function samplerStatus($sessionDomain)
 function agentInsights($location, $gender, $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName)
 {
     if ($location == "endPoints") echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">&nbsp;&nbsp;';
-    echo '<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div>
-    <div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div>
-    <div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div>
-    <div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row>
-    <div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div>
-    </div>">' . $agentName . '</a></td>';
+    echo '<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>">'.$agentName.'</a></td>';
 }
 
 function agentDetails($agent_dec, $agentDomain, $osVersion, $status, $ipaddress, $sessions)

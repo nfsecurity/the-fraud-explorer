@@ -33,6 +33,11 @@ body
     color: #555;
 }
 
+::-webkit-scrollbar 
+{ 
+    display: none; 
+}
+
 html,body 
 { 
     height:100%; 

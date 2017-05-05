@@ -30,6 +30,11 @@ table, caption, tbody, tfoot, thead, tr, th, td
     font-size:100%;
 }
 
+::-webkit-scrollbar 
+{ 
+    display: none; 
+}
+
 @font-face 
 {
     font-family: 'FFont';
@@ -410,6 +415,7 @@ a:active
 .table-body
 {
     height: calc(100% - 35px);
+    
     overflow-y: auto;
     width: 100%;
     background-image: url(../images/pattern-6j3d.png);

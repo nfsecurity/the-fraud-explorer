@@ -30,6 +30,11 @@ table, caption, tbody, tfoot, thead, tr, th, td
     font-size:100%;
 }
 
+::-webkit-scrollbar 
+{ 
+    display: none; 
+}
+
 @font-face 
 {
     font-family: 'FFont';
