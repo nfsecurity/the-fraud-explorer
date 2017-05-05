@@ -24,11 +24,42 @@ if(!$session->logged_in)
     exit;
 }
 
+include "lbs/open-db-connection.php";
+include "lbs/agent_methods.php";
+
 /* SQL queries */
 
-$queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM t_agents) AS agents GROUP BY agent) AS totals";
-$queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active'";
-$queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive'";
+if ($session->domain == "all")
+{
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM t_agents) AS agents GROUP BY agent) AS totals";
+        $queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active'";
+        $queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive'";
+    }
+    else
+    {
+        $queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain NOT LIKE 'thefraudexplorer.com'";
+        $queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive' AND domain NOT LIKE 'thefraudexplorer.com'";
+    }
+}
+else
+{
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active' AND domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive' AND domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+    }
+    else
+    {
+    
+        $queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active' AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive' AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+    }
+}
 
 include "lbs/open-db-connection.php";
 $count_all = mysql_fetch_assoc(mysql_query($queryCountTotalsSQL));
