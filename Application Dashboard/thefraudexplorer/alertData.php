@@ -67,7 +67,8 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
         <!-- Table sorting -->
 
         <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
-        <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script> 
+        <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
 
         <!-- Footes CSS -->
 
@@ -102,7 +103,7 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
                             </div>
 
                             <div class="modal-body">
-                                <p style="text-align:left; font-size: 12px;"><br>You are about to mark this fraud triangle alert as a false positive or viceversa, this procedure disable or enable this alert in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
+                                <p style="text-align:justify; font-size: 12px;"><br>You are about to mark this fraud triangle alert as a false positive or viceversa, this procedure disable or enable this alert in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
                                 <p class="debug-url window-debug"></p>
                             </div>
 

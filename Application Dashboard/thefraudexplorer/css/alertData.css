@@ -680,3 +680,15 @@ li a:hover:not(.active)
 {
     outline: 0 !important;
 }
+
+.tablesorter .filtered 
+{
+    display: none;
+}
+
+.tablesorter .tablesorter-errorRow td 
+{
+    text-align: center;
+    cursor: pointer;
+    background-color: #e6bf99;
+}
