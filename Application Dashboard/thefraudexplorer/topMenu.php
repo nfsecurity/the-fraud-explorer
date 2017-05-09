@@ -133,10 +133,8 @@ include "lbs/close-db-connection.php";
         <a class="active logout-button" href="logout">Logout</a>
     </li class="li">
     <li class="search search-input">
-        <form action="" method="get">
-            <input type="text" name="search_text" autocomplete="off" id="search-box" class="search_text" placeholder="Search ..."/>
-            <input class="input-search" type="button" name="search_button" id="search_button">
-        </form>
+        <input type="search" name="search_text" autocomplete="off" id="search-box" class="search_text" data-column="any" placeholder="Search ..."/>
+        <input class="input-search" type="button" name="search_button" id="search_button">
     </li>
     <li class="li counters">
         <button class="button-totals" id="totals-menu">Total<br><?php echo str_pad($count_all['total'], 4, "0", STR_PAD_LEFT); ?></button>
