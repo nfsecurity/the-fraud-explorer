@@ -338,6 +338,12 @@ if ($row_a = mysql_fetch_array($result_a))
 <script>
     $(document).ready(function(){
         $("#tblData").tablesorter({
+            widgets: [ 'filter' ],
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false
+            },
             headers:
             {
                 0:
@@ -372,42 +378,6 @@ if ($row_a = mysql_fetch_array($result_a))
             size: 20
         });
     }); 
-</script>
-
-<!-- Table search -->
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('#search-box').keyup(function(){
-            searchTable($(this).val());
-        });
-    });
-
-    function searchTable(inputVal)
-    {
-        var table = $('#tblData');
-
-        table.find('tr').each(function(index, row){
-            var allCells = $(row).find('td');
-
-            if(allCells.length > 0)
-            {
-                var found = false;
-
-                allCells.each(function(index, td){
-                    var regExp = new RegExp(inputVal, 'i');
-
-                    if(regExp.test($(td).text()))
-                    {
-                        found = true;
-                        return false;
-                    }
-                });
-
-                if(found == true)$(row).show();else $(row).hide();
-            }
-        });
-    }
 </script>
 
 <!-- Tooltipster -->

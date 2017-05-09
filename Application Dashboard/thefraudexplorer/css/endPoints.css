@@ -920,3 +920,14 @@ input[type=checkbox]
     transform: scale(1);
 }
 
+.tablesorter .filtered 
+{
+    display: none;
+}
+
+.tablesorter .tablesorter-errorRow td 
+{
+    text-align: center;
+    cursor: pointer;
+    background-color: #e6bf99;
+}
