@@ -54,7 +54,6 @@ else
     }
     else
     {
-    
         $queryCountTotalsSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
         $queryCountActiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='active' AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
         $queryCountInactiveSQL = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, heartbeat, status FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat, status FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS totals WHERE status='inactive' AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";

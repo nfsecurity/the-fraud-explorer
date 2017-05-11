@@ -42,6 +42,10 @@ $agent_enc = $_SESSION['agentIDh'];
 $matchesDataAgent = getAgentIdData($agent_decES, $ESAlerterIndex, "AlertEvent");
 $agentData = json_decode(json_encode($matchesDataAgent),true);
 
+/* Order the dashboard agent list */
+
+discoverOnline();
+
 echo '<style>';
 echo '.font-icon-gray { color: #B4BCC2; }';
 echo '.font-icon-green { color: #1E9141; }';
