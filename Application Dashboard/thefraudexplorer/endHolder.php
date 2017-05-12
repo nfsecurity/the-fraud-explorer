@@ -46,6 +46,7 @@ discoverOnline();
 echo '<style>';
 echo '.font-icon-color { color: #B4BCC2; }';
 echo '.font-icon-color-green { color: #1E9141; }';
+echo '.fa-padding { padding-right: 5px; }';
 echo '</style>';
 
 /* Elasticsearch querys for fraud triangle counts and score */
@@ -128,9 +129,7 @@ else $result_a = mysql_query($queryAgentsSQLDomain);
 /* Main Table */
 
 echo '<table id="tblData" class="tablesorter">';
-echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="totalwordsth"></th><th class="agentth">USERS UNDER ANALYTICS</th><th class="compth">RULE SET</th>
-<th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th>
-<th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr></thead><tbody>';
+echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg"></span></th><th class="totalwordsth"></th><th class="agentth">USERS UNDER ANALYTICS</th><th class="compth">RULE SET</th><th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th><th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr></thead><tbody>';
 
 if ($row_a = mysql_fetch_array($result_a))
 {
@@ -196,7 +195,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
         /* Agent software version */
 
-        echo '<td class="vertd"><span class="fa fa-codepen font-icon-color">&nbsp;&nbsp;</span>' .$row_a["version"] .'</td>';
+        echo '<td class="vertd"><span class="fa fa-codepen font-icon-color fa-padding"></span>' .$row_a["version"] .'</td>';
 
         /* Agent status */
 
@@ -211,7 +210,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
         /* Last connection to the server */
 
-        echo '<td class="lasttd">'.str_replace(array("-"),array("/"),$row_a["heartbeat"]).'&nbsp;</td>';
+        echo '<td class="lasttd">'.str_replace(array("-"),array("/"),$row_a["heartbeat"]).'</td>';
         echo '<div id="fraudCounterHolder"></div>';
 
         /* Fraud triangle counts and score */
@@ -225,9 +224,9 @@ if ($row_a = mysql_fetch_array($result_a))
         if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']) $level="high";
         if ($score >= $scoreResult['score_ts_critic_from']) $level="critic";
 
-        echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countPressure.'</td>';
-        echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countOpportunity.'</td>';
-        echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>'.$countRationalization.'</td>';
+        echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countPressure.'</td>';
+        echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
+        echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
         echo '<td class="countctd">'.$level.'</td>';
         echo '<td class="scoretd"><a href=alertData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';
 
@@ -276,6 +275,7 @@ if ($row_a = mysql_fetch_array($result_a))
             <div class="pager-inside-agent">
 
                 <?php
+                
                 if (array_key_exists('count', $resultWords)) $recordsCollected = number_format($resultWords['count'], 0, ',', '.');
                 else $recordsCollected = "0";
 
@@ -285,6 +285,7 @@ if ($row_a = mysql_fetch_array($result_a))
                 echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.$recordsCollected.' records collected and ';
                 echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudAlerts.' fraud triangle alerts triggered, ';
                 echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
+                
                 ?>
 
             </div>
@@ -303,6 +304,9 @@ if ($row_a = mysql_fetch_array($result_a))
                         <option value="500"> by 500 endpoints</option>
                         <option value="all"> All Endpoints</option>
                     </select>
+                    
+                    <?php echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>'; ?>
+                    
                 </form>
             </div>
         </div>
@@ -337,12 +341,34 @@ if ($row_a = mysql_fetch_array($result_a))
 
 <script>
     $(document).ready(function(){
+        
+        $('.download-csv').click(function(){
+            $("#tblData").trigger('outputTable');
+        });
+        
         $("#tblData").tablesorter({
-            widgets: [ 'filter' ],
+            widgets: [ 'filter', 'output' ],
             widgetOptions : 
             {
                 filter_external: '.search_text',
-                filter_columnFilters : false
+                filter_columnFilters : false,
+                output_separator: ',',
+                output_ignoreColumns : [ 0, 5, 12, 13, 14 ],
+                output_dataAttrib: 'data-name',
+                output_headerRows: false,
+                output_delivery: 'download',
+                output_saveRows: 'all',
+                output_replaceQuote: '\u201c;',
+                output_includeHTML: false,
+                output_trimSpaces: true,
+                output_wrapQuotes: false,
+                output_saveFileName: 'endpointsList.csv',
+                output_callback: function (data) {
+                    return true;
+                },
+                output_callbackJSON: function ($cell, txt, cellIndex) {
+                    return txt + '(' + (cellIndex + col) + ')';
+                }
             },
             headers:
             {

@@ -61,11 +61,12 @@ $_SESSION['instance'] = "endPoints";
 
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
-        <!-- Table sorting -->
+        <!-- JQuery Table -->
 
         <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
         <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
         <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
+        <script type="text/javascript" src="js/widgets/widget-output.js"></script>
 
         <!-- Footer -->
 

@@ -692,3 +692,14 @@ li a:hover:not(.active)
     cursor: pointer;
     background-color: #e6bf99;
 }
+
+.download-csv
+{
+    cursor: pointer;
+    border-radius: 5px;
+    height: 20px;
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    outline: 0 !important;
+}

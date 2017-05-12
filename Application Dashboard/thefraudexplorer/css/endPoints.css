@@ -677,9 +677,14 @@ input[type=checkbox]
 
 .gender-image
 {
-    vertical-align:middle; 
+    vertical-align: middle; 
     width: 35px; 
     height: 35px;
+}
+
+.image-padding
+{
+    padding-left: 8px;
 }
 
 .window-title
@@ -930,4 +935,15 @@ input[type=checkbox]
     text-align: center;
     cursor: pointer;
     background-color: #e6bf99;
+}
+
+.download-csv
+{
+    cursor: pointer;
+    border-radius: 5px;
+    height: 20px;
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    outline: 0 !important;
 }

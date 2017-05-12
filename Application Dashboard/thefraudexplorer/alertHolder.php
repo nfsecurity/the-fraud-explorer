@@ -49,6 +49,7 @@ discoverOnline();
 echo '<style>';
 echo '.font-icon-gray { color: #B4BCC2; }';
 echo '.font-icon-green { color: #1E9141; }';
+echo '.fa-padding { padding-right: 5px; }';
 echo '</style>';
 
 /* SQL Queries */
@@ -126,29 +127,29 @@ foreach ($agentData['hits']['hits'] as $result)
     /* Timestamp */
 
     echo '<td class="timestamptd">';
-    echo '<span class="fa fa-clock-o font-icon-gray">&nbsp;&nbsp;</span>'.$date;
+    echo '<span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$date;
     echo '</td>';
 
     echo '<td class="alerttypetd">';
-    echo '<span class="fa fa-tags font-icon-gray">&nbsp;&nbsp;</span>'.ucfirst($result['_source']['alertType']);
+    echo '<span class="fa fa-tags font-icon-gray fa-padding"></span>'.ucfirst($result['_source']['alertType']);
     echo '</td>';
 
     /* Window title */
 
     echo '<td class="windowtitletd">';
-    echo '<span class="fa fa-list-alt font-icon-gray">&nbsp;&nbsp;</span>'.$windowTitle;
+    echo '<span class="fa fa-list-alt font-icon-gray fa-padding"></span>'.$windowTitle;
     echo '</td>';
 
     /* Phrase typed */
 
     echo '<td class="phrasetypedtd">';
-    echo '<span class="fa fa-pencil font-icon-green">&nbsp;&nbsp;</span>'.$wordTyped;
+    echo '<span class="fa fa-pencil font-icon-green fa-padding"></span>'.$wordTyped;
     echo '</td>';
 
     /* Regular expression dictionary */
 
     echo '<td class="phrasedictionarytd">';
-    echo '<span class="fa fa-font font-icon-gray">&nbsp;&nbsp;</span>'.$searchResult;
+    echo '<span class="fa fa-font font-icon-gray fa-padding"></span>'.$searchResult;
     echo '</td>';
 
     /* Mark false positive */
@@ -206,6 +207,9 @@ echo '</tbody></table>';
                         <option value="500"> by 500 alerts</option>
                         <option value="all"> All Alerts</option>
                     </select>
+                    
+                    <?php echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>'; ?>
+                    
                 </form>
             </div>
         </div>
@@ -224,12 +228,34 @@ echo '</tbody></table>';
 
 <script>
     $(function(){
+        
+        $('.download-csv').click(function(){
+            $("#agentDataTable").trigger('outputTable');
+        });
+        
         $("#agentDataTable").tablesorter({
-            widgets: [ 'filter' ],
+            widgets: [ 'filter', 'output' ],
             widgetOptions : 
             {
                 filter_external: '.search_text',
-                filter_columnFilters : false
+                filter_columnFilters : false,
+                output_separator: ',',
+                output_ignoreColumns : [ 0, 6 ],
+                output_dataAttrib: 'data-name',
+                output_headerRows: false,
+                output_delivery: 'download',
+                output_saveRows: 'all',
+                output_replaceQuote: '\u201c;',
+                output_includeHTML: false,
+                output_trimSpaces: true,
+                output_wrapQuotes: false,
+                output_saveFileName: 'alertsList.csv',
+                output_callback: function (data) {
+                    return true;
+                },
+                output_callbackJSON: function ($cell, txt, cellIndex) {
+                    return txt + '(' + (cellIndex + col) + ')';
+                }
             },
             headers:
             {
