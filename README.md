@@ -2,7 +2,7 @@
 
 *The Fraud Explorer* es un software _**FTA** (Fraud Triangle Analytics)_ enfocado al descubrimiento del fraude ocupacional y ciber-crímenes. Identifica y genera eventos de alto valor para la detección proactiva y reactiva de fraudes a través de la semántica y análisis conductual basado en el triángulo del fraude de [Donald Cressey](https://en.wikipedia.org/wiki/Donald_Cressey). 
 
-Las instrucciones de instalación y configuración las encontrará en la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki), puede descargar también la [guía de usuario](https://www.thefraudexplorer.com/files/The_Fraud_Explorer_Userguide.pdf) y [solicitar](https://www.thefraudexplorer.com/#contact) el acceso gratuito al [demo](https://console.thefraudexplorer.com) en línea. El sitio oficial del software es https://www.thefraudexplorer.com
+Las instrucciones de instalación y configuración las encontrará en la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki), puede descargar también la [guía de usuario](https://www.thefraudexplorer.com/files/The_Fraud_Explorer_Userguide.pdf) y [solicitar](https://www.thefraudexplorer.com/#contact) el acceso gratuito al [demo](https://console.thefraudexplorer.com) en línea. El sitio oficial es https://www.thefraudexplorer.com
 
 ## Desarrollado en NF Cybersecurity & Antifraud Firm
 
