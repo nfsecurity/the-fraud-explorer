@@ -8,8 +8,6 @@
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
- *
- * Date: 2017-04
  * Revision: v1.0.0-beta
  *
  * Description: Code for paint dashboard
@@ -40,28 +38,62 @@ insertSampleData($configFile);
 
 if ($session->domain == "all")
 {
-    $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlWords);
-    $resultWords=curl_exec($ch);
-    curl_close($ch);
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,$urlWords);
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+    }
+    else
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,$urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+    }
 }
 else
 {
-    $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-
-    $params = '{ "query": { "term" : { "userDomain" : "'.$session->domain.'" } } }';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlWords);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-    $resultWords=curl_exec($ch);
-    curl_close($ch);
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,$urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+    }
+    else
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL,$urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+    }
 }
 
 $resultWords = json_decode($resultWords, true);
@@ -105,11 +137,21 @@ discoverOnline();
 
                     <?php
 
-                    $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent order by score desc limit 50";
-                    $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' group by agent order by score desc limit 50";
+                    $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 50";
+                    $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 50";                  
+                    $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC LIMIT 50";
+                    $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC LIMIT 50";
                     
-                    if ($session->domain != "all") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
-                    else $queryEndpoints = mysql_query($queryEndpointsSQL);
+                    if ($session->domain == "all")
+                    {
+                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
+                        else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
+                    }
+                    else
+                    {
+                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
+                        else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
+                    }
 
                     if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
                     {
@@ -174,16 +216,22 @@ discoverOnline();
 
     <?php
     
-    $queryTermsSQL = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
-    $queryTermsSQLDomain = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='".$session->domain."'";
-    $queryTermsSQLSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='thefraudexplorer.com'";
+    $queryTermsSQL = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents;";
+    $queryTermsSQL_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
+    $queryTermsSQLDomain_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='".$session->domain."'";
+    $queryTermsSQLDomain = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."'";
+    
     $samplerStatus = samplerStatus($session->domain);
     
-    if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQLSampler);
+    if ($session->domain == "all")
+    {
+        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQL);
+        else $queryTerms = mysql_query($queryTermsSQL_wOSampler);
+    }
     else
     {
-        if ($session->domain != "all") $queryTerms = mysql_query($queryTermsSQLDomain);
-        else $queryTerms = mysql_query($queryTermsSQL);
+        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQLDomain);
+        else $queryTerms = mysql_query($queryTermsSQLDomain_wOSampler);
     }
         
     $fraudTerms = mysql_fetch_assoc($queryTerms);
@@ -269,9 +317,17 @@ discoverOnline();
                 $ESalerterIndex = $configFile['es_alerter_index'];
                 $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
                 
-                if ($session->domain != "all") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain);
-                else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all");
-            
+                if ($session->domain != "all") 
+                {
+                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled");
+                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled");
+                }
+                else 
+                {
+                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled");
+                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled");
+                }
+                
                 $alertData = json_decode(json_encode($alertMatches), true);
 
                 foreach ($alertData['hits']['hits'] as $result)

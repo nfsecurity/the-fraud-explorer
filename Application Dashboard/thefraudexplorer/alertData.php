@@ -100,17 +100,33 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title window-title" id="myModalLabel">False positive marking</h4>
+                                <h4 class="modal-title window-title" id="myModalLabel">Alert marking</h4>
                             </div>
 
                             <div class="modal-body">
-                                <p style="text-align:justify; font-size: 12px;"><br>You are about to mark this fraud triangle alert as a false positive or viceversa, this procedure disable or enable this alert in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
+                                <p style="text-align:justify; font-size: 12px;"><br>You are about to mark this fraud triangle alert as inactive, active, false positive or viceversa, this procedure disable or enable this alert in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
                                 <p class="debug-url window-debug"></p>
                             </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
                                 <a class="btn btn-success false-positive-button" style="outline: 0 !important;">Toggle mark</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+        
+        <!-- Modal for Phrase Viewer -->
+
+        <center>
+            <div class="modal fade-scale" id="alert-phrases" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
                             </div>
                         </div>
                     </div>

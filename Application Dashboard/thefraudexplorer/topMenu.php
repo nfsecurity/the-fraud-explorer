@@ -147,7 +147,7 @@ include "lbs/close-db-connection.php";
 </ul>
 <br>
 
-<!-- Modal for agent setup -->
+<!-- Modal for main Configuration -->
 
 <div class="modal fade-scale" id="confirm-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">

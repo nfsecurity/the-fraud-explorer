@@ -37,7 +37,9 @@ $_SESSION['id_uniq_command']=null;
 
 $queryConfig = "SELECT * FROM t_config";
 $queryAgentsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
+$queryAgentsSQL_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
 $queryAgentsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent";
+$queryAgentsSQLDomain_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' GROUP BY agent";
 
 /* Order the dashboard agent list */
 
@@ -61,49 +63,115 @@ $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pres
 
 if ($session->domain == "all")
 {
-    $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
-    $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-    $urlSize="http://localhost:9200/_all/_stats";
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlWords);
-    $resultWords=curl_exec($ch);
-    curl_close($ch);
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlAlerts);
-    $resultAlerts=curl_exec($ch);
-    curl_close($ch);
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
+        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
+        $urlSize="http://localhost:9200/_all/_stats";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlWords);
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        $resultAlerts=curl_exec($ch);
+        curl_close($ch);
+        
+        $result_a = mysql_query($queryAgentsSQL);
+    }
+    else
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
+        $urlSize="http://localhost:9200/_all/_stats";
+        
+        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+        
+        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } }, { "match" : { "falsePositive.raw" : "1" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultAlerts=curl_exec($ch);
+        curl_close($ch);
+        
+        $result_a = mysql_query($queryAgentsSQL_wOSampler);
+    }
 }
 else
 {
-    $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-    $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-    $urlSize="http://localhost:9200/_all/_stats";
-
-    $params = '{ "query": { "term" : { "userDomain" : "'.$session->domain.'" } } }';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlWords);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-    $resultWords=curl_exec($ch);
-    curl_close($ch);
-
-    $params = '{ "query": { "term" : { "userDomain" : "'.$session->domain.'" } } }';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlAlerts);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-    $resultAlerts=curl_exec($ch);
-    curl_close($ch);
+    if (samplerStatus($session->domain) == "enabled")
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
+        $urlSize="http://localhost:9200/_all/_stats";
+        
+        $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+        
+        $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultAlerts=curl_exec($ch);
+        curl_close($ch);
+        
+        $result_a = mysql_query($queryAgentsSQLDomain);
+    }
+    else
+    {
+        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
+        $urlSize="http://localhost:9200/_all/_stats";
+        
+        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultWords=curl_exec($ch);
+        curl_close($ch);
+        
+        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } }, { "match" : { "falsePositive.raw" : "1" } } ] } } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        $resultAlerts=curl_exec($ch);
+        curl_close($ch);
+        
+        $result_a = mysql_query($queryAgentsSQLDomain_wOSampler);
+    }
 }
 
 $ch = curl_init();
@@ -120,11 +188,6 @@ $dataSize = $resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024
 
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0"; 
-
-/* Show main table and telemetry with the agent list */
-
-if($session->domain == "all") $result_a = mysql_query($queryAgentsSQL);
-else $result_a = mysql_query($queryAgentsSQLDomain);
 
 /* Main Table */
 

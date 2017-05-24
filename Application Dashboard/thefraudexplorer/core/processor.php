@@ -69,6 +69,20 @@ if(!isset($GLOBALS['agentList'])) exit;
 
 echo "\n[INFO] Starting Fraud Triangle Analytics phrase matching processor ...\n";
 
+/* Start from Scratch */
+
+if (isset($argv[1]))
+{
+    if ($argv[1] == "fromScratch") 
+    {
+        echo "[INFO] Starting from scratch, clearing word count ...\n";
+        clearWords();
+        
+        echo "[INFO] Repopulating sampler data from scratch ...\n";
+        repopulateSampler();
+    }
+}
+
 if (indexExist($configFile['es_alerter_status_index'], $configFile))
 {
     echo "[INFO] Index ".$configFile['es_alerter_status_index']." already exist, continue ...\n";
@@ -83,7 +97,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
     logToFile($configFile['log_file'], "[INFO] - Checking events from last date: ".$GLOBALS['lastAlertDate'][0]."  ...");
 
-    echo "\n[INFO] *** Searching for typedwords by agent ***\n\n";
+    echo "[INFO] Searching for typedwords by agent ...\n";
 
     $arrayCounter = 0;
     $lastArrayElement = false;
@@ -94,19 +108,23 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
         $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
         if ($typedWords['hits']['total'] == 0)
-        {
-            echo "[INFO] There is no typed words from agent [".$agentID."] from the latest alert date.\n";
+        {   
+            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+            $arrayCounter++;
             continue;
         }
         else
         {
             $ruleset = getRuleset($agentID);
+            
             echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
             if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
-        }
-        
-        $arrayCounter++;
+            
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+            $arrayCounter++;
+        }     
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
@@ -126,19 +144,23 @@ else
         $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
         if ($typedWords['hits']['total'] == 0)
-        {
-            echo "[INFO] There is no typed words from agent [".$agentID."] from the latest alert date.\n";
+        {   
+            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+            $arrayCounter++;   
             continue;
         }
         else 
         {
             $ruleset = getRuleset($agentID);
+            
             echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
             if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);          
+            $arrayCounter++;
         }
-        
-        $arrayCounter++;
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);

@@ -114,8 +114,10 @@ else if (!empty($_POST['delete']))
         if(!empty($count)) mysql_query(sprintf("DELETE FROM t_users WHERE user='%s'", $userName));
         
         $domainTable = "t_config_".str_replace(".", "_", $row[2]);
+        $wordsTable = "t_words_".str_replace(".", "_", $row[2]);
         
         if(mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$domainTable."'")) == 1) mysql_query(sprintf("DROP TABLE %s", $domainTable));
+        if(mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$wordsTable."'")) == 1) mysql_query(sprintf("DROP TABLE %s", $wordsTable));
     }
 }
 

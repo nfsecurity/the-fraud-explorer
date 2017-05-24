@@ -148,7 +148,7 @@ function extractEndDateFromAlerter($indexName, $indexType)
 function wordsByDays($value, $domain)
 {   
     $userDomain = str_replace(".", "_", $domain);
-    $query = "SELECT * from t_words_".$userDomain;
+    $query = "SELECT * FROM t_words_".$userDomain;
     $result = mysql_query($query);
 
     if(empty($result)) 
@@ -174,29 +174,48 @@ function wordsByDays($value, $domain)
     $destTime = strtotime($origDate[0]);
     $weekDay = date('l', $destTime);
     $weekDay = strtolower($weekDay);
+    
     mysql_query(sprintf("UPDATE t_words_%s SET %s=%s + 1", $userDomain, $weekDay, $weekDay));
     mysql_query(sprintf("UPDATE t_words SET %s=%s + 1", $weekDay, $weekDay));
+    
     return $weekDay;
+}
+
+/*  Clear all word counters */
+
+function clearWords()
+{   
+    $query = "SELECT domain FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY domain";    
+    $result = mysql_query($query);
+
+    while($row = mysql_fetch_array($result))
+    {
+        $domain = str_replace(".", "_", $row['domain']);
+        $queryWords = "UPDATE t_words_".$domain." SET monday=0, tuesday=0, wednesday=0, thursday=0, friday=0, saturday=0, sunday=0";
+        $resultQuery = mysql_query($queryWords);
+    }
+    
+    $queryTotalWords = "UPDATE t_words SET monday=0, tuesday=0, wednesday=0, thursday=0, friday=0, saturday=0, sunday=0";
+    $resultTotalQuery = mysql_query($queryTotalWords);
 }
 
 /* Start data procesing */ 
 
 function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement)
-{
-    echo "[INFO] Starting Fraud Triangle Analytics phrase matching for [".$agentID."] ...\n\n";
+{   
     getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", "userDomain", $agentID."_typedWords");
+    
     $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
-
-    foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) 
-    {
-        echo "\t* Window [".decRijndael($arrayValue[1])."] - Word [".decRijndael($arrayValue[0])."] Date [".$arrayValue[2]." - ".wordsByDays($arrayValue[2], $arrayValue[3])."]\n";
-    }
-
+    
+    foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) wordsByDays($arrayValue[2], $arrayValue[3]);
+    
+    $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
     $lastWindowTitle = null;
     $lastTimeStamp = null;
     $stringOfWords = null;
     $counter = 0;
-
+    $countWindows = 0;
+    $numberOfWindowsAndWords = count($arrayOfWordsAndWindows);
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $dictLan = $configFile['wc_language'];
     $dictEna = $configFile['wc_enabled'];
@@ -206,32 +225,33 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         $windowTitle = decRijndael($value[1]);
         $timeStamp = $value[2];
 
-        if ($windowTitle == $lastWindowTitle)
-        {
-            $stringOfWords = $stringOfWords . " " .decRijndael($value[0]);
-        }
-        else if ($counter == 0)
+        if ($counter == 0)
         {
             $stringOfWords = decRijndael($value[0]);
+        }
+        else if ($windowTitle == $lastWindowTitle)
+        {
+            $stringOfWords = $stringOfWords . " " .decRijndael($value[0]);
         }
         else
         {
             if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
 
-            echo "\n[INFO] Parsing fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestam [".$lastTimeStamp."] for agent [".$agentID."]";
-
             parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
             $counter = 0;
             $stringOfWords = decRijndael($value[0]);
         }
-        if ($key == count($arrayOfWordsAndWindows))
-        {
+        
+        /* Process the last Window */
+        
+        $countWindows++;
+        
+        if ($countWindows === $numberOfWindowsAndWords)
+        {            
             $lastWindowTitle = $windowTitle;
             $lastTimeStamp = $timeStamp; 
 
             if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
-
-            echo "\n[INFO] Parsing last fraud Triangle Window [".$lastWindowTitle."] Phrases [".$stringOfWords."] with Timestamp [".$lastTimeStamp."] for agent [".$agentID."]";
 
             parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }
@@ -273,12 +293,6 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                     socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                     $GLOBALS[$matchesGlobalCount]++;
 
-                    if ($countOutput == 1) echo "\n\n";
-
-                    echo "\t* Matching for agent [".$agentID."] with term [".$term."] at window [".$windowTitle."] with word [".$matches[0][0]."] in phrase [".str_replace('/', '', $termPhrase)."] - score [".$value."], total matches [".count($matches[0])."]";
-                    
-                    if ($lastArrayElement == false) echo "\n";
-
                     logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 
                     $countOutput++;
@@ -287,14 +301,6 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
             $rule = $ruleset;
         }
     }
-
-    if ($matched == FALSE) 
-    {
-        echo "\n\n\t* There is no matching phrases for agent [".$agentID."] at this time on this window [".$windowTitle."]";
-        if ($lastArrayElement == true) echo "\n";
-        else echo "\n\n";
-    }
-    else echo "\n";
 }
 
 /* Get ruleset from agent */
@@ -366,7 +372,7 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
 
 function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
 {
-    echo "\n[INFO] *** Populating SQL-Database with Fraud Triangle Analytics Insights by agent ***\n";
+    echo "[INFO] Populating SQL-Database with Fraud Triangle Analytics Insights by agent ...\n";
 
     $resultQuery = mysql_query("SELECT agent FROM t_agents");
 
@@ -384,7 +390,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
             $totalOpportunity = $matchesOpportunity['count'];
             $totalRationalization = $matchesRationalization['count'];
 
-            $result=mysql_query("Update t_agents set totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' where agent='".$row_a['agent']."'");
+            $result = mysql_query("Update t_agents set totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' where agent='".$row_a['agent']."'");
         }
         while ($row_a = mysql_fetch_array($resultQuery));
     }
@@ -414,16 +420,32 @@ function checkPhrases($string, $language)
         if(!pspell_check($dictionary, $value))
         {
             $suggestion = pspell_suggest($dictionary, $value);
-
-            if(strtolower($suggestion[0]) != strtolower($value))
+            
+            if (array_key_exists('0', $suggestion)) 
             {
-                $string[$key] = $suggestion[0];
-                $replacement_suggest = true;
+                if(strtolower($suggestion[0]) != strtolower($value))
+                {
+                    $string[$key] = $suggestion[0];
+                    $replacement_suggest = true;
+                }
             }
         }
     }
 
     return strtr(implode(' ', $string), $unwanted_chars);
+}
+
+/* Re-populate Sampler data */
+
+function repopulateSampler()
+{
+    $deleteQuery = "DELETE FROM t_agents WHERE agent in ('johndoe_90214c1_agt', 'nigel_abc14c1_agt', 'desmond_402vcc4_agt', 'spruce_s0214ck_agt', 'fletch_80j14g1_agt', 'ingredia_tq2v4c1_agt', 'archibald_b0314cm_agt', 'niles_1011jcl_agt', 'lurch_t021ycp_agt', 'eleanor_1114c3_agt', 'gordon_bbb94cc_agt', 'gustav_cht14f2_agt', 'jason_j8g12cg_agt', 'burgundy_18hg4cj_agt', 'benjamin_0001kc9_agt')";
+    
+    $resultQuery = mysql_query($deleteQuery);
+    
+    $insertQuery = "INSERT INTO t_agents (agent, heartbeat, system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization) VALUES ('johndoe_90214c1_agt', '2017-04-15 07:46:12', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.7', 'John Doe', 'BASELINE', 'male', '12723', '8', '10', '7'), ('nigel_abc14c1_agt', '2017-04-15 08:21:10', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.8', 'Nigel Eagle', 'BASELINE', 'female', '7321', '25', '0', '0'), ('desmond_402vcc4_agt', '2017-04-15 09:34:18', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.9', 'Desmond Wiedenbauer', 'BASELINE', 'male', '1983', '0', '25', '0'), ('spruce_s0214ck_agt', '2017-04-06 05:36:20', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.10', 'Spruce Bellevedere', 'BASELINE', 'male', '3000', '0', '0', '25'), ('fletch_80j14g1_agt', '2017-04-15 17:01:12', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.11', 'Fletch Nigel', 'BASELINE', 'male', '1560', '10', '10', '5'), ('ingredia_tq2v4c1_agt', '2017-04-06 03:11:02', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.12', 'Ingredia Douchebag', 'BASELINE', 'female', '3489', '5', '5', '15'), ('archibald_b0314cm_agt', '2017-04-06 09:14:37', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.13', 'Archibald Gibson', 'BASELINE', 'male', '921', '20', '2', '3'), ('niles_1011jcl_agt', '2017-04-15 02:37:13', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.14', 'Niles Ameter', 'BASELINE', 'male', '7528', '9', '13', '3'), ('lurch_t021ycp_agt', '2017-04-15 19:33:49', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.15', 'Lurch Barrow', 'BASELINE', 'male', '9800', '9', '5', '11'), ('eleanor_1114c3_agt', '2017-04-15 03:36:11', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.16', 'Eleanor Rails', 'BASELINE', 'female', '2899', '17', '3', '5'), ('gordon_bbb94cc_agt', '2017-04-15 04:16:09', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.17', 'Gordon Mondover', 'BASELINE', 'male', '1488', '7', '18', '0'), ('gustav_cht14f2_agt', '2017-04-15 06:46:22', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.18', 'Gustav Deck', 'BASELINE', 'male', '23900', '4', '9', '12'), ('jason_j8g12cg_agt', '2017-04-15 09:56:37', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.19', 'Jason Posture', 'BASELINE', 'male', '249', '0', '16', '9'), ('burgundy_18hg4cj_agt', '2017-04-15 17:12:43', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.20', 'Burgundy Skinner', 'BASELINE', 'male', '76', '9', '9', '7'), ('benjamin_0001kc9_agt', '2017-04-15 21:00:51', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.21', 'Benjamin Evalent', 'BASELINE', 'male', '7599', '7', '7', '11')";
+    
+    $resultQuery = mysql_query($insertQuery);
 }
 
 /* Send log data to external file */

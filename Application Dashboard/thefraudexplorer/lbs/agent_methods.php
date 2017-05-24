@@ -65,7 +65,7 @@ function agentInsights($location, $gender, $agent_enc, $totalWordHits, $countPre
 
 function agentDetails($agent_dec, $agentDomain, $osVersion, $status, $ipaddress, $sessions)
 {
-    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Agent details</div><div class=tooltip-row><div class=tooltip-item>Identification</div><div class=tooltip-value-lefta>'.$agent_dec.'</div></div><div class=tooltip-row><div class=tooltip-item>Corporate domain</div><div class=tooltip-value-lefta>'.$agentDomain.'</div></div><div class=tooltip-row><div class=tooltip-item>Operating system</div><div class=tooltip-value-lefta>'.$osVersion.'</div></div><div class=tooltip-row><div class=tooltip-item>Connection status</div><div class=tooltip-value-lefta>'.$status.'</div></div><div class=tooltip-row><div class=tooltip-item>IP Address</div><div class=tooltip-value-lefta>'.$ipaddress.'</div></div><div class=tooltip-row><div class=tooltip-item>Number of sessions</div><div class=tooltip-value-lefta>'.$sessions.'</div></div></div>"><span class="fa fa-building-o fa-lg font-icon-color">&nbsp;&nbsp;</span></a>';
+    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Agent details</div><div class=tooltip-row><div class=tooltip-item>Identification</div><div class=tooltip-value-lefta>'.$agent_dec.'</div></div><div class=tooltip-row><div class=tooltip-item>Corporate domain</div><div class=tooltip-value-lefta>'.$agentDomain.'</div></div><div class=tooltip-row><div class=tooltip-item>Operating system</div><div class=tooltip-value-lefta>'.$osVersion.'</div></div><div class=tooltip-row><div class=tooltip-item>Connection status</div><div class=tooltip-value-lefta>'.$status.'</div></div><div class=tooltip-row><div class=tooltip-item>IP Address</div><div class=tooltip-value-lefta>'.$ipaddress.'</div></div><div class=tooltip-row><div class=tooltip-item>Number of sessions</div><div class=tooltip-value-lefta>'.$sessions.'</div></div></div>"><span class="fa fa-info-circle fa-2x font-icon-color">&nbsp;&nbsp;</span></a>';
 }
 
 function discoverOnline()
@@ -110,7 +110,7 @@ function alertDetails($location, $date, $wordTyped, $windowTitle, $searchResult,
 {
     echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value-lefta>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value-lefta>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value-lefta>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value-lefta>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value-lefta>'.$phraseZoom.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value-lefta>'.$regExpression.'</div></div>">';
     
-    if ($location == "alertData") echo '<span class="fa fa-building-o fa-lg font-icon-gray">&nbsp;&nbsp;</span></a>';
+    if ($location == "alertData") echo '<span class="fa fa-info-circle fa-2x font-icon-gray">&nbsp;&nbsp;</span></a>';
     else echo '<span class="fa fa-clock-o font-icon-color-gray">&nbsp;&nbsp;</span></a>';
 }
 

@@ -150,7 +150,7 @@ td
 {
     padding:7px 0px 7px 0px;
     opacity: 30;
-    height: 40px;
+    height: 50px;
     vertical-align: middle;
     border-top:1px solid #e0e0e0;
     border-right:0px solid #F8F8F8;
@@ -269,7 +269,7 @@ th
     vertical-align: middle;
     width: 40px;
     min-width: 40px;
-    padding-left: 8px;
+    padding-left: 11px;
     background: #f2f2f2;
 }
 
@@ -701,5 +701,10 @@ li a:hover:not(.active)
     position: relative;
     border: 1px solid #ccc;
     background-color: #fff;
+    outline: 0 !important;
+}
+
+.alert-phrase-viewer
+{
     outline: 0 !important;
 }

@@ -76,7 +76,7 @@ echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg">&nbsp;&nbs
 $wordCounter = 0;
 
 foreach ($agentData['hits']['hits'] as $result)
-{
+{        
     echo '<tr>';
 
     /* Alert Details */
@@ -143,7 +143,7 @@ foreach ($agentData['hits']['hits'] as $result)
     /* Phrase typed */
 
     echo '<td class="phrasetypedtd">';
-    echo '<span class="fa fa-pencil font-icon-green fa-padding"></span>'.$wordTyped;
+    echo '<span class="fa fa-pencil font-icon-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
     echo '</td>';
 
     /* Regular expression dictionary */
@@ -216,11 +216,23 @@ echo '</tbody></table>';
     </div>
 </div>
 
-<!-- Modal for delete dialog -->
+<!-- Modal for false positive -->
 
 <script>
     $('#false-positive').on('show.bs.modal', function(e){
         $(this).find('.false-positive-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Phrase viewer -->
+
+<script>
+    $('#alert-phrases').on('show.bs.modal', function(e) {
+        $(this).find('.alert-phrase-viewer').attr('href', $(e.relatedTarget).data('href'));
+    });
+    
+    $('#alert-phrases').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
 
