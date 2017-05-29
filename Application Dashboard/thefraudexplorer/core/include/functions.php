@@ -199,12 +199,36 @@ function clearWords()
     $resultTotalQuery = mysql_query($queryTotalWords);
 }
 
+/*  Delete Alert Index */
+
+function deleteAlertIndex()
+{
+    $urlAlertData="http://localhost:9200/logstash-alerter-*";
+    $urlAlertStatus="http://localhost:9200/tfe-alerter-status";
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_URL, $urlAlertData);
+    $resultAlertData=curl_exec($ch);
+    curl_close($ch);
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_URL, $urlAlertStatus);
+    $resultAlertStatus=curl_exec($ch);
+    curl_close($ch);
+}
+
 /* Start data procesing */ 
 
 function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement)
 {   
+    $GLOBALS['arrayPosition'] = 0;
     getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", "userDomain", $agentID."_typedWords");
-    
     $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
     
     foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) wordsByDays($arrayValue[2], $arrayValue[3]);

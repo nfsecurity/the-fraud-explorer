@@ -41,29 +41,13 @@ $startTime = microtime(true);
 $ESindex = $configFile['es_words_index'];
 $fistTimeIndex = true;
 
-$AgentParams = [
-    'index' => $ESindex, 
-    'type' => 'TextEvent', 
-    'body' => [
-        'size' => 0, 
-        'aggs' => [
-            'agents' => [
-                'terms' => [ 'field' => 'agentId.raw' ]
-            ]
-        ]
-    ]
-];
-
-$allAgentList = $client->search($AgentParams);
 $fraudTriangleTerms = array('rationalization'=>'0 1 0','opportunity'=>'0 0 1','pressure'=>'1 0 0');
 $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
 
 /* Unique agentID List */
 
-$GLOBALS['arrayPosition'] = 0;
-getArrayData($allAgentList, "key", "agentList");
-
-if(!isset($GLOBALS['agentList'])) exit;
+$queryAgentList = "SELECT agent FROM t_agents";    
+$resultQueryAgentList = mysql_query($queryAgentList);
 
 /* Start the loop for each agent */
 
@@ -75,10 +59,10 @@ if (isset($argv[1]))
 {
     if ($argv[1] == "fromScratch") 
     {
-        echo "[INFO] Starting from scratch, clearing word count ...\n";
-        clearWords();
+        echo "[INFO] Starting from scratch, deleting previous alert data ...\n";
         
-        echo "[INFO] Repopulating sampler data from scratch ...\n";
+        deleteAlertIndex();
+        clearWords();
         repopulateSampler();
     }
 }
@@ -101,10 +85,11 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
     $arrayCounter = 0;
     $lastArrayElement = false;
-    $arrayLenght = count($GLOBALS['agentList']);
+    $arrayLenght = mysql_num_rows($resultQueryAgentList);
     
-    foreach($GLOBALS['agentList'] as $agentID)
+    while($row = mysql_fetch_array($resultQueryAgentList))
     {
+        $agentID = $row['agent'];
         $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
         if ($typedWords['hits']['total'] == 0)
@@ -137,10 +122,11 @@ else
     
     $arrayCounter = 0;
     $lastArrayElement = false;
-    $arrayLenght = count($GLOBALS['agentList']);
+    $arrayLenght = mysql_num_rows($resultQueryAgentList);
 
-    foreach($GLOBALS['agentList'] as $agentID)
+    while($row = mysql_fetch_array($resultQueryAgentList))
     {
+        $agentID = $row['agent'];
         $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
         if ($typedWords['hits']['total'] == 0)
