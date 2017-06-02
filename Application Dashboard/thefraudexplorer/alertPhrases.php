@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Code for Phrase viewer
  */
@@ -60,7 +60,7 @@ $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
         border: 1px solid #e2e2e2;
         line-height: 20px;
         width: 100%;
-        height: 113px;
+        height: 58px;
         border-radius: 4px;
         text-align: justify;
         font-family: 'FFont', sans-serif; 
@@ -84,7 +84,7 @@ $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
         
     <?php
         
-    echo decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+    echo decRijndael($alertPhrase['hits']['hits'][0]['_source']['wordTyped']);
         
     ?>
         

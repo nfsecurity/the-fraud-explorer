@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Code for horizontal analytics data
  */

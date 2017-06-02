@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Code for paint agent data table
  */
@@ -91,37 +91,9 @@ foreach ($agentData['hits']['hits'] as $result)
     $searchValue = "/".$result['_source']['phraseMatch']."/";
     $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
     $regExpression = htmlentities($result['_source']['phraseMatch']);
-    $stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
     
-    /* Phrase zoom */
-
-    $pieces = explode(" ", $stringHistory);
-
-    foreach($pieces as $key => $value)
-    {
-        if($pieces[$key] == $wordTyped)
-        {
-            if (array_key_exists($key-1, $pieces))
-            {
-                if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
-                else $leftWords = $pieces[$key-1];
-            }
-            else $leftWords = "";
-
-            if (array_key_exists($key+1, $pieces))
-            {
-                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];
-                else $rightWords = $pieces[$key+1];
-            }
-            else $rightWords = "";
-
-            $phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
-            break;
-        }
-    }
-
     echo '<td class="detailstd">';
-    alertDetails("alertData", $date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
+    alertDetails("alertData", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
     echo '</td>';
 
     /* Timestamp */

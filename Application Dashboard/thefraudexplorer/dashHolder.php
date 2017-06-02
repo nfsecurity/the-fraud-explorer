@@ -8,7 +8,7 @@
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
- * Revision: v1.0.0-beta
+ * Revision: v1.0.1-beta
  *
  * Description: Code for paint dashboard
  */
@@ -344,36 +344,8 @@ discoverOnline();
                     $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
                     $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
                     $regExpression = htmlentities($result['_source']['phraseMatch']);
-                    $stringHistory = decRijndael(htmlentities($result['_source']['stringHistory']));
                     
-                     /* Phrase zoom */
-                    
-                    $pieces = explode(" ", $stringHistory);
-                    
-                    foreach($pieces as $key => $value)
-                    {
-                        if($pieces[$key] == $wordTyped)
-                        {
-                            if (array_key_exists($key-1, $pieces))
-                            {
-                                if (array_key_exists($key-2, $pieces)) $leftWords = $pieces[$key-2]." ".$pieces[$key-1];
-                                else $leftWords = $pieces[$key-1];
-                            }
-                            else $leftWords = "";
-                            
-                            if (array_key_exists($key+1, $pieces))
-                            {
-                                if (array_key_exists($key+2, $pieces)) $rightWords = $pieces[$key+1]." ".$pieces[$key+2];
-                                else $rightWords = $pieces[$key+1];
-                            }
-                            else $rightWords = "";
-                            
-                            $phraseZoom = $leftWords." ".$wordTyped." ".$rightWords;
-                            break;
-                        }
-                    }
-                    
-                    alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result);
+                    alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
                     echo $date;
                     
                     echo '</td>';
@@ -427,37 +399,39 @@ discoverOnline();
 
 <?php
 
-$queryAllDays = "SELECT * from t_words";
-$queryDomainDays = "SELECT * from t_words_".str_replace(".", "_", $session->domain);
-$querySampleDomainDays = "SELECT * from t_words_thefraudexplorer_com";
+$queryAllDays_wOSampler = "SELECT * from t_words";
+$queryAllDay_wSampler = "SELECT SUM(monday) AS monday, SUM(tuesday) AS tuesday, SUM(wednesday) AS wednesday, SUM(thursday) AS thursday, SUM(friday) AS friday, SUM(saturday) AS saturday, SUM(sunday) AS sunday FROM (SELECT * FROM t_words UNION SELECT * FROM t_words_thefraudexplorer_com) as tbl";
+$queryDomainDays_wSampler = "SELECT SUM(monday) AS monday, SUM(tuesday) AS tuesday, SUM(wednesday) AS wednesday, SUM(thursday) AS thursday, SUM(friday) AS friday, SUM(saturday) AS saturday, SUM(sunday) AS sunday FROM (SELECT * FROM t_words_".str_replace(".", "_", $session->domain)." UNION SELECT * FROM t_words_thefraudexplorer_com) as tbl";
+$queryDomainDays_wOSampler = "SELECT * from t_words_".str_replace(".", "_", $session->domain);
 
-if ($samplerStatus == "disabled")
+if ($session->domain == "all")
 {
-    if ($session->domain != "all") 
-    {
-        $queryDays = mysql_query($queryDomainDays);
-        
-        if(empty($queryDays))
-        {
-            $query = "CREATE TABLE t_words_".str_replace(".", "_", $session->domain)." (
-            monday int DEFAULT NULL,
-            tuesday int DEFAULT NULL,
-            wednesday int DEFAULT NULL,
-            thursday int DEFAULT NULL,
-            friday int DEFAULT NULL,
-            saturday int DEFAULT NULL,
-            sunday int DEFAULT NULL)";
-            
-            $insert = "INSERT INTO t_words_".str_replace(".", "_", $session->domain)." (
-            monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('0', '0', '0', '0', '0', '0', '0')";
-            
-            $resultQuery = mysql_query($query);
-            $resultInsert = mysql_query($insert);
-        }
-    }
-    else $queryDays = mysql_query($queryAllDays);
+    if (samplerStatus($session->domain) == "enabled") $queryDays = mysql_query($queryAllDay_wSampler);
+    else $queryDays = mysql_query($queryAllDays_wOSampler);
 }
-else $queryDays = mysql_query($querySampleDomainDays);
+else
+{
+    if (samplerStatus($session->domain) == "enabled") $queryDays = mysql_query($queryDomainDays_wSampler);
+    else $queryDays = mysql_query($queryDomainDays_wOSampler);
+    
+    if(empty($queryDays))
+    {
+        $query = "CREATE TABLE t_words_".str_replace(".", "_", $session->domain)." (
+        monday int DEFAULT NULL,
+        tuesday int DEFAULT NULL,
+        wednesday int DEFAULT NULL,
+        thursday int DEFAULT NULL,
+        friday int DEFAULT NULL,
+        saturday int DEFAULT NULL,
+        sunday int DEFAULT NULL)";
+            
+        $insert = "INSERT INTO t_words_".str_replace(".", "_", $session->domain)." (
+        monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('0', '0', '0', '0', '0', '0', '0')";
+            
+        $resultQuery = mysql_query($query);
+        $resultInsert = mysql_query($insert);
+    }
+}
 
 $rows = array();
 while($row = mysql_fetch_assoc($queryDays)) $rows[] = $row;

@@ -9,7 +9,7 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
+ * Date: 2017-06
  * Revision: v0.9.67-beta
  *
  * Description: Code for login

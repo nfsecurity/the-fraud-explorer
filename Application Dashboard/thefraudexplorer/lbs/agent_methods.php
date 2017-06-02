@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Agent specific functions
  */ 
@@ -106,12 +106,12 @@ function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
     }
 }
 
-function alertDetails($location, $date, $wordTyped, $windowTitle, $searchResult, $phraseZoom, $regExpression, $result)
+function alertDetails($location, $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result)
 {
-    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value-lefta>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value-lefta>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value-lefta>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value-lefta>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase zoom (after, before)</div><div class=tooltip-value-lefta>'.$phraseZoom.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value-lefta>'.$regExpression.'</div></div>">';
+    echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value-lefta>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value-lefta>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value-lefta>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value-lefta>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value-lefta>'.$regExpression.'</div></div>">';
     
     if ($location == "alertData") echo '<span class="fa fa-info-circle fa-2x font-icon-gray">&nbsp;&nbsp;</span></a>';
-    else echo '<span class="fa fa-clock-o font-icon-color-gray">&nbsp;&nbsp;</span></a>';
+    else echo '<span class="fa fa-info-circle font-icon-color-gray">&nbsp;&nbsp;</span></a>';
 }
 
 ?>

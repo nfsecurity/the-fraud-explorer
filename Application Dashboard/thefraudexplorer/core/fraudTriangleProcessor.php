@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
@@ -51,6 +51,9 @@ $resultQueryAgentList = mysql_query($queryAgentList);
 
 /* Start the loop for each agent */
 
+$singleEndpoint = false;
+$endpointSelected = "all";
+
 echo "\n[INFO] Starting Fraud Triangle Analytics phrase matching processor ...\n";
 
 /* Start from Scratch */
@@ -64,6 +67,15 @@ if (isset($argv[1]))
         deleteAlertIndex();
         clearWords();
         repopulateSampler();
+    }
+    else if ($argv[1] == "fromEndpoint")
+    {
+        if (isset($argv[2]))
+        {
+            $singleEndpoint = true;
+            $endpointSelected = $argv[2];
+            echo "entramos";
+        }
     }
 }
 
@@ -86,30 +98,49 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     $arrayCounter = 0;
     $lastArrayElement = false;
     $arrayLenght = mysql_num_rows($resultQueryAgentList);
-    
-    while($row = mysql_fetch_array($resultQueryAgentList))
+       
+    if ($endpointSelected == "all" && $singleEndpoint == false)
     {
-        $agentID = $row['agent'];
+        while($row = mysql_fetch_array($resultQueryAgentList))
+        {
+            $agentID = $row['agent'];
+            $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
+
+            if ($typedWords['hits']['total'] == 0)
+            {   
+                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                $arrayCounter++;
+                continue;
+            }
+            else
+            {
+                $ruleset = getRuleset($agentID);
+            
+                echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
+                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+                $arrayCounter++;
+            }     
+        }
+    }
+    else
+    {
+        $agentID = $endpointSelected;
         $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
 
-        if ($typedWords['hits']['total'] == 0)
-        {   
-            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            
-            $arrayCounter++;
-            continue;
-        }
-        else
+        if (!$typedWords['hits']['total'] == 0)
         {
             $ruleset = getRuleset($agentID);
             
             echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
             
-            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            $lastArrayElement = true;
             
             startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
-            $arrayCounter++;
-        }     
+        }           
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
@@ -123,30 +154,50 @@ else
     $arrayCounter = 0;
     $lastArrayElement = false;
     $arrayLenght = mysql_num_rows($resultQueryAgentList);
-
-    while($row = mysql_fetch_array($resultQueryAgentList))
+    
+    if ($endpointSelected == "all" && $singleEndpoint == false)
     {
-        $agentID = $row['agent'];
+        while($row = mysql_fetch_array($resultQueryAgentList))
+        {
+            $agentID = $row['agent'];
+            $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
+
+            if ($typedWords['hits']['total'] == 0)
+            {   
+                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                $arrayCounter++;   
+                continue;
+            }
+            else 
+            {
+                $ruleset = getRuleset($agentID);
+            
+                echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
+                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);          
+                $arrayCounter++;
+            }
+        }
+    }
+    else
+    {
+        $agentID = $endpointSelected;
         $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
 
-        if ($typedWords['hits']['total'] == 0)
-        {   
-            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            
-            $arrayCounter++;   
-            continue;
-        }
-        else 
+        if (!$typedWords['hits']['total'] == 0)
         {
             $ruleset = getRuleset($agentID);
             
             echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
             
-            if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);          
-            $arrayCounter++;
-        }
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+        }     
+        
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);

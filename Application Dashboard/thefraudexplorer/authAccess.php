@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Code for download and view authorization
  */
@@ -29,54 +29,46 @@ include "lbs/global-vars.php";
 $file=filter($_GET['file']);
 $ext = substr($file, strrpos($file, '.')+1);
 
-if(isset($_GET['ctype']) $contentType=filter($_GET['ctype']); 
+if(isset($_GET['ctype'])) $contentType=filter($_GET['ctype']); 
 else $contentType="aplication/octet-stream"; 
 
-if(empty($_SESSION['connected']))
+/* Grant access to this type of file depending of the session status */
+
+if($ext=="txt")
 {
-    header ("Location: ".$serverURL);
-    exit;
+    header('Content-Type: text/'.$contentType);
+    flush();
+    readfile($_REQUEST['file']);
+    exit();
+}
+else if($ext=="html" || $ext=="htm")
+{
+    header('Content-Type: text/'.$contentType);
+    flush();
+    readfile($_REQUEST['file']);
+    exit();
+}
+else if($ext=="png")
+{
+    header('Content-Type: image/'.$contentType);
+    flush();
+    readfile($_REQUEST['file']);
+    exit();
 }
 else
 {
-    /* Grant access to this type of file depending of the session status */
-
-    if($ext=="txt")
+    if (file_exists($file))
     {
-        header('Content-Type: text/'.$contentType);
+        header("Expires: 0");
+        header("Content-Description: File Transfer");
+        header("Content-type: ".$contentType );
+        header("Content-Disposition: attachment; filename=$file");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Length: ".filesize($file));
+        ob_clean();
         flush();
-        readfile($_REQUEST['file']);
-        exit();
-    }
-    else if($ext=="html" || $ext=="htm")
-    {
-        header('Content-Type: text/'.$contentType);
-        flush();
-        readfile($_REQUEST['file']);
-        exit();
-    }
-    else if($ext=="png")
-    {
-        header('Content-Type: image/'.$contentType);
-        flush();
-        readfile($_REQUEST['file']);
-        exit();
-    }
-    else
-    {
-        if (file_exists($file))
-        {
-            header("Expires: 0");
-            header("Content-Description: File Transfer");
-            header("Content-type: ".$contentType );
-            header("Content-Disposition: attachment; filename=$file");
-            header("Content-Transfer-Encoding: binary");
-            header("Content-Length: ".filesize($file));
-            ob_clean();
-            flush();
-            readfile($file);
-            exit;
-        }
+        readfile($file);
+        exit;
     }
 }
 

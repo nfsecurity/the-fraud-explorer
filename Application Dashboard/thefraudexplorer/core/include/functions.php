@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-04
- * Revision: v1.0.0-beta
+ * Date: 2017-06
+ * Revision: v1.0.1-beta
  *
  * Description: Functions extension file
  */
@@ -354,7 +354,7 @@ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
                         [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
                     ],
                     'must_not' => [
-                            [ 'match' => [ 'falsePositive.raw' => '1'] ]
+                            [ 'match' => [ 'falsePositive' => '1'] ]
                     ]
                 ]
             ]
@@ -392,7 +392,7 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
     return $agentIdMatches;
 }
 
-/* Query agent data with APC caching */
+/* Populate SQL Database with Fraud Triangle Data */
 
 function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
 {
@@ -414,7 +414,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
             $totalOpportunity = $matchesOpportunity['count'];
             $totalRationalization = $matchesRationalization['count'];
 
-            $result = mysql_query("Update t_agents set totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' where agent='".$row_a['agent']."'");
+            $result = mysql_query("UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
         }
         while ($row_a = mysql_fetch_array($resultQuery));
     }
