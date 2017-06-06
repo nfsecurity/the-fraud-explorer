@@ -25,6 +25,7 @@ $now = DateTime::createFromFormat('U.u', microtime(true));
 $time = $now->format("Y-m-d\TH:i:s.u");
 $time = substr($time, 0, -3);
 $GLOBALS['currentTime'] = (string)$time."Z";
+$time_start = microtime(true); 
 
 /* Load parameters, methods, functions and procedures from external files */
 
@@ -96,6 +97,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     echo "[INFO] Searching for typedwords by agent ...\n";
 
     $arrayCounter = 0;
+    $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
     $arrayLenght = mysql_num_rows($resultQueryAgentList);
        
@@ -121,10 +123,15 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
                 if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
+                
                 $arrayCounter++;
+                $effectiveEndpointCounter++;
             }     
         }
+        
+        echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
+        
     }
     else
     {
@@ -152,6 +159,7 @@ else
     echo "[INFO] Checking events from now ...\n";
     
     $arrayCounter = 0;
+    $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
     $arrayLenght = mysql_num_rows($resultQueryAgentList);
     
@@ -177,10 +185,15 @@ else
             
                 if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);          
+                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
+                
                 $arrayCounter++;
+                $effectiveEndpointCounter++;
             }
         }
+        
+        echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
+        
     }
     else
     {
@@ -226,6 +239,10 @@ echo "[INFO] Sending this alert status to log file ...\n";
 logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
 include "/var/www/html/thefraudexplorer/lbs/close-db-connection.php";
 
+$time_end = microtime(true);
+$execution_time = ($time_end - $time_start)/60;
+
+echo "[INFO] Total execution time in minutes: ".round($execution_time, 2)."\n";
 echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
 
 ?>
