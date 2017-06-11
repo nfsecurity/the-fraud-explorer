@@ -78,6 +78,16 @@ if (isset($argv[1]))
             echo "entramos";
         }
     }
+    else if ($argv[1] == "checkRule")
+    {
+        if (isset($argv[2]))
+        {
+            $ruleToCheck = $argv[2];
+            checkRegexp($fraudTriangleTerms, $jsonFT, $ruleToCheck);
+            echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
+            exit;
+        }
+    }
 }
 
 if (indexExist($configFile['es_alerter_status_index'], $configFile))

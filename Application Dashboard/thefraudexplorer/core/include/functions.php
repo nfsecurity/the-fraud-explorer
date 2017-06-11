@@ -327,6 +327,42 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
     }
 }
 
+/* Check regular expressions */
+
+function checkRegexp($fraudTriangleTerms, $jsonFT, $ruleset)
+{
+    $errors = false;
+    $numberOfTerms = 0;
+    
+    if (!isset($jsonFT['dictionary'][$ruleset]))
+    {
+        echo "[ERROR] The specified rule doesn't exist, please check ... \n";
+        echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
+        exit;
+    }
+    
+    echo "[INFO] Start checking regular expressions on fraud triangle phrases ... \n";
+    
+    foreach ($fraudTriangleTerms as $term => $value)
+    {
+        foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
+        {
+            if (@preg_match_all($termPhrase, null) === false) 
+            {
+                $errors = true;
+                echo "[ERROR] Invalid regular expression in rule [".$ruleset."] term [".$term."] and phrase [".$field."]\n";
+            }
+            
+            $numberOfTerms++;
+        }
+    }
+    
+    echo "[INFO] Number of regular expressions checked [".$numberOfTerms."]\n";
+    
+    if ($errors == true) echo "[ERROR] There are one or more invalid regular expressions, please fix them ...\n";
+    else echo "[INFO] All regular expressions are OK under the rule checked ...\n";
+}
+
 /* Get ruleset from agent */
 
 function getRuleset($agentID)
