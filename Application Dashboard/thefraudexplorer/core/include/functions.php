@@ -199,6 +199,29 @@ function clearWords()
     $resultTotalQuery = mysql_query($queryTotalWords);
 }
 
+/*  Syncronize Rulesets */
+
+function syncRuleset()
+{   
+    $queryEndpoints = "SELECT agent FROM t_agents";    
+    $resultEndpoints = mysql_query($queryEndpoints);
+
+    while($row = mysql_fetch_array($resultEndpoints))
+    {
+        $endPart = explode("_", $row['agent']);
+        $endPoint = $endPart[0];    
+        
+        $queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat ASC) AS tbl WHERE agent='%s' LIMIT 1";
+        $rulesetQuery = mysql_query(sprintf($queryRule, $endPoint)); 
+        $rulesetArray = mysql_fetch_array($rulesetQuery);
+               
+        if ($rulesetArray[0] == NULL) $ruleset = "BASELINE";
+        else $ruleset = $rulesetArray[0];
+        
+        mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endPoint));
+    }
+}
+
 /*  Delete Alert Index */
 
 function deleteAlertIndex()

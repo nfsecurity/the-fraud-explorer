@@ -99,6 +99,10 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     $endDate = extractEndDateFromAlerter($configFile['es_alerter_status_index'], "AlertStatus");
     $GLOBALS['arrayPosition'] = 0;
     getArrayData($endDate, "endTime", 'lastAlertDate');
+    
+    echo "[INFO] Syncing new endpoints sessions with their existing rulesets ...\n";
+    
+    syncRuleset();
 
     echo "[INFO] Checking events from latest alert date: ".$GLOBALS['lastAlertDate'][0]." ...\n";
 
@@ -166,6 +170,11 @@ else
 {
     echo "[INFO] Index ".$configFile['es_alerter_status_index']." doesn't exist, continue ...\n";
     logToFile($configFile['log_file'], "[INFO] - Alerter index not found, continue with all data matching ...");
+    
+    echo "[INFO] Syncing new endpoints sessions with their existing rulesets ...\n";
+    
+    syncRuleset();
+    
     echo "[INFO] Checking events from now ...\n";
     
     $arrayCounter = 0;

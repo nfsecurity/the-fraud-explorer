@@ -17,8 +17,8 @@
 
 function encRijndael($text)
 {
-    $key = "1uBu8ycVugDIJz61";
-    $iv = "1uBu8ycVugDIJz61";
+    $key = "";
+    $iv = "";
 
     $block = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
     $padding = $block - (strlen($text) % $block);

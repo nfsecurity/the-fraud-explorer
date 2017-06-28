@@ -59,7 +59,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
         margin: 20px;
     }
 
-    .select-ruleset-styled
+    .select-ruleset-styled, .select-gender-styled
     {
         position: relative;
         border: 1px solid #ccc;
@@ -70,7 +70,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
         outline: 0 !important;
     }
 
-    .select-ruleset-styled:before
+    .select-ruleset-styled:before, .select-gender-styled:before
     {
         content: '';
         position: absolute;
@@ -85,7 +85,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
         pointer-events: none;
     }
 
-    .select-ruleset-styled select
+    .select-ruleset-styled select, .select-gender-styled select
     {
         padding: 5px 8px;
         width: 130%;
@@ -108,7 +108,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 /* SQL Queries */
 
 $queryName = "SELECT name FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
-$queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent;";
+$queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
 $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, gender, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
 
 ?>
@@ -138,7 +138,7 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 
         <br><br><p class="title">Agent gender</p><br>
 
-        <select class="select-ruleset-styled" name="gender" id="gender">
+        <select class="select-gender-styled" name="gender" id="gender">
             <option selected="selected">Choose the gender <?php $genderquery = mysql_query(sprintf($queryGender, $agent_dec)); $gender = mysql_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
             <option value="male">Male</option>
             <option value="female">Female</option>
