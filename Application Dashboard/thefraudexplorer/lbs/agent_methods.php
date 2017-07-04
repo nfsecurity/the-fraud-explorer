@@ -111,7 +111,7 @@ function alertDetails($location, $date, $wordTyped, $windowTitle, $searchResult,
     echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value-lefta>'.$windowTitle.'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value-lefta>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value-lefta>'.$wordTyped.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value-lefta>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value-lefta>'.$regExpression.'</div></div>">';
     
     if ($location == "alertData") echo '<span class="fa fa-info-circle fa-2x font-icon-gray">&nbsp;&nbsp;</span></a>';
-    else echo '<span class="fa fa-info-circle font-icon-color-gray">&nbsp;&nbsp;</span></a>';
+    else echo '<span class="fa fa-info-circle font-icon-color-gray awfont-padding-right"></span></a>';
 }
 
 ?>

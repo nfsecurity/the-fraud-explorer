@@ -65,6 +65,13 @@ $_SESSION['instance'] = "dashBoard";
 
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
         
+        <!-- JQuery Table -->
+
+        <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
+        <script type="text/javascript" src="js/widgets/widget-output.js"></script>
+        
         <!-- JQuery DotDotDot -->
         
         <script src="js/jquery.dotdotdot.js" type="text/javascript"></script>

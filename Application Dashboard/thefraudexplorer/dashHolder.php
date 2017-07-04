@@ -111,24 +111,27 @@ discoverOnline();
     <div class="container-upper-left">
         <h2>
             <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Fraud Triangle Endpoints (top 50)</p>
-            <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
+            <p class="container-window-icon">
+                <?php echo '&nbsp;<button type="button" class="download-csv-top50endpoints">Download as CSV</button>'; ?>&nbsp;
+                <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
+            </p>
         </h2>
         <div class="container-upper-left-sub table-class">
 
-            <table class="table">
+            <table id="top50endpoints" class="table tablesorter">
                 <thead class="table-head">
                     <tr class="tr">
                         <th class="th" style="padding-left: 10px;">
-                            <span class="fa fa-desktop font-icon-color-gray">&nbsp;&nbsp;</span>ENDPOINT
+                            ENDPOINT
                         </th>
                         <th class="th">
-                            <center><span class="fa fa-exclamation-triangle font-icon-color-gray">&nbsp;&nbsp;</span>TRIANGLE</center>
+                            <center>TRIANGLE</center>
                         </th>
                         <th class="th">
-                            <center><span class="fa fa-list-alt font-icon-color-gray">&nbsp;&nbsp;</span>RULESET</center>
+                            <center>RULESET</center>
                         </th>
                         <th class="th">
-                            <center><span class="fa fa-bar-chart font-icon-color-gray">&nbsp;&nbsp;</span>SCORE</center>
+                            <center>SCORE</center>
                         </th>
                     </tr>
                 </thead>
@@ -170,7 +173,7 @@ discoverOnline();
                             
                             echo '<tr class="tr">';
                             echo '<td class="td">';
-                            echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>';
+                            echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
                             
                             if ($endpointsFraud["name"] == NULL || $endpointsFraud['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
                             else 
@@ -185,13 +188,13 @@ discoverOnline();
                             $triangleScore = round($endpointsFraud['score'], 2);
 
                             echo '<td class="td">';
-                            echo '<center><span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>'.str_pad($triangleSum, 4, '0', STR_PAD_LEFT).'</center>';
+                            echo '<center><span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.str_pad($triangleSum, 4, '0', STR_PAD_LEFT).'</center>';
                             echo '</td>';
                             echo '<td class="td">';
                             echo '<center>'.$endpointsFraud['ruleset'].'</center>';
                             echo '</td>';
                             echo '<td class="td">';
-                            echo '<center><span class="fa fa-line-chart font-icon-color-gray">&nbsp;&nbsp;</span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
+                            echo '<center><span class="fa fa-line-chart font-icon-color-gray awfont-padding-right"></span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
                             echo '</td>';
                         }
                         while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
@@ -284,27 +287,30 @@ discoverOnline();
 <div class="container-bottom-right">
     <h2>
         <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
-        <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
+        <p class="container-window-icon">
+            <?php echo '&nbsp;<button type="button" class="download-csv-top50alerts">Download as CSV</button>'; ?>&nbsp;
+            <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
+        </p>
     </h2>
     <div class="container-bottom-right-sub table-class">
 
-        <table class="table">
+        <table id="top50alerts" class="table tablesorter">
             <thead class="thead">
                 <tr class="tr">
                     <th class="th">
-                        <span class="fa fa-calendar font-icon-color-gray">&nbsp;&nbsp;</span>DATE
+                        DATE
                     </th>
                     <th class="th">
-                        <span class="fa fa-exclamation-triangle font-icon-color-gray">&nbsp;&nbsp;</span>ALERT TYPE
+                        ALERT TYPE
                     </th>
                     <th class="th">
-                        <span class="fa fa-desktop font-icon-color-gray">&nbsp;&nbsp;</span>ENDPOINT
+                        ENDPOINT
                     </th>
                     <th class="th">
-                        <span class="fa fa-font font-icon-color-gray">&nbsp;&nbsp;</span>PHRASE TYPED
+                        PHRASE TYPED
                     </th>
                     <th class="th">
-                        <span class="fa fa-list-alt font-icon-color-gray">&nbsp;&nbsp;</span>APPLICATION
+                        APPLICATION
                     </th>
                 </tr>
             </thead>
@@ -351,7 +357,7 @@ discoverOnline();
                     echo '</td>';
                     
                     echo '<td class="td">';
-                    echo '<span class="fa fa-tags font-icon-color-gray">&nbsp;&nbsp;</span>'.$result['_source']['alertType'];
+                    echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
                     echo '</td>';
                     echo '<td class="td">';
 
@@ -370,7 +376,7 @@ discoverOnline();
                     if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
                     else $dataRepresentation = "0";
                     
-                    echo '<span class="fa fa-laptop font-icon-color-gray">&nbsp;&nbsp;</span>';
+                    echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
                                     
                     if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
                     else 
@@ -381,10 +387,10 @@ discoverOnline();
                     
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray">&nbsp;&nbsp;</span>'.$wordTyped;
+                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.$wordTyped;
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-list-alt font-icon-color-gray">&nbsp;&nbsp;</span>'.$windowTitle;
+                    echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.$windowTitle;
                     echo '</td>';
                     echo '</tr>';
                 }
@@ -598,6 +604,92 @@ $(document).ready(function() {
         watch : 'window' 
     });
 });
+</script>
+
+<!-- Table sorting -->
+
+<script>
+    $(document).ready(function(){
+        
+        $('.download-csv-top50alerts').click(function(){
+            $("#top50alerts").trigger('outputTable');
+        });
+        
+        $('.download-csv-top50endpoints').click(function(){
+            $("#top50endpoints").trigger('outputTable');
+        });
+        
+        $("#top50alerts").tablesorter({
+            widgets: [ 'filter', 'output' ],
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false,
+                output_separator: ',',
+                output_dataAttrib: 'data-name',
+                output_headerRows: false,
+                output_delivery: 'download',
+                output_saveRows: 'all',
+                output_replaceQuote: '\u201c;',
+                output_includeHTML: false,
+                output_trimSpaces: true,
+                output_wrapQuotes: false,
+                output_saveFileName: 'top50Alerts.csv',
+                output_callback: function (data) {
+                    return true;
+                },
+                output_callbackJSON: function ($cell, txt, cellIndex) {
+                    return txt + '(' + (cellIndex + col) + ')';
+                }
+            },
+            headers:
+            {
+                3:
+                {
+                    sorter: false
+                },
+                4:
+                {
+                    sorter: false
+                }
+            },
+            sortList: [[0,1]] 
+        });
+        
+        $("#top50endpoints").tablesorter({
+            widgets: [ 'filter', 'output' ],
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false,
+                output_separator: ',',
+                output_dataAttrib: 'data-name',
+                output_headerRows: false,
+                output_delivery: 'download',
+                output_saveRows: 'all',
+                output_replaceQuote: '\u201c;',
+                output_includeHTML: false,
+                output_trimSpaces: true,
+                output_wrapQuotes: false,
+                output_saveFileName: 'top50Endpoints.csv',
+                output_callback: function (data) {
+                    return true;
+                },
+                output_callbackJSON: function ($cell, txt, cellIndex) {
+                    return txt + '(' + (cellIndex + col) + ')';
+                }
+            },
+            headers:
+            {
+                0:
+                {
+                    sorter: false
+                }
+            },
+            sortList: [[3,1]] 
+        });
+    
+    }); 
 </script>
 
 <!-- Tooltipster -->
