@@ -39,16 +39,6 @@ include "lbs/open-db-connection.php";
         padding-top: 10px;
     }
 
-    .input-value-text-config
-    {
-        width:100%; 
-        height: 30px; 
-        padding: 5px; 
-        border: solid 1px #c9c9c9; 
-        outline: none;
-        font-family: 'FFont', sans-serif; font-size:12px;
-    }
-
     .window-footer-config
     {
         padding: 0px 0px 0px 0px;

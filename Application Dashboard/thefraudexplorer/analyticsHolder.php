@@ -227,6 +227,10 @@ discoverOnline();
             echo '<div class="y-axis-line"></div>';
             echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$countPressureTotal.'</div>';
             echo '<div class="x-axis-line-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$countRationalizationTotal.'</div>';
+            
+            /* Data Table */
+            
+            echo '<div class="data-table-icon"><br><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Access graphic data</a></div>';
                     
             ?>
             
@@ -468,3 +472,17 @@ discoverOnline();
         });
     });
 </script>
+
+<!-- Modal for Ruleset -->
+
+<div class="modal fade-scale" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
