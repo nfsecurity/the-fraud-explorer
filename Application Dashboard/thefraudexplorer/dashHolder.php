@@ -251,7 +251,7 @@ discoverOnline();
             <div class="container-bottom-left-sub-one">
                 <div class="container-bottom-left-sub-one-sub">
                     <p class="container-bottom-left-fraud-score"><?php echo round($fraudScore,1); ?></p>
-                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Fraud score
+                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Behavioral score
             </div>
             <canvas id="bottom-left" style="z-index:1;"></canvas>
         </div>
@@ -288,6 +288,7 @@ discoverOnline();
     <h2>
         <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
         <p class="container-window-icon">
+            <?php echo '<a href="alertData?agent='.base64_encode(base64_encode("all")).'" class="button-view-all-alerts">&nbsp;&nbsp;View all alerts&nbsp;&nbsp;</a>'; ?>
             <?php echo '&nbsp;<button type="button" class="download-csv-top50alerts">Download as CSV</button>'; ?>&nbsp;
             <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
         </p>
@@ -325,13 +326,13 @@ discoverOnline();
                 
                 if ($session->domain != "all") 
                 {
-                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled");
-                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled");
+                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled", "dashboard");
+                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled", "dashboard");
                 }
-                else 
+                else
                 {
-                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled");
-                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled");
+                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled", "dashboard");
+                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled", "dashboard");
                 }
                 
                 $alertData = json_decode(json_encode($alertMatches), true);
@@ -360,8 +361,7 @@ discoverOnline();
                     echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
                     echo '</td>';
                     echo '<td class="td">';
-
-                    
+                 
                     $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
                     $userDomain = mysql_fetch_assoc($queryUserDomain);

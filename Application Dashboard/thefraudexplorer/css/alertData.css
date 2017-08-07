@@ -175,7 +175,7 @@ th
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; 
+    font-family: 'FFont', sans-serif; font-size: 12px; 
     color: #474747;
     text-align: center;
     vertical-align: middle;
@@ -187,7 +187,7 @@ th
 .timestampth
 {
     overflow: hidden;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     color: #474747;
     min-width: 160px;
     width: 160px;
@@ -200,7 +200,7 @@ th
     width: 150px; 
     min-width: 150px;
     overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #474747;
     padding: 0px 0px 0px 20px;
     display: table-cell;
@@ -211,7 +211,7 @@ th
 .windowtitleth
 { 
     overflow: hidden; 
-    font-family: 'FFont-Bold', sans-serif; font-size:12px; 
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #474747;
     max-width: 300px;
     display: table-cell;
@@ -223,7 +223,7 @@ th
 .phrasedictionaryth
 {
     overflow: hidden;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     color: #474747;
     min-width: 240px;
     width: 240px;
@@ -236,7 +236,7 @@ th
 .phrasetypedth
 {
     overflow: hidden;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     color: #474747;
     min-width: 240px;
     width: 240px;
@@ -250,7 +250,7 @@ th
 {
     overflow: hidden;
     display: table-cell;
-    font-family: 'FFont-Bold', sans-serif; font-size:12px;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     white-space: nowrap;
     color: #474747;
     text-align: center;
@@ -264,7 +264,7 @@ th
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     text-align: center;
     vertical-align: middle;
     width: 40px;
@@ -278,7 +278,7 @@ th
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     border-right:1px solid #F8F8F8;
     text-align: center;
     vertical-align: middle;
@@ -295,7 +295,7 @@ th
     white-space: nowrap;
     display: table-cell; 
     white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
     text-align: left;
     vertical-align: middle;
     padding: 0px 0px 0px 20px;
@@ -308,7 +308,7 @@ th
     display: table-cell; 
     white-space: nowrap; 
     text-overflow: ellipsis;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
     text-align: left;
     vertical-align: middle;
     max-width: 300px;
@@ -322,7 +322,7 @@ th
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     text-align: left;
     vertical-align: middle;
     max-width: 240px;
@@ -339,7 +339,7 @@ th
     display: table-cell;
     border-right: 1px solid #f7f7f7;
     white-space: nowrap;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     text-align: left;
     vertical-align: middle;
     min-width: 240px;
@@ -354,7 +354,200 @@ th
 {
     overflow: hidden;
     display: table-cell;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    white-space: nowrap;
+    background:#f7f7f7;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
+}
+
+.detailsth-all
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size: 12px; 
+    color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 8px;
+    width: 40px;
+    min-width: 40px;
+}
+
+.timestampth-all
+{
+    overflow: hidden;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+    color: #474747;
+    min-width: 160px;
+    width: 160px;
+    display: table-cell;
+    white-space: nowrap;
+}
+
+.alerttypeth-all
+{
+    width: 150px; 
+    min-width: 150px;
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
+    color: #474747;
+    padding: 0px 0px 0px 20px;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.endpointth-all
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
+    color: #474747;
+    width: 240px;
+    min-width: 240px;
+    display: table-cell;
+    overflow: hidden;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
+}
+
+.windowtitleth-all
+{ 
+    overflow: hidden; 
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
+    color: #474747;
+    max-width: 300px;
+    display: table-cell;
+    overflow: hidden;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
+}
+
+.phrasetypedth-all
+{
+    overflow: hidden;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+    color: #474747;
+    min-width: 240px;
+    width: 240px;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
+}
+
+.falseth-all
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+    white-space: nowrap;
+    color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    min-width: 100px;
+}
+
+.detailstd-all
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    text-align: center;
+    vertical-align: middle;
+    width: 40px;
+    min-width: 40px;
+    padding-left: 11px;
+    background: #f2f2f2;
+}
+
+.timestamptd-all
+{
+    overflow: hidden;
+    display: table-cell;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    border-right:1px solid #F8F8F8;
+    text-align: center;
+    vertical-align: middle;
+    width: 160px;
+    min-width: 160px;
+}
+
+.alerttypetd-all
+{ 
+    width: 150px;
+    min-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: table-cell; 
+    white-space: nowrap; 
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
+    text-align: left;
+    vertical-align: middle;
+    padding: 0px 0px 0px 20px;
+    background:#f2f2f2;
+}
+
+.endpointtd-all
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
+    text-align: left;
+    vertical-align: middle;
+    width: 240px;
+    min-width: 240px;
+    border-right:0px solid #F8F8F8;
+    border-left:1px solid #F8F8F8;
+    padding: 0px 20px 0px 20px;
+}
+
+.windowtitletd-all
+{ 
+    overflow: hidden; 
+    display: table-cell; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
+    text-align: left;
+    vertical-align: middle;
+    max-width: 300px;
+    border-right:0px solid #F8F8F8;
+    border-left:1px solid #F8F8F8;
+    padding: 0px 20px 0px 20px;
+}
+
+.phrasetypedtd-all
+{
+    overflow: hidden;
+    display: table-cell;
+    border-right: 1px solid #f7f7f7;
+    white-space: nowrap;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    text-align: left;
+    vertical-align: middle;
+    min-width: 240px;
+    max-width: 240px;
+    width: 240px;
+    background:#f2f2f2;
+    text-overflow: ellipsis;
+    padding: 0px 20px 0px 20px;
+}
+
+.falsetd-all
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     white-space: nowrap;
     background:#f7f7f7;
     text-align: center;
@@ -386,7 +579,7 @@ li a
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-family: 'FFont', sans-serif; font-size:12px; color: black;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: black;
     outline: 0 !important;
 }
 
@@ -421,7 +614,7 @@ li a:hover:not(.active)
     width: 237px;
     padding: 15px 0 15px 20px;
     font-size: 16px;
-    font-family: 'FFont', sans-serif; font-size:12px; color: grey;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: grey;
     border: 0 none;
     height: 35px;
     margin-right: 0;
@@ -462,7 +655,7 @@ li a:hover:not(.active)
     height: 35px;
     cursor: default;
     margin: 4px;
-    font-family: 'FFont', sans-serif; font-size:9px; color: white;
+    font-family: 'FFont', sans-serif; font-size: 9px; color: white;
 }
 
 #footer
@@ -558,6 +751,14 @@ li a:hover:not(.active)
     display: table-cell;
     padding: 0px 25px 0px 0px;
     float: right;	
+}
+
+.pager-screen
+{
+    position: fixed;
+    bottom: 10px;
+    left: 8px;
+    width: calc(100% - 16px);
 }
 
 .select-styled 
@@ -707,4 +908,9 @@ li a:hover:not(.active)
 .alert-phrase-viewer
 {
     outline: 0 !important;
+}
+
+.awfont-padding-right
+{
+    padding-right: 5px;
 }

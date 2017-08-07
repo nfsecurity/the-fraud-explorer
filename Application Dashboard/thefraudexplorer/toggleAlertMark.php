@@ -30,6 +30,7 @@ $regid=filter($_GET['regid']);
 $agent=filter($_GET['agent']);
 $index=filter($_GET['index']);
 $type=filter($_GET['type']);
+$urlrefer=filter($_GET['urlrefer']);
 
 /* Query actual falsePositive value */
 
@@ -63,9 +64,10 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 $resultAlerts=curl_exec($ch);
 curl_close($ch);
 
-/* Return to home */
+/* Return to refering url */
 
-header ("location: alertData?agent=".$agent);
+if ($urlrefer == "allalerts") header ("location: alertData?agent=".base64_encode(base64_encode("all")));
+else header ("location: alertData?agent=".$agent);
 
 ?>
 

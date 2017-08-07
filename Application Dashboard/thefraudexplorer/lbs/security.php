@@ -40,6 +40,7 @@ function checkAlert($endPoint)
     include "lbs/close-db-connection.php";
     
     if(mysql_fetch_array($result) !== false) return true;
+    else if ($endPoint == "all") return true;
     return false;
 }
 

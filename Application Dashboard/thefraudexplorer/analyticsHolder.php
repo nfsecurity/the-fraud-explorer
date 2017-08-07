@@ -228,9 +228,11 @@ discoverOnline();
             echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$countPressureTotal.'</div>';
             echo '<div class="x-axis-line-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$countRationalizationTotal.'</div>';
             
-            /* Data Table */
+            /* Data Table & Alerts*/
             
-            echo '<div class="data-table-icon"><br><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Access graphic data</a></div>';
+            echo '<div class="data-table-icon"><br>';
+            echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="alertData?agent='.base64_encode(base64_encode("all")).'">Access all alerts</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Access graphic data</a></div>';
                     
             ?>
             

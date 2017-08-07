@@ -135,8 +135,11 @@ function countAllFraudTriangleMatches($fraudTerm, $index, $domain, $samplerStatu
 
 /* Search all Fraud Triangle Matches */
 
-function getAllFraudTriangleMatches($index, $domain, $samplerStatus)
+function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
 {
+    if ($context == "allalerts") $querySize = 10000;
+    else $querySize = 50;
+    
     if ($domain == "all")
     {
         if ($samplerStatus == "enabled")
@@ -145,7 +148,7 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus)
                 'index' => $index,
                 'type' => 'AlertEvent',
                 'body' => [
-                    'size' => 50,
+                    'size' => $querySize,
                     'sort' => [
                         [ '@timestamp' => [ 'order' => 'desc' ] ]
                     ],
@@ -168,7 +171,7 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus)
                 'index' => $index,
                 'type' => 'AlertEvent',
                 'body' => [
-                    'size' => 50,
+                    'size' => $querySize,
                     'sort' => [
                         [ '@timestamp' => [ 'order' => 'desc' ] ]
                     ],
@@ -195,7 +198,7 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus)
                 'index' => $index,
                 'type' => 'AlertEvent',
                 'body' => [
-                    'size' => 50,
+                    'size' => $querySize,
                     'sort' => [
                         [ '@timestamp' => [ 'order' => 'desc' ] ]
                     ],
@@ -219,7 +222,7 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus)
                 'index' => $index,
                 'type' => 'AlertEvent',
                 'body' => [
-                    'size' => 50,
+                    'size' => $querySize,
                     'sort' => [
                         [ '@timestamp' => [ 'order' => 'desc' ] ]
                     ],

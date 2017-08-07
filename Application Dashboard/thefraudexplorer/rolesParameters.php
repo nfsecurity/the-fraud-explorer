@@ -121,7 +121,7 @@ else if (!empty($_POST['delete']))
     }
 }
 
-header ("location: endPoints");
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 include "lbs/close-db-connection.php";
 
 ?>

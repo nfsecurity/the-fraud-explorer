@@ -87,7 +87,7 @@ if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfr
     }
 }
 
-header ("location: dashBoard");
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 include "lbs/close-db-connection.php";
 
 ?>

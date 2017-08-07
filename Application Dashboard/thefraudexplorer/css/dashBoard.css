@@ -783,3 +783,15 @@ li a:hover:not(.active)
     background-image: none;
     cursor: default;
 }
+
+.button-view-all-alerts 
+{
+    cursor: pointer;
+    border-radius: 5px;
+    height: 16px;
+    position: relative;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    outline: 0 !important;
+    font-size: 10px;
+}
