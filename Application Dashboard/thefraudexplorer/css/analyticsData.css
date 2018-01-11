@@ -161,6 +161,7 @@ li a:hover:not(.active)
     text-align: center;
     height: 35px;
     cursor: default;
+    border-radius: 0px;
 }
 
 #totals-menu
@@ -171,6 +172,7 @@ li a:hover:not(.active)
     float: left;
     padding: 0;
     text-align: center;
+    border-radius: 0px;
     height: 35px;
     cursor: default;
     margin: 4px;

@@ -346,7 +346,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.$wordTyped;
+        echo '<span class="fa fa-pencil font-icon-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */

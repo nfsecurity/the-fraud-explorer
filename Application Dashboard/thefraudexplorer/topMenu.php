@@ -130,7 +130,7 @@ include "lbs/close-db-connection.php";
     </li>
     <li style="float:right">
         <a class="active logout-button" href="logout">Logout</a>
-    </li class="li">
+    </li>
     <li class="search search-input">
         <input type="search" name="search_text" autocomplete="off" id="search-box" class="search_text" data-column="any" placeholder="Search ..."/>
         <input class="input-search" type="button" name="search_button" id="search_button">

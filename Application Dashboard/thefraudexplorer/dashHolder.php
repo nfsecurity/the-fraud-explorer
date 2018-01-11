@@ -387,10 +387,10 @@ discoverOnline();
                     
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.$wordTyped;
+                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
                     echo '</td>';
                     echo '<td class="td">';
-                    echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.$windowTitle;
+                    echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle,0,80));
                     echo '</td>';
                     echo '</tr>';
                 }
