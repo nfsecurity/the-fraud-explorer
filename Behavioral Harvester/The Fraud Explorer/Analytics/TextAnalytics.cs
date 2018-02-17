@@ -131,7 +131,7 @@ namespace TFE_core.Analytics
 
         public static void TextAnalyticsGlobalProperties()
         {
-            log4net.GlobalContext.Properties["IPAddress"] = Cryptography.EncRijndael(Network.GetAllLocalIPv4(NetworkInterfaceType.Ethernet).FirstOrDefault());
+            log4net.GlobalContext.Properties["IPAddress"] = Cryptography.EncRijndael(Network.GetLocalIPAddress());
             log4net.GlobalContext.Properties["AgentID"] = Cryptography.EncRijndael(Settings.AgentID);
             log4net.GlobalContext.Properties["UserDomain"] = Cryptography.EncRijndael(Settings.userDomain);
         }

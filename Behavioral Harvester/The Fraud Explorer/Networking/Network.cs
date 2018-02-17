@@ -157,23 +157,16 @@ namespace TFE_core.Networking
 
         #region Local Ip Address
 
-        public static string[] GetAllLocalIPv4(NetworkInterfaceType _type)
+	public static string GetLocalIPAddress()
         {
-            List<string> ipAddrList = new List<string>();
-            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+
+            foreach (var ip in host.AddressList)
             {
-                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
-                {
-                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                        {
-                            ipAddrList.Add(ip.Address.ToString());
-                        }
-                    }
-                }
+                if (ip.AddressFamily == AddressFamily.InterNetwork) return ip.ToString();
             }
-            return ipAddrList.ToArray();
+
+            return "1.1.1.1";
         }
 
         #endregion
