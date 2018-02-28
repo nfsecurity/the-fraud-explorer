@@ -72,25 +72,25 @@ include "lbs/close-db-connection.php";
 
 <link rel="stylesheet" type="text/css" href="css/topMenu.css">
 
-<ul class="ul">
+<ul class="ul" id="elm-topmenu">
     <li class="li">
         <p class="fixed-space">&nbsp;</p>
         &nbsp;&nbsp;<img src=images/nftop.svg class="main-logo">
     </li>
     <li class="li">
-        <a href="dashBoard">Dashboard</a>
+        <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
-        <a href="endPoints">Endpoints</a>
+        <a href="endPoints" id="elm-endpoints">Endpoints</a>
     </li>
     <li class="li">
-        <a href="analyticsData">Analytics</a>
+        <a href="analyticsData" id="elm-analytics">Analytics</a>
     </li>
     <li class="li">
-        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#">Ruleset</a>
+        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Ruleset</a>
     </li>
     <li class="li">
-        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#">Configuration</a>
+        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Configuration</a>
     </li>
 
     <?php
@@ -105,7 +105,7 @@ include "lbs/close-db-connection.php";
     ?>
 
     <li class="li">
-        <a href="eraseCommands">Queue reset</a>
+        <a href="eraseCommands" id="elm-queuereset">Queue reset</a>
     </li>
 
     <?php
@@ -113,32 +113,32 @@ include "lbs/close-db-connection.php";
     if ($session->domain == "all")
     {
         echo '<li class="li">';
-        echo '<a href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Global command</a>';
+        echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Global command</a>';
         echo '</li>';
     }
     else
     {
         echo '<li class="li">';
-        echo '<a href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Global command</a>';
+        echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Global command</a>';
         echo '</li>';
     }
     
     ?>
 
     <li class="li">
-        <a href="https://www.thefraudexplorer.com/#contact" target="_blank">Help</a>
+        <a href="#" onclick="startTour()">Take tour</a>
     </li>
     <li style="float:right">
         <a class="active logout-button" href="logout">Logout</a>
     </li>
-    <li class="search search-input">
+    <li class="search search-input" id="elm-search">
         <input type="search" name="search_text" autocomplete="off" id="search-box" class="search_text" data-column="any" placeholder="Search ..."/>
         <input class="input-search" type="button" name="search_button" id="search_button">
     </li>
     <li class="li counters">
         <button class="button-totals" id="totals-menu">Total<br><?php echo str_pad($count_all['total'], 4, "0", STR_PAD_LEFT); ?></button>
     </li>
-    <li class="li counters">
+    <li class="li counters" id="elm-counters">
         <button class="button-totals" id="totals-menu">Online<br><?php echo str_pad($count_online['total'], 4, "0", STR_PAD_LEFT); ?></button>
     </li>
     <li class="li counters">

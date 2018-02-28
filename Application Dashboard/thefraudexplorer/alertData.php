@@ -48,7 +48,9 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap-tour.min.js"></script>
 
         <!-- JS/CSS for Tooltip -->
 
@@ -151,3 +153,66 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
         </div>
     </body>
 </html>
+
+<!-- Take tour -->
+
+<script type="text/javascript">
+    
+var tour = new Tour({
+    smartPlacement: false,
+    backdrop: false,
+    steps: [{
+        element: "#elm-details-alert",
+        placement: 'right',
+        title: "Alert details",
+        content: "Hover mouse pointer over this icon, you will see the alert consolidation data. This icon show all the alert data you can see in the main table plus the regular expression matched by the phrase."
+    }, {
+        element: "#elm-date-alert",
+        placement: 'bottom',
+        title: "Alert date",
+        content: "This column show the date when the alert was triggered from the specified endpoint. This ocurr when the endpoint types some phrases that match with the fraud triangle phrase database."
+    }, {
+        element: "#elm-type-alert",
+        placement: 'bottom',
+        title: "Alert type",
+        content: "The sofware classify the alerts under the three vertices of the fraud triangle. Pressure, opportunity and rationalitazion are the three types of alerts you can see in this module."
+    }, {
+        element: "#elm-endpoint-alert",
+        placement: 'bottom',
+        title: "Endpoint",
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, alerts by pressure, oportunity, rationalization, score and data representation."
+    }, {
+        element: "#elm-windowtitle-alert",
+        placement: 'bottom',
+        title: "Window title",
+        content: "This software maps the endpoint writing with windows titles. For every alert, you will see the phrase matched and the window or application context that was used for type the phrase."
+    }, {
+        element: "#elm-phrasetyped-alert",
+        placement: 'bottom',
+        title: "Phrase typed",
+        content: "You can clic over the phrase typed and you will see a new window showing the entire text history. If you are the admin user, you also can review and correct the phrases fixing typos."
+    }, {
+        element: "#elm-mark-alert",
+        placement: 'left',
+        title: "Alert marking",
+        content: "The software provides the ability to mark an alert and classify it as a false positive. This is useful when you consider that the alert is not relevant and need to disable it from futher calculations."
+    }, {
+        element: "#elm-pager-alerts",
+        placement: 'top',
+        title: "Statistics and pager",
+        content: "You can see here some statistics like the total number of alerts and your classification. In the right side, you can use the pager option to navigate in the entire alerts using paging."
+    }, {
+        element: "#elm-search",
+        placement: 'bottom',
+        title: "Search",
+        content: "You can use this search box to find one or more alerts in the entire list. This is useful when you have a lot of alerts under the methodology and needs to focus in one of them."
+    }]
+});
+
+function startTour() {
+    tour.init();
+    tour.restart();
+    tour.start(true);
+}
+
+</script>

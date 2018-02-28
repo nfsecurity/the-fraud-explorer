@@ -45,7 +45,9 @@ $_SESSION['instance'] = "endPoints";
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap-tour.min.js"></script>
 
         <!-- JS/CSS for Tooltip -->
 
@@ -146,7 +148,7 @@ $_SESSION['instance'] = "endPoints";
         <script type="text/javascript" src="js/xmlTableHolder.js"></script>
 
         <div class="command-console-container">
-            <div class="command-console">
+            <div class="command-console" id="elm-commandconsole">
                 
                 <?php
                 
@@ -235,3 +237,101 @@ $_SESSION['instance'] = "endPoints";
         </div>
     </body>
 </html>
+
+<!-- Take tour -->
+
+<script type="text/javascript">
+    
+var tour = new Tour({
+    smartPlacement: false,
+    backdrop: false,
+    steps: [{
+        element: "#elm-details-dashboard",
+        placement: 'right',
+        title: "Endpoint details",
+        content: "You can hover the mouse pointer over this icon to see some endpoint data, like identification, corporate domain, operating system, IP address, sessions and connection status."
+    }, {
+        element: "#elm-endpoints-dashboard",
+        placement: 'bottom',
+        title: "Endpoints",
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, alerts by pressure, oportunity, rationalization, score and data representation."
+    }, {
+        element: "#elm-ruleset-dashboard",
+        placement: 'bottom',
+        title: "Ruleset",
+        content: "Each endpoint can has a category assigned. This category provides the ability to specify a portion of phrase dictionary to get matched using departments like human resources, purchases, etc. "
+    }, {
+        element: "#elm-version-dashboard",
+        placement: 'bottom',
+        title: "Endpoint version",
+        content: "You can see here the endpoint version of the software. This is useful when you are doing updates and you can see how many endpoints are going to work with the new software versions."
+    }, {
+        element: "#elm-status-dashboard",
+        placement: 'bottom',
+        title: "Status",
+        content: "You will see here the endpoint status, connected or disconnected. If the agent is disconnected means that the PC is offline or is working without an internet connection to send data."
+    }, {
+        element: "#elm-last-dashboard",
+        placement: 'bottom',
+        title: "Last connection",
+        content: "Is important to see when was the last connection on every endpoint in date format, because you can troubleshoot some problems in endpoint deployment and connectivity issues."
+    }, {
+        element: "#elm-triangle-dashboard",
+        placement: 'bottom',
+        title: "Fraud Triangle data",
+        content: "You can see here a consolidation of alerts for each endpoint in relation to the fraud triangle vertices, pressure, opportunity and rationalization. It's for rapid view of fraud triangle data."
+    }, {
+        element: "#elm-level-dashboard",
+        placement: 'bottom',
+        title: "Criticality level",
+        content: "This field show the level of criticity for each endpoint based in the three fraud triangle vertices, pressure, opportunity and rationalization. This level can be adjusted in configuration."
+    }, {
+        element: "#elm-score-dashboard",
+        placement: 'bottom',
+        title: "Score",
+        content: "The score is the average value from the amount of alerts in the fraud triangle vertices, pressure, opportunity and rationalization. You can clic the number to enter directly in alert data."
+    }, {
+        element: "#elm-command-dashboard",
+        placement: 'bottom',
+        title: "Send command",
+        content: "This is and advance feature of the software available only to experienced users. You can send some commands to an endpoint. Please read the documentation for more information about that."
+    }, {
+        element: "#elm-delete-dashboard",
+        placement: 'bottom',
+        title: "Endpoint deletion",
+        content: "You can delete endpoints if you don't need them anymore. This process is irreversible and delete all data from databases. It's recommended to do a backup first before endpoint deletions."
+    }, {
+        element: "#elm-set-dashboard",
+        placement: 'left',
+        title: "Endpoint setup",
+        content: "You can clic on this icon to adjust the endpoint alias, the gender and the ruleset. Remember that assign ruleset is similar to set the department of the endpoint in the company."
+    }, {
+        element: "#elm-commandconsole",
+        placement: 'top',
+        title: "Command console",
+        content: "This is and advanced function of the software. The advanced user can send commands to the endpoints to change individual or global configurations. See the documentation for more information."
+    }, {
+        element: "#tableHolderXML",
+        placement: 'top',
+        title: "Command response console",
+        content: "This is command consolidation console. When the advanced user sends a command to an endpoint, the console show the entire command. This is useful to see the last command sent to the endpoints."
+    }, {
+        element: "#elm-pager",
+        placement: 'top',
+        title: "Data statistics and pager",
+        content: "You can see some data statistics about the amount of data collected. Also, you can do paging between endpoints with the ability of download the entire endpoint list in a XLS format."
+    }, {
+        element: "#elm-search",
+        placement: 'bottom',
+        title: "Search",
+        content: "You can use this search box to find one or more endpoints in the entire list. This is useful when you have a lot of endpoints under the methodology and needs to focus in one of them."
+    }]
+});
+
+function startTour() {
+    tour.init();
+    tour.restart();
+    tour.start(true);
+}
+
+</script>

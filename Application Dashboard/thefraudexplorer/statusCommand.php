@@ -56,7 +56,7 @@ function clear_xml_updater($id)
 
 /* List of available and permitted commands */
 
-$cmds_srv = array("uninstall", "update", "module");
+$cmds_srv = array("uninstall", "update", "module", "setworkflow", "getworkflow", "clearworkflow", "mswordsearch");
 $seconds_to_complete=3600;
 
 if (!isset($_SESSION['seconds_waiting'])) $_SESSION['seconds_waiting']=0;

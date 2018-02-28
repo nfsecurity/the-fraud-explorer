@@ -50,7 +50,9 @@ include "lbs/elasticsearch.php";
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap-tour.min.js"></script>
 
         <!-- Charts CSS -->
 
@@ -94,3 +96,56 @@ include "lbs/elasticsearch.php";
         <div id="includedGenericFooterContent"></div>
     </body>
 </html>
+
+<!-- Take tour -->
+
+<script type="text/javascript">
+    
+var tour = new Tour({
+    smartPlacement: false,
+    backdrop: false,
+    steps: [{
+        element: "#scatterplot",
+        placement: 'top',
+        title: "Scatter graph",
+        content: "This is the module used for doing horizontal and vertical analytics. The circles represents alerts and are plotted using the pressure, opportunity and rationlaization axis with a score variable."
+    }, {
+        element: "#elm-analyticsaccess",
+        placement: 'bottom',
+        title: "Analytics data access",
+        content: "You can access all alert data and also see the data source that produces this scatter graph. Some times there are endpoints with the same number of alerts, please use that data for clarification."
+    }, {
+        element: "#elm-scope",
+        placement: 'right',
+        title: "Analytics scope",
+        content: "You can limit the data on graph based on departments in your company. All the software methodology is based on fraud triangle expressions associated with depertments with one global scope."
+    }, {
+        element: "#elm-legend",
+        placement: 'right',
+        title: "Graph leyend",
+        content: "Depends of the data, the alert can be represented in various forms. A red point indicates that the endpoint has a high score and a yellow point indicates that endpoint has a lower score."
+    }, {
+        element: "#elm-opportunity",
+        placement: 'right',
+        title: "Opportunity variable",
+        content: "The scatter graph has 4 variables, 2 of them represented in axes. Another variable is represented by the size of the point and the last variable is represented by score. Here is the opportunity variable values."
+    }, {
+        element: "#elm-phrasecounts",
+        placement: 'right',
+        title: "Phrase counts",
+        content: "This is the amount of phrases matched by the phrase library database. This represents the total phrases in pressure, opportunity and rationalization that the company has."
+    }, {
+        element: "#elm-dictionarysize",
+        placement: 'right',
+        title: "Dictionary size",
+        content: "This data represents the size of the expression or phrase library size. Each phrase under pressure, opportunity and rationalization can has many expansions due to the use of regular expressions."
+    }]
+});
+
+function startTour() {
+    tour.init();
+    tour.restart();
+    tour.start(true);
+}
+
+</script>

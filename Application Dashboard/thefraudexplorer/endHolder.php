@@ -189,10 +189,24 @@ $dataSize = $resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0"; 
 
-/* Main Table */
+/* Main data */
 
 echo '<table id="tblData" class="tablesorter">';
-echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg"></span></th><th class="totalwordsth"></th><th class="agentth">USERS UNDER ANALYTICS</th><th class="compth">RULE SET</th><th class="verth">VER</th><th class="stateth">STT</th><th class="lastth">LAST</th><th class="countpth">P</th><th class="countoth">O</th><th class="countrth">R</th><th class="countcth">L</th><th class="scoreth">SCORE</th><th class="specialth">CMD</th><th class="specialth">DEL</th><th class="specialth">SET</th></tr></thead><tbody>';
+echo '<thead><tr>';
+echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
+echo '<th class="totalwordsth"></th>';
+echo '<th class="agentth" id="elm-endpoints-dashboard">USERS UNDER ANALYTICS</th>';
+echo '<th class="compth" id="elm-ruleset-dashboard">RULE SET</th>';
+echo '<th class="verth" id="elm-version-dashboard">VER</th>';
+echo '<th class="stateth" id="elm-status-dashboard">STT</th>';
+echo '<th class="lastth" id="elm-last-dashboard">LAST</th>';
+echo '<th class="countpth">P</th><th class="countoth" id="elm-triangle-dashboard">O</th><th class="countrth">R</th>';
+echo '<th class="countcth" id="elm-level-dashboard">L</th>';
+echo '<th class="scoreth" id="elm-score-dashboard">SCORE</th>';
+echo '<th class="specialth" id="elm-command-dashboard">CMD</th>';
+echo '<th class="specialth" id="elm-delete-dashboard">DEL</th>';
+echo '<th class="specialth" id="elm-set-dashboard">SET</th></tr>';
+echo '</thead><tbody>';
 
 if ($row_a = mysql_fetch_array($result_a))
 {
@@ -335,7 +349,7 @@ if ($row_a = mysql_fetch_array($result_a))
 <div id="pager" class="pager">
     <div class="pager-layout">
         <div class="pager-inside">
-            <div class="pager-inside-agent">
+            <div class="pager-inside-agent" id="elm-pager">
 
                 <?php
                 

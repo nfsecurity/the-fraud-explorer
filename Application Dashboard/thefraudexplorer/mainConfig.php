@@ -214,7 +214,7 @@ include "lbs/open-db-connection.php";
 
         <div class="master-container">
             <div class="key-container">
-                <p class="title-config">Specify/change the key for agents connection</p><br>
+                <p class="title-config">Specify the key for endpoints connection</p><br>
                 <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key here <?php $keyQuery = mysql_query("SELECT password FROM t_crypt"); $keyPass = mysql_fetch_array($keyQuery); echo '(current value:'.$keyPass[0].')'; ?>">
             </div>
             <div class="sample-calculation-container">

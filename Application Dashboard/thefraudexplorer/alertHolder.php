@@ -250,25 +250,25 @@ else
     echo '<table id="allalerts" class="tablesorter">';
     echo '<thead>';
     echo '<tr>';
-    echo '<th class="detailsth-all">';
+    echo '<th class="detailsth-all" id="elm-details-alert">';
     echo '<span class="fa fa-list fa-lg">&nbsp;&nbsp;</span>';
     echo '</th>';
-    echo '<th class="timestampth-all">';
+    echo '<th class="timestampth-all" id="elm-date-alert">';
     echo 'DATE';
     echo '</th>';
-    echo '<th class="alerttypeth-all">';
+    echo '<th class="alerttypeth-all" id="elm-type-alert">';
     echo 'ALERT TYPE';
     echo '</th>';
-    echo '<th class="endpointth-all">';
+    echo '<th class="endpointth-all" id="elm-endpoint-alert">';
     echo 'ENDPOINT';
     echo '</th>';
-    echo '<th class="windowtitleth-all">';
+    echo '<th class="windowtitleth-all" id="elm-windowtitle-alert">';
     echo 'APPLICATION CONTEXT';
     echo '</th>';
-    echo '<th class="phrasetypedth-all">';
+    echo '<th class="phrasetypedth-all" id="elm-phrasetyped-alert">';
     echo 'PHRASE TYPED';
     echo '</th>';
-    echo '<th class="falseth-all">';
+    echo '<th class="falseth-all" id="elm-mark-alert">';
     echo 'MARK';
     echo '</th>';
     echo '</tr>';
@@ -445,7 +445,7 @@ else
     /* Pager */
     
     echo '<div id="pagerAll" class="pager pager-screen">';
-    echo '<div class="pager-layout">';
+    echo '<div class="pager-layout" id="elm-pager-alerts">';
     echo '<div class="pager-inside">';
     echo '<div class="pager-inside-agent">';
     echo 'There are '.$alertCounter.' total alerts, '.$fraudTerms['pressure'].' from pressure, '.$fraudTerms['opportunity'].' from opportunity and '.$fraudTerms['rationalization'].' from rationalization';

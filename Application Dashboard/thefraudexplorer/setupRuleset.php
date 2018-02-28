@@ -26,6 +26,7 @@ if(!$session->logged_in)
 
 include "lbs/global-vars.php";
 include "lbs/open-db-connection.php";
+include "lbs/agent_methods.php";
 
 ?>
 
@@ -156,13 +157,38 @@ include "lbs/open-db-connection.php";
             <th class="table-th-ruleset"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>OPPRT</th>
             <th class="table-th-ruleset"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>RATNL</th>
             <th class="table-th-ruleset"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>TOTAL</th>
-            <th class="table-th-ruleset"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>AGENT</th>
+            <th class="table-th-ruleset"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>ENDPT</th>
         </thead>
         <tbody class="table-tbody-ruleset">
 
             <?php
 
-            $countQuery = "SELECT COUNT(*) FROM (SELECT agent, heartbeat, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS count WHERE ruleset='%s'";
+            /* SQL queries */
+
+            if ($session->domain == "all")
+            {
+                if (samplerStatus($session->domain) == "enabled")
+                {
+                    $countQuery = "SELECT COUNT(*) AS total FROM (SELECT agent, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents) AS agents GROUP BY agent) AS count WHERE ruleset='%s'";
+                }
+                else
+                {
+                    $countQuery = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset FROM t_agents) AS agents GROUP BY agent) AS count WHERE domain NOT LIKE 'thefraudexplorer.com' AND ruleset='%s'";
+                }
+            }
+            else
+            {
+                if (samplerStatus($session->domain) == "enabled")
+                {
+                    $countQuery = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset FROM t_agents) AS agents GROUP BY agent) AS count WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND ruleset='%s'";
+                }
+                else
+                {
+                    $countQuery = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset FROM t_agents) AS agents GROUP BY agent) AS count WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com' AND ruleset='%s'";
+                }
+            }
+            
+            //$countQuery = "SELECT COUNT(*) FROM (SELECT agent, heartbeat, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS count WHERE ruleset='%s'";
 
             $fraudTriangleTerms = array('0'=>'pressure','1'=>'opportunity','2'=>'rationalization');
             $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);

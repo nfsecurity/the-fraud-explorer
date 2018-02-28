@@ -52,7 +52,7 @@ discoverOnline();
 
             <!-- Graph scope -->
 
-            <form name="scope" method="post">
+            <form name="scope" method="post" id="elm-scope">
                 <select class="select-scope-styled" name="ruleset" id="ruleset">
                     <option selected="selected"> <?php echo $_SESSION['rulesetScope']; ?></option>
 
@@ -129,7 +129,7 @@ discoverOnline();
             ?>
 
             <span style="line-height: 0.3"><br></span>
-            <table class="table-leyend">
+            <table class="table-leyend" id="elm-legend">
                 <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Score legend</th>
                 <tr>
                     <td class="table-leyend-point"><span class="point-red"></span><br><?php echo $scoreResult['score_ts_critic_from'].">"; ?></td>
@@ -141,7 +141,7 @@ discoverOnline();
                 </tr>
             </table>
             <span style="line-height: 0.1"><br></span>
-            <table class="table-leyend">
+            <table class="table-leyend" id="elm-opportunity">
                 <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Opportunity</th>
                 <tr>
                     <td class="table-leyend-point"><span class="point-opportunity-low"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_low_to']; ?></td>
@@ -174,7 +174,7 @@ discoverOnline();
             $countOpportunityTotal = $matchesOpportunityCount['count'];
             $countPressureTotal = $matchesPressureCount['count'];
 
-            echo '<table class="table-insights">';
+            echo '<table class="table-insights" id="elm-phrasecounts">';
             echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Phrase counts</th>';
             echo '<tr>';
             echo '<td class="table-insights-triangle">Pressure</td>';
@@ -206,7 +206,7 @@ discoverOnline();
                 }
             }
 
-            echo '<table class="table-dictionary">';
+            echo '<table class="table-dictionary" id="elm-dictionarysize">';
             echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Dictionary DB</th>';
             echo ' <tr>';
             echo '<td class="table-dictionary-triangle">Pressure</td>';
@@ -230,7 +230,7 @@ discoverOnline();
             
             /* Data Table & Alerts*/
             
-            echo '<div class="data-table-icon"><br>';
+            echo '<div class="data-table-icon" id="elm-analyticsaccess"><br>';
             echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="alertData?agent='.base64_encode(base64_encode("all")).'">Access all alerts</a>&nbsp;&nbsp;&nbsp;';
             echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Access graphic data</a></div>';
                     

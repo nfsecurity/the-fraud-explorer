@@ -45,7 +45,9 @@ $_SESSION['instance'] = "dashBoard";
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
+        <script src="js/bootstrap-tour.min.js"></script>
         
         <!-- JS/CSS for Tooltip -->
 
@@ -144,4 +146,93 @@ $_SESSION['instance'] = "dashBoard";
     </div>
 
     </body>
+
 </html>
+
+<!-- Take tour -->
+
+<script type="text/javascript">
+    
+var tour = new Tour({
+    smartPlacement: false,
+    backdrop: false,
+    steps: [{
+        element: "#elm-topmenu",
+        placement: 'bottom',
+        title: "Main menu",
+        content: "This is the top menu you can use for navigate the entire solution."
+    }, {
+        element: "#elm-dashboard",
+        placement: 'bottom',
+        title: "Dashboard",
+        content: "This is the main dashboard, here you can see all relevant data, including alerts, top endpoints, metrics and data volume graphs. You can use the dashboard for executive analysis of fraud triangle."
+    }, {
+        element: "#elm-endpoints",
+        placement: 'bottom',
+        title: "Endpoint administration",
+        content: "This is the module for endpoint administration, you can use it for search, set department, view the amount of data collected, send commands to endpoints and view some statistics and scores."
+    }, {
+        element: "#elm-analytics",
+        placement: 'bottom',
+        title: "Analytics",
+        content: "You can do horizontal, vertical and diagonal analytics with the main graph and source data. All alerts are placed in a scatter plot graph that represents pressure, opportunity and rationalization."
+    }, {
+        element: "#elm-ruleset",
+        placement: 'bottom',
+        title: "Ruleset / Phrase library",
+        content: "This software provides a base phrase library of pressure, opportunity and rationalization expressions. You can view and edit that library here and map them to departments in your company."
+    }, {
+        element: "#elm-configuration",
+        placement: 'bottom',
+        title: "Main configuration",
+        content: "In the main configuration you can specify a password for endpoints connection, enable or disable sample data, set the admin password and stablish the fraud score criticity for fraud alerts."
+    }, {
+        element: "#elm-queuereset",
+        placement: 'bottom',
+        title: "Queue reset",
+        content: "This link is used for advanced users that sends personalized and custom commands to endpoints. You can use this link to refresh or delete the command queue and be prepared for the next command."
+    }, {
+        element: "#elm-globalcommand",
+        placement: 'bottom',
+        title: "Global commands",
+        content: "This software can send custom commands to endpoints for update, deletion and setting some configuration options. Please read the documentation provided with The Fraud Explorer for more info."
+    }, {
+        element: "#elm-top50alerts",
+        placement: 'top',
+        title: "TOP 50 Alerts",
+        content: "You can see here a list of top alerts by fraud triangle analytics ordered by date. You can clic on View alerts button to expand them in a new page. Hold the mouse in info icon to see more data."
+    }, {
+        element: "#elm-termstatistics",
+        placement: 'top',
+        title: "Term statistics",
+        content: "This graph show an average of fraud triangle term alerts in count. You can use this graph to quick view the amount of alerts triggered by pressure, opportunity and rationalization in your company."
+    }, {
+        element: "#elm-top50endpoints",
+        placement: 'bottom',
+        title: "Top 50 Endpoints",
+        content: "You can see here a list of top endpoints ordered by number of alerts triggered in total, with score and ruleset (department). You can clic on Download as CSV to get this list in XLS format."
+    }, {
+        element: "#elm-wordstyped",
+        placement: 'bottom',
+        title: "Words Typed Graph",
+        content: "This graph show a global count of words typed by whole company (or department) where you have implemented The Fraud Explorer. You can see in this graph if the solution is collecting daily data."
+    }, {
+        element: "#elm-counters",
+        placement: 'bottom',
+        title: "Endpoint counter",
+        content: "You can see here the total number of endpoints, the number of offline and online in The Fraud Explorer. This data is useful to see the status in deployment and compare with company users."
+    }, {
+        element: "#footer",
+        placement: 'auto',
+        title: "Application footer and context",
+        content: "You can see some helper links and bug report, also, The Fraud Explorer is a multi company solution, you can see here the context of the company that can use with your actual login credentials."
+    }]
+});
+
+function startTour() {
+    tour.init();
+    tour.restart();
+    tour.start(true);
+}
+
+</script>

@@ -100,7 +100,7 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Agent setup</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Endpoint setup</h4>
 </div>
 
 <?php
@@ -136,7 +136,7 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
             ?>
         </select> 
 
-        <br><br><p class="title">Agent gender</p><br>
+        <br><br><p class="title">Endpoint gender</p><br>
 
         <select class="select-gender-styled" name="gender" id="gender">
             <option selected="selected">Choose the gender <?php $genderquery = mysql_query(sprintf($queryGender, $agent_dec)); $gender = mysql_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>

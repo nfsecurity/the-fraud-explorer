@@ -108,7 +108,7 @@ discoverOnline();
 ?>
 
 <div class="dashboard-container">
-    <div class="container-upper-left">
+    <div class="container-upper-left" id="elm-top50endpoints">
         <h2>
             <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Fraud Triangle Endpoints (top 50)</p>
             <p class="container-window-icon">
@@ -207,7 +207,7 @@ discoverOnline();
         </div>
     </div>
 
-    <div class="container-upper-right">
+    <div class="container-upper-right" id="elm-wordstyped">
         <h2>
             <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Words typed and stored by day</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
@@ -242,7 +242,7 @@ discoverOnline();
     
     ?>
 
-    <div class="container-bottom-left">
+    <div class="container-bottom-left" id="elm-termstatistics">
         <h2>
             <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
@@ -284,7 +284,7 @@ discoverOnline();
     </div>
 </div>
 
-<div class="container-bottom-right">
+<div class="container-bottom-right" id="elm-top50alerts">
     <h2>
         <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
         <p class="container-window-icon">
