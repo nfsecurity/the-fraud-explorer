@@ -202,6 +202,11 @@ var tour = new Tour({
         title: "TOP 50 Alerts",
         content: "You can see here a list of top alerts by fraud triangle analytics ordered by date. You can clic on View alerts button to expand them in a new page. Hold the mouse in info icon to see more data."
     }, {
+        element: "#elm-viewallalerts",
+        placement: 'top',
+        title: "View All alerts",
+        content: "This button open a new page in the current browser window and show all alerts in extended mode. You can review an alert, order the result in pagination, analyze and mark it as a false positive."
+    }, {
         element: "#elm-termstatistics",
         placement: 'top',
         title: "Term statistics",

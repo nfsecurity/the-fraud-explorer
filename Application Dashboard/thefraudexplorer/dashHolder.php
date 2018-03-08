@@ -288,7 +288,7 @@ discoverOnline();
     <h2>
         <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
         <p class="container-window-icon">
-            <?php echo '<a href="alertData?agent='.base64_encode(base64_encode("all")).'" class="button-view-all-alerts">&nbsp;&nbsp;View all alerts&nbsp;&nbsp;</a>'; ?>
+            <?php echo '<a href="alertData?agent='.base64_encode(base64_encode("all")).'" class="button-view-all-alerts" id="elm-viewallalerts">&nbsp;&nbsp;View all alerts&nbsp;&nbsp;</a>'; ?>
             <?php echo '&nbsp;<button type="button" class="download-csv-top50alerts">Download as CSV</button>'; ?>&nbsp;
             <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
         </p>
