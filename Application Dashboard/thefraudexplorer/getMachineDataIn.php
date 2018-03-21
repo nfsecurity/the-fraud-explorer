@@ -47,7 +47,9 @@ $content = decRijndael(filter($_GET['response']));
 $table='t_'.$macAgent;
 
 $result_a=mysql_query("SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");
-$row_a = mysql_fetch_array($result_a);
+
+if (is_bool($result_a) === true) exit; 
+else $row_a = mysql_fetch_array($result_a);
 
 /* If the agent exists or not */
 

@@ -57,5 +57,5 @@ $(function(){
 /* Code for html top menu include */
 
 $(function(){
-    $("#includedTopMenu").load("topMenu.php");
+    $("#includedTopMenu").load("topMenu.php?origin=endpoints");
 });

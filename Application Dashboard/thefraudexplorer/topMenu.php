@@ -90,10 +90,13 @@ include "lbs/close-db-connection.php";
         <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Ruleset</a>
     </li>
     <li class="li">
-        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Configuration</a>
+        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Settings</a>
     </li>
 
     <?php
+    
+    if (isset($_GET['origin'])) $resourceOrigin=filter($_GET['origin']);
+    else $resourceOrigin = "other";
     
     if ($session->domain == "all")
     {
@@ -101,26 +104,25 @@ include "lbs/close-db-connection.php";
         echo '<a href="rolesConfig" data-toggle="modal" data-target="#roles" href="#">Roles</a>';
         echo '</li>';
     }
-    
-    ?>
-
-    <li class="li">
-        <a href="eraseCommands" id="elm-queuereset">Queue reset</a>
-    </li>
-
-    <?php
-    
-    if ($session->domain == "all")
+        
+    if ($resourceOrigin == "endpoints")
     {
         echo '<li class="li">';
-        echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Global command</a>';
+        echo '<a href="eraseCommands" id="elm-queuereset">Queue reset</a>';
         echo '</li>';
-    }
-    else
-    {
-        echo '<li class="li">';
-        echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Global command</a>';
-        echo '</li>';
+
+        if ($session->domain == "all")
+        {
+            echo '<li class="li">';
+            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Global command</a>';
+            echo '</li>';
+        }
+        else
+        {
+            echo '<li class="li">';
+            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Global command</a>';
+            echo '</li>';
+        }
     }
     
     ?>
