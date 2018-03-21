@@ -213,9 +213,9 @@ include "lbs/open-db-connection.php";
     <form id="formConfig" name="formConfig" method="post" action="configParameters">
 
         <div class="master-container">
-            <div class="key-container">
+            <div class="key-container">              
                 <p class="title-config">Specify the key for endpoints connection</p><br>
-                <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key here <?php $keyQuery = mysql_query("SELECT password FROM t_crypt"); $keyPass = mysql_fetch_array($keyQuery); echo '(current value:'.$keyPass[0].')'; ?>">
+                <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key here <?php $keyQuery = mysql_query("SELECT password FROM t_crypt"); $keyPass = mysql_fetch_array($keyQuery); echo '(current value:'.$keyPass[0].')'; ?>" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
             <div class="sample-calculation-container">
                 <p class="title-config">Enable or disable sample data calculation</p><br>
@@ -248,10 +248,10 @@ include "lbs/open-db-connection.php";
             </div>
         </div>
 
-        <p class="title-config">Change 16Bit Encryption key & vector</p><br><input class="input-value-text-config" type="text" name="encryption" id="encryption" autocomplete="off" placeholder=":encryption key/vector here <?php $keyQuery = mysql_query("SELECT `key` FROM t_crypt"); $keyPass = mysql_fetch_array($keyQuery); echo '(current value:'.$keyPass[0].')'; ?>">
+        <p class="title-config">Change 16Bit Encryption key & vector</p><br><input class="input-value-text-config" type="text" name="encryption" id="encryption" autocomplete="off" placeholder=":encryption key/vector here <?php $keyQuery = mysql_query("SELECT `key` FROM t_crypt"); $keyPass = mysql_fetch_array($keyQuery); echo '(current value:'.$keyPass[0].')'; ?>" <?php if ($session->domain != "all") echo 'disabled'; ?>>
 
         <br><p class="title-config">Admin password modification</p><br>
-        <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" placeholder=":new password here">
+        <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
 
         <?php
         

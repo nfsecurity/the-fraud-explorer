@@ -187,15 +187,10 @@ var tour = new Tour({
         title: "Main configuration",
         content: "In the main configuration you can specify a password for endpoints connection, enable or disable sample data, set the admin password and stablish the fraud score criticity for fraud alerts."
     }, {
-        element: "#elm-queuereset",
+        element: "#elm-roles",
         placement: 'bottom',
-        title: "Queue reset",
-        content: "This link is used for advanced users that sends personalized and custom commands to endpoints. You can use this link to refresh or delete the command queue and be prepared for the next command."
-    }, {
-        element: "#elm-globalcommand",
-        placement: 'bottom',
-        title: "Global commands",
-        content: "This software can send custom commands to endpoints for update, deletion and setting some configuration options. Please read the documentation provided with The Fraud Explorer for more info."
+        title: "Roles and profiles",
+        content: "Here you can create, delete or modify users and assign a domain as a context for administration segregation. Only the admin user can get into this option, other user can't access this role setting."
     }, {
         element: "#elm-top50alerts",
         placement: 'top',

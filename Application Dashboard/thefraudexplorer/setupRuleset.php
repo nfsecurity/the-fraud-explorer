@@ -228,10 +228,18 @@ include "lbs/agent_methods.php";
         <br>
         <a href="authAccess?file=core/rules/fta_text_spanish.json" class="btn btn-default" style="outline: 0 !important;">Download JSON file</a>
         <form action="rulesetUpload.php" id="rulesetUpload" method="post" enctype="multipart/form-data">
-            <div class="fileUpload btn btn-default" style="outline: 0 !important;">
-                <span>Upload JSON file</span>
-                <input type="file" name="fileToUpload" id="fileToUpload" class="upload" />
-            </div>
+            
+            <?php 
+            
+            if ($session->domain == "all") echo '<div class="fileUpload btn btn-default" style="outline: 0 !important;">';
+            else echo '<div class="fileUpload btn btn-default disabled" style="outline: 0 !important;">';
+            
+            echo '<span>Upload JSON file</span>';
+            echo '<input type="file" name="fileToUpload" id="fileToUpload" class="upload" />';
+            echo '</div>';
+            
+            ?>
+            
         </form>
         <button type="button" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
     </div>

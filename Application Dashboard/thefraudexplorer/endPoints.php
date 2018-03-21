@@ -325,6 +325,16 @@ var tour = new Tour({
         placement: 'bottom',
         title: "Search",
         content: "You can use this search box to find one or more endpoints in the entire list. This is useful when you have a lot of endpoints under the methodology and needs to focus in one of them."
+    }, {
+        element: "#elm-queuereset",
+        placement: 'bottom',
+        title: "Queue reset",
+        content: "This link is used for advanced users that sends personalized and custom commands to endpoints. You can use this link to refresh or delete the command queue and be prepared for the next command."
+    }, {
+        element: "#elm-globalcommand",
+        placement: 'bottom',
+        title: "Global commands",
+        content: "This software can send custom commands to endpoints for update, deletion and setting some configuration options. Please read the documentation provided with The Fraud Explorer for more info."
     }]
 });
 

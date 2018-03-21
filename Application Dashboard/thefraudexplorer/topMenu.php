@@ -101,26 +101,26 @@ include "lbs/close-db-connection.php";
     if ($session->domain == "all")
     {
         echo '<li class="li">';
-        echo '<a href="rolesConfig" data-toggle="modal" data-target="#roles" href="#">Roles</a>';
+        echo '<a href="rolesConfig" data-toggle="modal" data-target="#roles" href="#" id="elm-roles">Roles</a>';
         echo '</li>';
     }
         
     if ($resourceOrigin == "endpoints")
     {
         echo '<li class="li">';
-        echo '<a href="eraseCommands" id="elm-queuereset">Queue reset</a>';
+        echo '<a href="eraseCommands" id="elm-queuereset">Reset</a>';
         echo '</li>';
 
         if ($session->domain == "all")
         {
             echo '<li class="li">';
-            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Global command</a>';
+            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Command</a>';
             echo '</li>';
         }
         else
         {
             echo '<li class="li">';
-            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Global command</a>';
+            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Command</a>';
             echo '</li>';
         }
     }
