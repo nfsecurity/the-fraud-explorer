@@ -277,9 +277,11 @@ else
     
     foreach ($alertData['hits']['hits'] as $result)
     {
+        if (isset($result['_source']['tags'])) continue;
+        
         echo '<tr>';
         echo '<td class="detailstd-all">';
-                    
+                   
         $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
         $wordTyped = decRijndael($result['_source']['wordTyped']);
         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
