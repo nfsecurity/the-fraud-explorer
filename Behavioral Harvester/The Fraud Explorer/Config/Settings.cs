@@ -1,14 +1,14 @@
-﻿/*
+﻿/*Copyright (c) 2014-2019 The Fraud Explorer
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Internal configuration
  */
@@ -265,7 +265,7 @@ namespace TFE_core.Config
             if (type == "aesKey") return "1uBu8ycVugDIJz61";
             if (type == "aesIV") return "1uBu8ycVugDIJz61";
             if (type == "serverPassword") return "KGBz77";
-            if (type == "harvesterVersion") return "1.0.0";
+            if (type == "harvesterVersion") return "1.2.0";
             if (type == "agentPostfix") return "_agt";
             if (type == "textPort") return "5965";
             else return "";
