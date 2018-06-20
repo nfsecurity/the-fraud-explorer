@@ -4,11 +4,11 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
- * Revision: v1.0.1-beta
+ * Revision: v1.2.0
  *
  * Description: Code for paint dashboard
  */
@@ -207,9 +207,9 @@ discoverOnline();
         </div>
     </div>
 
-    <div class="container-upper-right" id="elm-wordstyped">
+    <div class="container-upper-right" id="elm-generalstatistics">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Words typed and stored by day</p>
+            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Enpoints general statistics</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
         </h2><br>
         <div class="container-upper-right-sub">
@@ -252,196 +252,201 @@ discoverOnline();
                 <div class="container-bottom-left-sub-one-sub">
                     <p class="container-bottom-left-fraud-score"><?php echo round($fraudScore,1); ?></p>
                     </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Behavioral score
+                </div>
+                <canvas id="bottom-left" style="z-index:1;"></canvas>
             </div>
-            <canvas id="bottom-left" style="z-index:1;"></canvas>
-        </div>
-        <div class="container-bottom-left-sub-two">
-            <div class="container-bottom-left-sub-two-sub">
-                <div class="container-bottom-left-sub-two-sub-one">
-                    <div class="container-bottom-left-sub-two-sub-one-pressure"></div>
-                    <div class="block-with-text ellipsis">
-                        <p class="title-text">[Pressure]</p><p class="content-vertex-text"> personal (addiction, discipline, gambling), corporate (compensation, fear to lose the job) or external (market, ego, image, reputation).</p>
+            <div class="container-bottom-left-sub-two">
+                <div class="container-bottom-left-sub-two-sub">
+                    <div class="container-bottom-left-sub-two-sub-one">
+                        <div class="container-bottom-left-sub-two-sub-one-pressure"></div>
+                        <div class="block-with-text ellipsis">
+                            <p class="title-text">[Pressure]</p><p class="content-vertex-text"> personal (addiction, discipline, gambling), corporate (compensation, fear to lose the job) or external (market, ego, image, reputation).</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-bottom-left-sub-two-sub">
-                <div class="container-bottom-left-sub-two-sub-one">
-                    <div class="container-bottom-left-sub-two-sub-one-opportunity"></div>
-                    <div class="block-with-text ellipsis">
-                        <p class="title-text">[Opportunity]</p><p class="content-vertex-text"> araises when the fraudster sees a way to use their position of trust to solve a problem, knowing they are unlikely to be caught.</p>
+                <div class="container-bottom-left-sub-two-sub">
+                    <div class="container-bottom-left-sub-two-sub-one">
+                        <div class="container-bottom-left-sub-two-sub-one-opportunity"></div>
+                        <div class="block-with-text ellipsis">
+                            <p class="title-text">[Opportunity]</p><p class="content-vertex-text"> araises when the fraudster sees a way to use their position of trust to solve a problem, knowing they are unlikely to be caught.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-bottom-left-sub-two-sub">
-                <div class="container-bottom-left-sub-two-sub-one">
-                    <div class="container-bottom-left-sub-two-sub-one-rational"></div>
-                    <div class="block-with-text ellipsis">
-                        <p class="title-text">[Rationalization]</p><p class="content-vertex-text"> the final component needed to complete the fraud triangle. It's the ability to persuade yourself that something is really ok.</p>
+                <div class="container-bottom-left-sub-two-sub">
+                    <div class="container-bottom-left-sub-two-sub-one">
+                        <div class="container-bottom-left-sub-two-sub-one-rational"></div>
+                        <div class="block-with-text ellipsis">
+                            <p class="title-text">[Rationalization]</p><p class="content-vertex-text"> the final component needed to complete the fraud triangle. It's the ability to persuade yourself that something is really ok.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container-bottom-right" id="elm-top50alerts">
-    <h2>
-        <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
-        <p class="container-window-icon">
-            <?php echo '<a href="alertData?agent='.base64_encode(base64_encode("all")).'" class="button-view-all-alerts" id="elm-viewallalerts">&nbsp;&nbsp;View all alerts&nbsp;&nbsp;</a>'; ?>
-            <?php echo '&nbsp;<button type="button" class="download-csv-top50alerts">Download as CSV</button>'; ?>&nbsp;
-            <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
-        </p>
-    </h2>
-    <div class="container-bottom-right-sub table-class">
+    <div class="container-bottom-right" id="elm-top50alerts">
+        <h2>
+            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Latest alerts by fraud triange (top 50)</p>
+            <p class="container-window-icon">
+                <?php echo '<a href="alertData?agent='.base64_encode(base64_encode("all")).'" class="button-view-all-alerts" id="elm-viewallalerts">&nbsp;&nbsp;View all alerts&nbsp;&nbsp;</a>'; ?>
+                <?php echo '&nbsp;<button type="button" class="download-csv-top50alerts">Download as CSV</button>'; ?>&nbsp;
+                <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
+            </p>
+        </h2>
+        <div class="container-bottom-right-sub table-class">
 
-        <table id="top50alerts" class="table tablesorter">
-            <thead class="thead">
-                <tr class="tr">
-                    <th class="th">
-                        DATE
-                    </th>
-                    <th class="th">
-                        ALERT TYPE
-                    </th>
-                    <th class="th">
-                        ENDPOINT
-                    </th>
-                    <th class="th">
-                        PHRASE TYPED
-                    </th>
-                    <th class="th">
-                        APPLICATION
-                    </th>
-                </tr>
-            </thead>
+            <table id="top50alerts" class="table tablesorter">
+                <thead class="thead">
+                    <tr class="tr">
+                        <th class="th">
+                            DATE
+                        </th>
+                        <th class="th">
+                            ALERT TYPE
+                        </th>
+                        <th class="th">
+                            ENDPOINT
+                        </th>
+                        <th class="th">
+                            PHRASE TYPED
+                        </th>
+                        <th class="th">
+                            APPLICATION
+                        </th>
+                    </tr>
+                </thead>
 
-            <tbody class="tbody">
+                <tbody class="tbody">
 
-                <?php
+                    <?php
 
-                $configFile = parse_ini_file("config.ini");
-                $ESalerterIndex = $configFile['es_alerter_index'];
-                $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
+                    $configFile = parse_ini_file("config.ini");
+                    $ESalerterIndex = $configFile['es_alerter_index'];
+                    $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
                 
-                if ($session->domain != "all") 
-                {
-                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled", "dashboard");
-                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled", "dashboard");
-                }
-                else
-                {
-                    if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled", "dashboard");
-                    else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled", "dashboard");
-                }
-                
-                $alertData = json_decode(json_encode($alertMatches), true);
-
-                foreach ($alertData['hits']['hits'] as $result)
-                {
-                    echo '<tr class="tr">';
-                    echo '<td class="td">';
-                    
-                    $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
-                    $wordTyped = decRijndael($result['_source']['wordTyped']);
-                    $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
-                    $searchValue = "/".$result['_source']['phraseMatch']."/";
-                    $endPoint = explode("_", $result['_source']['agentId']);
-                    $agent_decSQ = $endPoint[0];
-                    $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
-                    $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
-                    $regExpression = htmlentities($result['_source']['phraseMatch']);
-                    
-                    alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
-                    echo $date;
-                    
-                    echo '</td>';
-                    
-                    echo '<td class="td">';
-                    echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
-                    echo '</td>';
-                    echo '<td class="td">';
-                 
-                    $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
-                    
-                    $userDomain = mysql_fetch_assoc($queryUserDomain);
-                    $agentName = $userDomain['agent']."@".$userDomain['domain'];
-                    $agent_enc = base64_encode(base64_encode($userDomain['agent']));
-                    $totalWordHits = $userDomain['totalwords'];
-                    $countPressure = $userDomain['pressure'];
-                    $countOpportunity = $userDomain['opportunity'];
-                    $countRationalization = $userDomain['rationalization'];
-                    $score = $userDomain['score'];
-                            
-                    if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
-                    else $dataRepresentation = "0";
-                    
-                    echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
-                                    
-                    if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-                    else 
+                    if ($session->domain != "all") 
                     {
-                        $agentName = $userDomain['name'];
-                        agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                        if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled", "dashboard");
+                        else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled", "dashboard");
                     }
+                    else
+                    {
+                        if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled", "dashboard");
+                        else $alertMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled", "dashboard");
+                    }
+                
+                    $alertData = json_decode(json_encode($alertMatches), true);
+
+                    foreach ($alertData['hits']['hits'] as $result)
+                    {
+                        echo '<tr class="tr">';
+                        echo '<td class="td">';
                     
-                    echo '</td>';
-                    echo '<td class="td">';
-                    echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
-                    echo '</td>';
-                    echo '<td class="td">';
-                    echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle,0,80));
-                    echo '</td>';
-                    echo '</tr>';
-                }
+                        $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                        $wordTyped = decRijndael($result['_source']['wordTyped']);
+                        $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                        $searchValue = "/".$result['_source']['phraseMatch']."/";
+                        $endPoint = explode("_", $result['_source']['agentId']);
+                        $agent_decSQ = $endPoint[0];
+                        $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
+                        $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
+                        $regExpression = htmlentities($result['_source']['phraseMatch']);
+                    
+                        alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
+                        echo $date;
+                    
+                        echo '</td>';
+                    
+                        echo '<td class="td">';
+                        echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
+                        echo '</td>';
+                        echo '<td class="td">';
+                 
+                        $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+                    
+                        $userDomain = mysql_fetch_assoc($queryUserDomain);
+                        $agentName = $userDomain['agent']."@".$userDomain['domain'];
+                        $agent_enc = base64_encode(base64_encode($userDomain['agent']));
+                        $totalWordHits = $userDomain['totalwords'];
+                        $countPressure = $userDomain['pressure'];
+                        $countOpportunity = $userDomain['opportunity'];
+                        $countRationalization = $userDomain['rationalization'];
+                        $score = $userDomain['score'];
+                            
+                        if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
+                        else $dataRepresentation = "0";
+                    
+                        echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
+                                    
+                        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                        else 
+                        {
+                            $agentName = $userDomain['name'];
+                            agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+                        }
+                    
+                        echo '</td>';
+                        echo '<td class="td">';
+                        echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
+                        echo '</td>';
+                        echo '<td class="td">';
+                        echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle,0,80));
+                        echo '</td>';
+                        echo '</tr>';
+                    }
 
-                ?>
+                    ?>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </div>
 
 <?php
 
-$queryAllDays_wOSampler = "SELECT * from t_words";
-$queryAllDay_wSampler = "SELECT SUM(monday) AS monday, SUM(tuesday) AS tuesday, SUM(wednesday) AS wednesday, SUM(thursday) AS thursday, SUM(friday) AS friday, SUM(saturday) AS saturday, SUM(sunday) AS sunday FROM (SELECT * FROM t_words UNION SELECT * FROM t_words_thefraudexplorer_com) as tbl";
-$queryDomainDays_wSampler = "SELECT SUM(monday) AS monday, SUM(tuesday) AS tuesday, SUM(wednesday) AS wednesday, SUM(thursday) AS thursday, SUM(friday) AS friday, SUM(saturday) AS saturday, SUM(sunday) AS sunday FROM (SELECT * FROM t_words_".str_replace(".", "_", $session->domain)." UNION SELECT * FROM t_words_thefraudexplorer_com) as tbl";
-$queryDomainDays_wOSampler = "SELECT * from t_words_".str_replace(".", "_", $session->domain);
+/* Graph data calculation - The Fraud Explorer general statisctics */
 
 if ($session->domain == "all")
 {
-    if (samplerStatus($session->domain) == "enabled") $queryDays = mysql_query($queryAllDay_wSampler);
-    else $queryDays = mysql_query($queryAllDays_wOSampler);
+    if (samplerStatus($session->domain) == "enabled") 
+    {                
+        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM t_agents) AS agents GROUP BY agent) AS totals";
+        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents";
+        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY)";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM ((SELECT agent FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus";
+    }
+    else 
+    {
+        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain NOT LIKE 'thefraudexplorer.com'";      
+        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
+        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain NOT LIKE 'thefraudexplorer.com'";
+    }
 }
 else
 {
-    if (samplerStatus($session->domain) == "enabled") $queryDays = mysql_query($queryDomainDays_wSampler);
-    else $queryDays = mysql_query($queryDomainDays_wOSampler);
-    
-    if(empty($queryDays))
+    if (samplerStatus($session->domain) == "enabled") 
+    { 
+        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+    }
+    else 
     {
-        $query = "CREATE TABLE t_words_".str_replace(".", "_", $session->domain)." (
-        monday int DEFAULT NULL,
-        tuesday int DEFAULT NULL,
-        wednesday int DEFAULT NULL,
-        thursday int DEFAULT NULL,
-        friday int DEFAULT NULL,
-        saturday int DEFAULT NULL,
-        sunday int DEFAULT NULL)";
-            
-        $insert = "INSERT INTO t_words_".str_replace(".", "_", $session->domain)." (
-        monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES ('0', '0', '0', '0', '0', '0', '0')";
-            
-        $resultQuery = mysql_query($query);
-        $resultInsert = mysql_query($insert);
+        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
     }
 }
 
-$rows = array();
-while($row = mysql_fetch_assoc($queryDays)) $rows[] = $row;
-$daysOfWeek = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
+$countUniques = mysql_fetch_assoc(mysql_query($queryUniqueEndpoints));
+$countSessions = mysql_fetch_assoc(mysql_query($queryEndpointSessions));
+$countDead = mysql_fetch_assoc(mysql_query($queryDeadEndpoints));
+$countTyping = mysql_fetch_assoc(mysql_query($queryTyping));
+$countAlerts = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'];
 
 ?>
 
@@ -457,14 +462,12 @@ $daysOfWeek = array("monday", "tuesday", "wednesday", "thursday", "friday", "sat
         type: 'bar',
         defaults: defaultOptions,
         data: {
-            labels: ["Monday", "Tuesday", "Wednesday", "Thuersday", "Friday", "Saturday", "Sunday"],
+            labels: [ "Unique", "Alerts", "Sessions", "Dead", "Typing" ],
             datasets: [
                 {
-                    label: "Words by Day",
+                    label: "Endpoint statistics",
                     type: 'bar',
                     backgroundColor: [
-                        'rgba(19, 146, 61, 0.25)',
-                        'rgba(19, 146, 61, 0.25)',
                         'rgba(19, 146, 61, 0.25)',
                         'rgba(19, 146, 61, 0.25)',
                         'rgba(19, 146, 61, 0.25)',
@@ -473,10 +476,10 @@ $daysOfWeek = array("monday", "tuesday", "wednesday", "thursday", "friday", "sat
                     ],
                     borderColor: [],
                     borderWidth: 1,
-                    data: [ <?php foreach ($daysOfWeek as $day) { if ($day != "sunday") echo $rows[0][$day].", "; else echo $rows[0][$day]; } ?> ],
+                    data: [ <?php echo $countUniques['total'] . ", " . $countAlerts . ", " . $countSessions['total'] . ", " . $countDead['total'] . ", " . $countTyping['total']; ?> ],
                 },
-                {
-                    label: "Words by Day",
+                 {
+                    label: "Endpoint statistics",
                     type: 'line',
                     fill: true,
                     fillColor: "#13923D",
@@ -496,7 +499,7 @@ $daysOfWeek = array("monday", "tuesday", "wednesday", "thursday", "friday", "sat
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ <?php foreach ($daysOfWeek as $day) { if ($day != "sunday") echo $rows[0][$day].", "; else echo $rows[0][$day]; } ?> ],
+                    data: [ <?php echo $countUniques['total'] . ", " . $countAlerts . ", " . $countSessions['total'] . ", " . $countDead['total'] . ", " . $countTyping['total']; ?> ],
                     spanGaps: false,
                 }
             ]

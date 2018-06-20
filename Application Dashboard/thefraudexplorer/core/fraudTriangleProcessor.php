@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
@@ -41,9 +41,9 @@ $GLOBALS['matchesGlobalCount'] = 0;
 $startTime = microtime(true);
 $ESindex = $configFile['es_words_index'];
 $fistTimeIndex = true;
-
+$fta_lang = $configFile['fta_lang_selection'];
 $fraudTriangleTerms = array('rationalization'=>'0 1 0','opportunity'=>'0 0 1','pressure'=>'1 0 0');
-$jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+$jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
 
 /* Unique agentID List */
 
@@ -83,7 +83,9 @@ if (isset($argv[1]))
         if (isset($argv[2]))
         {
             $ruleToCheck = $argv[2];
+            
             checkRegexp($fraudTriangleTerms, $jsonFT, $ruleToCheck);
+                   
             echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
             exit;
         }
@@ -137,15 +139,14 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
                 if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
-                
+                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+                    
                 $arrayCounter++;
                 $effectiveEndpointCounter++;
             }     
         }
         
-        echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
-        
+        echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";       
     }
     else
     {
@@ -160,7 +161,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
             $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);   
         }           
     }
 

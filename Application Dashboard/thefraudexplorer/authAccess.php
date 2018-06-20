@@ -4,17 +4,18 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for download and view authorization
  */
 
+include "lbs/global-vars.php";
 include "lbs/login/session.php";
 include "lbs/security.php";
 
@@ -23,8 +24,6 @@ if(!$session->logged_in)
     header ("Location: index");
     exit;
 }
-
-include "lbs/global-vars.php";
 
 $file=filter($_GET['file']);
 $ext = substr($file, strrpos($file, '.')+1);
@@ -54,6 +53,22 @@ else if($ext=="png")
     flush();
     readfile($_REQUEST['file']);
     exit();
+}
+else if($ext=="zip")
+{
+    if (file_exists($file))
+    {
+        header("Expires: 0");
+        header("Content-Description: File Transfer");
+        header("Content-type: ".$contentType );
+        header("Content-Disposition: attachment; filename=thefraudexplorer-rules.zip");
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Length: ".filesize($file));
+        ob_clean();
+        flush();
+        readfile($file);
+        exit;
+    }
 }
 else
 {

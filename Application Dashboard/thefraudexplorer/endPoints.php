@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for endPoints
  */
@@ -86,10 +86,8 @@ $_SESSION['instance'] = "endPoints";
             <div id="includedTopMenu"></div>
 
             <?php
-            
-            $_SESSION['id_uniq_command']=null;
 
-            /* Code for paint the table of agents via AJAX */
+            /* Code for paint endpoint table via AJAX */
 
             echo '<div id="tableHolder" class="table-holder"></div>';
 
@@ -98,7 +96,7 @@ $_SESSION['instance'] = "endPoints";
 
         <!-- Modal for deletion -->
 
-        <div class="modal fade-scale" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -123,7 +121,7 @@ $_SESSION['instance'] = "endPoints";
 
         <!-- Modal for agent setup -->
 
-        <div class="modal fade-scale" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -134,97 +132,38 @@ $_SESSION['instance'] = "endPoints";
                 </div>
             </div>
         </div>
+        
+        <!-- Modal for switch phrases collection -->
 
-        <!-- ConsoleJS functions -->
+        <center>
+            <div class="modal" id="switch-phrase-collection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title window-title" id="myModalLabel">Phrase collection switching</h4>
+                            </div>
 
-        <script type="text/javascript" src="js/console.js"></script>
+                            <div class="modal-body">
+                                <p style="text-align:justify; font-size: 12px;"><br>You are about to switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server, and The Fraud Explorer can't do the work. You can switch the times you want. Do you want to proceed ?</p>
+                                <p class="debug-url window-debug"></p>
+                            </div>
 
-        <!-- Ajax for capture ENTER key in command line -->
-
-        <script language="JavaScript" type="text/javascript" src="js/ajax.js"></script>
-
-        <!-- TableXMLHolder AJAX funtions -->
-
-        <script type="text/javascript" src="js/xmlTableHolder.js"></script>
-
-        <div class="command-console-container">
-            <div class="command-console" id="elm-commandconsole">
-                
-                <?php
-                
-                if(isset($_SESSION['id_command'])) unset($_SESSION['id_command']);
-                if(isset($_SESSION['seconds_waiting'])) unset($_SESSION['seconds_waiting']);
-                if(isset($_SESSION['NRF'])) unset($_SESSION['NRF']);
-                if(isset($_SESSION['waiting_command'])) unset($_SESSION['waiting_command']);
-                if(isset($_SESSION['NRF_CMD'])) unset($_SESSION['NRF_CMD']);
-                if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-
-                $command_console_enabled = "no";
-
-                if (!isset($_GET['agent']) && !isset($_GET['domain']))
-                {
-                    echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
-                    $command_console_enabled = "no";
-                    if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-                }
-                else if(isset($_GET['agent']) && isset($_GET['domain']))
-                {
-                    $agent_dec = base64_decode(base64_decode(filter($_GET['agent'])));
-                    $agent = $agent_dec;
-                    $domain_dec = base64_decode(base64_decode(filter($_GET['domain'])));
-                    $domain = $domain_dec;
-                    
-                    if (checkEndpoint($agent, $domain))
-                    {
-                        $command_console_enabled = "yes";
-                        $_SESSION['agent']=$agent;
-                        $_SESSION['agentchecked']=$agent_dec;
-                        echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute on '.$agent.'</strong><br><br>';
-                    }
-                    else
-                    {
-                        echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
-                        $command_console_enabled = "no";
-                        if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-                    }
-                }
-                else
-                {
-                    echo '<strong class="console-title"><span class="fa fa-cube font-icon-color-gray">&nbsp;&nbsp;</span>Please give an instruction to execute</strong><br><br>';
-                    $command_console_enabled = "no";
-                    if(isset($_SESSION['agentchecked'])) unset($_SESSION['agentchecked']);
-                }
-                
-                ?>
-                
-                <div id="result"></div>
-                
-                <?php
-                
-                if ($command_console_enabled == "yes")
-                {
-                    echo '<form id="fo3" name="fo3" method="post" action="saveCommands?agent='.$agent.'&domain='.$domain.'">';
-                    echo '</strong><input class="intext command-cli" type="text" autocomplete="off" placeholder=":type instruction here" name="commands" id="commands" onkeypress="iSubmitEnter(event, document.form1)" >';
-                    echo '<br><br><div class="window-command-status" id="commandStatus"></div>';
-                    echo '</form>';
-                }
-                else
-                {
-                    echo '<form id="fo3" name="fo3" method="post" action="#">';
-                    echo '<input class="intext command-cli" type="text" disabled autocomplete="off" placeholder=":type instruction here" name="commands" id="commands" onkeypress="iSubmitEnter(event, document.form1)" >';
-                    echo '<br><br><div class="window-command-status" id="commandStatus"></div>';
-                    echo '</form>';
-                }
-                
-                ?>
-                
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">I'm not sure</button>
+                                <a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">I'm sure, proceed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </center>
 
-            <div id="tableHolderXML"></div>
-            <div id="footer">
-                <p class="main-text">&nbsp;</p>
-                <div class="logo-container">
-                    &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; NF Cybersecurity & Antifraud Firm
+        <div id="footer">
+            <p class="main-text">&nbsp;</p>
+            <div class="logo-container">
+                &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; NF Cybersecurity & Antifraud Firm
             </div>
             <div class="helpers-container">
                 <span class="fa fa-bug fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -233,7 +172,6 @@ $_SESSION['instance'] = "endPoints";
                 <span class="fa fa-medkit fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="fa fa-building-o fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Application context [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-        </div>
         </div>
     </body>
 </html>
@@ -306,35 +244,30 @@ var tour = new Tour({
         title: "Endpoint setup",
         content: "You can clic on this icon to adjust the endpoint alias, the gender and the ruleset. Remember that assign ruleset is similar to set the department of the endpoint in the company."
     }, {
-        element: "#elm-commandconsole",
-        placement: 'top',
-        title: "Command console",
-        content: "This is and advanced function of the software. The advanced user can send commands to the endpoints to change individual or global configurations. See the documentation for more information."
-    }, {
-        element: "#tableHolderXML",
-        placement: 'top',
-        title: "Command response console",
-        content: "This is command consolidation console. When the advanced user sends a command to an endpoint, the console show the entire command. This is useful to see the last command sent to the endpoints."
-    }, {
         element: "#elm-pager",
         placement: 'top',
         title: "Data statistics and pager",
         content: "You can see some data statistics about the amount of data collected. Also, you can do paging between endpoints with the ability of download the entire endpoint list in a XLS format."
     }, {
+        element: "#elm-csv",
+        placement: 'top',
+        title: "Download data in CSV",
+        content: "By pressing thus button you can export the endpoint list in a comma separated value (CSV) file. This file is useful when you need to filter and make some reports in an executive manner."
+    }, {
+        element: "#elm-msi",
+        placement: 'left',
+        title: "Download MSI Endpoint",
+        content: "The MSI file you obtain here is useful for deploy the software in the Active Directory enviromnet of your organization. Please note that this MSI is only valid for your public IP address."
+    }, {
+        element: "#elm-switch-phrase-collection",
+        placement: 'top',
+        title: "Switch phrase collection",
+        content: "You can switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server."
+    }, {
         element: "#elm-search",
         placement: 'bottom',
         title: "Search",
         content: "You can use this search box to find one or more endpoints in the entire list. This is useful when you have a lot of endpoints under the methodology and needs to focus in one of them."
-    }, {
-        element: "#elm-queuereset",
-        placement: 'bottom',
-        title: "Queue reset",
-        content: "This link is used for advanced users that sends personalized and custom commands to endpoints. You can use this link to refresh or delete the command queue and be prepared for the next command."
-    }, {
-        element: "#elm-globalcommand",
-        placement: 'bottom',
-        title: "Global commands",
-        content: "This software can send custom commands to endpoints for update, deletion and setting some configuration options. Please read the documentation provided with The Fraud Explorer for more info."
     }]
 });
 

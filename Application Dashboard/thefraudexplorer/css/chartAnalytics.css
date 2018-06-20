@@ -2,13 +2,13 @@
 * The Fraud Explorer
 * https://www.thefraudexplorer.com/
 *
-* Copyright (c) 2017 The Fraud Explorer
+* Copyright (c) 2014-2019 The Fraud Explorer
 * email: customer@thefraudexplorer.com
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2017-06
-* Revision: v1.0.1-beta
+* Date: 2018-12
+* Revision: v1.2.0
 *
 * Description: CSS Code
 */
@@ -38,7 +38,27 @@ a
 
 ::-webkit-scrollbar 
 { 
-    display: none; 
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background: #e8eaeb;
+  border: 1px solid #e8eaeb;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: linear-gradient(left, #fff, #e4e4e4);
+  border: 1px solid #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22ADD4, #1E98BA);
 }
 
 @font-face 

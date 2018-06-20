@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Agent specific functions
  */ 
@@ -115,7 +115,7 @@ function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
 }
 
 function alertDetails($location, $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result)
-{
+{   
     echo '<a class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Alert Consolidation Data</div><div class=tooltip-row><div class=tooltip-item>Window Title</div><div class=tooltip-value-lefta>'.strip_tags(substr($windowTitle,0,80)).'</div></div><div class=tooltip-row><div class=tooltip-item>Alert time source</div><div class=tooltip-value-lefta>'.$date.'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word typed</div><div class=tooltip-value-lefta>'.strip_tags($wordTyped).'</div></div><div class=tooltip-row><div class=tooltip-item>Phrase or word in Dictionary</div><div class=tooltip-value-lefta>'.$searchResult.'</div></div><div class=tooltip-row><div class=tooltip-item>Regular expression matching</div><div class=tooltip-value-lefta>'.strip_tags($regExpression).'</div></div>">';
     
     if ($location == "alertData") echo '<span class="fa fa-info-circle fa-2x font-icon-gray">&nbsp;&nbsp;</span></a>';

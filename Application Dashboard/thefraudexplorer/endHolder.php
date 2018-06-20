@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for paint main endpoints list
  */
@@ -30,8 +30,6 @@ include "lbs/agent_methods.php";
 include "lbs/elasticsearch.php";
 include "lbs/open-db-connection.php";
 include "lbs/cryptography.php";
-
-$_SESSION['id_uniq_command']=null;
 
 /* SQL Queries */
 
@@ -195,15 +193,14 @@ echo '<table id="tblData" class="tablesorter">';
 echo '<thead><tr>';
 echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
 echo '<th class="totalwordsth"></th>';
-echo '<th class="agentth" id="elm-endpoints-dashboard">USERS UNDER ANALYTICS</th>';
+echo '<th class="agentth" id="elm-endpoints-dashboard">PEOPLE UNDER ANALYTICS</th>';
 echo '<th class="compth" id="elm-ruleset-dashboard">RULE SET</th>';
-echo '<th class="verth" id="elm-version-dashboard">VER</th>';
+echo '<th class="verth" id="elm-version-dashboard">VERSION</th>';
 echo '<th class="stateth" id="elm-status-dashboard">STT</th>';
 echo '<th class="lastth" id="elm-last-dashboard">LAST</th>';
 echo '<th class="countpth">P</th><th class="countoth" id="elm-triangle-dashboard">O</th><th class="countrth">R</th>';
 echo '<th class="countcth" id="elm-level-dashboard">L</th>';
 echo '<th class="scoreth" id="elm-score-dashboard">SCORE</th>';
-echo '<th class="specialth" id="elm-command-dashboard">CMD</th>';
 echo '<th class="specialth" id="elm-delete-dashboard">DEL</th>';
 echo '<th class="specialth" id="elm-set-dashboard">SET</th></tr>';
 echo '</thead><tbody>';
@@ -307,27 +304,6 @@ if ($row_a = mysql_fetch_array($result_a))
         echo '<td class="countctd">'.$level.'</td>';
         echo '<td class="scoretd"><a href=alertData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';
 
-        /* Agent selection for command retrieval */
-
-        if(isConnected($row_a["heartbeat"], $row_a[2]))
-        {
-            if(isset($_SESSION['agentchecked']))
-            {
-                if($_SESSION['agentchecked'] == $row_a["agent"]) echo '<td class="specialtd"><a href="endPoints?agent='.$agent_enc.'&domain='.$domain_enc.'"><img src="images/cmd-ok.svg" onmouseover="this.src=\'images/cmd-mo-ok.svg\'" onmouseout="this.src=\'images/cmd-ok.svg\'" alt="" title="" /></a></td>';
-                else echo '<td class="specialtd"><a href="endPoints?agent='.$agent_enc.'&domain='.$domain_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';  
-            }
-            else echo '<td class="specialtd"><a href="endPoints?agent='.$agent_enc.'&domain='.$domain_enc.'"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="" title="" /></a></td>';
-        }
-        else
-        {
-            if(isset($_SESSION['agentchecked']))
-            {
-                if($_SESSION['agentchecked'] == $row_a["agent"]) echo '<td class="specialtd"><img src="images/cmd-ok.svg" onmouseover="this.src=\'images/cmd-mo-ok.svg\'" onmouseout="this.src=\'images/cmd-ok.svg\'" alt="Agent down" title="Agent down" /></td>';
-                else echo '<td class="specialtd"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="Agent down" title="Agent down" /></td>';
-            }
-            else echo '<td class="specialtd"><img src="images/cmd.svg" onmouseover="this.src=\'images/cmd-mo.svg\'" onmouseout="this.src=\'images/cmd.svg\'" alt="Agent down" title="Agent down" /></td>'; 
-        }
-
         /* Option for delete the agent */
 
         echo '<td class="specialtd"><a class="delete-agent" data-href="deleteAgent?agent='.$agent_enc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
@@ -339,7 +315,18 @@ if ($row_a = mysql_fetch_array($result_a))
     }
     while ($row_a = mysql_fetch_array($result_a));
 
-    echo '</tbody></table>';
+    echo '</tbody></table>'; 
+    
+    /* Button to switch phrase collection */
+    
+    $xml = simplexml_load_file('update.xml');
+    $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
+    
+    if ($phraseCollectionStatus == "textAnalytics 1") $phraseStatus = "enabled";
+    else $phraseStatus = "disabled";
+    
+    if ($session->username == "admin") echo '&nbsp;<a data-href="switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection">Press to switch between enabled and disabled phrase collection on endpoints, this feature applies at the next reboot of the user machines. The current status of phrase collection is: '.$phraseStatus.'</a>';
+    else echo '&nbsp;<a href="#" class="enable-analytics-button" id="elm-switch-phrase-collection">Press to switch between enabled and disabled phrase collection on endpoints, this feature applies at the next reboot of the user machines. The current status of phrase collection is: '.$phraseStatus.'</a>';
 }
 
 ?>
@@ -359,9 +346,9 @@ if ($row_a = mysql_fetch_array($result_a))
                 if (array_key_exists('count', $resultAlerts)) $fraudAlerts = number_format($resultAlerts['count'], 0, ',', '.');	
                 else $fraudAlerts = "0";
 
-                echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.$recordsCollected.' records collected and ';
-                echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudAlerts.' fraud triangle alerts triggered, ';
-                echo 'all ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes in size';
+                echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.$recordsCollected.' records ';
+                echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudAlerts.' fraud triangle alerts, ';
+                echo 'ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes';
                 
                 ?>
 
@@ -382,7 +369,11 @@ if ($row_a = mysql_fetch_array($result_a))
                         <option value="all"> All Endpoints</option>
                     </select>
                     
-                    <?php echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>'; ?>
+                    <?php 
+                    
+                        echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Download as CSV</button>&nbsp;';
+                        echo '<a href="authAccess?file=msi/endpoint_x64-v1.2.0.msi" download="endpoint_x64-v1.2.0.msi"><button type="button" class="download-msi" id="elm-msi">Download MSI</button></a>';
+                    ?>
                     
                 </form>
             </div>
@@ -411,6 +402,14 @@ if ($row_a = mysql_fetch_array($result_a))
 <script>
     $('#confirm-config').on('show.bs.modal', function(e){
         $(this).find('.config').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for switch phrase collection -->
+
+<script>
+    $('#switch-phrase-collection').on('show.bs.modal', function(e){
+        $(this).find('.switch-phrase-collection-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

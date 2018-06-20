@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for top menu
  */
@@ -104,29 +104,13 @@ include "lbs/close-db-connection.php";
         echo '<a href="rolesConfig" data-toggle="modal" data-target="#roles" href="#" id="elm-roles">Roles</a>';
         echo '</li>';
     }
-        
-    if ($resourceOrigin == "endpoints")
-    {
-        echo '<li class="li">';
-        echo '<a href="eraseCommands" id="elm-queuereset">Reset</a>';
-        echo '</li>';
-
-        if ($session->domain == "all")
-        {
-            echo '<li class="li">';
-            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode("all")).'">Command</a>';
-            echo '</li>';
-        }
-        else
-        {
-            echo '<li class="li">';
-            echo '<a id="elm-globalcommand" href="endPoints?agent='.base64_encode(base64_encode("all")).'&domain='.base64_encode(base64_encode('.$session->domain.')).'">Command</a>';
-            echo '</li>';
-        }
-    }
     
     ?>
-
+    
+    <li class="li">
+        <a href="maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
+    </li>
+        
     <li class="li">
         <a href="#" onclick="startTour()">Take tour</a>
     </li>
@@ -151,7 +135,21 @@ include "lbs/close-db-connection.php";
 
 <!-- Modal for main Configuration -->
 
-<div class="modal fade-scale" id="confirm-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="confirm-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Maintenance -->
+
+<div class="modal" id="confirm-maintenance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">
@@ -165,7 +163,7 @@ include "lbs/close-db-connection.php";
 
 <!-- Modal for Ruleset -->
 
-<div class="modal fade-scale" id="ruleset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="ruleset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">
@@ -179,7 +177,7 @@ include "lbs/close-db-connection.php";
 
 <!-- Modal for Roles -->
 
-<div class="modal fade-scale" id="roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="roles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">

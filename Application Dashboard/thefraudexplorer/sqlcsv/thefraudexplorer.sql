@@ -2,13 +2,13 @@
  * The Fraud Explorer 
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: SQL database
  */
@@ -69,7 +69,7 @@ CREATE TABLE t_login_attempts (
     ip varchar(20),
     attempts int default 0,
     lastlogin datetime default NULL	
-);
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `t_config` (
     `score_ts_low_from` int DEFAULT NULL,
@@ -94,43 +94,3 @@ INSERT INTO `t_config` (
     `score_ts_critic_to`,
     `sample_data_calculation`
 ) VALUES ('0', '10', '11', '20', '21', '30', '31', '100', 'enabled');
-
-CREATE TABLE IF NOT EXISTS `t_words_thefraudexplorer_com` (
-    `monday` int DEFAULT NULL,
-    `tuesday` int DEFAULT NULL,
-    `wednesday` int DEFAULT NULL,
-    `thursday` int DEFAULT NULL,
-    `friday` int DEFAULT NULL,
-    `saturday` int DEFAULT NULL,
-    `sunday` int DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-INSERT INTO `t_words_thefraudexplorer_com` (
-    `monday`,
-    `tuesday`,
-    `wednesday`,
-    `thursday`,
-    `friday`,
-    `saturday`,
-    `sunday`
-) VALUES ('17520', '9520', '13520', '11518', '15518', '8518', '5518');
-
-CREATE TABLE IF NOT EXISTS `t_words` (
-    `monday` int DEFAULT NULL,
-    `tuesday` int DEFAULT NULL,
-    `wednesday` int DEFAULT NULL,
-    `thursday` int DEFAULT NULL,
-    `friday` int DEFAULT NULL,
-    `saturday` int DEFAULT NULL,
-    `sunday` int DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-INSERT INTO `t_words` (
-    `monday`,
-    `tuesday`,
-    `wednesday`,
-    `thursday`,
-    `friday`,
-    `saturday`,
-    `sunday`
-) VALUES ('0', '0', '0', '0', '0', '0', '0');

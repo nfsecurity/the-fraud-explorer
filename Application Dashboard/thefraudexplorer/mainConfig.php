@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for main config
  */
@@ -282,7 +282,7 @@ include "lbs/open-db-connection.php";
 
         <div class="modal-footer window-footer-config">
             <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-            <input type="submit" class="btn btn-danger setup" value="Set values" style="outline: 0 !important;">
+            <input type="submit" class="btn btn-danger setup" value="Apply configuration" style="outline: 0 !important;">
         </div>
     </form>
 </div> 

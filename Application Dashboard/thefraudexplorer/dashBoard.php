@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for dashboard
  */
@@ -192,6 +192,11 @@ var tour = new Tour({
         title: "Roles and profiles",
         content: "Here you can create, delete or modify users and assign a domain as a context for administration segregation. Only the admin user can get into this option, other user can't access this role setting."
     }, {
+        element: "#elm-maintenance",
+        placement: 'bottom',
+        title: "Maintenance",
+        content: "You can purge many records in this module, for example, the phrase collected, the fraud triangle analytics alerts, the general status and the endpoint dead sessions (people leaving the company)."
+    }, {
         element: "#elm-top50alerts",
         placement: 'top',
         title: "TOP 50 Alerts",
@@ -212,10 +217,10 @@ var tour = new Tour({
         title: "Top 50 Endpoints",
         content: "You can see here a list of top endpoints ordered by number of alerts triggered in total, with score and ruleset (department). You can clic on Download as CSV to get this list in XLS format."
     }, {
-        element: "#elm-wordstyped",
+        element: "#elm-generalstatistics",
         placement: 'bottom',
-        title: "Words Typed Graph",
-        content: "This graph show a global count of words typed by whole company (or department) where you have implemented The Fraud Explorer. You can see in this graph if the solution is collecting daily data."
+        title: "Statistics graph",
+        content: "This graph show a global count of important endpoint data like the number of users covered, the number of sessions, alerts, dead endpoints (more than 30 days) and users that are typing phrases."
     }, {
         element: "#elm-counters",
         placement: 'bottom',

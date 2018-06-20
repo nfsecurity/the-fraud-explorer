@@ -4,12 +4,12 @@
  * The Fraud Explorer 
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
+ * Date: 2018-12
  * Revision: v0.9.67-beta
  *
  * Description: Code for login

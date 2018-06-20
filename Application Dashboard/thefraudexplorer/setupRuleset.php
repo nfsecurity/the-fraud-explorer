@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for ruleset setup
  */
@@ -187,8 +187,6 @@ include "lbs/agent_methods.php";
                     $countQuery = "SELECT COUNT(*) AS total FROM (SELECT agent, domain, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset FROM t_agents) AS agents GROUP BY agent) AS count WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com' AND ruleset='%s'";
                 }
             }
-            
-            //$countQuery = "SELECT COUNT(*) FROM (SELECT agent, heartbeat, ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent) AS count WHERE ruleset='%s'";
 
             $fraudTriangleTerms = array('0'=>'pressure','1'=>'opportunity','2'=>'rationalization');
             $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
@@ -226,15 +224,16 @@ include "lbs/agent_methods.php";
 
     <div class="modal-footer window-footer-config">
         <br>
-        <a href="authAccess?file=core/rules/fta_text_spanish.json" class="btn btn-default" style="outline: 0 !important;">Download JSON file</a>
+        <a id="download-rules" class="btn btn-default" style="outline: 0 !important;">Download rules</a>
+        
         <form action="rulesetUpload.php" id="rulesetUpload" method="post" enctype="multipart/form-data">
             
             <?php 
             
-            if ($session->domain == "all") echo '<div class="fileUpload btn btn-default" style="outline: 0 !important;">';
+            if ($session->username == "admin")  echo '<div class="fileUpload btn btn-default" style="outline: 0 !important;">';
             else echo '<div class="fileUpload btn btn-default disabled" style="outline: 0 !important;">';
             
-            echo '<span>Upload JSON file</span>';
+            echo 'Upload rule';
             echo '<input type="file" name="fileToUpload" id="fileToUpload" class="upload" />';
             echo '</div>';
             
@@ -249,4 +248,20 @@ include "lbs/agent_methods.php";
     document.getElementById("fileToUpload").onchange = function() {
         document.getElementById("rulesetUpload").submit();
     }
+</script>
+
+<!-- Download multiple rule files -->
+
+<script>
+    $(document).ready(function(){
+    $('#download-rules').click(function(){
+    $.ajax({
+        url: 'lbs/downloadRules.php',
+        type: 'post',
+        success: function(response){
+            window.location = response;
+        }
+    });
+    });
+    });
 </script>

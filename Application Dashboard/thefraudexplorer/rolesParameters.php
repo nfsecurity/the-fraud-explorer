@@ -3,13 +3,13 @@
  * The Fraud Explorer 
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Code for roles parameters
  */
@@ -44,7 +44,6 @@ if (!empty($_POST['createmodify']))
         /* Domain config table */
         
         $domainConfigTable = "t_config_".str_replace(".", "_", $userDomain);
-        $domainWordsTable = "t_words_".str_replace(".", "_", $userDomain);
         $queryCreateDomainTable = "CREATE TABLE IF NOT EXISTS ".$domainConfigTable." (
         score_ts_low_from int DEFAULT NULL, 
         score_ts_low_to int DEFAULT NULL, 
@@ -56,23 +55,6 @@ if (!empty($_POST['createmodify']))
         score_ts_critic_to int DEFAULT NULL, 
         sample_data_calculation varchar(15) DEFAULT NULL)";
         
-        /* Domain words count table */
-        
-        $queryWords = "CREATE TABLE ".$domainWordsTable." (
-        monday int DEFAULT NULL,
-        tuesday int DEFAULT NULL,
-        wednesday int DEFAULT NULL,
-        thursday int DEFAULT NULL,
-        friday int DEFAULT NULL,
-        saturday int DEFAULT NULL,
-        sunday int DEFAULT NULL)";
-        
-        $insert = "INSERT INTO ".$domainWordsTable." (
-        monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-        VALUES ('0', '0', '0', '0', '0', '0', '0')";
-        
-        $resultQuery = mysql_query($queryWords);
-        $resultInsert = mysql_query($insert);             
         $queryTable = mysql_query($queryCreateDomainTable);
         
         if(mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$domainConfigTable."'")) == 1) 
@@ -114,10 +96,8 @@ else if (!empty($_POST['delete']))
         if(!empty($count)) mysql_query(sprintf("DELETE FROM t_users WHERE user='%s'", $userName));
         
         $domainTable = "t_config_".str_replace(".", "_", $row[2]);
-        $wordsTable = "t_words_".str_replace(".", "_", $row[2]);
         
         if(mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$domainTable."'")) == 1) mysql_query(sprintf("DROP TABLE %s", $domainTable));
-        if(mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$wordsTable."'")) == 1) mysql_query(sprintf("DROP TABLE %s", $wordsTable));
     }
 }
 

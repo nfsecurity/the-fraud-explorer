@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2017 The Fraud Explorer
+ * Copyright (c) 2014-2019 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
- *
- * Date: 2017-06
- * Revision: v1.0.1-beta
+ * 
+ * Date: 2018-12
+ * Revision: v1.2.0
  *
  * Description: Functions extension file
  */
@@ -143,62 +143,6 @@ function extractEndDateFromAlerter($indexName, $indexType)
     return $lastAlertTime;
 }
 
-/*  Count words by days */
-
-function wordsByDays($value, $domain)
-{   
-    $userDomain = str_replace(".", "_", $domain);
-    $query = "SELECT * FROM t_words_".$userDomain;
-    $result = mysql_query($query);
-
-    if(empty($result)) 
-    {
-        $query = "CREATE TABLE t_words_".$userDomain." (
-        monday int DEFAULT NULL,
-        tuesday int DEFAULT NULL,
-        wednesday int DEFAULT NULL,
-        thursday int DEFAULT NULL,
-        friday int DEFAULT NULL,
-        saturday int DEFAULT NULL,
-        sunday int DEFAULT NULL)";
-        
-        $insert = "INSERT INTO t_words_".$userDomain." (
-        monday, tuesday, wednesday, thursday, friday, saturday, sunday) 
-        VALUES ('0', '0', '0', '0', '0', '0', '0')";
-        
-        $resultQuery = mysql_query($query);
-        $resultInsert = mysql_query($insert);     
-    }
-    
-    $origDate = explode(" ", $value);
-    $destTime = strtotime($origDate[0]);
-    $weekDay = date('l', $destTime);
-    $weekDay = strtolower($weekDay);
-    
-    mysql_query(sprintf("UPDATE t_words_%s SET %s=%s + 1", $userDomain, $weekDay, $weekDay));
-    mysql_query(sprintf("UPDATE t_words SET %s=%s + 1", $weekDay, $weekDay));
-    
-    return $weekDay;
-}
-
-/*  Clear all word counters */
-
-function clearWords()
-{   
-    $query = "SELECT domain FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY domain";    
-    $result = mysql_query($query);
-
-    while($row = mysql_fetch_array($result))
-    {
-        $domain = str_replace(".", "_", $row['domain']);
-        $queryWords = "UPDATE t_words_".$domain." SET monday=0, tuesday=0, wednesday=0, thursday=0, friday=0, saturday=0, sunday=0";
-        $resultQuery = mysql_query($queryWords);
-    }
-    
-    $queryTotalWords = "UPDATE t_words SET monday=0, tuesday=0, wednesday=0, thursday=0, friday=0, saturday=0, sunday=0";
-    $resultTotalQuery = mysql_query($queryTotalWords);
-}
-
 /*  Syncronize Rulesets */
 
 function syncRuleset()
@@ -253,8 +197,6 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
     $GLOBALS['arrayPosition'] = 0;
     getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", "userDomain", $agentID."_typedWords");
     $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
-    
-    foreach($arrayOfWordsAndWindows as $arrayKey=>$arrayValue) wordsByDays($arrayValue[2], $arrayValue[3]);
     
     $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
     $lastWindowTitle = null;
