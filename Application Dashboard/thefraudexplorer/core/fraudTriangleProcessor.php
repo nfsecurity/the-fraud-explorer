@@ -75,7 +75,6 @@ if (isset($argv[1]))
         {
             $singleEndpoint = true;
             $endpointSelected = $argv[2];
-            echo "entramos";
         }
     }
     else if ($argv[1] == "checkRule")

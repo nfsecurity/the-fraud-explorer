@@ -53,6 +53,8 @@ $ipAddress = getAgentIP();
 $keyquery = mysql_query("SELECT password FROM t_crypt");
 $keypass = mysql_fetch_array($keyquery);
 
+if (empty($domain)) $domain = "mydomain.loc";
+
 /* If agent has the correct key (password), then connect */
 
 if ($key == $keypass[0])
