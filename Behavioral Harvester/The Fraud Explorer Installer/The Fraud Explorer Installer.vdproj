@@ -375,7 +375,7 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:NF S.A.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
