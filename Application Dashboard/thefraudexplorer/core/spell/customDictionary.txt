@@ -43,14 +43,6 @@ anadir
 andadera
 angurria
 angurriosa
-angurrioso
-apechichar
-apenada
-apenado
-aperezada
-aperezado
-aporreada
-aporreado
 aporrear
 aporriada
 aporriado
@@ -232,6 +224,7 @@ corone
 corono
 corroncha
 corroncho
+cositas
 cositera
 cositero
 cuca

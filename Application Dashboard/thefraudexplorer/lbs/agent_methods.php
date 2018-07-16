@@ -104,6 +104,9 @@ function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
 {
     $rulesetquery = mysql_query(sprintf($queryRuleset, $agent_decSQ));
     $ruleset = mysql_fetch_array($rulesetquery);
+    
+    if (is_null($ruleset[0])) $ruleset[0] = "BASELINE"; 
+    
     $baselineRuleset = "BASELINE";
     $fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
 

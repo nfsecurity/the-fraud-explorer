@@ -81,6 +81,9 @@ include "lbs/close-db-connection.php";
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
+        <a href="alertData?agent=WVd4cw==" id="elm-dashboard">Alerts</a>
+    </li>
+    <li class="li">
         <a href="endPoints" id="elm-endpoints">Endpoints</a>
     </li>
     <li class="li">
