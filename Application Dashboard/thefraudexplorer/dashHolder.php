@@ -209,7 +209,7 @@ discoverOnline();
 
     <div class="container-upper-right" id="elm-generalstatistics">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Enpoints general statistics</p>
+            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Endpoints general statistics</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
         </h2><br>
         <div class="container-upper-right-sub">

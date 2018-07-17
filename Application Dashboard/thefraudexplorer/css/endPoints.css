@@ -207,7 +207,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     text-align: left;
     display: table-cell;
     white-space: nowrap;
@@ -217,7 +217,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     min-width: 150px;
     width: 150px;
     display: table-cell;
@@ -228,7 +228,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     min-width: 100px;
     width: 100px;
     display: table-cell;
@@ -239,7 +239,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 100px;
     min-width: 100px;
     display: table-cell;
@@ -249,7 +249,7 @@ th
 .lastth    
 { 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 90px;
     min-width: 90px;
     display: table-cell;
@@ -260,7 +260,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 70px;
     min-width: 70px;
     display: table-cell;
@@ -271,7 +271,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 70px;
     min-width: 70px;
     display: table-cell;
@@ -282,7 +282,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 70px;
     min-width: 70px;
     display: table-cell;
@@ -293,7 +293,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 70px;
     min-width: 70px;
     display: table-cell;
@@ -304,7 +304,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 100px;
     min-width: 100px;
     display: table-cell;
@@ -315,7 +315,7 @@ th
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
-    color: #474747;
+    color: #555555;
     width: 80px;
     min-width: 80px;
     display: table-cell;

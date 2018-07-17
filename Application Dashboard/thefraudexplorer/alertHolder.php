@@ -162,9 +162,14 @@ $domain = mysql_fetch_array($domainQuery);
 if ($agent_decSQ != "all")
 {
     echo '<table id="agentDataTable" class="tablesorter">';
-    echo '<thead><tr><th class="detailsth"><span class="fa fa-list fa-lg">&nbsp;&nbsp;</span></th><th class="timestampth">EVENT TIMESTAMP</th><th class="alerttypeth">ALERT TYPE</th>
-    <th class="windowtitleth">APPLICATION CONTEXT</th><th class="phrasetypedth">PHRASE TYPED</th><th class="phrasedictionaryth">PHRASE IN DICTIONARY</th><th class="falseth">MARK</th></tr>
-    </thead><tbody>';
+    echo '<thead><tr>';
+    echo '<th class="detailsth" id="elm-details-alert"><span class="fa fa-list fa-lg">&nbsp;</span></th>';
+    echo '<th class="timestampth" id="elm-date-alert">DATE</th>';
+    echo '<th class="alerttypeth" id="elm-type-alert">FRAUD VERTICE</th>';
+    echo '<th class="windowtitleth" id="elm-windowtitle-alert">&ensp;APPLICATION CONTEXT</th>';
+    echo '<th class="phrasetypedth" id="elm-phrasetyped-alert">PHRASE TYPED</th>';
+    echo '<th class="falseth" id="elm-mark-alert">MARK&emsp;</th>';
+    echo '</tr></thead><tbody>';
 
     foreach ($agentData['hits']['hits'] as $result)
     {        
@@ -174,9 +179,6 @@ if ($agent_decSQ != "all")
 
         $date = $result['_source']['eventTime'];
         $date = substr($date, 0, strpos($date, ","));
-    
-        /* AlertType */
-
         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
         $wordTyped = decRijndael($result['_source']['wordTyped']);
         $searchValue = "/".$result['_source']['phraseMatch']."/";
@@ -190,11 +192,14 @@ if ($agent_decSQ != "all")
         /* Timestamp */
 
         echo '<td class="timestamptd">';
-        echo '<span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$date;
+        $date = date_create($date);
+        echo date_format($date, 'Y-m-d H:i');
         echo '</td>';
+        
+        /* AlertType */
 
         echo '<td class="alerttypetd">';
-        echo '<span class="fa fa-tags font-icon-gray fa-padding"></span>'.ucfirst($result['_source']['alertType']);
+        echo '<center>'.strtoupper(ucfirst($result['_source']['alertType'])).'</center>';
         echo '</td>';
 
         /* Window title */
@@ -206,13 +211,7 @@ if ($agent_decSQ != "all")
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil font-icon-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
-        echo '</td>';
-
-        /* Regular expression dictionary */
-
-        echo '<td class="phrasedictionarytd">';
-        echo '<span class="fa fa-font font-icon-gray fa-padding"></span>'.$searchResult;
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Mark false positive */
@@ -251,25 +250,25 @@ else
     echo '<thead>';
     echo '<tr>';
     echo '<th class="detailsth-all" id="elm-details-alert">';
-    echo '<span class="fa fa-list fa-lg">&nbsp;&nbsp;</span>';
+    echo '<span class="fa fa-list fa-lg">&nbsp;</span>';
     echo '</th>';
     echo '<th class="timestampth-all" id="elm-date-alert">';
     echo 'DATE';
     echo '</th>';
     echo '<th class="alerttypeth-all" id="elm-type-alert">';
-    echo 'ALERT TYPE';
+    echo 'FRAUD VERTICE';
     echo '</th>';
     echo '<th class="endpointth-all" id="elm-endpoint-alert">';
-    echo 'ENDPOINT';
+    echo '&nbsp;PEOPLE';
     echo '</th>';
     echo '<th class="windowtitleth-all" id="elm-windowtitle-alert">';
-    echo 'APPLICATION CONTEXT';
+    echo '&emsp;APPLICATION CONTEXT';
     echo '</th>';
     echo '<th class="phrasetypedth-all" id="elm-phrasetyped-alert">';
     echo 'PHRASE TYPED';
     echo '</th>';
     echo '<th class="falseth-all" id="elm-mark-alert">';
-    echo 'MARK';
+    echo '<center>MARK&emsp;</center>';
     echo '</th>';
     echo '</tr>';
     echo '</thead>';
@@ -307,7 +306,7 @@ else
         /* Alert type */
                     
         echo '<td class="alerttypetd-all">';
-        echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
+        echo '<center>'.strtoupper($result['_source']['alertType']).'</center>';
         echo '</td>';
         
         /* Endpoint */
@@ -317,7 +316,7 @@ else
         $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
         $userDomain = mysql_fetch_assoc($queryUserDomain);
-        $agentName = $userDomain['agent']."@".$userDomain['domain'];
+        $agentName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
         $agent_enc = base64_encode(base64_encode($userDomain['agent']));
         $totalWordHits = $userDomain['totalwords'];
         $countPressure = $userDomain['pressure'];
@@ -328,7 +327,7 @@ else
         if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
         else $dataRepresentation = "0";
                     
-        echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
+        echo '<span class="fa fa-laptop font-icon-color-green awfont-padding-right"></span>';
                                     
         if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
         else 
@@ -342,13 +341,13 @@ else
         /* Application */
         
         echo '<td class="windowtitletd-all">';
-        echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.$windowTitle;
+        echo '<span class="fa fa-list-alt font-icon-color-gray-low awfont-padding-right"></span>'.$windowTitle;
         echo '</td>';
         
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil font-icon-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */
@@ -390,10 +389,13 @@ else
 if ($allAlertsSwitch != true)
 {
     echo '<div id="pager" class="pager">';
-    echo '<div class="pager-layout">';
+    echo '<div class="pager-layout" id="elm-pager-alerts">';
     echo '<div class="pager-inside">';
     echo '<div class="pager-inside-agent">';
-    echo 'There are '.$wordCounter.' regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span>'.$agent_decSQ.'@'.$domain[0].' stored in database';
+    
+    $endpointName = $agent_decSQ."@".between('@', '.', "@".$domain[0]);
+    
+    echo 'There are '.$wordCounter.' regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span>'.$endpointName.' stored in database';
     echo '</div>';
 
     echo '<div class="pager-inside-pager">';
@@ -542,7 +544,7 @@ else
                 {
                     sorter: "shortDate", dateFormat: "yyymmdd"
                 },
-                6:
+                5:
                 {
                     sorter: false
                 },

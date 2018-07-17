@@ -193,7 +193,7 @@ echo '<table id="tblData" class="tablesorter">';
 echo '<thead><tr>';
 echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
 echo '<th class="totalwordsth"></th>';
-echo '<th class="agentth" id="elm-endpoints-dashboard">PEOPLE UNDER ANALYTICS</th>';
+echo '<th class="agentth" id="elm-endpoints-dashboard">PEOPLE UNDER FRAUD TRIANGLE ANALYTICS</th>';
 echo '<th class="compth" id="elm-ruleset-dashboard">RULE SET</th>';
 echo '<th class="verth" id="elm-version-dashboard">VERSION</th>';
 echo '<th class="stateth" id="elm-status-dashboard">STT</th>';
@@ -244,7 +244,7 @@ if ($row_a = mysql_fetch_array($result_a))
 
         /* Agent name */
 
-        $agentName = $row_a["agent"] . "@" .$row_a["domain"];
+        $agentName = $row_a['agent']."@".between('@', '.', "@".$row_a['domain']);
 
         if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
         {
