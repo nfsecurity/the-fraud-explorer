@@ -474,6 +474,13 @@ a:active
     text-overflow: ellipsis;
 }
 
+.td-with-bg
+{
+    background-color: #F2F2F2;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 11px;
+}
+
 .block-with-text 
 {
     position: relative; 
@@ -489,6 +496,11 @@ a:active
 .font-icon-color-gray 
 { 
     color: #B4BCC2; 
+}
+
+.font-icon-color-green
+{
+    color: #95C8A6;
 }
 
 .ul 

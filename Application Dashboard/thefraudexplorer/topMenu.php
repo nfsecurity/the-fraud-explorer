@@ -90,10 +90,10 @@ include "lbs/close-db-connection.php";
         <a href="analyticsData" id="elm-analytics">Analytics</a>
     </li>
     <li class="li">
-        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Ruleset</a>
+        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
     </li>
     <li class="li">
-        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Settings</a>
+        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
     </li>
 
     <?php
@@ -115,7 +115,7 @@ include "lbs/close-db-connection.php";
     </li>
         
     <li class="li">
-        <a href="#" onclick="startTour()">Take tour</a>
+        <a href="#" onclick="startTour()">Tour</a>
     </li>
     <li style="float:right">
         <a class="active logout-button" href="logout">Logout</a>

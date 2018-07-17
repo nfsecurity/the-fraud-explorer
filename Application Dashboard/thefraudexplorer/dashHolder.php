@@ -122,16 +122,16 @@ discoverOnline();
                 <thead class="table-head">
                     <tr class="tr">
                         <th class="th" style="padding-left: 10px;">
-                            ENDPOINT
+                            PEOPLE
                         </th>
                         <th class="th">
                             <center>TRIANGLE</center>
                         </th>
                         <th class="th">
-                            <center>RULESET</center>
+                            <center>RULESET&nbsp;&nbsp;</center>
                         </th>
                         <th class="th">
-                            <center>SCORE</center>
+                            <center>SCORE&nbsp;&nbsp;</center>
                         </th>
                     </tr>
                 </thead>
@@ -160,7 +160,7 @@ discoverOnline();
                     {
                         do
                         {
-                            $agentName = $endpointsFraud['agent']."@".$endpointsFraud['domain'];
+                            $agentName = $endpointsFraud['agent']."@".between('@', '.', "@".$endpointsFraud['domain']);
                             $agent_enc = base64_encode(base64_encode($endpointsFraud['agent']));
                             $totalWordHits = $endpointsFraud['totalwords'];
                             $countPressure = $endpointsFraud['pressure'];
@@ -173,7 +173,7 @@ discoverOnline();
                             
                             echo '<tr class="tr">';
                             echo '<td class="td">';
-                            echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
+                            echo '<span class="fa fa-laptop font-icon-color-green awfont-padding-right"></span>';
                             
                             if ($endpointsFraud["name"] == NULL || $endpointsFraud['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
                             else 
@@ -190,11 +190,11 @@ discoverOnline();
                             echo '<td class="td">';
                             echo '<center><span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.str_pad($triangleSum, 4, '0', STR_PAD_LEFT).'</center>';
                             echo '</td>';
-                            echo '<td class="td">';
+                            echo '<td class="td td-with-bg">';
                             echo '<center>'.$endpointsFraud['ruleset'].'</center>';
                             echo '</td>';
                             echo '<td class="td">';
-                            echo '<center><span class="fa fa-line-chart font-icon-color-gray awfont-padding-right"></span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
+                            echo '<center><span class="fa fa-line-chart font-icon-color-green awfont-padding-right"></span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
                             echo '</td>';
                         }
                         while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
@@ -296,27 +296,24 @@ discoverOnline();
         <div class="container-bottom-right-sub table-class">
 
             <table id="top50alerts" class="table tablesorter">
-                <thead class="thead">
+                <thead class="table-head">
                     <tr class="tr">
                         <th class="th">
-                            DATE
+                            MOMENTUM
                         </th>
                         <th class="th">
-                            ALERT TYPE
+                            PEOPLE
                         </th>
                         <th class="th">
-                            ENDPOINT
+                            <center>FRAUD VERTICE&nbsp;&nbsp;</center>
                         </th>
                         <th class="th">
-                            PHRASE TYPED
-                        </th>
-                        <th class="th">
-                            APPLICATION
+                            ORIGIN
                         </th>
                     </tr>
                 </thead>
 
-                <tbody class="tbody">
+                <tbody class="table-body">
 
                     <?php
 
@@ -353,19 +350,16 @@ discoverOnline();
                         $regExpression = htmlentities($result['_source']['phraseMatch']);
                     
                         alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
-                        echo $date;
+                        echo '&nbsp;'.$date;
                     
                         echo '</td>';
                     
-                        echo '<td class="td">';
-                        echo '<span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.$result['_source']['alertType'];
-                        echo '</td>';
                         echo '<td class="td">';
                  
                         $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
                         $userDomain = mysql_fetch_assoc($queryUserDomain);
-                        $agentName = $userDomain['agent']."@".$userDomain['domain'];
+                        $agentName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
                         $agent_enc = base64_encode(base64_encode($userDomain['agent']));
                         $totalWordHits = $userDomain['totalwords'];
                         $countPressure = $userDomain['pressure'];
@@ -385,13 +379,15 @@ discoverOnline();
                             agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
                         }
                     
+                        echo '<td class="td td-with-bg">';
+                        echo '<center>'.strtoupper($result['_source']['alertType']).'</center>';
+                        echo '</td>';
+                        
                         echo '</td>';
                         echo '<td class="td">';
-                        echo '<span class="fa fa-pencil-square-o font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
+                        echo '<span class="fa fa-pencil-square-o font-icon-color-green awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
                         echo '</td>';
-                        echo '<td class="td">';
-                        echo '<span class="fa fa-list-alt font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle,0,80));
-                        echo '</td>';
+                                              
                         echo '</tr>';
                     }
 
