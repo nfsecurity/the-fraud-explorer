@@ -93,4 +93,4 @@ INSERT INTO `t_config` (
     `score_ts_critic_from`, 
     `score_ts_critic_to`,
     `sample_data_calculation`
-) VALUES ('0', '10', '11', '20', '21', '30', '31', '100', 'enabled');
+) VALUES ('0', '3', '4', '7', '8', '11', '12', '100', 'enabled');
