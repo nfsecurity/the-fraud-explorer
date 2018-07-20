@@ -75,7 +75,7 @@ include "lbs/close-db-connection.php";
 <ul class="ul" id="elm-topmenu">
     <li class="li">
         <p class="fixed-space">&nbsp;</p>
-        &nbsp;&nbsp;<img src=images/nftop.svg class="main-logo">
+        &emsp;&ensp;<img src=images/nftop.svg class="main-logo">
     </li>
     <li class="li">
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
