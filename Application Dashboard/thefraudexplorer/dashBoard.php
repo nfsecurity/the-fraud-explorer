@@ -123,7 +123,7 @@ $_SESSION['instance'] = "dashBoard";
 
     <!-- Modal for Welcome Screen -->
 
-    <div class="modal fade-scale" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="vertical-alignment-helper">
             <div class="modal-dialog vertical-align-center">
                 <div class="modal-content">
