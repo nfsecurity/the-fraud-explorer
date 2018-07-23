@@ -232,7 +232,9 @@ if ($agent_decSQ != "all")
         $jsonResultValue = json_decode($resultValues);
         $falsePositiveValue = $jsonResultValue->_source->falsePositive;
     
-        echo '<td class="falsetd"><a class="false-positive" data-href="toggleAlertMark?regid='.$result['_id'].'&agent='.$agent_enc.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singlealerts" data-toggle="modal" data-target="#false-positive" href="#">';
+        echo '<td class="falsetd">';
+        
+        echo '<a class="false-positive" href="alertMarking?regid='.$result['_id'].'&agent='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singlealerts" data-toggle="modal" data-target="#alertMarking" href="#">';
     
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
@@ -369,12 +371,13 @@ else
         $jsonResultValue = json_decode($resultValues);
         $falsePositiveValue = $jsonResultValue->_source->falsePositive;
     
-        echo '<td class="falsetd-all"><a class="false-positive" data-href="toggleAlertMark?regid='.$result['_id'].'&agent='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allalerts" data-toggle="modal" data-target="#false-positive" href="#">';
-    
+        echo '<td class="falsetd-all">';
+        echo '<a class="false-positive" href="alertMarking?regid='.$result['_id'].'&agent='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allalerts" data-toggle="modal" data-target="#alertMarking" href="#">';
+        
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
 
-        echo '</tr>';  
+        echo '</tr>';
         
         $alertCounter++;
     }
@@ -480,14 +483,6 @@ else
 }
 
 ?>
-
-<!-- Modal for false positive -->
-
-<script>
-    $('#false-positive').on('show.bs.modal', function(e){
-        $(this).find('.false-positive-button').attr('href', $(e.relatedTarget).data('href'));
-    });
-</script>
 
 <!-- Modal for Phrase viewer -->
 

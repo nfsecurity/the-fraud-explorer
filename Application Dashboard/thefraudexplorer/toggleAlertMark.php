@@ -32,37 +32,51 @@ $index=filter($_GET['index']);
 $type=filter($_GET['type']);
 $urlrefer=filter($_GET['urlrefer']);
 
-/* Query actual falsePositive value */
+if (!empty($_POST['toggle-alert']))
+{
+    /* Query actual falsePositive value */
 
-$urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
+    $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
     
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-$resultValues=curl_exec($ch);
-curl_close($ch);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    $resultValues=curl_exec($ch);
+    curl_close($ch);
 
-$jsonResultValue = json_decode($resultValues);
-$falsePositiveValue = $jsonResultValue->_source->falsePositive;
-$mark = 0;
+    $jsonResultValue = json_decode($resultValues);
+    $falsePositiveValue = $jsonResultValue->_source->falsePositive;
+    $mark = 0;
 
-if ($falsePositiveValue == "0") $mark = 1;
+    if ($falsePositiveValue == "0") $mark = 1;
 
-/* Toggle falsePositive value */
+    /* Toggle falsePositive value */
 
-$urlAlerts="http://localhost:9200/".$index."/".$type."/".$regid."/_update?pretty&pretty";
-$params = '{ "doc" : { "falsePositive" : "'.$mark.'" } } }';
+    $urlAlerts="http://localhost:9200/".$index."/".$type."/".$regid."/_update?pretty&pretty";
+    $params = '{ "doc" : { "falsePositive" : "'.$mark.'" } } }';
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL,$urlAlerts);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-$resultAlerts=curl_exec($ch);
-curl_close($ch);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL,$urlAlerts);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    $resultAlerts=curl_exec($ch);
+    curl_close($ch);
+}
+else if (!empty($_POST['delete-alert']))
+{
+    /* Delete agent elasticsearch documents */
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/".$index."/".$type."/".$regid); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_exec($ch); 
+    curl_close($ch); 
+}
 
 /* Return to refering url */
 

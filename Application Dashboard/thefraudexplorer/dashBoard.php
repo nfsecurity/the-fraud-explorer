@@ -167,6 +167,11 @@ var tour = new Tour({
         title: "Dashboard",
         content: "This is the main dashboard, here you can see all relevant data, including alerts, top endpoints, metrics and data volume graphs. You can use the dashboard for executive analysis of fraud triangle."
     }, {
+        element: "#elm-alertmodule",
+        placement: 'bottom',
+        title: "Alerts",
+        content: "Here you can see the alerts produced by the Fraud Triangle Analytics methodology based on the Fraud Triangle theory from Donald R. Cressey. By clicking here you will be redirected to the Alert module."
+    }, {
         element: "#elm-endpoints",
         placement: 'bottom',
         title: "Endpoint administration",
