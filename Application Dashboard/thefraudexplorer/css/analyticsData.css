@@ -257,3 +257,70 @@ li a:hover:not(.active)
     outline: none;
     cursor:pointer;
 }
+
+.fraudtriangle-bubble-container
+{
+    position: fixed;
+    border: 2px green;
+    left: 245px;
+    right: 47px;
+    top: 93px;
+    bottom: 110px;
+    background-color: #E8E9E8;
+}
+
+.tl 
+{ 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 30%; 
+    bottom: 30%; 
+    background: #e2e5e6; 
+    border: solid white; 
+    border-width: 0 3px 3px 0; 
+    z-index: -1; 
+    text-align: right;
+}
+
+.tr 
+{ 
+    position: absolute; 
+    top: 0; 
+    left: 70%; 
+    right: 0; 
+    bottom: 30%; 
+    background: #e2e5e6; 
+    border: solid white; 
+    border-width: 0 0 3px 0; 
+    z-index: -1;
+    text-align: left;
+    font-family: 'FFont-Bold';
+}
+
+.bl 
+{ 
+    position: absolute; 
+    top: 70%; 
+    left: 0; 
+    right: 30%; 
+    bottom: 0; 
+    background: #f1f3f3; 
+    border: solid white; 
+    border-width: 0 3px 0 0; 
+    z-index: -1;
+    text-align: right;
+}
+
+.br 
+{ 
+    position: absolute; 
+    top: 70%; 
+    left: 70%; 
+    right: 0; 
+    bottom: 0; 
+    background: #f1f3f3; 
+    z-index: -1;
+    text-align: left;
+    font-family: 'FFont-Bold';
+}

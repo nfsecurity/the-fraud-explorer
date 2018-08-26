@@ -219,6 +219,7 @@ if ($agent_decSQ != "all")
         $index = $result['_index'];
         $type = $result['_type'];
         $regid = $result['_id'];
+        $agentId = $result['_source']['agentId'];
     
         $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();

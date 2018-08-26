@@ -282,7 +282,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                     socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
                     $GLOBALS[$matchesGlobalCount]++;
 
-                    logToFile($configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
+                    logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 
                     $countOutput++;
                 }
@@ -473,14 +473,20 @@ function repopulateSampler()
     $resultQuery = mysql_query($insertQuery);
 }
 
-/* Send log data to external file */
+/* Send log data to external file & syslog */
 
-function logToFile($filename, $msg)
+function logToFileAndSyslog($logType, $filename, $msg)
 {
     $fd = fopen($filename, "a");
     $str = "[" . date("Y/m/d h:i:s", mktime()) . "] " . $msg; 
     fwrite($fd, $str . "\n");
     fclose($fd);
+    
+    /* Syslog integration */
+    
+    openlog("thefraudexplorer", LOG_PID, LOG_LOCAL0);
+    syslog(($logType == "LOG_INFO" ? LOG_INFO : LOG_ALERT), $msg);
+    closelog();
 }
 
 ?>

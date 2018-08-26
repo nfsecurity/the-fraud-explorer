@@ -87,14 +87,14 @@ discoverOnline();
                 if (samplerStatus($session->domain) == "enabled")
                 {
                     $queryAgentsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryAgentsGraphSQL = "SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent";
-                    $queryAgentsGraphSQLRuleset = "SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent";
+                    $queryAgentsGraphSQL = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
                 else
                 {
                     $queryAgentsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryAgentsGraphSQL = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent";
-                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent";
+                    $queryAgentsGraphSQL = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
             }
             else
@@ -102,18 +102,18 @@ discoverOnline();
                 if (samplerStatus($session->domain) == "enabled")
                 {
                     $queryAgentsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryAgentsGraphSQLDomain = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent";
-                    $queryAgentsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent";
-                    $queryAgentsGraphSQL = "SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent";
-                    $queryAgentsGraphSQLRuleset = "SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent";
+                    $queryAgentsGraphSQLDomain = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQL = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
                 else
                 {
-                    $queryAgentsGraphSQLLeyend = "SELECT * FROM t_config_".str_replace(".", "_", $session->domain);
-                    $queryAgentsGraphSQLDomain = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' GROUP BY agent";
-                    $queryAgentsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent";
-                    $queryAgentsGraphSQL = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent";
-                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent";
+                    $queryAgentsGraphSQLLeyend = "SELECT * FROM t_config_".str_replace(".", "_", $session->domain);                                     
+                    $queryAgentsGraphSQLDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";            
+                    $queryAgentsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";  
+                    $queryAgentsGraphSQL = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
+                    $queryAgentsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
             }
                    
@@ -132,12 +132,8 @@ discoverOnline();
             <table class="table-leyend" id="elm-legend">
                 <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Score legend</th>
                 <tr>
-                    <td class="table-leyend-point"><span class="point-red"></span><br><?php echo $scoreResult['score_ts_critic_from'].">"; ?></td>
-                    <td class="table-leyend-point"><span class="point-green"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_high_to']; ?></td>
-                </tr>
-                <tr>
-                    <td class="table-leyend-point"><span class="point-blue"></span><br><?php echo $scoreResult['score_ts_medium_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
-                    <td class="table-leyend-point"><span class="point-yellow"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_low_to']; ?></td>
+                    <td class="table-leyend-point"><span class="point-red"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_critic_from'].">"; ?></td>
+                    <td class="table-leyend-point"><span class="point-green"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
                 </tr>
             </table>
             <span style="line-height: 0.1"><br></span>
@@ -223,103 +219,53 @@ discoverOnline();
             echo '</table>';
             echo '<br>';
             echo '</div>';
-
-            echo '<div class="y-axis-line"></div>';
-            echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$countPressureTotal.'</div>';
-            echo '<div class="x-axis-line-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$countRationalizationTotal.'</div>';
             
-            /* Data Table & Alerts*/
+            /* Axis calculation */
+        
+            if($session->domain == "all")
+            {
+                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysql_query($queryAgentsGraphSQL);
+                else $result_axis = mysql_query($queryAgentsGraphSQLRuleset);
+
+            }
+            else
+            {
+                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysql_query($queryAgentsGraphSQLDomain);
+                else $result_axis = mysql_query($queryAgentsGraphSQLRulesetDomain);
+            }
+
+            $axisCounter = 0;
+            $row_axis = mysql_fetch_array($result_axis);
+            
+            do
+            {    
+                $axisRationalization[$axisCounter] = $row_axis['rationalization'];
+                $axisPressure[$axisCounter] = $row_axis['pressure'];
+                $axisCounter++;
+            }
+            while ($row_axis = mysql_fetch_array($result_axis));
+                
+            $xAxisGraph = max($axisPressure);
+            $yAxisGraph = max($axisRationalization);
+            
+            echo '<div class="y-axis-line"></div>';
+            echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$xAxisGraph.'</div>';
+            echo '<div class="x-axis-line-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$yAxisGraph.'</div>';
+            
+            /* Data Table & Alerts */
             
             echo '<div class="data-table-icon" id="elm-analyticsaccess"><br>';
             echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="alertData?agent='.base64_encode(base64_encode("all")).'">Access all alerts</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Access graphic data</a></div>';
+            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Vertical analytics</a></div>';
                     
             ?>
             
-            <div id="scatterplot">
-
-                <?php
-
-                function paintScatter($counter, $opportunityPoint, $agent, $score, $countPressure, $countOpportunity, $countRationalization)
-                {
-                    $agentEncoded=base64_encode(base64_encode($agent));
-                    echo '<span id="point'.$counter.'" class="'.$opportunityPoint.' tooltip-custom pseudolink" title="<div class=tooltip-inside><b>'.$agent.'</b><table class=tooltip-table><tbody><tr><td>Total Fraud Score</td><td>'.$score.'</td></tr><tr><td>Pressure count</td><td>'.$countPressure.'</td></tr><tr><td>Opportunity count</td><td>'.$countOpportunity.'</td></tr><tr><td>Rationalization count</td><td>'.$countRationalization.'</td></tr></tbody></table></div>" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'"></span>'."\n";
-                }
-
-                /* Elasticsearch querys for fraud triangle counts and score */
-
-                $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
-
-                /* Database querys */
-
-                if($session->domain == "all")
-                {
-                    if ($_SESSION['rulesetScope'] == "ALL") $result_a = mysql_query($queryAgentsGraphSQL);
-                    else $result_a = mysql_query($queryAgentsGraphSQLRuleset);
-                }
-                else
-                {
-                    if ($_SESSION['rulesetScope'] == "ALL") $result_a = mysql_query($queryAgentsGraphSQLDomain);
-                    else $result_a = mysql_query($queryAgentsGraphSQLRulesetDomain);
-                }
-
-                /* Graph Logic */
-
-                $counter = 1;
-
-                if ($row_a = mysql_fetch_array($result_a))
-                {
-                    do
-                    {
-                        /* Agent data */
-
-                        $countRationalization = $row_a['rationalization'];
-                        $countOpportunity = $row_a['opportunity'];
-                        $countPressure = $row_a['pressure'];
-                        $score=($countPressure+$countOpportunity+$countRationalization)/3;
-
-                        $score = round($score, 1);
-                        unset($GLOBALS['numberOfRMatches']);
-                        unset($GLOBALS['numberOfOMatches']);
-                        unset($GLOBALS['numberOfPMatches']);
-                        unset($GLOBALS['numberOfCMatches']);
-
-                        if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
-                        {
-                            if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-low-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-low-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-low-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-low-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                        }
-
-                        if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
-                        {
-                            if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-medium-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-medium-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-medium-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-medium-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                        }
-
-                        if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
-                        {
-                            if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-high-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-high-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-high-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-high-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                        }
-
-                        if ($countOpportunity >= $scoreResult['score_ts_critic_from'])
-                        {
-                            if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) paintScatter($counter, "point-opportunity-critic-yellow", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) paintScatter($counter, "point-opportunity-critic-blue", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) paintScatter($counter, "point-opportunity-critic-green", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                            if ($score >= $scoreResult['score_ts_critic_from']) paintScatter($counter, "point-opportunity-critic-red", $row_a["agent"], $score, $countPressure, $countOpportunity, $countRationalization);
-                        }
-                        $counter++;
-                    }
-                    while ($row_a = mysql_fetch_array($result_a));
-                }
-                ?>
+            <div class="fraudtriangle-bubble-container">
+                <div class="tl"><br>High Pressures&emsp;</div>
+                <div class="tr"><br>&emsp;Fraud Triangle Consolidation</div>
+                <div class="bl"><br>Low Fraud Triangle Behaviors&emsp;</div>
+                <div class="br"><br>&emsp;High Rationalizations</div>
+                <canvas id="fraudtriangle-graph"></canvas>
             </div>
         </div>
     </div>
@@ -328,151 +274,286 @@ discoverOnline();
 <!-- Scatterplot -->
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#scatterplot').scatter({
-            color: '#ededed',
+    
+    var defaultOptions = {
+        global: {
+            defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'FFont'"
+        }
+    }
+    
+    var canvas = document.getElementById("fraudtriangle-graph");
+    var ctx = canvas.getContext("2d");
+    var BubbleChart = new Chart(ctx, {
+    type: 'bubble',
+    data: { datasets: [
 
-            <?php
-
-            /* Database querys */
-
-            if($session->domain == "all")
+    <?php
+    
+        /* Database querys */
+        
+        if($session->domain == "all")
+        {
+            if ($_SESSION['rulesetScope'] == "ALL")
             {
-                if ($_SESSION['rulesetScope'] == "ALL")
-                {
-                    $result_a = mysql_query($queryAgentsGraphSQL);
-                    $result_b = mysql_query($queryAgentsGraphSQL);
-                }
-                else
-                {
-                    $result_a = mysql_query($queryAgentsGraphSQLRuleset);
-                    $result_b = mysql_query($queryAgentsGraphSQLRuleset);
-                }
+                $result_a = mysql_query($queryAgentsGraphSQL);
+                $result_b = mysql_query($queryAgentsGraphSQL);
             }
             else
             {
-                if ($_SESSION['rulesetScope'] == "ALL")
-                {
-                    $result_a = mysql_query($queryAgentsGraphSQLDomain);
-                    $result_b = mysql_query($queryAgentsGraphSQLDomain);
-                }
-                else
-                {
-                    $result_a = mysql_query($queryAgentsGraphSQLRulesetDomain);
-                    $result_b = mysql_query($queryAgentsGraphSQLRulesetDomain);
-                }
+                $result_a = mysql_query($queryAgentsGraphSQLRuleset);
+                $result_b = mysql_query($queryAgentsGraphSQLRuleset);
             }
-
-            /* Graph Logic */
-
-            $counter = 1;
-            $row_a = mysql_fetch_array($result_a);
-
-            do
+        }
+        else
+        {
+            if ($_SESSION['rulesetScope'] == "ALL")
             {
-                /* Agent data */
-
-                $countRationalization = $row_a['rationalization'];
-                $countOpportunity = $row_a['opportunity'];
-                $countPressure = $row_a['pressure'];
-
-                /*  Draw axis units */
-
-                if ($counter == 1)
-                {
-                    $subCounter = 1;
-
-                    /* Get max count value for both axis */
-
-                    $row_aT = mysql_fetch_array($result_b);
-
-                    do
-                    {
-                        /* Agent data */
-
-                        $countRationalizationT[$subCounter] = $row_aT['rationalization'];
-                        $countPressureT[$subCounter] = $row_aT['pressure'];
-
-                        $subCounter++;
-                    }
-                    while ($row_aT = mysql_fetch_array($result_b));
-
-                    $GLOBALS['maxYAxis'] = max($countPressureT);
-                    $GLOBALS['maxXAxis'] = max($countRationalizationT);
-
-                    echo 'rows: 2,';
-                    echo 'columns: 2,';
-                    echo 'subsections: 0,';
-                    echo 'responsive: true';
-                    echo '});';
-                }
-
-                /* Scoring calculation */
-
-                $score=($countPressure+$countOpportunity+$countRationalization)/3;
-
-                if($GLOBALS['maxYAxis'] == 0) $yAxis = ($countPressure*100)/1;
-                else $yAxis = ($countPressure*100)/$GLOBALS['maxYAxis'];
-
-                if($GLOBALS['maxXAxis'] == 0) $xAxis = ($countRationalization*100)/1;
-                else $xAxis = ($countRationalization*100)/$GLOBALS['maxXAxis'];
-
-                /* Fix corners */
-
-                if ($xAxis == 100) $xAxis = $xAxis - 2;
-                if ($yAxis == 100) $yAxis = $yAxis - 4.5;
-                if ($xAxis == 0) $xAxis = $xAxis + 1.5;
-                if ($yAxis == 0) $yAxis = $yAxis + 3;
-
-                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= $scoreResult['score_ts_low_to'])
-                {
-                    if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                }
-
-                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= $scoreResult['score_ts_medium_to'])
-                {
-                    if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                }
-
-                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= $scoreResult['score_ts_high_to'])
-                {
-                    if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                }
-
-                if ($countOpportunity >= $scoreResult['score_ts_critic_from'] && $countOpportunity <= $scoreResult['score_ts_critic_to'])
-                {
-                    if ($score > $scoreResult['score_ts_low_from'] && $score <= ($scoreResult['score_ts_low_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_medium_from'] && $score <= ($scoreResult['score_ts_medium_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_high_from'] && $score <= ($scoreResult['score_ts_high_to']+0.9)) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                    if ($score >= $scoreResult['score_ts_critic_from']) echo '$(\'#point'.$counter.'\').plot({ xPos: \''.$xAxis.'%\', yPos: \''.$yAxis.'%\'});';
-                }
-
-                $counter++;
+                $result_a = mysql_query($queryAgentsGraphSQLDomain);
+                $result_b = mysql_query($queryAgentsGraphSQLDomain);
             }
-            while ($row_a = mysql_fetch_array($result_a));
+            else
+            {
+                $result_a = mysql_query($queryAgentsGraphSQLRulesetDomain);
+                $result_b = mysql_query($queryAgentsGraphSQLRulesetDomain);
+            }
+        }
+        
+        /* Graph Logic */
+        
+        $counter = 1;
+        $row_a = mysql_fetch_array($result_a);
+    
+        do
+        {
+            /* Agent data */
+            
+            $queryOpportunity = "SELECT opportunity FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE agent='".$row_a['agent']."'";
+            $result_opportunity = mysql_query($queryOpportunity);
+            $opportunityValue = mysql_fetch_array($result_opportunity);
+         
+            $countRationalization = $row_a['rationalization'];
+            $countOpportunity = $opportunityValue['opportunity'];
+            $countPressure = $row_a['pressure'];
+        
+            /*  Draw axis units */
+            
+            if ($counter == 1)
+            {
+                $subCounter = 1;
+            
+                /* Get max count value for both axis */
+                
+                $row_aT = mysql_fetch_array($result_b);
+                
+                do
+                {
+                    /* Agent data */
+                    
+                    $countRationalizationT[$subCounter] = $row_aT['rationalization'];
+                    $countPressureT[$subCounter] = $row_aT['pressure'];
+                    $subCounter++;
+                }
+                while ($row_aT = mysql_fetch_array($result_b));
+                
+                $GLOBALS['maxYAxis'] = max($countPressureT);
+                $GLOBALS['maxXAxis'] = max($countRationalizationT);
+            }
+                
+            /* Scoring calculation */
+            
+            $score=($countPressure+$countOpportunity+$countRationalization)/3;
+            
+            if ($counter%2 == 0) $xAxis = $countRationalization + mt_rand(25,50)/100;
+            else $xAxis = $countRationalization;
+            
+            $yAxis = $countPressure;
+            
+            
+            /* Do not graph */
+            
+            if ($countRationalization == 0 && $countOpportunity == 0 && $countPressure == 0) continue;
+                      
+            /* Low criticality */
+    
+            if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']+0.9)
+            {
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(128,216,135,0.3)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 5 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(128,216,135,0.3)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 7 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(128,216,135,0.3)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 9 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(128,216,135,0.3)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 11 } ]},';
+                }
+            }
+            
+            /* Medium criticality */
+            
+            else if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']+0.9)
+            {
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.5, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 10 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.5, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 15 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.5, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 18 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.5, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 20 } ]},';
+                }
+            }
+            
+            /* High criticality */
+            
+            else if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']+0.9)
+            {
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 10 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 13 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 15 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 17 } ]},';
+                }
+            }
+            
+            /* Critical criticality */
+            
+            else if ($score >= $scoreResult['score_ts_critic_from'] && $score <= $scoreResult['score_ts_critic_to']+0.9)
+            {
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to']))
+                {
+                    echo '{ label: "Endpoints matching", backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 15 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 17 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 19 } ]},';
+                }
+                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+                {
+                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: 20 } ]},';
+                }
+            }
+            $counter++;
+        }
+        while ($row_a = mysql_fetch_array($result_a));
+        
+    ?>
+     
+    ]},
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        layout: {
+            padding: {
+                left: 80,
+                right: 80,
+                top: 80,
+                bottom: 60
+            }
+        },
+        tooltips: {
+            callbacks: {
+                title: function(tooltipItems, data) {
+                    return "Endpoints Behavior";
+                },
+                label: function(tooltipItems, data) {
+                    return "Pressure: " + parseInt(tooltipItems.yLabel) + ", " + "Rationalization: " + parseInt(tooltipItems.xLabel);
+                }
+            },
+            enabled: true,
+            backgroundColor: "#ededed",
+            titleFontColor: "#474747",
+            bodyFontColor: "#474747",
+            xPadding: 10,
+            yPadding: 10,
+            cornerRadius: 3,
+            titleFontSize: 12,
+            bodyFontSize: 11,
+            borderColor: "#B3B3B3",
+            borderWidth: 0.5,
+            caretPadding: 20,
+            displayColors: false,
+            footerFontColor: "#000000",
+            titleFontFamily: "FFont-Bold"
+        },
+        animation: false,
+        scales: {
+            xAxes: [{
+                display: false,
+                ticks: {
+                    suggestedMin: 0,
+                    display: false,
+                    
+                    <?php echo "suggestedMax: ".$GLOBALS['maxXAxis']; ?>
+                },
+                gridLines: {
+                    drawTicks: false
+                }
+            }],
+            yAxes: [{
+                display: false,
+                ticks: {
+                    suggestedMin: 0,
+                    display: false,
+                    
+                    <?php echo "suggestedMax: ".$GLOBALS['maxYAxis']; ?>
+                },
+                gridLines: {
+                    drawTicks: false
+                }
+            }]
+        },
+        onClick: function(e) {
+            var element = this.getElementAtEvent(e);
 
-            ?>
-        });
-</script>
-
-<!-- Tooltipster -->
-
-<script>
-    $(document).ready(function(){
-        $('.tooltip-custom').tooltipster({
-            theme: 'tooltipster-light',
-            contentAsHTML: true
-        });
-    });
+            if (element.length > 0) {
+                var data = JSON.stringify(this.config.data.datasets[element[0]._datasetIndex].data[element[0]._index]);
+                var url = "analyticsGraphPoints.php?coordinates=" + data;
+                
+                $('.modal-body').load(url);
+                $('#bubble-clicking').modal('show');
+            }
+        },
+        hover: {
+            onHover: function(e) {
+                var point = this.getElementAtEvent(e);
+                if (point.length) e.target.style.cursor = 'pointer';
+                else e.target.style.cursor = 'default';
+            }
+        }
+    }
+});
+ 
 </script>
 
 <!-- Modal for GraphicData -->
@@ -484,6 +565,22 @@ discoverOnline();
                 <div class="modal-body">
                     <p class="debug-url window-debug"></p>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Bubble clicking -->
+
+<div class="modal" id="bubble-clicking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title window-title" id="myModalLabel">Coordinate zoom</h4>
+                </div>
+                <div class="modal-body"></div>
             </div>
         </div>
     </div>

@@ -520,13 +520,19 @@ $countAlerts = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
             animation: false,
             scales: {
                 xAxes: [{
+                    ticks: {
+                        min: 0
+                    },
                     gridLines: {
-                        offsetGridLines: false
+                        offsetGridLines: true
                     }
                 }],
                 yAxes: [{
                     ticks: {
                         min: 0
+                    },
+                    gridLines: {
+                        offsetGridLines: true
                     }
                 }]
             }

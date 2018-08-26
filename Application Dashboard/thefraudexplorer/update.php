@@ -49,7 +49,6 @@ $domain = strtolower(decRijndael(filter($_GET['d'])));
 $agent=$macAgent;
 $configFile = parse_ini_file("config.ini");
 $ipAddress = getAgentIP();
-
 $keyquery = mysql_query("SELECT password FROM t_crypt");
 $keypass = mysql_fetch_array($keyquery);
 

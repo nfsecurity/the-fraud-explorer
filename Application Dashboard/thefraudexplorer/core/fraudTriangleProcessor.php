@@ -96,7 +96,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     echo "[INFO] Index ".$configFile['es_alerter_status_index']." already exist, continue ...\n";
 
     $firstTimeIndex = false;
-    logToFile($configFile['log_file'], "[INFO] - The alerter index already exist, continue with data range matching ...");
+    logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - The alerter index already exist, continue with data range matching ...");
     $endDate = extractEndDateFromAlerter($configFile['es_alerter_status_index'], "AlertStatus");
     $GLOBALS['arrayPosition'] = 0;
     getArrayData($endDate, "endTime", 'lastAlertDate');
@@ -107,7 +107,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
     echo "[INFO] Checking events from latest alert date: ".$GLOBALS['lastAlertDate'][0]." ...\n";
 
-    logToFile($configFile['log_file'], "[INFO] - Checking events from last date: ".$GLOBALS['lastAlertDate'][0]."  ...");
+    logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Checking events from last date: ".$GLOBALS['lastAlertDate'][0]."  ...");
 
     echo "[INFO] Searching for typedwords by agent ...\n";
 
@@ -169,7 +169,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 else
 {
     echo "[INFO] Index ".$configFile['es_alerter_status_index']." doesn't exist, continue ...\n";
-    logToFile($configFile['log_file'], "[INFO] - Alerter index not found, continue with all data matching ...");
+    logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Alerter index not found, continue with all data matching ...");
     
     echo "[INFO] Syncing new endpoints sessions with their existing rulesets ...\n";
     
@@ -255,7 +255,7 @@ socket_close($sockAlerter);
 
 echo "[INFO] Sending this alert status to log file ...\n";
 
-logToFile($configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
+logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
 include "/var/www/html/thefraudexplorer/lbs/close-db-connection.php";
 
 $time_end = microtime(true);

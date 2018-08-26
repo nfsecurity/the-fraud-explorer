@@ -126,6 +126,7 @@ bejucos
 beringo
 berraca
 berraco
+berraquera
 berrinche
 bichito
 bichote
@@ -349,6 +350,7 @@ cutupeto
 daniela
 decile
 decimele
+Deisy
 dejemola
 dejemolo
 dejemosla
@@ -449,6 +451,8 @@ espicho
 estoraque
 estrato
 estren
+excel
+exel
 faca
 facatativa
 fajaron
@@ -493,6 +497,8 @@ gomela
 gomelo
 gonorrea
 gritadera
+guachada
+guachadas
 guachafita
 guache
 guaches
@@ -514,6 +520,10 @@ guevones
 gurre
 gusaniando
 gusaniar
+habela
+habelas
+habelo
+haberlo
 hablate
 hagale
 hembra
@@ -529,6 +539,7 @@ huevonear
 huevoniar
 ibague
 incauca
+ing
 ipiales
 isa
 isagen
@@ -833,6 +844,8 @@ tarrao
 tel
 tenaz
 terpel
+teta
+tetas
 tigo
 tiniebla
 tinieblo
@@ -877,3 +890,12 @@ zarzo
 zipaquira
 zumbambica
 zumbambico
+lapo
+bandido
+bandida
+bandidos
+bandidas
+criticon
+criticona
+criticones
+criticonas

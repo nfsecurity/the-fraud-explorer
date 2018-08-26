@@ -132,9 +132,25 @@ include "lbs/agent_methods.php";
         min-height: 30px;
         padding: 0px 0px 0px 5px;
         text-align: center;
+        border-right: 2px solid white;
     }
     
-      .table-td-graphdata-endpoint
+    .table-td-graphdata-body-opportunity
+    {
+        width: calc(435px / 5);
+        min-width: calc(435px / 5);
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 5px;
+        text-align: center;
+        border-right: 2px solid white;
+        background: #d9d9d9; 
+        font-family: 'FFont-Bold'; 
+        border: 1px solid white; 
+        border-radius: 3px 3px 3px 3px;
+    }
+    
+    .table-td-graphdata-endpoint
     {
         border: 0px solid gray;
         width: 120px;
@@ -143,18 +159,42 @@ include "lbs/agent_methods.php";
         min-height: 30px;
         padding: 0px 0px 0px 5px;
         text-align: center;
+        border-radius: 10px 0px 0px 0px; 
+        text-align: left; 
+        border-right: 2px solid white;
+    }
+    
+    .table-td-graphdata-endpoint-woradius
+    {
+        border: 0px solid gray;
+        width: 120px;
+        min-width: 120px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 5px;
+        text-align: center;
+        border-radius: 0px 0px 0px 0px; 
+        text-align: left; 
+        border-right: 2px solid white;
     }
 
     .font-icon-color-green
     {
         color: green;
     }
+    
+    .footer-statistics
+    {
+        background-color: #e8e9e8;
+        border-radius: 5px 5px 5px 5px;
+        padding: 8px 8px 8px 8px;
+    }
 
 </style>
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Graphic data</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Endpoint triangle alerts</h4>
 </div>
 
 <div class="div-container">
@@ -165,16 +205,16 @@ include "lbs/agent_methods.php";
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>PRESS</th>
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>OPPRT</th>
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>RATNL</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>TOTAL</th>
+            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>SCORE</th>
         </thead>
         <tbody class="table-tbody-graphdata">
 
             <?php
 
-            $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 250";
-            $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 250";                  
-            $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC LIMIT 250";
-            $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC LIMIT 250";
+            $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC";
+            $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC";                  
+            $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC";
+            $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC";
                     
             if ($session->domain == "all")
             {
@@ -189,6 +229,8 @@ include "lbs/agent_methods.php";
 
             if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
             {
+                $counter = 0;
+                
                 do
                 {
                     $agentName = $endpointsFraud['agent'];
@@ -198,23 +240,25 @@ include "lbs/agent_methods.php";
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
                     $totalAlerts = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
-                    
-                    echo '<tr class="table-tr-graphdata">';
-                    
+                                    
                     if ($totalAlerts != 0) 
                     {
-                        echo '<td class="table-td-graphdata-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
+                        echo '<tr class="table-tr-graphdata">';
+                        
+                        if ($counter == 0) echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
+                        else echo '<td class="table-td-graphdata-endpoint-woradius"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
                         echo '<span class="pseudolink" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'">'.$agentName.'</span></td>';
                     }
-                    else echo '<td class="table-td-graphdata-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-gray">&nbsp;&nbsp;</span>'.$agentName.'</td>'; 
+                    else continue;
                         
-                    echo '<td class="table-td-graphdata-body" style="text-align: center; border-right: 2px solid white;">'.$totalWordHits.'</td>';
+                    echo '<td class="table-td-graphdata-body">'.$totalWordHits.'</td>';
                     echo '<td class="table-td-graphdata-body">'.$countPressure.'</td>';
-                    echo '<td class="table-td-graphdata-body">'.$countOpportunity.'</td>';
-                    echo '<td class="table-td-graphdata-body" style="text-align: center; border-right: 2px solid white;">'.$countRationalization.'</td>';
-                    echo '<td class="table-td-graphdata-body">'.str_pad($totalAlerts, 2, '0', STR_PAD_LEFT).'</td>';
+                    echo '<td class="table-td-graphdata-body-opportunity">'.$countOpportunity.'</td>';
+                    echo '<td class="table-td-graphdata-body">'.$countRationalization.'</td>';
+                    echo '<td class="table-td-graphdata-body">'.number_format($totalAlerts/3, 1).'</td>';
                     echo '</tr>';
                     
+                    $counter++;
                 }
                 while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
             }
@@ -223,10 +267,11 @@ include "lbs/agent_methods.php";
 
         </tbody>
     </table>
+    
+    <?php
+    
+    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the graph</div><br>';
+    
+    ?>
 
-    <div class="modal-footer window-footer-config">
-        <br>
-        <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Accept</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-    </div>
 </div> 

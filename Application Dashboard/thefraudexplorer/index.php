@@ -1,5 +1,4 @@
 <?php
-
 /*
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
@@ -14,7 +13,6 @@
  *
  * Description: Code for login page
  */
-
 ?>
 
 <html>
@@ -32,10 +30,8 @@
         {
             if(!isset($_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) throw new RuntimeException('CSRF');
         }
-
         $key = sha1(microtime());
         $_SESSION['csrf'] = $key;
-
         include("lbs/login/session.php");
         $_SESSION['welcome'] = "enable";
         

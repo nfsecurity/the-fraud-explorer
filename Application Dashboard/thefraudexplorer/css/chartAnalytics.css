@@ -109,7 +109,7 @@ html,body
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
 }
 
-.point-red, .point-blue, .point-yellow, .point-green
+.point-red, .point-green
 {
     display: inline-block;
     width: 25px;
@@ -121,16 +121,6 @@ html,body
     transition: opacity .25s ease-in-out;
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-blue
-{
-    background: #0074D9;
-}
-
-.point-yellow
-{
-    background: #FFDC00;
 }
 
 .point-green
@@ -174,77 +164,6 @@ html,body
 {
     width: 33px;
     height: 33px;
-}
-
-.point-opportunity-low-red, .point-opportunity-low-green, .point-opportunity-low-blue, .point-opportunity-low-yellow 
-{
-    width: 25px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-medium-red, .point-opportunity-medium-green, .point-opportunity-medium-blue, .point-opportunity-medium-yellow
-{
-    width: 27px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-high-red, .point-opportunity-high-green, .point-opportunity-high-blue, .point-opportunity-high-yellow
-{
-    width: 29px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-critic-red, .point-opportunity-critic-green, .point-opportunity-critic-blue, .point-opportunity-critic-yellow
-{
-    width: 31px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-low-green, .point-opportunity-medium-green, .point-opportunity-high-green, .point-opportunity-critic-green 
-{
-    background: #2ECC40;
-}
-
-.point-opportunity-low-blue, .point-opportunity-medium-blue, .point-opportunity-high-blue, .point-opportunity-critic-blue
-{
-    background: #0074D9;
-}
-
-.point-opportunity-low-yellow, .point-opportunity-medium-yellow, .point-opportunity-high-yellow, .point-opportunity-critic-yellow
-{
-    background: #FFDC00;
-}
-
-.point-opportunity-low-red:hover, .point-opportunity-medium-red:hover, .point-opportunity-high-red:hover, .point-opportunity-critic-red:hover,
-.point-opportunity-low-green:hover, .point-opportunity-medium-green:hover, .point-opportunity-high-green:hover, .point-opportunity-critic-green:hover,
-.point-opportunity-low-blue:hover, .point-opportunity-medium-blue:hover, .point-opportunity-high-blue:hover, .point-opportunity-critic-blue:hover,
-.point-opportunity-low-yellow:hover, .point-opportunity-medium-yellow:hover, .point-opportunity-high-yellow:hover, .point-opportunity-critic-yellow:hover,
-{
-    opacity: 0.9;
 }
 
 hr 
@@ -315,7 +234,7 @@ table
 
 .y-axis-line
 {
-    border-right: 3px solid #d5d5d5; 
+    border-right: 3px solid white; 
     margin-bottom: 1px; 
     position: absolute; 
     top: 39px; 
@@ -337,7 +256,7 @@ table
 
 .x-axis-line-leyend
 {
-    border-top: 3px solid #d5d5d5; 
+    border-top: 3px solid white; 
     margin-bottom: 1px; 
     position: absolute; 
     bottom: 55px; 

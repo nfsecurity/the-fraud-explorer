@@ -81,19 +81,16 @@ include "lbs/close-db-connection.php";
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
-        <a href="alertData?agent=WVd4cw==" id="elm-alertmodule">Alerts</a>
-    </li>
-    <li class="li">
-        <a href="endPoints" id="elm-endpoints">Endpoints</a>
+        <a href="alertData?agent=WVd4cw==" id="elm-alertmodule">Fraud Triangle Alerts</a>
     </li>
     <li class="li">
         <a href="analyticsData" id="elm-analytics">Analytics</a>
     </li>
-    <li class="li">
-        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
+        <li class="li">
+        <a href="endPoints" id="elm-endpoints">Endpoints</a>
     </li>
     <li class="li">
-        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
+        <a href="setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
     </li>
 
     <?php
@@ -111,12 +108,13 @@ include "lbs/close-db-connection.php";
     ?>
     
     <li class="li">
+        <a href="mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
+    </li>
+    
+    <li class="li">
         <a href="maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
     </li>
         
-    <li class="li">
-        <a href="#" onclick="startTour()">Tour</a>
-    </li>
     <li style="float:right">
         <a class="active logout-button" href="logout">Logout</a>
     </li>

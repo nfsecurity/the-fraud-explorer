@@ -59,16 +59,9 @@ include "lbs/elasticsearch.php";
         <link rel="stylesheet" type="text/css" href="css/analyticsData.css"/>
         <link rel="stylesheet" type="text/css" href="css/chartAnalytics.css" media="screen" />
 
-        <!-- JS/CSS for Tooltip -->
+        <!-- Load Chart.js -->
 
-        <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
-        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipster-sideTip-light.min.css">
-        <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
-
-        <!-- Load ScatterPlotChart -->
-
-        <link href="css/scatterplot.css" rel="stylesheet" type="text/css" />
-        <script src="js/scatterplot.js"></script>
+        <script src="js/Chart.js"></script>
 
         <!-- Font Awesome -->
 
