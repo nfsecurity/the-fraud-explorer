@@ -37,6 +37,8 @@ function getArrayData($array, $field, $globalVar)
 
 function getMultiArrayData($array, $field1, $field2, $field3, $field4, $globalVar)
 {
+    $timeStartgetMultiArrayData = microtime(true);
+    
     foreach($array as $key => $value)
     {
         if (is_array($value)) getMultiArrayData($value, $field1, $field2, $field3, $field4, $globalVar);
@@ -52,6 +54,11 @@ function getMultiArrayData($array, $field1, $field2, $field3, $field4, $globalVa
             }
         }
     }
+    
+    $timeEndgetMultiArrayData = microtime(true);
+    $executionTimegetMultiArrayData = ($timeEndgetMultiArrayData - $timeStartgetMultiArrayData);
+    
+    // echo "Time taken getMultiArrayData in seconds: ".$executionTimegetMultiArrayData."\n";
 }
 
 /* Extract all words typed by agent */
@@ -143,6 +150,22 @@ function extractEndDateFromAlerter($indexName, $indexType)
     return $lastAlertTime;
 }
 
+/* Fork child management */
+
+function childFinished($signo)
+{
+    global $openProcesses, $procs;
+
+    foreach ($procs as $key => $pid) 
+    {
+        if (posix_getpgid($pid) === false) 
+        {
+            unset($procs[$key]);
+            $openProcesses--;
+        }
+    }
+}
+
 /*  Syncronize Rulesets */
 
 function syncRuleset()
@@ -150,20 +173,46 @@ function syncRuleset()
     $queryEndpoints = "SELECT agent FROM t_agents";    
     $resultEndpoints = mysql_query($queryEndpoints);
 
+    $openProcesses = 0; 
+    $procs = array();
+    $maxProcesses = cpuCores();
+    
+    pcntl_signal(SIGCHLD, "childFinished");   
+    mysql_close();
+
     while($row = mysql_fetch_array($resultEndpoints))
     {
-        $endPart = explode("_", $row['agent']);
-        $endPoint = $endPart[0];    
+        $pid = pcntl_fork();
+
+        if (!$pid) 
+        {
+            include "../lbs/open-db-connection.php";
         
-        $queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat ASC) AS tbl WHERE agent='%s' LIMIT 1";
-        $rulesetQuery = mysql_query(sprintf($queryRule, $endPoint)); 
-        $rulesetArray = mysql_fetch_array($rulesetQuery);
+            $endPart = explode("_", $row['agent']);
+            $endPoint = $endPart[0];    
+        
+            $queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat ASC) AS tbl WHERE agent='%s' LIMIT 1";
+            
+            $rulesetQuery = mysql_query(sprintf($queryRule, $endPoint)); 
+            $rulesetArray = mysql_fetch_array($rulesetQuery);
                
-        if ($rulesetArray[0] == NULL) $ruleset = "BASELINE";
-        else $ruleset = $rulesetArray[0];
+            if ($rulesetArray[0] == NULL) $ruleset = "BASELINE";
+            else $ruleset = $rulesetArray[0];
         
-        mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endPoint));
+            mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endPoint));
+            exit();
+        }
+        else
+        {
+            ++$openProcesses;
+            
+            if ($openProcesses >= $maxProcesses) 
+            {
+                pcntl_wait($status);
+            }    
+        }
     }
+    while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
 }
 
 /*  Delete Alert Index */
@@ -255,6 +304,8 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
 
 function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT, $ruleset, $lastArrayElement)
 {
+    $timeStartparseFraudTrianglePhrases = microtime(true); 
+    
     $matched = FALSE;
     $countOutput = 1;
 
@@ -290,6 +341,11 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
             $rule = $ruleset;
         }
     }
+    
+    $timeEndparseFraudTrianglePhrases = microtime(true);
+    $executionTimeparseFraudTrianglePhrases = ($timeEndparseFraudTrianglePhrases - $timeStartparseFraudTrianglePhrases);
+    
+    // echo "Time taken parseFraudTrianglePhrases in seconds: ".$executionTimeparseFraudTrianglePhrases."\n";
 }
 
 /* Check regular expressions */
@@ -399,25 +455,56 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
 {
     echo "[INFO] Populating SQL-Database with Fraud Triangle Analytics Insights by agent ...\n";
 
+    sleep(10);
+    include "../lbs/open-db-connection.php";
+    
     $resultQuery = mysql_query("SELECT agent FROM t_agents");
+    
+    $openProcesses = 0; 
+    $procs = array();
+    $maxProcesses = cpuCores();
+    
+    pcntl_signal(SIGCHLD, "childFinished");
+    mysql_close();
 
     if ($row_a = mysql_fetch_array($resultQuery))
     {
         do
         {
-            $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
-            $totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);
-            $matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
-            $matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);
-            $matchesPressure = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['p'], $configFile_es_alerter_index);
-            $totalWords = $totalWordCount['count'];
-            $totalPressure = $matchesPressure['count'];
-            $totalOpportunity = $matchesOpportunity['count'];
-            $totalRationalization = $matchesRationalization['count'];
-
-            $result = mysql_query("UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
+            $pid = pcntl_fork();
+            
+            if (!$pid) 
+            {
+                include "../lbs/open-db-connection.php";
+                               
+                $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
+                $totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);
+                $matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
+                $matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);
+                $matchesPressure = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['p'], $configFile_es_alerter_index);
+                $totalWords = $totalWordCount['count'];
+                $totalPressure = $matchesPressure['count'];
+                $totalOpportunity = $matchesOpportunity['count'];
+                $totalRationalization = $matchesRationalization['count'];
+                
+                $result = mysql_query("UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
+                
+                exit();
+            }
+            else
+            {
+                ++$openProcesses;
+            
+                if ($openProcesses >= $maxProcesses) 
+                {
+                    pcntl_wait($status);
+                }    
+            }
+            
         }
         while ($row_a = mysql_fetch_array($resultQuery));
+        
+        while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
     }
 }
 
@@ -487,6 +574,14 @@ function logToFileAndSyslog($logType, $filename, $msg)
     openlog("thefraudexplorer", LOG_PID, LOG_LOCAL0);
     syslog(($logType == "LOG_INFO" ? LOG_INFO : LOG_ALERT), $msg);
     closelog();
+}
+
+function cpuCores()
+{
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $cpuCores = $configFile['cpu_cores'];
+    
+    return $cpuCores/2;
 }
 
 ?>

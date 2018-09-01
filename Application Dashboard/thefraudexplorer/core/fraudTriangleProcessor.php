@@ -111,6 +111,8 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
     echo "[INFO] Searching for typedwords by agent ...\n";
 
+    include "../lbs/open-db-connection.php";
+    
     $arrayCounter = 0;
     $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
@@ -118,32 +120,56 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
        
     if ($endpointSelected == "all" && $singleEndpoint == false)
     {
+        $openProcesses = 0; 
+        $procs = array();
+        $maxProcesses = cpuCores();
+    
+        pcntl_signal(SIGCHLD, "childFinished");   
+        mysql_close();
+        
         while($row = mysql_fetch_array($resultQueryAgentList))
         {
-            $agentID = $row['agent'];
-            $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
+            $pid = pcntl_fork();
 
-            if ($typedWords['hits']['total'] == 0)
-            {   
-                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            if (!$pid) 
+            {
+                include "../lbs/open-db-connection.php";
+                
+                $agentID = $row['agent'];
+                $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
+
+                if ($typedWords['hits']['total'] == 0)
+                {      
+                    if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                $arrayCounter++;
-                continue;
+                    $arrayCounter++;
+                }
+                else
+                {
+                    $ruleset = getRuleset($agentID);
+            
+                    echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
+                    if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+               
+                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+               
+                    $arrayCounter++;
+                }
+                exit();
             }
             else
             {
-                $ruleset = getRuleset($agentID);
-            
-                echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
-            
-                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            
-                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
-                    
-                $arrayCounter++;
                 $effectiveEndpointCounter++;
-            }     
+                ++$openProcesses;
+            
+                if ($openProcesses >= $maxProcesses) 
+                {
+                    pcntl_wait($status);
+                }    
+            }
         }
+        while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
         
         echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";       
     }
@@ -184,32 +210,56 @@ else
     
     if ($endpointSelected == "all" && $singleEndpoint == false)
     {
+        $openProcesses = 0; 
+        $procs = array();
+        $maxProcesses = cpuCores();
+    
+        pcntl_signal(SIGCHLD, "childFinished");   
+        mysql_close();
+        
         while($row = mysql_fetch_array($resultQueryAgentList))
         {
-            $agentID = $row['agent'];
-            $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
+            $pid = pcntl_fork();
 
-            if ($typedWords['hits']['total'] == 0)
-            {   
-                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            
-                $arrayCounter++;   
-                continue;
-            }
-            else 
+            if (!$pid) 
             {
-                $ruleset = getRuleset($agentID);
-            
-                echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
-            
-                if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
-            
-                startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
+                include "../lbs/open-db-connection.php";
                 
-                $arrayCounter++;
+                $agentID = $row['agent'];
+                $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
+
+                if ($typedWords['hits']['total'] == 0)
+                {   
+                    if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                    $arrayCounter++;
+                }
+                else 
+                {
+                    $ruleset = getRuleset($agentID);
+            
+                    echo "[INFO] Agent [".$agentID."] - Ruleset [".$ruleset."] - Number of words typed from latest alert date [".$typedWords['hits']['total']."]\n";
+            
+                    if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
+            
+                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
+                
+                    $arrayCounter++;
+                }
+                exit();
+            }
+            else
+            {
+                ++$openProcesses;
                 $effectiveEndpointCounter++;
+            
+                if ($openProcesses >= $maxProcesses) 
+                {
+                    pcntl_wait($status);
+                }    
             }
         }
+        while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
         
         echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
         
