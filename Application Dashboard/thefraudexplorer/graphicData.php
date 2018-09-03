@@ -81,7 +81,7 @@ include "lbs/agent_methods.php";
         min-width: calc(435px / 5);
         width: calc(435px / 5);
         text-align: center;
-        padding: 0px 0px 0px 5px;
+        padding: 0px 8px 0px 0px;
         height: 45px;
     }
     
@@ -95,18 +95,18 @@ include "lbs/agent_methods.php";
         background: white;
         min-width: 120px;
         width: 120px;
-        text-align: center;
-        padding: 0px 0px 0px 5px;
+        text-align: left;
+        padding: 0px 0px 0px 0px;
         height: 45px;
     }
 
     .table-tbody-graphdata
     {
         display: block;
-        border: 1px solid white;
+        border: 1px solid #e8e9e8;
         width: 100%;
-        height: 300px !important; 
-        max-height: 300px !important;
+        height: 302px !important; 
+        max-height: 302px !important;
         overflow-y: scroll; 
     }
 
@@ -130,9 +130,21 @@ include "lbs/agent_methods.php";
         min-width: calc(435px / 5);
         height: 30px;
         min-height: 30px;
-        padding: 0px 0px 0px 5px;
+        padding: 0px 0px 0px 0px;
         text-align: center;
         border-right: 2px solid white;
+    }
+    
+     .table-td-graphdata-score
+    {
+        border: 0px solid gray;
+        width: calc(435px / 5);
+        min-width: calc(435px / 5 - 7);
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 0px;
+        text-align: center;
+        border-right: 0px solid white;
     }
     
     .table-td-graphdata-body-opportunity
@@ -141,31 +153,20 @@ include "lbs/agent_methods.php";
         min-width: calc(435px / 5);
         height: 30px;
         min-height: 30px;
-        padding: 0px 0px 0px 5px;
+        padding: 0px 0px 0px 0px;
         text-align: center;
-        border-right: 2px solid white;
-        background: #d9d9d9; 
-        font-family: 'FFont-Bold'; 
-        border: 1px solid white; 
-        border-radius: 3px 3px 3px 3px;
+        background: #e8e9e8; 
+        font-family: 'FFont';
+        border: 0px solid white;
+        border-right: 2px solid white; 
+        border-radius: 0px 0px 0px 0px;
     }
     
     .table-td-graphdata-endpoint
     {
-        border: 0px solid gray;
-        width: 120px;
-        min-width: 120px;
-        height: 30px;
-        min-height: 30px;
-        padding: 0px 0px 0px 5px;
-        text-align: center;
-        border-radius: 10px 0px 0px 0px; 
-        text-align: left; 
-        border-right: 2px solid white;
-    }
-    
-    .table-td-graphdata-endpoint-woradius
-    {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
         border: 0px solid gray;
         width: 120px;
         min-width: 120px;
@@ -189,6 +190,16 @@ include "lbs/agent_methods.php";
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
     }
+    
+    .font-icon-gray 
+    { 
+        color: #B4BCC2;; 
+    }
+    
+    .fa-padding 
+    { 
+        padding-right: 5px; 
+    }
 
 </style>
 
@@ -200,7 +211,7 @@ include "lbs/agent_methods.php";
 <div class="div-container">
     <table class="table-graphdata">
         <thead class="table-thead-graphdata">
-            <th class="table-th-graphdata-endpoint" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color"></span>ENDPOINT</th>
+            <th class="table-th-graphdata-endpoint"><span class="fa fa-bookmark-o font-icon-color"></span>ENDPOINT</th>
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>WORDS</th>
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>PRESS</th>
             <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>OPPRT</th>
@@ -233,7 +244,7 @@ include "lbs/agent_methods.php";
                 
                 do
                 {
-                    $agentName = $endpointsFraud['agent'];
+                    $agentName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
                     $agentEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
                     $totalWordHits = $endpointsFraud['totalwords'];
                     $countPressure = $endpointsFraud['pressure'];
@@ -245,17 +256,16 @@ include "lbs/agent_methods.php";
                     {
                         echo '<tr class="table-tr-graphdata">';
                         
-                        if ($counter == 0) echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
-                        else echo '<td class="table-td-graphdata-endpoint-woradius"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
+                        echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
                         echo '<span class="pseudolink" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'">'.$agentName.'</span></td>';
                     }
                     else continue;
                         
                     echo '<td class="table-td-graphdata-body">'.$totalWordHits.'</td>';
-                    echo '<td class="table-td-graphdata-body">'.$countPressure.'</td>';
-                    echo '<td class="table-td-graphdata-body-opportunity">'.$countOpportunity.'</td>';
-                    echo '<td class="table-td-graphdata-body">'.$countRationalization.'</td>';
-                    echo '<td class="table-td-graphdata-body">'.number_format($totalAlerts/3, 1).'</td>';
+                    echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
+                    echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
+                    echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countRationalization.'</td>';
+                    echo '<td class="table-td-graphdata-score">'.number_format($totalAlerts/3, 1).'</td>';
                     echo '</tr>';
                     
                     $counter++;
@@ -270,8 +280,14 @@ include "lbs/agent_methods.php";
     
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the graph</div><br>';
+    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the graph</div>';
     
     ?>
+    
+    <div class="modal-footer window-footer-config">
+        <br>
+        <a class="btn btn-default" style="outline: 0 !important;" href="alertData?agent=WVd4cw==">Access all alerts</a>
+        <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>
+    </div>
 
-</div> 
+</div>

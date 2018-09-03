@@ -119,13 +119,39 @@ include "lbs/open-db-connection.php";
 
     .table-td-role
     {
-        border: 0px solid gray;
+        border-right: 2px solid white;
         width: calc(555px / 2);
         min-width: calc(555px / 2);
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
         text-align: left;
+    }
+    
+    .table-td-role-domain
+    {
+        border: 0px solid gray;
+        width: calc(555px / 2);
+        min-width: calc(555px / 2 - 7);
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 5px;
+        text-align: left;
+    }
+    
+     .font-icon-color-green
+    {
+        color: green;
+    }
+    
+    .font-icon-gray 
+    { 
+        color: #B4BCC2;; 
+    }
+    
+    .fa-padding 
+    { 
+        padding-right: 5px; 
     }
 
 </style>
@@ -148,8 +174,8 @@ include "lbs/open-db-connection.php";
 
         <table class="table-role">
             <thead class="table-thead-role">
-                <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>User name</th>
-                <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color">&nbsp;&nbsp;</span>Domain context</th>
+                <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>User name</th>
+                <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Domain context</th>
             </thead>
             <tbody class="table-tbody-role">
 
@@ -160,8 +186,8 @@ include "lbs/open-db-connection.php";
                 while($userEntry = mysql_fetch_assoc($userQuery))
                 {
                     echo '<tr class="table-tr-role">';
-                    echo '<td class="table-td-role">'.$userEntry['user'].'</td>';
-                    echo '<td class="table-td-role">'.$userEntry['domain'].'</td>';
+                    echo '<td class="table-td-role"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$userEntry['user'].'</td>';
+                    echo '<td class="table-td-role-domain"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$userEntry['domain'].'</td>';
                     echo '</tr>';
                 }
 
