@@ -116,10 +116,18 @@ include "lbs/open-db-connection.php";
     {
         background-color: #EDEDED !important;
     }
+    
+    .table-tbody-role tr:nth-child(even)
+    {
+        background: #FFFFFF;
+    }
 
     .table-td-role
     {
         border-right: 2px solid white;
+        border-top: 0px solid white;
+        border-left: 0px solid white;
+        border-bottom: 0px solid white;
         width: calc(555px / 2);
         min-width: calc(555px / 2);
         height: 30px;
