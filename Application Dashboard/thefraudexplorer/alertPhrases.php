@@ -91,15 +91,21 @@ $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
     
     <?php
     
+    $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+    $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+    
+    foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+
     if($session->username == "admin")
     {
+        
         echo '<div id="reviewPhrasesDivArea" class="phrase-viewer" contenteditable=true>';
-        echo decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+        echo $sanitizedPhrases;
     }
     else
     {
         echo '<div class="phrase-viewer" contenteditable=false>';
-        echo decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+        echo $sanitizedPhrases;
     }
         
     ?>

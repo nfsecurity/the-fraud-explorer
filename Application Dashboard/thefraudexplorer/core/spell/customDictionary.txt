@@ -25,6 +25,8 @@ aguevado
 aguevarse
 alebrestada
 alebrestado
+aleja
+alejo
 aletosa
 aletoso
 alicorada
@@ -46,6 +48,7 @@ anadir
 andadera
 angurria
 angurriosa
+anibal
 antioquia
 antoje
 apartacho
@@ -151,6 +154,8 @@ bolsona
 bolsonas
 bolsones
 bonche
+botnet
+botnets
 boyaca
 bucaramanga
 buenaventura
@@ -159,6 +164,7 @@ burletera
 burleteras
 burletero
 burleteros
+cabify
 cabron
 cabrona
 cachaca
@@ -254,7 +260,6 @@ charlatarenia
 charra
 charras
 charro
-charro
 charros
 chau
 chechere
@@ -268,6 +273,8 @@ chicaneras
 chicanero
 chicaneros
 chichigua
+chichigua
+chichiguas
 chichiguas
 chichipata
 chichipatas
@@ -362,6 +369,7 @@ culicagao
 culillo
 cutupeto
 daniela
+data
 decile
 decimele
 Deisy
@@ -510,6 +518,10 @@ golazo
 gomela
 gomelo
 gonorrea
+grandesita
+grandesito
+grandota
+grandote
 gritadera
 guachada
 guachadas
@@ -534,6 +546,8 @@ guevones
 gurre
 gusaniando
 gusaniar
+habeas
+habeasdata
 habela
 habelas
 habelo
@@ -595,7 +609,6 @@ loliar
 loquera
 lorica
 lucas
-lucas
 lucrecios
 machera
 machorra
@@ -612,13 +625,13 @@ maluco
 maluquera
 maluquiada
 maluquiado
+malware
 mamadera
 mamarse
 mamera
 mamey
 mamon
 mamona
-manana
 manana
 manaure
 mandado
@@ -633,8 +646,6 @@ manoseo
 manosiar
 manuelita
 marce
-marce
-marica
 marica
 maricona
 mariconas
@@ -688,6 +699,8 @@ muergano
 muerganos
 musarana
 napa
+nati
+naty
 necio
 necocli
 neiva
@@ -850,6 +863,7 @@ salidita
 saludito
 santander
 sap
+sap
 sardina
 sardino
 senita
@@ -863,9 +877,7 @@ sip
 siriri
 sisarras
 sisas
-sisas
 sizarras
-sizas
 sizas
 soacha
 sodexo
@@ -909,6 +921,7 @@ tunja
 turbaco
 tusa
 tuso
+uber
 ud
 uribia
 vaciada
@@ -929,6 +942,8 @@ visaje
 volate
 voleito
 voleo
+wasap
+whatsapp
 yeyo
 yopal
 yumbo
