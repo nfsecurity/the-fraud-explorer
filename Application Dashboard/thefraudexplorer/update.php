@@ -10,13 +10,13 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for update machine status
  */
 
-include "lbs/global-vars.php";
-include $documentRoot."lbs/open-db-connection.php";
+include "lbs/globalVars.php";
+include $documentRoot."lbs/openDBconn.php";
 include $documentRoot."lbs/cryptography.php";
 include "lbs/security.php";
 
@@ -74,7 +74,7 @@ if ($key == $keypass[0])
         {
             /* Send message alert for first agent connection */
 
-            include $documentRoot."lbs/mail-event.php";
+            include $documentRoot."lbs/mailEvent.php";
             mail($to, $subject, $message, $headers);
 
             /* Heartbeat data */
@@ -90,6 +90,6 @@ if ($key == $keypass[0])
     }
 }
 
-include $documentRoot."lbs/close-db-connection.php";
+include $documentRoot."lbs/closeDBconn.php";
 
 ?>

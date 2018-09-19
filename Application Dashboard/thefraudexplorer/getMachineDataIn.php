@@ -10,13 +10,13 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for get data from the agent
  */
 
-include "lbs/global-vars.php";
-include $documentRoot."lbs/open-db-connection.php";
+include "lbs/globalVars.php";
+include $documentRoot."lbs/openDBconn.php";
 include $documentRoot."lbs/cryptography.php";
 include "lbs/security.php";
 
@@ -81,6 +81,6 @@ else
     }
 }
 
-include $documentRoot."lbs/close-db-connection.php";
+include $documentRoot."lbs/closeDBconn.php";
 
 ?>

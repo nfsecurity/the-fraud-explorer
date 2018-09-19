@@ -10,12 +10,12 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for cryptography
  */
 
-include "/var/www/html/thefraudexplorer/lbs/open-db-connection.php";
+include "/var/www/html/thefraudexplorer/lbs/openDBconn.php";
 
 function encRijndael($unencrypted)
 {

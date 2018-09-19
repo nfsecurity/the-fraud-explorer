@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for logout
  */

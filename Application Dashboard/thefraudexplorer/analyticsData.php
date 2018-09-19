@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for Chart
  */
@@ -27,8 +27,8 @@ if(!$session->logged_in)
 $_SESSION['instance'] = "analyticsData";
 
 require 'vendor/autoload.php';
-include "lbs/open-db-connection.php";
-include "lbs/agent_methods.php";
+include "lbs/openDBconn.php";
+include "lbs/agentMethods.php";
 include "lbs/elasticsearch.php";
 
 ?>
@@ -74,6 +74,10 @@ include "lbs/elasticsearch.php";
 
             <div id="includedTopMenu"></div>
 
+            <!-- Footer inclusion -->
+
+            <div id="includedFooterContent"></div>
+
             <!-- Code for paint chart -->
 
             <?php
@@ -83,10 +87,6 @@ include "lbs/elasticsearch.php";
 
             <div id="chartHolder" class="chart-holder"></div>
         </div>
-
-        <!-- Footer -->
-
-        <div id="includedGenericFooterContent"></div>
     </body>
 </html>
 

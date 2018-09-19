@@ -8,42 +8,26 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for AJAX
  */
 
-/* Ajax for reset XML file */
-
-$(function() 
-  {
-    $('a[class="reset-xml-button"]').click(function(){  
-        $.ajax({
-            url: "eraseCommands.php",
-            type: "POST",
-            data: "",	
-            success: function(){},
-            error:function(){}   
-        });
-    });
-});
-
 /* Code for refresh main Table using AJAX */
 
 $(function(){
-    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>"
-                          ).load("alertHolder.php"); 
+    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("modules/alertHolder.php"); 
 });
 
 /* Code for html footer include */
 
 $(function(){
-    $("#includedFooterContent").load("mainFooter.php"); 
+    $("#includedFooterContent").load("helpers/mainFooter.php"); 
 });
 
 /* Code for html top menu include */
 
 $(function(){
-    $("#includedTopMenu").load("topMenu.php");
+    $("#includedTopMenu").load("helpers/topMenu.php");
 });
 

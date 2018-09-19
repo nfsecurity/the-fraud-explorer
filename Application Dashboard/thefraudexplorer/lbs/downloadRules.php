@@ -15,7 +15,7 @@
  * Description: Download multiple files
  */
 
-include "global-vars.php";
+include "globalVars.php";
 
 $zip = new ZipArchive();
 $filename = $documentRoot."/core/ziprules/thefraudexplorer-rules.zip";
@@ -48,4 +48,4 @@ if (is_dir($dir))
 
 $zip->close();
 
-echo "authAccess?file=".$filename;
+echo "helpers/authAccess?file=".$filename;

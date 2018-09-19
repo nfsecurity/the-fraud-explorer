@@ -1,4 +1,5 @@
 <?php
+
 /*
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
@@ -9,10 +10,11 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for login page
  */
+
 ?>
 
 <html>
@@ -30,8 +32,10 @@
         {
             if(!isset($_SESSION['csrf']) || $_SESSION['csrf'] !== $_POST['csrf']) throw new RuntimeException('CSRF');
         }
+
         $key = sha1(microtime());
         $_SESSION['csrf'] = $key;
+
         include("lbs/login/session.php");
         $_SESSION['welcome'] = "enable";
         
@@ -39,7 +43,7 @@
 
         <div align="center">
             <table>
-                <th><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer<br></th>
+            <th><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer<br></th>
                 <tbody>
                     <tr>
                         <td class="login-container">
@@ -55,8 +59,8 @@
                                                 <input type="text" name="user" id="user" autofocus="autofocus" autocomplete="off" tabindex=1 placeholder=":enter your username" class="input-login" maxlength="30" value="<?php echo $form->value("user"); ?>">
                                             </td>
                                             <td rowspan="3" style="border-top:0px solid #e0e0e0; border-right:0px solid #e0e0e0;">
-                                                <center><img src="captcha"/></center><br>
-                                                &nbsp;&nbsp;<input type="submit" name="loginok" value="Sign In Now" class="sign-in-button">
+                                                <center><img src="helpers/captcha"/></center><br>
+                                                &nbsp;<input type="submit" name="loginok" value="Sign In Now" class="sign-in-button">
                                             </td>
                                         </tr>
                                         <tr>

@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  * 
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Functions extension file
  */
@@ -186,7 +186,7 @@ function syncRuleset()
 
         if (!$pid) 
         {
-            include "../lbs/open-db-connection.php";
+            include "../lbs/openDBconn.php";
         
             $endPart = explode("_", $row['agent']);
             $endPoint = $endPart[0];    
@@ -456,7 +456,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
     echo "[INFO] Populating SQL-Database with Fraud Triangle Analytics Insights by agent ...\n";
 
     sleep(10);
-    include "../lbs/open-db-connection.php";
+    include "../lbs/openDBconn.php";
     
     $resultQuery = mysql_query("SELECT agent FROM t_agents");
     
@@ -475,7 +475,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
             
             if (!$pid) 
             {
-                include "../lbs/open-db-connection.php";
+                include "../lbs/openDBconn.php";
                                
                 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
                 $totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);

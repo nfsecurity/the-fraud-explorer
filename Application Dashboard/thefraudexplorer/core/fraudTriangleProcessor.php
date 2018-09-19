@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
@@ -111,7 +111,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
     echo "[INFO] Searching for typedwords by agent ...\n";
 
-    include "../lbs/open-db-connection.php";
+    include "../lbs/openDBconn.php";
     
     $arrayCounter = 0;
     $effectiveEndpointCounter = 1;
@@ -133,7 +133,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
 
             if (!$pid) 
             {
-                include "../lbs/open-db-connection.php";
+                include "../lbs/openDBconn.php";
                 
                 $agentID = $row['agent'];
                 $typedWords = extractTypedWordsFromAgentIDWithDate($agentID, $ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
@@ -223,7 +223,7 @@ else
 
             if (!$pid) 
             {
-                include "../lbs/open-db-connection.php";
+                include "../lbs/openDBconn.php";
                 
                 $agentID = $row['agent'];
                 $typedWords = extractTypedWordsFromAgentID($agentID, $ESindex);
@@ -306,7 +306,7 @@ socket_close($sockAlerter);
 echo "[INFO] Sending this alert status to log file ...\n";
 
 logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
-include "/var/www/html/thefraudexplorer/lbs/close-db-connection.php";
+include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";
 
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start)/60;

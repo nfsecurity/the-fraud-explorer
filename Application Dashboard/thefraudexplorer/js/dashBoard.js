@@ -8,7 +8,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for AJAX
  */
@@ -16,18 +16,17 @@
 /* Code for load main Dashboard */
 
 $(function(){
-    $("#mainDashHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>"
-                             ).load("dashHolder.php"); 
+    $("#mainDashHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("modules/dashHolder.php"); 
 });
 
 /* Code for html footer include */
 
 $(function(){
-    $("#includedFooterContent").load("mainFooter.php"); 
+    $("#includedFooterContent").load("helpers/mainFooter.php"); 
 });
 
 /* Code for html top menu include */
 
 $(function(){
-    $("#includedTopMenu").load("topMenu.php");
+    $("#includedTopMenu").load("helpers/topMenu.php");
 });

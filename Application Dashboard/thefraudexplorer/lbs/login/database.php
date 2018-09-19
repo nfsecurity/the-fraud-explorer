@@ -10,13 +10,13 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for login
  */
 
 include "constants.php";
-include "lbs/open-db-connection.php";     
+include "/var/www/html/thefraudexplorer/lbs/openDBconn.php";     
 
 class MySQLDB
 {
@@ -203,6 +203,6 @@ class MySQLDB
 };
 
 $database = new MySQLDB;
-include "lbs/close-db-connection.php";
+include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";
 
 ?>

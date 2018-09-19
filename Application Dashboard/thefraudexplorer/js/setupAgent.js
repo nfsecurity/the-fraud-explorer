@@ -8,7 +8,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for AJAX
  */
@@ -49,45 +49,14 @@ jQuery(document).ready(function() {
     });
 });
 
-/* Ajax for reset XML file */
-
-$(function() { 
-    $('a[class="reset-xml-button"]').click(function(){
-        $.ajax({
-            url: "eraseCommands.php", 
-            type: "POST",
-            data: "", 
-            success: function()
-            {
-                console.log("AJAX request was successfull");
-            },
-            error: function()
-            {
-                console.log("AJAX request was a failure");
-            }   
-        });
-    });
-});
-
-/* Code for refresh XML Table using AJAX */
+/* Code for disable cache modal */
 
 $.ajaxSetup ({
     cache: false
 });
 
-$(document).ready(function(){
-    refreshXML();
-});
-
-function refreshXML()
-{
-    $('#tableHolderXML').load('getXMLfile.php', function(){
-        setTimeout(refreshXML, 2000);
-    });
-}
-
 /* Code for html footer include */
 
 $(function(){
-    $("#includedFooterContent").load("mainFooter.html"); 
+    $("#includedFooterContent").load("helpers/mainFooter.html"); 
 });

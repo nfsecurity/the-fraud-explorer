@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for horizontal analytics data
  */
@@ -84,11 +84,15 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
 
             <div id="includedTopMenu"></div>
 
+            <!-- Footer inclusion -->
+
+            <div id="includedFooterContent"></div>
+
             <?php
             
-            include "lbs/open-db-connection.php";
+            include "lbs/openDBconn.php";
             echo '<div id="tableHolder" class="table-holder"></div>';
-            include "lbs/close-db-connection.php";
+            include "lbs/closeDBconn.php";
             
             ?>
         </div>
@@ -124,22 +128,6 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
                 </div>
             </div>
         </center>
-
-        <!-- Footer -->
-
-        <div id="footer">
-            <p class="main-text">&nbsp;</p>
-            <div class="logo-container">
-                &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Realtime Fraud Triangle Analytics
-            </div>
-            <div class="helpers-container">
-                <span class="fa fa-bug fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="fa fa-file-text fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="fa fa-globe fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="fa fa-medkit fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="fa fa-building-o fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Application context [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-        </div>
     </body>
 </html>
 

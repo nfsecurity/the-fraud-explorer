@@ -8,7 +8,7 @@
 * https://www.thefraudexplorer.com/License
 *
 * Date: 2018-12
-* Revision: v1.2.0
+* Revision: v1.2.1
 *
 * Description: CSS Code
 */
@@ -222,10 +222,10 @@ th
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #555555;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 8px;
     display: table-cell;
     white-space: nowrap;
-    text-align: left;
+    text-align: center;
 }
 
 .windowtitleth
@@ -237,7 +237,7 @@ th
     display: table-cell;
     overflow: hidden;
     text-align: left;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 25px;
 }
 
 .phrasedictionaryth
@@ -263,7 +263,7 @@ th
     display: table-cell;
     white-space: nowrap;
     text-align: left;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 10px;
 }
 
 .falseth
@@ -277,6 +277,7 @@ th
     vertical-align: middle;
     width: 100px;
     min-width: 100px;
+    padding-right: 10px;
 }
 
 .detailstd
@@ -400,10 +401,10 @@ th
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #555555;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 8px;
     display: table-cell;
     white-space: nowrap;
-    text-align: left;
+    text-align: center;
 }
 
 .endpointth-all
@@ -416,7 +417,7 @@ th
     display: table-cell;
     overflow: hidden;
     text-align: left;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 25px;
 }
 
 .windowtitleth-all
@@ -428,7 +429,7 @@ th
     display: table-cell;
     overflow: hidden;
     text-align: left;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 25px;
 }
 
 .phrasetypedth-all
@@ -441,7 +442,7 @@ th
     display: table-cell;
     white-space: nowrap;
     text-align: left;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 10px;
 }
 
 .falseth-all
@@ -455,6 +456,7 @@ th
     vertical-align: middle;
     width: 100px;
     min-width: 100px;
+    padding-right: 10px;
 }
 
 .detailstd-all

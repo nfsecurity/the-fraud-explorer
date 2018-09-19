@@ -10,7 +10,7 @@
  * https://www.thefraudexplorer.com/License
  *
  * Date: 2018-12
- * Revision: v1.2.0
+ * Revision: v1.2.1
  *
  * Description: Code for dashboard
  */
@@ -93,60 +93,48 @@ $_SESSION['instance'] = "dashBoard";
 
             <div id="includedTopMenu"></div>
 
+            <!-- Footer inclusion -->
+
+            <div id="includedFooterContent"></div>
+
             <?php
             
-            include "lbs/open-db-connection.php";
+            include "lbs/openDBconn.php";
             $_SESSION['id_uniq_command']=null;
 
             echo '<div id="mainDashHolder" class="table-holder"></div>';
             if (isset($_SESSION['welcome']) && $_SESSION['welcome'] == "enable") echo '<script type="text/javascript"> $(document).ready(function(){$(\'#welcomeScreen\').modal(\'show\');});</script>';
 
             $_SESSION['welcome'] = "disable";
-            include "lbs/close-db-connection.php";
+            include "lbs/closeDBconn.php";
             
             ?>
         </div>
 
-        <div id="footer">
-            <p class="main-text">&nbsp;</p>
-            <div class="logo-container">
-                &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-white">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Realtime Fraud Triangle Analytics
-        </div>
-        <div class="helpers-container">
-            <span class="fa fa-bug fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-globe fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-medkit fa-lg font-icon-color-white">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-building-o fa-lg font-icon-color-white">&nbsp;&nbsp;</span>Application context [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        </div>
-        </div>
+        <!-- Modal for Welcome Screen -->
 
-    <!-- Modal for Welcome Screen -->
+        <div class="modal" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title window-title" id="myModalLabel">Welcome to The Fraud Explorer</h4>
+                        </div>
 
-    <div class="modal" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="vertical-alignment-helper">
-            <div class="modal-dialog vertical-align-center">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title window-title" id="myModalLabel">Welcome to The Fraud Explorer</h4>
-                    </div>
+                        <div class="modal-body">
+                            <p style="text-align:justify; font-size: 12px;"><br>Welcome to the realtime implementation of Fraud Triangle Analytics methodology. With this software your company will address the fraud from a new detective and preventive perspective, identifying human behaviors that conduct to a dishonest actions mapping them into a three important aspects: social or company pressures, opportunity and justification attitudes in order to commit a fraud.<br><br> Read the documentation located in the <a href="https://www.thefraudexplorer.com/es/wiki">Wiki</a> and feel free to submit requests for software improvement, methodology application or bug reports at <a href="https://github.com/nfsecurity/the-fraud-explorer/issues">Github Issues</a>. In the name of The Fraud Explorer team, we wish you a good fraud fight.</p>
+                            <p class="debug-url window-debug"></p>
+                        </div>
 
-                    <div class="modal-body">
-                        <p style="text-align:justify; font-size: 12px;"><br>Welcome to the realtime implementation of Fraud Triangle Analytics methodology. With this software your company will address the fraud from a new detective and preventive perspective, identifying human behaviors that conduct to a dishonest actions mapping them into a three important aspects: social or company pressures, opportunity and justification attitudes in order to commit a fraud.<br><br> Read the documentation located in the <a href="https://www.thefraudexplorer.com/es/wiki">Wiki</a> and feel free to submit requests for software improvement, methodology application or bug reports at <a href="https://github.com/nfsecurity/the-fraud-explorer/issues">Github Issues</a>. In the name of The Fraud Explorer team, we wish you a good fraud fight.</p>
-                        <p class="debug-url window-debug"></p>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Let's begin</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Let's begin</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
     </body>
-
 </html>
 
 <!-- Take tour -->
