@@ -81,7 +81,7 @@ include "../lbs/agentMethods.php";
         min-width: calc(435px / 5);
         width: calc(435px / 5);
         text-align: center;
-        padding: 0px 8px 0px 0px;
+        padding: 0px 0px 0px 0px;
         height: 45px;
     }
     
@@ -96,7 +96,7 @@ include "../lbs/agentMethods.php";
         min-width: 120px;
         width: 120px;
         text-align: left;
-        padding: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 5px;
         height: 45px;
     }
 
@@ -211,12 +211,12 @@ include "../lbs/agentMethods.php";
 <div class="div-container">
     <table class="table-graphdata">
         <thead class="table-thead-graphdata">
-            <th class="table-th-graphdata-endpoint"><span class="fa fa-bookmark-o font-icon-color"></span>ENDPOINT</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>WORDS</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>PRESS</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>OPPRT</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>RATNL</th>
-            <th class="table-th-graphdata-body"><span class="fa fa-bookmark-o font-icon-color"></span>SCORE</th>
+            <th class="table-th-graphdata-endpoint">ENDPOINT</th>
+            <th class="table-th-graphdata-body">WORDS</th>
+            <th class="table-th-graphdata-body">PRESS</th>
+            <th class="table-th-graphdata-body">OPPRT</th>
+            <th class="table-th-graphdata-body">RATNL</th>
+            <th class="table-th-graphdata-body">SCORE</th>
         </thead>
         <tbody class="table-tbody-graphdata">
 
