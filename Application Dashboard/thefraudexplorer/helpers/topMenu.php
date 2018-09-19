@@ -94,7 +94,7 @@ include "../lbs/closeDBconn.php";
         <a href="../endPoints" id="elm-endpoints">Endpoints</a>
     </li>
     <li class="li">
-        <a href="../modules/setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
+        <a href="../mods/setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
     </li>
 
     <?php
@@ -105,18 +105,18 @@ include "../lbs/closeDBconn.php";
     if ($session->domain == "all")
     {
         echo '<li class="li">';
-        echo '<a href="../modules/rolesConfig" data-toggle="modal" data-target="#roles" href="#" id="elm-roles">Roles</a>';
+        echo '<a href="../mods/rolesConfig" data-toggle="modal" data-target="#roles" href="#" id="elm-roles">Roles</a>';
         echo '</li>';
     }
     
     ?>
     
     <li class="li">
-        <a href="../modules/mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
+        <a href="../mods/mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
     </li>
     
     <li class="li">
-        <a href="../modules/maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
+        <a href="../mods/maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
     </li>
         
     <li style="float:right">
