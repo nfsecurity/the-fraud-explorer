@@ -94,3 +94,14 @@ INSERT INTO `t_config` (
     `score_ts_critic_to`,
     `sample_data_calculation`
 ) VALUES ('0', '3', '4', '7', '8', '11', '12', '100', 'enabled');
+
+CREATE TABLE IF NOT EXISTS `t_inferences` (
+    `endpoint` varchar(128) DEFAULT NULL,
+    `domain` varchar(128) DEFAULT NULL,
+    `ruleset` varchar(128) DEFAULT NULL,
+    `application` varchar(128) DEFAULT NULL,
+    `date` datetime DEFAULT NULL,
+    `reason` varchar(12) DEFAULT NULL,
+    `alertid` varchar(128) DEFAULT NULL,
+    `deduction` int DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

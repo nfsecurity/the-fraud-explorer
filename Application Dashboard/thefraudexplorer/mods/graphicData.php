@@ -173,10 +173,15 @@ include "../lbs/agentMethods.php";
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
-        text-align: center;
         border-radius: 0px 0px 0px 0px; 
         text-align: left; 
         border-right: 2px solid white;
+    }
+
+    .not-ruleset
+    {
+        text-align: justify;
+        font-family: 'FFont', sans-serif; font-size: 12px;
     }
 
     .font-icon-color-green
@@ -208,6 +213,53 @@ include "../lbs/agentMethods.php";
     <h4 class="modal-title window-title" id="myModalLabel">Endpoint triangle alerts</h4>
 </div>
 
+<?php
+
+    /* SQL Queries */
+
+    if ($_SESSION['rulesetScope'] == "ALL")
+    {
+        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";                  
+        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+    }
+    else
+    {
+        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+    }
+     
+    if ($session->domain == "all")
+    {
+        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
+        else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
+    }
+    else
+    {
+        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
+        else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
+    }
+
+    if(mysql_num_rows($queryEndpoints) == 0)
+    {
+        echo '<div class="div-container">';
+        echo '<p class="not-ruleset">There is no data at this time regarding this ruleset, maybe you did not have categorized/organized your endpoints according to the organization chart. Please spend some time clasifying your users and get back later to see their representation.</p>';
+        echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the graph</div>';
+        echo '<div class="modal-footer window-footer-config">';
+        echo '<br>';
+        echo '<a class="btn btn-default" style="outline: 0 !important;" href="alertData?agent=WVd4cw==">Access all alerts</a>';
+        echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>';
+        echo '</div>';
+        echo '</div>';
+
+        exit();
+    }
+
+?>
+
 <div class="div-container">
     <table class="table-graphdata">
         <thead class="table-thead-graphdata">
@@ -221,22 +273,6 @@ include "../lbs/agentMethods.php";
         <tbody class="table-tbody-graphdata">
 
             <?php
-
-            $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC";
-            $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC";                  
-            $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC";
-            $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC";
-                    
-            if ($session->domain == "all")
-            {
-                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
-                else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
-            }
-            else
-            {
-                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
-                else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
-            }
 
             if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
             {

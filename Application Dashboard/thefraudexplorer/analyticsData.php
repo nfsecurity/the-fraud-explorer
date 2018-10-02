@@ -81,8 +81,10 @@ include "lbs/elasticsearch.php";
             <!-- Code for paint chart -->
 
             <?php
+
             if (isset($_POST["ruleset"])) $_SESSION['rulesetScope'] = $_POST["ruleset"];
             else $_SESSION['rulesetScope'] = "ALL";
+            
             ?>
 
             <div id="chartHolder" class="chart-holder"></div>

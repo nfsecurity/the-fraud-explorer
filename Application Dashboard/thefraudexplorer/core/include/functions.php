@@ -576,12 +576,204 @@ function logToFileAndSyslog($logType, $filename, $msg)
     closelog();
 }
 
+/* Compute the number of CPU cores */
+
 function cpuCores()
 {
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $cpuCores = $configFile['cpu_cores'];
     
     return $cpuCores/2;
+}
+
+/* Get entry for agentid Data */
+
+function getAgentIdData($agentID, $index, $alertType)
+{
+    $matchesParams = [
+        'index' => $index,
+        'type' => $alertType,
+        'body' => [
+            'size' => 10000,
+            'query' => [
+                'wildcard' => [ 'agentId' => $agentID ] 
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $agentIdData = $client->search($matchesParams);
+
+    return $agentIdData;
+}
+
+/* Parse Fraud Triangle phrases for Artificial Intelligence Deduction Engine */
+
+function AIparseFraudTrianglePhrases($fraudTriangleTerms, $stringOfWords, $jsonFT, $ruleset)
+{
+    $matched = FALSE;
+    $countTriangle = ['pressure' => 0, 'opportunity' => 0, 'rationalization' => 0]; 
+
+    foreach ($fraudTriangleTerms as $term => $value)
+    {
+        $rule = "BASELINE";
+
+        if ($ruleset != "BASELINE") $steps = 2;
+        else $steps = 1;
+
+        for($i=1; $i<=$steps; $i++)
+        {
+            foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+            {
+                if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                {
+                    $matched = TRUE;
+                    $countTriangle[$term] = $countTriangle[$term] + 1;
+                }
+            }
+            $rule = $ruleset;
+        }
+    }
+
+    return $countTriangle;
+}
+
+/* Check in_array under associative model */
+
+function is_in_array($array, $key, $key_value)
+{
+    $within_array = false;
+
+    foreach($array as $k=>$v)
+    {
+        if(is_array($v))
+        {
+            $within_array = is_in_array($v, $key, $key_value);
+            
+            if( $within_array == 'yes' ) break;
+        } 
+        else 
+        {
+            if( $v == $key_value && $k == $key )
+            {
+                $within_array = true;
+                break;
+            }
+        }
+    }
+    return $within_array;
+}
+
+/* Artificial Intelligence Deduction Engine */
+
+function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
+{
+    echo "[INFO] Starting fraud inferences, checking alerts ...\n";
+
+    /* SQL queries */
+
+    include "../lbs/openDBconn.php";
+
+    $endPointHasAlerts = "SELECT agent, ruleset, heartbeat, domain, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat, domain, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE trianglesum > 0 GROUP BY agent";
+    $truncateInferences = "TRUNCATE TABLE t_inferences";
+    $resultEndPointsHasAlerts = mysql_query($endPointHasAlerts);
+    $resultTruncateInferences = mysql_query($truncateInferences);
+
+    /* Expert System Inference Engine */
+
+    $fraudTriangleHeight = ['pressure' => 50, 
+                            'opportunity' => 20, 
+                            'rationalization' => 30];
+
+    $fraudProbability = ['almost' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['opportunity'] + $fraudTriangleHeight['rationalization'], 
+                        'very' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['rationalization'], 
+                        'maybe' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['opportunity'], 
+                        'less' => $fraudTriangleHeight['opportunity'] + $fraudTriangleHeight['rationalization']];
+
+    /* Main Logic */
+
+    if ($rowEndPointsHasAlerts = mysql_fetch_array($resultEndPointsHasAlerts))
+    {
+        do
+        {
+            $endPoint = $rowEndPointsHasAlerts['agent']."*";
+            $agentAlerts = getAgentIdData($endPoint, $ESAlerterIndex, "AlertEvent");
+            $alertData = json_decode(json_encode($agentAlerts),true);
+            $ruleset = $rowEndPointsHasAlerts['ruleset'];
+            $stringHistoryArchive = array(array());
+            $counter = 0;
+
+            foreach ($alertData['hits']['hits'] as $result)
+            {
+                if (isset($result['_source']['tags'])) continue;
+
+                $stringOfWords = decRijndael($result['_source']['stringHistory']); 
+                $application = decRijndael($result['_source']['windowTitle']);
+                $timeStamp = $result['_source']['sourceTimestamp'];
+                $domain = $result['_source']['userDomain'];
+                $alertID = $result['_id'];
+                $countTriangleMatch = AIparseFraudTrianglePhrases($fraudTriangleTerms, $stringOfWords, $jsonFT, $ruleset);
+                $deductionMatch = false;
+                $matchReason = "N/A";
+
+                if ($countTriangleMatch['pressure'] != 0 && $countTriangleMatch['opportunity'] != 0 && $countTriangleMatch['rationalization'] != 0) 
+                {
+                    /* Put the alert in DB with P+O+R */
+
+                    if (is_in_array($stringHistoryArchive, "phrase", substr($stringOfWords, 0, 256))) continue;
+
+                    $deductionMatch = true;
+                    $matchReason = "POR";
+                    $fraudProbDeduction = $fraudProbability['almost'];
+                    $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
+                }
+                else if ($countTriangleMatch['pressure'] != 0 && $countTriangleMatch['opportunity'] != 0) 
+                {
+                    /* Put the alert in DB with P+O */
+
+                    if (is_in_array($stringHistoryArchive, "phrase", substr($stringOfWords, 0, 256))) continue; 
+
+                    $deductionMatch = true;
+                    $matchReason = "PO";
+                    $fraudProbDeduction = $fraudProbability['maybe'];
+                    $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
+                }
+                else if ($countTriangleMatch['pressure'] != 0 && $countTriangleMatch['rationalization'] != 0)
+                {
+                    /* Put the alert in DB with P+R */
+
+                    if (is_in_array($stringHistoryArchive, "phrase", substr($stringOfWords, 0, 256))) continue; 
+
+                    $deductionMatch = true;
+                    $matchReason = "PR";
+                    $fraudProbDeduction = $fraudProbability['very'];
+                    $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
+                }
+                else if ($countTriangleMatch['opportunity'] != 0 && $countTriangleMatch['rationalization'] != 0)
+                {
+                    /* Put the alert in DB with O+R */
+
+                    if (is_in_array($stringHistoryArchive, "phrase", substr($stringOfWords, 0, 256))) continue; 
+
+                    $deductionMatch = true;
+                    $matchReason = "OR";
+                    $fraudProbDeduction = $fraudProbability['less'];
+                    $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
+                }
+
+                if ($deductionMatch == true)
+                {
+                    $queryDeduction = sprintf("INSERT INTO t_inferences (endpoint, domain, ruleset, application, date, reason, alertid, deduction) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", rtrim($endPoint, "*"), $domain, $ruleset, $application, $timeStamp, $matchReason, $alertID, $fraudProbDeduction);
+                    $resultDeduction = mysql_query($queryDeduction);
+
+                    logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
+                }
+
+                $counter++;
+            }
+        }
+        while ($rowEndPointsHasAlerts = mysql_fetch_array($resultEndPointsHasAlerts));
+    }
 }
 
 ?>

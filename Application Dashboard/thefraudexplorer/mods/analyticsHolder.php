@@ -251,8 +251,10 @@ include "../lbs/elasticsearch.php";
             /* Data Table & Alerts */
             
             echo '<div class="data-table-icon" id="elm-analyticsaccess"><br>';
+            echo '<span class="fa fa-cogs font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#">Expert deductions</a>&nbsp;&nbsp;&nbsp;';
             echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="alertData?agent='.base64_encode(base64_encode("all")).'">Access all alerts</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Vertical analytics</a></div>';
+            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Vertical analytics</a>';
+            echo '</div>';
                     
             ?>
             
@@ -583,6 +585,20 @@ include "../lbs/elasticsearch.php";
 });
  
 </script>
+
+<!-- Modal for Artificial Intelligence -->
+
+<div class="modal" id="expertSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal for GraphicData -->
 

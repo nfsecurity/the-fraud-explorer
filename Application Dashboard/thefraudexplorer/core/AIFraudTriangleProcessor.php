@@ -40,6 +40,7 @@ $client = Elasticsearch\ClientBuilder::create()->build();
 $GLOBALS['matchesGlobalCount'] = 0;
 $startTime = microtime(true);
 $ESindex = $configFile['es_words_index'];
+$ESAlerterIndex = $configFile['es_alerter_index'];
 $fistTimeIndex = true;
 $fta_lang = $configFile['fta_lang_selection'];
 $fraudTriangleTerms = array('rationalization'=>'0 1 0','opportunity'=>'0 0 1','pressure'=>'1 0 0');
@@ -55,7 +56,7 @@ $resultQueryAgentList = mysql_query($queryAgentList);
 $singleEndpoint = false;
 $endpointSelected = "all";
 
-echo "\n[INFO] Starting Fraud Triangle Analytics phrase matching processor ...\n";
+echo "\n[INFO] Starting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n";
 
 /* Start from Scratch */
 
@@ -85,9 +86,16 @@ if (isset($argv[1]))
             
             checkRegexp($fraudTriangleTerms, $jsonFT, $ruleToCheck);
                    
-            echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
+            echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
             exit;
         }
+    }
+    else if ($argv[1] == "onlyAI")
+    {
+        startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile);
+
+        echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+        exit;
     }
 }
 
@@ -186,7 +194,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
             $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);   
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }           
     }
 
@@ -242,7 +250,7 @@ else
             
                     if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);    
+                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
                 
                     $arrayCounter++;
                 }
@@ -262,7 +270,6 @@ else
         while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
         
         echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
-        
     }
     else
     {
@@ -277,13 +284,16 @@ else
             
             $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);           
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);      
         }     
-        
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
 }
+
+/* Artificial Intelligence deductions */
+
+startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile);
 
 /* Close Alerter UDP socket */
 
@@ -312,6 +322,6 @@ $time_end = microtime(true);
 $execution_time = ($time_end - $time_start)/60;
 
 echo "[INFO] Total execution time in minutes: ".round($execution_time, 2)."\n";
-echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
+echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
 
 ?>
