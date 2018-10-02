@@ -1,6 +1,6 @@
 # The Fraud Explorer
 
-*The Fraud Explorer* es un software _**FTA** (Fraud Triangle Analytics)_ enfocado al descubrimiento del fraude ocupacional y ciber-crímenes. Identifica y genera eventos de alto valor para la detección proactiva y reactiva de fraudes a través de la semántica y análisis conductual basado en el triángulo del fraude de [Donald Cressey](https://en.wikipedia.org/wiki/Donald_Cressey). 
+*The Fraud Explorer* es un software _**FTA** (Fraud Triangle Analytics)_ enfocado al descubrimiento del fraude ocupacional y ciber-crímenes. Identifica y genera eventos de alto valor para la detección proactiva y reactiva de fraudes con Inteligencia Artificial a través de la semántica y análisis conductual basado en el triángulo del fraude de [Donald Cressey](https://en.wikipedia.org/wiki/Donald_Cressey). 
 
 Las instrucciones de instalación y configuración las encontrará en la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki), puede descargar también la [guía de usuario](https://www.thefraudexplorer.com/files/The_Fraud_Explorer_Userguide.pdf) y [solicitar](https://www.thefraudexplorer.com/#contact) el acceso gratuito al [demo](https://console.thefraudexplorer.com) en línea. El sitio oficial es https://www.thefraudexplorer.com.
 
@@ -12,7 +12,7 @@ Las instrucciones de instalación y configuración las encontrará en la [Wiki](
 
 ## Metodología y estrategia
 
-A través de agentes instalados en los equipos de las personas en un entorno corporativo, se identifican, clasifican y envían datos conductuales (frases digitadas en aplicaciones) a la plataforma central, donde se procesan, convierten y almacenan para luego ser presentados estadísticamente a través de tablas y gráficas construidas en base a un sistema de alertas diseñado para identificar qué frases convergen con los vértices del triángulo del fraude y así generar una puntuación.
+A través de agentes instalados en los equipos de las personas en un entorno corporativo, se identifican, clasifican y envían datos conductuales (frases digitadas en aplicaciones) a la plataforma central, donde se procesan, convierten y almacenan para luego ser presentados estadísticamente a través de tablas y gráficas construidas en base a un sistema de alertas e Inteligencia Artificial diseñado para identificar qué frases convergen con los vértices del triángulo del fraude y así generar una puntuación y probabilidad de ocurrencia de un fraude.
 
 ## Qué obtiene usted
 
