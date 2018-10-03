@@ -38,7 +38,7 @@ if(!$session->logged_in)
 <div id="footer">
     <p class="main-text">&nbsp;</p>
     <div class="logo-container">
-        &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Opensource Fraud Triangle Analytics
+        &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Opensource Fraud Triangle Analytics
     </div>
     <div class="helpers-container">
         <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
