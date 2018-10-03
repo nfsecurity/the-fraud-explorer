@@ -43,7 +43,7 @@
 
         <div align="center">
             <table>
-            <th><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer<br></th>
+            <th><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer - Artificial Intelligence<br></th>
                 <tbody>
                     <tr>
                         <td class="login-container">
