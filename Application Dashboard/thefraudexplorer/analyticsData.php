@@ -84,7 +84,7 @@ include "lbs/elasticsearch.php";
 
             if (isset($_POST["ruleset"])) $_SESSION['rulesetScope'] = $_POST["ruleset"];
             else $_SESSION['rulesetScope'] = "ALL";
-            
+
             ?>
 
             <div id="chartHolder" class="chart-holder"></div>
@@ -108,7 +108,7 @@ var tour = new Tour({
         element: "#elm-analyticsaccess",
         placement: 'bottom',
         title: "Analytics data access",
-        content: "You can access all alert data and also see the data source that produces this scatter graph. Some times there are endpoints with the same number of alerts, please use that data for clarification."
+        content: "You can access all alerts data, see the data source that produces this scatter graph and enter to the artificial intelligence deductions. Use this modules as the principal source for decision taking."
     }, {
         element: "#elm-scope",
         placement: 'right',
