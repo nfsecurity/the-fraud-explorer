@@ -210,6 +210,8 @@ else
     syncRuleset();
     
     echo "[INFO] Checking events from now ...\n";
+
+    include "../lbs/openDBconn.php";
     
     $arrayCounter = 0;
     $effectiveEndpointCounter = 1;

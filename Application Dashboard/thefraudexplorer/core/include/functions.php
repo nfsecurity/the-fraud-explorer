@@ -709,7 +709,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
 
                 $stringOfWords = decRijndael($result['_source']['stringHistory']); 
                 $application = decRijndael($result['_source']['windowTitle']);
-                $timeStamp = $result['_source']['sourceTimestamp'];
+                $timeStamp = date('Y-m-d h:i:s', strtotime($result['_source']['sourceTimestamp']));
                 $domain = $result['_source']['userDomain'];
                 $alertID = $result['_id'];
                 $countTriangleMatch = AIparseFraudTrianglePhrases($fraudTriangleTerms, $stringOfWords, $jsonFT, $ruleset);
