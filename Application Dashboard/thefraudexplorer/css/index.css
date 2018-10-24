@@ -37,11 +37,17 @@ table, caption, tbody, tfoot, thead, tr, th, td
     src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
 }
 
+@font-face
+{
+    font-family: 'FFont-Bold';
+    src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
+}
+
 html, body 
 {
     height: 100%;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     color: #555;
     background:#f5f5f5;
     font-family: 'FFont', sans-serif;
@@ -81,13 +87,13 @@ a
 
 #content 
 {
-    width:1236px;
+    width: 1236px;
 }
 
 table
 {
-    overflow:hidden;
-    border:1px solid #13923D;
+    overflow: hidden;
+    border: 1px solid #13923D;
     background:#fefefe;
     width: 500px;
     height: 200px; 
@@ -99,11 +105,20 @@ tbody
     background-color: #eee;
 }
 
+.table-footer 
+{
+    padding: 8px 10px 8px 10px;
+    background: #13923D;
+    font: 12px 'FFont', "Helvetica Neue", Arial, Helvetica, sans-serif;
+    text-align: center;
+    border: 0px solid #d3d3d3;
+    color: white;
+}
 
 td 
 {
-    padding:14px 12px 14px 12px; 
-    text-align:left; 
+    padding: 14px 12px 14px 12px; 
+    text-align: left; 
     opacity: 30;
     border-top: 0px solid #e0e0e0; 
     border-right: 0px solid #e0e0e0;
@@ -112,11 +127,11 @@ td
 
 th 
 {
-    padding:25px 12px 25px 12px;
+    padding: 20px 12px 20px 12px;
     background: #13923D;
-    font: 16px 'FFont', "Helvetica Neue",Arial, Helvetica, sans-serif;
+    font: 16px 'FFont', "Helvetica Neue", Arial, Helvetica, sans-serif;
     text-align: center;
-    border:0px solid #d3d3d3;
+    border: 0px solid #d3d3d3;
     color: white;
 }
 
@@ -169,4 +184,11 @@ th
 .sign-in-button:active 
 {
     transform: translateY(4px);
+}
+
+.logotype
+{
+    font-family: 'FFont', sans-serif; 
+    font-size: 18px; 
+    color: white; 
 }

@@ -43,7 +43,7 @@
 
         <div align="center">
             <table>
-            <th><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer - Artificial Intelligence<br></th>
+            <th class="logotype"><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer<br></th>
                 <tbody>
                     <tr>
                         <td class="login-container">
@@ -86,6 +86,11 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="table-footer">Realtime Fraud Triangle Analytics with Artificial Intelligence</td>
+                    </tr>
+                </tfoot>
             </table>
             <br>
 
