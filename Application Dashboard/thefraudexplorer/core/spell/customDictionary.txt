@@ -23,6 +23,15 @@ aguapanela
 aguevada
 aguevado
 aguevarse
+alborotada
+alborotadas
+alborotado
+alborotados
+alborotar
+alborote
+alboroten
+alboroto
+alborotos
 alebrestada
 alebrestado
 aleja
@@ -273,8 +282,6 @@ chicaneras
 chicanero
 chicaneros
 chichigua
-chichigua
-chichiguas
 chichiguas
 chichipata
 chichipatas
@@ -285,6 +292,9 @@ chicuca
 chigorodo
 chimba
 chimbada
+chimbee
+chimbiando
+chimbiar
 chimbita
 chimbitas
 chimbo
@@ -300,6 +310,7 @@ chirrido
 chiviada
 chiviado
 chivo
+chombi
 chucha
 chucho
 chumbimba
@@ -323,12 +334,15 @@ colanta
 colmotores
 colsanitas
 colsubsidio
+comadre
 combito
 combo
 comentaste
 comentastes
 comfama
 comfandi
+compa
+compadre
 concha
 conchuda
 conchudas
@@ -519,8 +533,14 @@ gomela
 gomelo
 gonorrea
 grandesita
+grandesita
+grandesitas
 grandesito
+grandesito
+grandesitos
 grandota
+grandota
+grandote
 grandote
 gritadera
 guachada
@@ -554,6 +574,8 @@ habelo
 haberlo
 hablate
 hagale
+hagale
+hagalen
 hembra
 hembras
 hembrita
@@ -632,6 +654,7 @@ mamera
 mamey
 mamon
 mamona
+man
 manana
 manaure
 mandado
@@ -718,6 +741,7 @@ nutresa
 ocensa
 oilo
 oiste
+ola
 pachanga
 pachocha
 pachochas
@@ -863,7 +887,6 @@ salidita
 saludito
 santander
 sap
-sap
 sardina
 sardino
 senita
@@ -912,6 +935,8 @@ torcida
 torcido
 torombola
 torombolo
+torresilla
+torresillas
 tractomula
 traquetero
 traqueto

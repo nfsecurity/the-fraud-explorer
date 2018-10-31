@@ -675,9 +675,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
     include "../lbs/openDBconn.php";
 
     $endPointHasAlerts = "SELECT agent, ruleset, heartbeat, domain, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat, domain, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE trianglesum > 0 GROUP BY agent";
-    $truncateInferences = "TRUNCATE TABLE t_inferences";
     $resultEndPointsHasAlerts = mysql_query($endPointHasAlerts);
-    $resultTruncateInferences = mysql_query($truncateInferences);
 
     /* Expert System Inference Engine */
 
@@ -763,10 +761,16 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
 
                 if ($deductionMatch == true)
                 {
-                    $queryDeduction = sprintf("INSERT INTO t_inferences (endpoint, domain, ruleset, application, date, reason, alertid, deduction) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", rtrim($endPoint, "*"), $domain, $ruleset, $application, $timeStamp, $matchReason, $alertID, $fraudProbDeduction);
-                    $resultDeduction = mysql_query($queryDeduction);
+                    $queryDeductionsExist = "SELECT * FROM t_inferences WHERE alertid = '".$alertID."'";    
+                    $resultDeductionsExist =  mysql_query($queryDeductionsExist);
 
-                    logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
+                    if (mysql_num_rows($resultDeductionsExist) == 0) 
+                    {
+                        $queryDeduction = sprintf("INSERT INTO t_inferences (endpoint, domain, ruleset, application, date, reason, alertid, deduction) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", rtrim($endPoint, "*"), $domain, $ruleset, $application, $timeStamp, $matchReason, $alertID, $fraudProbDeduction);
+                        $resultDeduction = mysql_query($queryDeduction);
+
+                        logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
+                    }
                 }
 
                 $counter++;

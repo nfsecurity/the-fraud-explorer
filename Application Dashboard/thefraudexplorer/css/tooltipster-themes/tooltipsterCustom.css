@@ -1,0 +1,90 @@
+.tooltipster-sidetip.tooltipster-custom .tooltipster-box 
+{
+    background: #ececec;
+    border: 2px solid#aaa;
+    border-radius: 4px;
+}
+
+.tooltipster-sidetip.tooltipster-custom .tooltipster-content 
+{
+    padding: 8px;
+}
+
+.tooltipster-sidetip.tooltipster-custom .tooltipster-arrow
+{
+    height:10px;
+    margin-left:-10px;
+    width:20px;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-left .tooltipster-arrow, .tooltipster-sidetip.tooltipster-custom.tooltipster-right .tooltipster-arrow
+{
+    height:20px;
+    margin-left:0;
+    margin-top:-10px;
+    width:10px
+}
+
+.tooltipster-sidetip.tooltipster-custom .tooltipster-arrow-background
+{
+    border:10px solid transparent;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-bottom .tooltipster-arrow-background
+{
+    border-bottom-color: #ececec;
+    top:4px
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-left .tooltipster-arrow-background
+{
+    border-left-color: #ececec;
+    left:-4px
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-right .tooltipster-arrow-background
+{
+    border-right-color: #ececec;
+    left:4px
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-top .tooltipster-arrow-background
+{
+    border-top-color: #ececec;
+    top:-4px
+}
+
+.tooltipster-sidetip.tooltipster-custom .tooltipster-arrow-border
+{
+    border-width:10px;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-bottom .tooltipster-arrow-border
+{
+    border-bottom-color:#aaa;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-left .tooltipster-arrow-border
+{
+    border-left-color:#aaa;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-right .tooltipster-arrow-border
+{
+    border-right-color:#aaa;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-top .tooltipster-arrow-border
+{
+    border-top-color:#aaa;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-bottom .tooltipster-arrow-uncropped
+{
+    top:-10px;
+}
+
+.tooltipster-sidetip.tooltipster-custom.tooltipster-right .tooltipster-arrow-uncropped
+{
+    left:-10px;
+}

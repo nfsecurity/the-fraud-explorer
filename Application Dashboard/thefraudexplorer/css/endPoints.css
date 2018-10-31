@@ -901,7 +901,7 @@ input[type=checkbox]
 {
     display: table-cell;
     padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
+    border: 0px solid #d3d3d3;
     font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
     text-align: left;
 }
@@ -909,19 +909,12 @@ input[type=checkbox]
 .tooltip-value
 {
     display: table-cell;
-    padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
+    padding: 3px 5px 3px 5px;
+    border: 0px solid #d3d3d3;
+    font-family: 'FFont', sans-serif; font-size:11px; color: white;
     text-align: center;
-}
-
-.tooltip-value-lefta
-{
-    display: table-cell;
-    padding: 3px 3px 3px 3px;
-    border: 1px solid #d3d3d3;
-    font-family: 'FFont', sans-serif; font-size:11px; color: #474747;
-    text-align: left;
+    background-color: #aaa;
+    border-radius: 4px;
 }
 
 .delete-agent, .setup-agent

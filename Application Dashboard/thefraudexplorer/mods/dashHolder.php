@@ -352,9 +352,8 @@ else $totalSystemWords= "0";
                         $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
                         $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
                         $regExpression = htmlentities($result['_source']['phraseMatch']);
-                    
-                        alertDetails("dashBoard", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
-                        echo $date;
+
+                        echo '<span class="fa fa-id-card-o font-icon-color-green awfont-padding-right"></span>'.$date;
                     
                         echo '</td>';
                     
@@ -527,15 +526,34 @@ $countAlerts = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                 display: false
             },
             tooltips: {
+                callbacks: {
+                    title: function(tooltipItems, data) {
+                        return "General statistics"
+                    },
+                    label: function(tooltipItems, data) {
+                        return "Status " + parseInt(tooltipItems.yLabel);
+                    },
+                    footer: function(tooltipItems, data) {
+                        return data['labels'][tooltipItems[0]['index']] + " Category";
+                    }
+                },
                 enabled: true,
                 backgroundColor: "#ededed",
                 titleFontColor: "#474747",
                 bodyFontColor: "#474747",
                 xPadding: 10,
-                yPadding: 10,
-                cornerRadius: 3,
+                yPadding: 15,
+                cornerRadius: 4,
                 titleFontSize: 11,
-                bodyFontSize: 11
+                bodyFontSize: 11,
+                footerFontSize: 11,
+                borderColor: "#aaa",
+                borderWidth: 2,
+                caretPadding: 20,
+                displayColors: false,
+                titleMarginBottom: 15,
+                footerFontColor: "#474747",
+                titleFontFamily: "FFont-Bold"
             },
             animation: false,
             scales: {
@@ -608,15 +626,35 @@ $countAlerts = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                 display: false
             },
             tooltips: {
+                callbacks: {
+                    title: function(tooltipItems, data) {
+                        return "Fraud Triangle Score"
+                    },
+                    label: function(tooltipItems, data) {
+                        var indice = tooltipItems.index;                 
+                        return  "Status " + data.datasets[0].data[indice];
+                    },
+                    footer: function(tooltipItems, data) {
+                        return data['labels'][tooltipItems[0]['index']] + " Vertice";
+                    }
+                },
                 enabled: true,
                 backgroundColor: "#ededed",
                 titleFontColor: "#474747",
                 bodyFontColor: "#474747",
                 xPadding: 10,
-                yPadding: 10,
-                cornerRadius: 3,
+                yPadding: 15,
+                cornerRadius: 4,
                 titleFontSize: 11,
-                bodyFontSize: 11
+                bodyFontSize: 11,
+                footerFontSize: 11,
+                borderColor: "#aaa",
+                borderWidth: 2,
+                caretPadding: 20,
+                displayColors: false,
+                titleMarginBottom: 15,
+                footerFontColor: "#474747",
+                titleFontFamily: "FFont-Bold"
             },
             animation: false
         }
@@ -636,9 +674,11 @@ $(document).ready(function() {
 <script>
     $(document).ready(function(){
         $('.tooltip-custom').tooltipster({
-            theme: 'tooltipster-light',
+            theme: 'tooltipster-custom',
             contentAsHTML: true,
-            side: 'right'
+            side: 'right',
+            delay: 0,
+            animationDuration: 0
         });
     });
 </script>

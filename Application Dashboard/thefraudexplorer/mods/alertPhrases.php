@@ -35,6 +35,7 @@ $ESalerterIndex = $configFile['es_alerter_index'];
 $documentId = filter($_GET['id']);
 $indexId = filter($_GET['idx']);
 $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
+$regExp = filter($_GET['regexp']);
 
 ?>
 
@@ -78,6 +79,13 @@ $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
         overflow-y: scroll;
     }
 
+    .footer-statistics
+    {
+        background-color: #e8e9e8;
+        border-radius: 5px 5px 5px 5px;
+        padding: 8px 8px 8px 8px;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -111,6 +119,14 @@ $alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
     ?>
         
     </div>
+
+    <?php
+
+    $regularExpression = (strlen(base64_decode($regExp)) > 40) ? substr(base64_decode($regExp), 0, 40) . ' ...' : base64_decode($regExp);
+
+    echo '<div class="footer-statistics"><span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
+
+    ?>
     
     <div class="modal-footer window-footer-config">
         

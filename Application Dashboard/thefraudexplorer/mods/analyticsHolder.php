@@ -366,7 +366,6 @@ include "../lbs/elasticsearch.php";
             
             $yAxis = $countPressure;
             
-            
             /* Do not graph */
             
             if ($countRationalization == 0 && $countOpportunity == 0 && $countPressure == 0) continue;
@@ -407,25 +406,25 @@ include "../lbs/elasticsearch.php";
             {
                 if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
                 {
-                    $radiusPoint = 17;
+                    $radiusPoint = 12;
                     
                     echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                 }
                 if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
                 {
-                    $radiusPoint = 17;
+                    $radiusPoint = 12;
                     
                     echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                 }
                 if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
                 {
-                    $radiusPoint = 17;
+                    $radiusPoint = 12;
                     
                     echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                 }
                 if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
                 {
-                    $radiusPoint = 17;
+                    $radiusPoint = 12;
                     
                     echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                 }
@@ -517,7 +516,10 @@ include "../lbs/elasticsearch.php";
                     return "Endpoints Behavior";
                 },
                 label: function(tooltipItems, data) {
-                    return "Pressure: " + parseInt(tooltipItems.yLabel) + ", " + "Rationalization: " + parseInt(tooltipItems.xLabel);
+                    return "Pressure " + parseInt(tooltipItems.yLabel);
+                },
+                footer: function(tooltipItems, data){                                    
+                    return "Rationalization " + parseInt(tooltipItems[0].xLabel);
                 }
             },
             enabled: true,
@@ -525,15 +527,17 @@ include "../lbs/elasticsearch.php";
             titleFontColor: "#474747",
             bodyFontColor: "#474747",
             xPadding: 10,
-            yPadding: 10,
-            cornerRadius: 3,
-            titleFontSize: 12,
+            yPadding: 15,
+            cornerRadius: 4,
+            titleFontSize: 11,
             bodyFontSize: 11,
-            borderColor: "#B3B3B3",
-            borderWidth: 0.5,
+            footerFontSize: 11,
+            borderColor: "#aaa",
+            borderWidth: 2,
             caretPadding: 20,
             displayColors: false,
-            footerFontColor: "#000000",
+            titleMarginBottom: 15,
+            footerFontColor: "#474747",
             titleFontFamily: "FFont-Bold"
         },
         animation: false,

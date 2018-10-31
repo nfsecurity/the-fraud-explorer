@@ -55,7 +55,7 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
         <!-- JS/CSS for Tooltip -->
 
         <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
-        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipster-sideTip-light.min.css">
+        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipsterCustom.css">
         <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
 
         <!-- CSS -->

@@ -186,7 +186,7 @@ if ($agent_decSQ != "all")
         $regExpression = htmlentities($result['_source']['phraseMatch']);
     
         echo '<td class="detailstd">';
-        alertDetails("alertData", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
+        echo '<span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;">&ensp;</span>';
         echo '</td>';
 
         /* Timestamp */
@@ -211,7 +211,7 @@ if ($agent_decSQ != "all")
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -302,7 +302,7 @@ else
                     
         /* Details */
         
-        alertDetails("alertData", $date, $wordTyped, $windowTitle, $searchResult, $regExpression, $result);
+        echo '<span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;">&ensp;</span>';
         
         echo '</td>';
         
@@ -356,7 +356,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -629,11 +629,12 @@ else
 
 <script>
     $(document).ready(function(){
-        $('.tooltip-custom').tooltipster(
-            {
-                theme: 'tooltipster-light',
-                contentAsHTML: true,
-                side: 'right'
-            });
+        $('.tooltip-custom').tooltipster({
+            theme: 'tooltipster-custom',
+            contentAsHTML: true,
+            side: 'right',
+            delay: 0,
+            animationDuration: 0
+        });
     });
 </script>

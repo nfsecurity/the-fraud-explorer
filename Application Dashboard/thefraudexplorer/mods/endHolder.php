@@ -215,7 +215,7 @@ if ($row_a = mysql_fetch_array($result_a))
         /* Enpoint Details */
 
         echo '<td class="detailstd">';
-        agentDetails($row_a['agent'], $row_a['domain'], getTextSist($row_a["system"]), $row_a['status'], $row_a['ipaddress'], $row_a['sessions']);
+        echo '<span class="fa fa-id-card-o fa-2x font-icon-color" style="font-size: 20px;">&nbsp;&nbsp;</span>';
         echo '</td>';
 
         /* Agent data retrieval */
@@ -485,9 +485,11 @@ if ($row_a = mysql_fetch_array($result_a))
 <script>
     $(document).ready(function(){
         $('.tooltip-custom').tooltipster({
-            theme: 'tooltipster-light',
+            theme: 'tooltipster-custom',
             contentAsHTML: true,
-            side: 'right'
+            side: 'right',
+            delay: 0,
+            animationDuration: 0
         });
     });
 </script>
