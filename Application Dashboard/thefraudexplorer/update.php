@@ -72,11 +72,6 @@ if ($key == $keypass[0])
     {
         if(strlen($macAgent)<60)
         {
-            /* Send message alert for first agent connection */
-
-            include $documentRoot."lbs/mailEvent.php";
-            mail($to, $subject, $message, $headers);
-
             /* Heartbeat data */
 
             $query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";

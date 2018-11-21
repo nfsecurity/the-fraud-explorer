@@ -770,6 +770,12 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                         $resultDeduction = mysql_query($queryDeduction);
 
                         logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
+                    
+                        /* Send message alert */
+
+                        $mailEventPath = $configFile['php_document_root']."/lbs/mailEvent.php";
+                        include $mailEventPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
