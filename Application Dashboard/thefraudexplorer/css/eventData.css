@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2018-12
-* Revision: v1.2.1
+* Date: 2019-01
+* Revision: v1.2.2-ai
 *
 * Description: CSS Code
 */
@@ -125,13 +125,14 @@ a:active
 
 table 
 {
-    overflow:hidden;
-    border: 1px solid #d3d3d3;
-    background: #fefefe;
+    overflow: hidden;
+    border: 2px solid #d3d3d3;
+    background: #d3d3d3;
     width: 100%;
     border-spacing: 0px;
     table-layout:fixed;
     height: 100%;
+    border-radius: 5px;
 }
 
 tbody tr:nth-child(even)
@@ -168,9 +169,9 @@ th.header
 
 td
 {
-    padding:7px 0px 7px 0px;
+    padding: 7px 0px 7px 0px;
     opacity: 30;
-    height: 50px;
+    height: 55px;
     vertical-align: middle;
     border-top:1px solid #e0e0e0;
     border-right:0px solid #F8F8F8;
@@ -215,7 +216,7 @@ th
     white-space: nowrap;
 }
 
-.alerttypeth
+.eventtypeth
 {
     width: 150px; 
     min-width: 150px;
@@ -307,7 +308,7 @@ th
     min-width: 160px;
 }
 
-.alerttypetd
+.eventtypetd
 { 
     width: 150px;
     min-width: 150px;
@@ -394,7 +395,7 @@ th
     white-space: nowrap;
 }
 
-.alerttypeth-all
+.eventtypeth-all
 {
     width: 150px; 
     min-width: 150px;
@@ -486,7 +487,7 @@ th
     min-width: 160px;
 }
 
-.alerttypetd-all
+.eventtypetd-all
 { 
     width: 150px;
     min-width: 150px;
@@ -733,9 +734,10 @@ li a:hover:not(.active)
     position: relative;
     height: 30px;
     bottom: 15px;
-    width: 100%; 
+    width: calc(100% - 2px); 
     border: 1px solid #d3d3d3; 
     background: #FFFFFF;
+    border-radius: 5px;
 }
 
 .pager-inside
@@ -748,7 +750,7 @@ li a:hover:not(.active)
     border: 0px solid red;
 }
 
-.pager-inside-agent
+.pager-inside-endpoint
 {
     display: table-cell;
     padding: 2px 0px 0px 15px;
@@ -766,7 +768,7 @@ li a:hover:not(.active)
 {
     position: fixed;
     bottom: 10px;
-    left: 8px;
+    left: 9px;
     width: calc(100% - 16px);
 }
 
@@ -907,7 +909,7 @@ li a:hover:not(.active)
     outline: 0 !important;
 }
 
-.alert-phrase-viewer
+.event-phrase-viewer
 {
     outline: 0 !important;
 }
@@ -925,4 +927,14 @@ li a:hover:not(.active)
 .font-icon-color-gray-low
 {
     color: #B4BCC2;
+}
+
+.behavior-button
+{
+    border: 0px solid gray; 
+    background-color: #e0e0e0; 
+    color: #888888; 
+    border-radius: 5px; 
+    padding: 5px 5px 5px 5px; 
+    margin: 5px 10px 5px 10px;
 }

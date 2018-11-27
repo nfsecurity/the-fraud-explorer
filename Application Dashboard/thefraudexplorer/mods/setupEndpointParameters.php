@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Code for agent setup
+ * Description: Code for endpoint setup
  */
 
 include "../lbs/login/session.php";
@@ -27,25 +27,25 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-$agent_enc=filter($_GET['agent']);
-$agent_dec=base64_decode(base64_decode($agent_enc));
+$endpointEnc=filter($_GET['endpoint']);
+$endpointDec=base64_decode(base64_decode($endpointEnc));
 
 if (isset($_POST['alias']) && $_POST['alias'] != "") 
 {
     $alias=filter($_POST['alias']);
-    if (!empty($alias)) mysql_query(sprintf("UPDATE t_agents SET name='%s' WHERE agent LIKE '%s%%'", $alias, $agent_dec));
+    if (!empty($alias)) mysql_query(sprintf("UPDATE t_agents SET name='%s' WHERE agent LIKE '%s%%'", $alias, $endpointDec));
 }
 
 if (isset($_POST['ruleset']) && strpos($_POST['ruleset'], 'Choose the ruleset') === false) 
 {
     $ruleset=filter($_POST['ruleset']);
-    if (!empty($ruleset)) mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $agent_dec));
+    if (!empty($ruleset)) mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endpointDec));
 }
 
 if (isset($_POST['gender']) && strpos($_POST['gender'], 'Choose the gender') === false)
 {
     $gender=filter($_POST['gender']);
-    if (!empty($gender)) mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent LIKE '%s%%'", $gender, $agent_dec));
+    if (!empty($gender)) mysql_query(sprintf("UPDATE t_agents SET gender='%s' WHERE agent LIKE '%s%%'", $gender, $endpointDec));
 }
 
 header ("location: ../endPoints");

@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Code for setup agent
+ * Description: Code for setup endpoint
  */
 
 include "../lbs/login/session.php";
@@ -27,8 +27,8 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-$agent_enc=filter($_GET['agent']);
-$agent_dec=base64_decode(base64_decode($agent_enc));
+$endpointEnc=filter($_GET['endpoint']);
+$endpointDec=base64_decode(base64_decode($endpointEnc));
 
 ?>
 
@@ -46,7 +46,8 @@ $agent_dec=base64_decode(base64_decode($agent_enc));
         padding: 5px; 
         border: solid 1px #c9c9c9; 
         outline: none;
-        font-family: 'FFont', sans-serif; font-size:12px;
+        font-family: 'FFont', sans-serif; font-size: 12px;
+        border-radius: 5px;
     }
 
     .window-footer
@@ -114,13 +115,13 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 ?>
 
 <div class="div-container">
-    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'mods/setupAgentParameters?agent='.$agent_enc; ?>">
-        <p class="title">Agent alias</p><br>
-        <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysql_query(sprintf($queryName,$agent_dec)); $alias = mysql_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
+    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'mods/setupEndpointParameters?endpoint='.$endpointEnc; ?>">
+        <p class="title">Endpoint alias</p><br>
+        <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysql_query(sprintf($queryName,$endpointDec)); $alias = mysql_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
         <br><br><p class="title">Ruleset or Dictionary</p><br>
 
         <select class="select-ruleset-styled" name="ruleset" id="ruleset">
-            <option selected="selected">Choose the ruleset <?php $rulesetquery = mysql_query(sprintf($queryRule, $agent_dec)); $ruleset = mysql_fetch_array($rulesetquery); if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)'; else echo '(current dictionary: '.$ruleset[0].')'; ?></option>
+            <option selected="selected">Choose the ruleset <?php $rulesetquery = mysql_query(sprintf($queryRule, $endpointDec)); $ruleset = mysql_fetch_array($rulesetquery); if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)'; else echo '(current dictionary: '.$ruleset[0].')'; ?></option>
 
             <?php
 
@@ -139,7 +140,7 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
         <br><br><p class="title">Endpoint gender</p><br>
 
         <select class="select-gender-styled" name="gender" id="gender">
-            <option selected="selected">Choose the gender <?php $genderquery = mysql_query(sprintf($queryGender, $agent_dec)); $gender = mysql_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
+            <option selected="selected">Choose the gender <?php $genderquery = mysql_query(sprintf($queryGender, $endpointDec)); $gender = mysql_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>

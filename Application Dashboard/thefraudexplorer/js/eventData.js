@@ -7,8 +7,8 @@
  * Licensed under GNU GPLv3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for AJAX
  */
@@ -16,7 +16,7 @@
 /* Code for refresh main Table using AJAX */
 
 $(function(){
-    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("mods/alertHolder.php"); 
+    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("mods/eventHolder.php"); 
 });
 
 /* Code for html footer include */

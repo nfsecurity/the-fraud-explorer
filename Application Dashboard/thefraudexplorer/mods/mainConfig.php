@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for main config
  */
@@ -47,6 +47,7 @@ include "../lbs/openDBconn.php";
         border: solid 1px #c9c9c9;
         outline: none;
         font-family: 'FFont', sans-serif; font-size:12px;
+        border-radius: 5px;
     }
 
     .score-text
@@ -82,6 +83,7 @@ include "../lbs/openDBconn.php";
         width: 120px;
         height: 30px;
         outline: 0 !important;
+        border-radius: 5px
     }
 
     input[type="number"].mod::-webkit-outer-spin-button, input[type="number"].mod::-webkit-inner-spin-button 
@@ -214,11 +216,11 @@ include "../lbs/openDBconn.php";
 
         <div class="master-container">
             <div class="key-container">              
-                <p class="title-config">Specify the key for endpoints connection</p><br>
+                <p class="title-config">Endpoints connection key</p><br>
                 <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="off" placeholder=":key here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
             <div class="sample-calculation-container">
-                <p class="title-config">Enable or disable sample data calculation</p><br>
+                <p class="title-config">Sample data calculation</p><br>
                 <select class="select-ruleset-styled" name="samplecalculation" id="samplecalculation">
                     <option selected="selected"> 
                         

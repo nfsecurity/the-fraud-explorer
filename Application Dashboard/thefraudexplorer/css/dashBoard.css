@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2018-12
-* Revision: v1.2.1
+* Date: 2019-01
+* Revision: v1.2.2-ai
 *
 * Description: CSS Code
 */
@@ -133,7 +133,8 @@ a:active
     top: 0px;
     left: 8px;
     position: absolute;
-    background: white;
+    background: #e8eaeb;
+    border-radius: 5px;
 }
 
 .container-upper-left-sub
@@ -156,6 +157,7 @@ a:active
     right: 8px;
     position: absolute;
     background: white;
+    border-radius: 5px;
 }
 
 .container-upper-right-sub
@@ -178,6 +180,7 @@ a:active
     bottom: 0px;
     position: absolute;
     background-color: white;
+    border-radius: 5px;
 }
 
 .container-bottom-left-sub
@@ -258,7 +261,7 @@ a:active
     background-color: #BEDAC7; 
     height: 55px; 
     float: left;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .container-bottom-left-sub-two-sub-one-pressure
@@ -268,7 +271,7 @@ a:active
     background-color: #4CA86B; 
     height: 55px; 
     float: left;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .container-bottom-left-sub-two-sub-one-rational
@@ -278,7 +281,7 @@ a:active
     background-color: #96C8A6; 
     height: 55px; 
     float: left;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .container-bottom-right
@@ -292,7 +295,8 @@ a:active
     right: 0px;
     bottom: 0px;
     position: absolute;
-    background: white;
+    background: #e8eaeb;
+    border-radius: 5px;
 }
 
 .container-bottom-right-sub
@@ -311,6 +315,7 @@ a:active
     padding: 10px;
     text-align: left;
     height: 33px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .container-upper-right h2 
@@ -321,6 +326,7 @@ a:active
     padding: 10px;
     text-align: left;
     height: 33px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .container-bottom-left h2
@@ -331,6 +337,7 @@ a:active
     padding: 10px;
     text-align: left;
     height: 33px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .container-bottom-right h2 
@@ -341,6 +348,7 @@ a:active
     padding: 10px;
     text-align: left;
     height: 33px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .container-title
@@ -365,11 +373,12 @@ a:active
 .table
 {
     border-top: 0px solid #c9c9c9;
-    background: #fefefe;
+    background: #e8eaeb;
     width: 100%;
     border-spacing: 0px;
     height: 100%;
     border-collapse: collapse;
+    border-radius: 0px 0px 3px 3px;
 }
 
 .thead, .tbody, .tr, .td, .th 
@@ -466,7 +475,7 @@ a:active
 {
     vertical-align:middle;
     text-align: left;
-    padding: 10px 10px 10px 10px;
+    padding: 0px 10px 0px 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -499,6 +508,11 @@ a:active
 .font-icon-color-green
 {
     color: #95C8A6;
+}
+
+.font-icon-color-white 
+{ 
+    color: #FFFFFF; 
 }
 
 .ul 
@@ -767,7 +781,7 @@ li a:hover:not(.active)
     padding-right: 5px;
 }
 
-.download-csv-top50alerts, .download-csv-top50endpoints
+.download-csv-top50events, .download-csv-top50endpoints
 {
     cursor: pointer;
     border-radius: 5px;
@@ -809,7 +823,7 @@ li a:hover:not(.active)
     cursor: default;
 }
 
-.button-view-all-alerts 
+.button-view-all-events 
 {
     cursor: pointer;
     border-radius: 5px;
@@ -819,4 +833,14 @@ li a:hover:not(.active)
     background-color: #fff;
     outline: 0 !important;
     font-size: 10px;
+}
+
+.ruleset-button, .behavior-button
+{
+    border: 0px solid gray; 
+    background-color: #e0e0e0; 
+    color: #888888; 
+    border-radius: 5px; 
+    padding: 2px 5px 2px 5px; 
+    margin: 0px 10px 0px 10px;
 }

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for horizontal analytics data
  */
@@ -24,16 +24,16 @@ if(!$session->logged_in)
     exit;
 }
 
-$_SESSION['instance'] = "alertData";
-$_SESSION['agentIDh']=filter($_GET['agent']);
+$_SESSION['instance'] = "eventData";
+$_SESSION['endpointIDh']=filter($_GET['endpoint']);
 
-if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) header ("location: endPoints");
+if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh']))))) header ("location: endPoints");
 
 ?>
 
 <html>
     <head>
-        <title>Agent Data &raquo; The Fraud Explorer</title>
+        <title>Endpoint Data &raquo; The Fraud Explorer</title>
         <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -43,7 +43,7 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
 
         <!-- JS functions -->
 
-        <script type="text/javascript" src="js/alertData.js"></script>
+        <script type="text/javascript" src="js/eventData.js"></script>
 
         <!-- Styles and JS for modal dialogs -->
 
@@ -60,7 +60,7 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
 
         <!-- CSS -->
 
-        <link rel="stylesheet" type="text/css" href="css/alertData.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/eventData.css" media="screen" />
 
         <!-- Font Awesome -->
 
@@ -97,10 +97,10 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
             ?>
         </div>
         
-        <!-- Modal for Alert Marking -->
+        <!-- Modal for Event Marking -->
 
         <center>
-            <div class="modal" id="alertMarking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal" id="eventMarking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
@@ -116,7 +116,7 @@ if (!checkAlert(base64_decode(base64_decode(filter($_SESSION['agentIDh']))))) he
         <!-- Modal for Phrase Viewer -->
 
         <center>
-            <div class="modal" id="alert-phrases" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal" id="event-phrases" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
@@ -139,50 +139,50 @@ var tour = new Tour({
     smartPlacement: false,
     backdrop: false,
     steps: [{
-        element: "#elm-details-alert",
+        element: "#elm-details-event",
         placement: 'right',
-        title: "Alert details",
-        content: "Hover mouse pointer over this icon, you will see the alert consolidation data. This icon show all the alert data you can see in the main table plus the regular expression matched by the phrase."
+        title: "Event details",
+        content: "Hover mouse pointer over this icon, you will see the event consolidation data. This icon show all the event data you can see in the main table plus the regular expression matched by the phrase."
     }, {
-        element: "#elm-date-alert",
+        element: "#elm-date-event",
         placement: 'bottom',
-        title: "Alert date",
-        content: "This column show the date when the alert was triggered from the specified endpoint. This ocurr when the endpoint types some phrases that match with the fraud triangle phrase database."
+        title: "Event date",
+        content: "This column show the date when the event was triggered from the specified endpoint. This ocurr when the endpoint types some phrases that match with the fraud triangle phrase database."
     }, {
-        element: "#elm-type-alert",
+        element: "#elm-type-event",
         placement: 'bottom',
-        title: "Alert type",
-        content: "The sofware classify the alerts under the three vertices of the fraud triangle. Pressure, opportunity and rationalitazion are the three types of alerts you can see in this module."
+        title: "Event type",
+        content: "The sofware classify the events under the three vertices of the fraud triangle. Pressure, opportunity and rationalitazion are the three types of events you can see in this module."
     }, {
-        element: "#elm-endpoint-alert",
+        element: "#elm-endpoint-event",
         placement: 'bottom',
         title: "Endpoint",
-        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, alerts by pressure, oportunity, rationalization, score and data representation."
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization, score and data representation."
     }, {
-        element: "#elm-windowtitle-alert",
+        element: "#elm-windowtitle-event",
         placement: 'bottom',
         title: "Window title",
-        content: "This software maps the endpoint writing with windows titles. For every alert, you will see the phrase matched and the window or application context that was used for type the phrase."
+        content: "This software maps the endpoint writing with windows titles. For every event, you will see the phrase matched and the window or application context that was used for type the phrase."
     }, {
-        element: "#elm-phrasetyped-alert",
+        element: "#elm-phrasetyped-event",
         placement: 'bottom',
         title: "Phrase typed",
         content: "You can clic over the phrase typed and you will see a new window showing the entire text history. If you are the admin user, you also can review and correct the phrases fixing typos."
     }, {
-        element: "#elm-mark-alert",
+        element: "#elm-mark-event",
         placement: 'left',
-        title: "Alert marking",
-        content: "The software provides the ability to mark an alert and classify it as a false positive. This is useful when you consider that the alert is not relevant and need to disable it from futher calculations."
+        title: "Event marking",
+        content: "The software provides the ability to mark an event and classify it as a false positive. This is useful when you consider that the event is not relevant and need to disable it from futher calculations."
     }, {
-        element: "#elm-pager-alerts",
+        element: "#elm-pager-events",
         placement: 'top',
         title: "Statistics and pager",
-        content: "You can see here some statistics like the total number of alerts and your classification. In the right side, you can use the pager option to navigate in the entire alerts using paging."
+        content: "You can see here some statistics like the total number of events and your classification. In the right side, you can use the pager option to navigate in the entire events using paging."
     }, {
         element: "#elm-search",
         placement: 'bottom',
         title: "Search",
-        content: "You can use this search box to find one or more alerts in the entire list. This is useful when you have a lot of alerts under the methodology and needs to focus in one of them."
+        content: "You can use this search box to find one or more events in the entire list. This is useful when you have a lot of events under the methodology and needs to focus in one of them."
     }]
 });
 

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for paint main endpoints list
  */
@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 require '../vendor/autoload.php';
 include "../lbs/globalVars.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 include "../lbs/elasticsearch.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
@@ -34,10 +34,10 @@ include "../lbs/cryptography.php";
 /* SQL Queries */
 
 $queryConfig = "SELECT * FROM t_config";
-$queryAgentsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
-$queryAgentsSQL_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
-$queryAgentsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent";
-$queryAgentsSQLDomain_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' GROUP BY agent";
+$queryEndpointsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
+$queryEndpointsSQL_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent";
+$queryEndpointsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent";
+$queryEndpointsSQLDomain_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' GROUP BY agent";
 
 /* Local styles */
 
@@ -79,7 +79,7 @@ if ($session->domain == "all")
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryAgentsSQL);
+        $result_a = mysql_query($queryEndpointsSQL);
     }
     else
     {
@@ -107,7 +107,7 @@ if ($session->domain == "all")
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryAgentsSQL_wOSampler);
+        $result_a = mysql_query($queryEndpointsSQL_wOSampler);
     }
 }
 else
@@ -138,7 +138,7 @@ else
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryAgentsSQLDomain);
+        $result_a = mysql_query($queryEndpointsSQLDomain);
     }
     else
     {
@@ -166,7 +166,7 @@ else
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryAgentsSQLDomain_wOSampler);
+        $result_a = mysql_query($queryEndpointsSQLDomain_wOSampler);
     }
 }
 
@@ -191,7 +191,7 @@ echo '<table id="tblData" class="tablesorter">';
 echo '<thead><tr>';
 echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
 echo '<th class="totalwordsth"></th>';
-echo '<th class="agentth" id="elm-endpoints-dashboard">PEOPLE UNDER FRAUD TRIANGLE ANALYTICS</th>';
+echo '<th class="endpointth" id="elm-endpoints-dashboard">AUDIENCE UNDER FRAUD ANALYTICS</th>';
 echo '<th class="compth" id="elm-ruleset-dashboard">RULE SET</th>';
 echo '<th class="verth" id="elm-version-dashboard">VERSION</th>';
 echo '<th class="stateth" id="elm-status-dashboard">STT</th>';
@@ -209,7 +209,7 @@ if ($row_a = mysql_fetch_array($result_a))
     {
         echo '<tr>';
 
-        $agent_enc = base64_encode(base64_encode($row_a["agent"]));
+        $endpointEnc = base64_encode(base64_encode($row_a["agent"]));
         $domain_enc = base64_encode(base64_encode($row_a["domain"]));
 
         /* Enpoint Details */
@@ -218,7 +218,7 @@ if ($row_a = mysql_fetch_array($result_a))
         echo '<span class="fa fa-id-card-o fa-2x font-icon-color" style="font-size: 20px;">&nbsp;&nbsp;</span>';
         echo '</td>';
 
-        /* Agent data retrieval */
+        /* Endpoint data retrieval */
 
         if($row_a['rationalization'] == NULL) $countRationalization = 0;
         else $countRationalization = $row_a['rationalization'];
@@ -240,36 +240,36 @@ if ($row_a = mysql_fetch_array($result_a))
 
         echo '<td class="totalwordstd">'.$totalWordHits.'</td>';
 
-        /* Agent name */
+        /* Endpoint name */
 
-        $agentName = $row_a['agent']."@".between('@', '.', "@".$row_a['domain']);
+        $endpointName = $row_a['agent']."@".between('@', '.', "@".$row_a['domain']);
 
         if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
         {
-            echo '<td class="agenttd">';
-            if ($row_a["gender"] == "male") agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else if ($row_a["gender"] == "female") agentInsights("endPoints", "female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            echo '<td class="endpointtd">';
+            if ($row_a["gender"] == "male") endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
         else
         {
-            $agentName = $row_a["name"];
-            echo '<td class="agenttd">';
-            if ($row_a["gender"] == "male") agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else if ($row_a["gender"] == "female") agentInsights("endPoints", "female", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
-            else echo agentInsights("endPoints", "male", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            $endpointName = $row_a["name"];
+            echo '<td class="endpointtd">';
+            if ($row_a["gender"] == "male") endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else echo endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
 
         /* Company, department or group */
 
-        if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd">BASELINE</td>';
-        else echo '<td class="comptd">' . $row_a["ruleset"] . "</td>";
+        if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd"><div class="department-button">BASELINE</div></td>';
+        else echo '<td class="comptd"><div class="department-button">' . $row_a["ruleset"] . "</div></td>";
 
-        /* Agent software version */
+        /* Endpoint software version */
 
         echo '<td class="vertd"><span class="fa fa-codepen font-icon-color fa-padding"></span>' .$row_a["version"] .'</td>';
 
-        /* Agent status */
+        /* Endpoint status */
 
         if($row_a["status"] == "active")
         {
@@ -300,15 +300,15 @@ if ($row_a = mysql_fetch_array($result_a))
         echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
         echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
         echo '<td class="countctd">'.$level.'</td>';
-        echo '<td class="scoretd"><a href=alertData?agent='.$agent_enc.'>'.round($score, 1).'</a></td>';
+        echo '<td class="scoretd"><a href=eventData?endpoint='.$endpointEnc.'>'.round($score, 1).'</a></td>';
 
-        /* Option for delete the agent */
+        /* Option for delete the endpoint */
 
-        echo '<td class="specialtd"><a class="delete-agent" data-href="mods/deleteAgent?agent='.$agent_enc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
+        echo '<td class="specialtd"><a class="delete-endpoint" data-href="mods/deleteEndpoint?endpoint='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
 
-        /* Agent setup */
+        /* Endpoint setup */
 
-        echo '<td class="specialtd"><a class="setup-agent" href="mods/setupAgent?agent='.$agent_enc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
+        echo '<td class="specialtd"><a class="setup-endpoint" href="mods/setupEndpoint?endpoint='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
         echo '</tr>';
     }
     while ($row_a = mysql_fetch_array($result_a));
@@ -334,18 +334,18 @@ if ($row_a = mysql_fetch_array($result_a))
 <div id="pager" class="pager">
     <div class="pager-layout">
         <div class="pager-inside">
-            <div class="pager-inside-agent" id="elm-pager">
+            <div class="pager-inside-endpoint" id="elm-pager">
 
                 <?php
                 
                 if (array_key_exists('count', $resultWords)) $recordsCollected = number_format($resultWords['count'], 0, ',', '.');
                 else $recordsCollected = "0";
 
-                if (array_key_exists('count', $resultAlerts)) $fraudAlerts = number_format($resultAlerts['count'], 0, ',', '.');	
-                else $fraudAlerts = "0";
+                if (array_key_exists('count', $resultAlerts)) $fraudEvents = number_format($resultAlerts['count'], 0, ',', '.');	
+                else $fraudEvents = "0";
 
                 echo 'There are <span class="fa fa-font font-icon-color">&nbsp;&nbsp;</span>'.$recordsCollected.' records ';
-                echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudAlerts.' fraud triangle alerts, ';
+                echo '<span class="fa fa-exclamation-triangle font-icon-color">&nbsp;&nbsp;</span>'.$fraudEvents.' fraud triangle events, ';
                 echo 'ocupping <span class="fa fa-database font-icon-color">&nbsp;&nbsp;</span>'.number_format(round($dataSize,2), 2, ',', '.').' MBytes';
                 
                 ?>

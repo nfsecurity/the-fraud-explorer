@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Code for agent deletion
+ * Description: Code for endpoint deletion
  */
 
 include "../lbs/login/session.php";
@@ -27,23 +27,23 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-$agent_enc=filter($_GET['agent']);
-$agent_dec=base64_decode(base64_decode($agent_enc));
-$agentID=str_replace(array("."), array("_"), $agent_dec);
+$endpointEnc=filter($_GET['endpoint']);
+$endpointDec=base64_decode(base64_decode($endpointEnc));
+$endpointID=str_replace(array("."), array("_"), $endpointDec);
 
 /* Delete agent tables */
 
 $queryStatement = "SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(table_name), ';') AS statement FROM information_schema.tables WHERE table_schema = 'thefraudexplorer' AND table_name LIKE 't_%s_%%'";
-$statement = mysql_query(sprintf($queryStatement, $agentID));
+$statement = mysql_query(sprintf($queryStatement, $endpointID));
 $rowStatement = mysql_fetch_array($statement);
 
 mysql_query($rowStatement[0]);
-mysql_query(sprintf("DELETE FROM t_agents WHERE agent like '%s%%'", $agentID));
+mysql_query(sprintf("DELETE FROM t_agents WHERE agent like '%s%%'", $endpointID));
 
 /* Delete agent elasticsearch documents */
 
 $urlDelete = "http://localhost:9200/_all/_delete_by_query?pretty";
-$params = '{ "query": { "wildcard" : { "agentId.raw" : "'.$agentID.'*" } } }';
+$params = '{ "query": { "wildcard" : { "agentId.raw" : "'.$endpointID.'*" } } }';
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

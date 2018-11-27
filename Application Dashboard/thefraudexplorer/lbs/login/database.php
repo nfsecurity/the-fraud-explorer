@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for login
  */
@@ -83,7 +83,7 @@ class MySQLDB
         }
     }
 
-    function confirmUserPass($username, $password, $captcha)
+    function confirmUserPass($username, $password)
     {
         if(!get_magic_quotes_gpc()) 
         {
@@ -101,19 +101,6 @@ class MySQLDB
         $dbarray = mysql_fetch_array($result);
         $dbarray['password'] = stripslashes($dbarray['password']);
         $password = stripslashes($password);
-
-        /* Captcha validation */
-
-        $sql2 = "SELECT count(*) FROM t_captcha WHERE captcha='".(stripslashes($captcha))."'";
-        $result_b = mysql_query($sql2);
-
-        if (@$row = mysql_fetch_array($result_b))
-        {
-            if(!$row[0]>0) 
-            {
-                return 1;
-            }
-        }
 
         /* Password validation */
 

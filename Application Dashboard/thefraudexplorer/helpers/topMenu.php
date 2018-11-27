@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for top menu
  */
@@ -25,7 +25,7 @@ if(!$session->logged_in)
 }
 
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 
 /* Online and Offline Endpoints Query */
 
@@ -85,7 +85,7 @@ include "../lbs/closeDBconn.php";
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
-        <a href="../alertData?agent=WVd4cw==" id="elm-alertmodule">Fraud Triangle Alerts</a>
+        <a href="../eventData?endpoint=WVd4cw==" id="elm-eventmodule">Fraud Triangle Events</a>
     </li>
     <li class="li">
         <a href="analyticsData" id="elm-analytics">Analytics</a>
@@ -196,7 +196,7 @@ include "../lbs/closeDBconn.php";
 
 <?php
 
-if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_SESSION['instance'] != "alertData"))
+if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_SESSION['instance'] != "eventData"))
 {
     echo '<script>';
     echo 'document.getElementById("search-box").disabled = true;';

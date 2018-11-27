@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for Phrase viewer
  */
@@ -34,7 +34,7 @@ $ESalerterIndex = $configFile['es_alerter_index'];
 
 $documentId = filter($_GET['id']);
 $indexId = filter($_GET['idx']);
-$alertPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
+$eventPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
 $regExp = filter($_GET['regexp']);
 
 ?>
@@ -90,7 +90,7 @@ $regExp = filter($_GET['regexp']);
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Phrase viewer</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Expression analysis</h4>
 </div>
 
 <div class="div-container">
@@ -100,7 +100,7 @@ $regExp = filter($_GET['regexp']);
     <?php
     
     $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
-    $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+    $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
     
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
 

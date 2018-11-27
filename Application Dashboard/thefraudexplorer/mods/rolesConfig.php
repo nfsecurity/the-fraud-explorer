@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for role administration
  */
@@ -31,6 +31,11 @@ include "../lbs/openDBconn.php";
 
 <style>
 
+    .ruleset-scroll::-webkit-scrollbar-track 
+    {
+        border-radius: 0px 0px 5px 0px;
+    }
+
     .title-config
     {
         font-family: 'FFont', sans-serif; font-size:12px;
@@ -47,6 +52,7 @@ include "../lbs/openDBconn.php";
         border: solid 1px #c9c9c9;
         outline: none;
         font-family: 'FFont', sans-serif; font-size:12px;
+        border-radius: 5px;
     }
 
     .window-footer-config
@@ -61,10 +67,11 @@ include "../lbs/openDBconn.php";
 
     .table-role
     {
-        font-family: 'FFont', sans-serif; font-size:10px;
+        font-family: 'FFont', sans-serif; font-size: 10px;
         border: 1px solid #C9C9C9;
         width: 100%;
-        border-spacing: 0px;
+        border-collapse: separate !important;
+        border-radius: 5px 5px 5px 5px;
     }
 
     .table-thead-role
@@ -92,16 +99,19 @@ include "../lbs/openDBconn.php";
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
+        border-collapse: separate !important;
+        border-radius: 5px 5px 0px 0px;
     }
 
     .table-tbody-role
     {
         display: block;
-        border: 1px solid white;
         width: 100%;
         height: 60px !important;
         max-height: 60px !important;
         overflow-y: scroll;
+        border-collapse: separate !important;
+        border-radius: 0px 0px 5px 5px;
     }
 
     .table-tr-role
@@ -185,7 +195,7 @@ include "../lbs/openDBconn.php";
                 <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>User name</th>
                 <th class="table-th-role" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Domain context</th>
             </thead>
-            <tbody class="table-tbody-role">
+            <tbody class="table-tbody-role ruleset-scroll">
 
                 <?php
 

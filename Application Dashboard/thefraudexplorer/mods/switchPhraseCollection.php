@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for switch between phrase collection
  */
@@ -30,7 +30,7 @@ include $documentRoot."lbs/cryptography.php";
 $xml = simplexml_load_file('../update.xml');
 $enableCommand = "module textAnalytics 1";
 $disableCommand = "module textAnalytics 0";
-$agentScope = "all";
+$endpointScope = "all";
 $domainScope = "all";
 $enabledPhraseCollection = false;
 $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
@@ -53,11 +53,11 @@ foreach ($xml->version as $version) $numVersion = (int) $version['num'];
 $numVersion++;
 $xmlContent="<?xml version=\"1.0\"?>\r\n<update>\r\n<version num=\"" . $numVersion . "\" />\r\n";
 $id = mt_rand(1,32000);	
-$agent = encRijndael($agentScope);
+$endpoint = encRijndael($endpointScope);
 $domain = encRijndael($domainScope);
 
-if (stristr($com, ' ') === FALSE) $xmlContent=$xmlContent . "<token type=\"" . encRijndael($com) . "\" arg=\"\" id=\"".$id."\" agt=\"".$agent."\" domain=\"".$domain."\"/>\r\n";
-else $xmlContent=$xmlContent . "<token type=\"" . encRijndael(substr($com, 0, strpos($com, " "))) . "\" arg=\"" . encRijndael(substr(strstr($com, ' '),1)) . "\" id=\"".$id."\" agt=\"".$agent."\" domain=\"".$domain."\"/>\r\n";
+if (stristr($com, ' ') === FALSE) $xmlContent=$xmlContent . "<token type=\"" . encRijndael($com) . "\" arg=\"\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
+else $xmlContent=$xmlContent . "<token type=\"" . encRijndael(substr($com, 0, strpos($com, " "))) . "\" arg=\"" . encRijndael(substr(strstr($com, ' '),1)) . "\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
 
 $xmlContent = $xmlContent . "</update>";
 $fp = fopen('../update.xml',"w+");

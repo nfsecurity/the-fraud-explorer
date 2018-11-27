@@ -7,8 +7,8 @@
  * Licensed under GNU GPLv3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for Chart
  */

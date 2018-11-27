@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for dashboard
  */
@@ -81,10 +81,6 @@ $_SESSION['instance'] = "dashBoard";
         <!-- Footer -->
 
         <link rel="stylesheet" type="text/css" href="css/footer.css" />
-
-        <style>
-            .font-icon-color-white { color: #FFFFFF; }
-        </style>
     </head>
     <body>
         <div align="center" style="height:100%;">
@@ -100,7 +96,6 @@ $_SESSION['instance'] = "dashBoard";
             <?php
             
             include "lbs/openDBconn.php";
-            $_SESSION['id_uniq_command']=null;
 
             echo '<div id="mainDashHolder" class="table-holder"></div>';
             if (isset($_SESSION['welcome']) && $_SESSION['welcome'] == "enable") echo '<script type="text/javascript"> $(document).ready(function(){$(\'#welcomeScreen\').modal(\'show\');});</script>';
@@ -111,7 +106,7 @@ $_SESSION['instance'] = "dashBoard";
             ?>
         </div>
 
-        <!-- Modal for Welcome Screen -->
+        <!-- Modal for Welcome screen -->
 
         <div class="modal" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
@@ -123,7 +118,7 @@ $_SESSION['instance'] = "dashBoard";
                         </div>
 
                         <div class="modal-body">
-                            <p style="text-align:justify; font-size: 12px;"><br>Welcome to the realtime implementation of Fraud Triangle Analytics methodology. With this software your company will address the fraud from a new detective and preventive perspective, identifying human behaviors that conduct to a dishonest actions mapping them into a three important aspects: social or company pressures, opportunity and justification attitudes in order to commit a fraud.<br><br> Read the documentation located in the <a href="https://www.thefraudexplorer.com/es/wiki">Wiki</a> and feel free to submit requests for software improvement, methodology application or bug reports at <a href="https://github.com/nfsecurity/the-fraud-explorer/issues">Github Issues</a>. In the name of The Fraud Explorer team, we wish you a good fraud fight.</p>
+                            <p style="text-align:justify; font-size: 12px;"><br>Welcome to the realtime implementation of Fraud Triangle Analytics methodology with Artificial Intelligence. With this software your company will address the fraud from a new preventive and prescriptive perspective, identifying human behaviors that may conduct to a dishonest actions mapping them into a three important aspects: social or company pressures, opportunity and justification attitudes in order to commit a fraud.<br><br> Read the documentation located in the <a href="https://www.thefraudexplorer.com/es/wiki">Wiki</a> and feel free to submit requests for software improvement, methodology application or bug reports at <a href="https://github.com/nfsecurity/the-fraud-explorer/issues">Github Issues</a>. In the name of The Fraud Explorer team, we wish you a good fraud fight.</p>
                             <p class="debug-url window-debug"></p>
                         </div>
 
@@ -153,67 +148,67 @@ var tour = new Tour({
         element: "#elm-dashboard",
         placement: 'bottom',
         title: "Dashboard",
-        content: "This is the main dashboard, here you can see all relevant data, including alerts, top endpoints, metrics and data volume graphs. You can use the dashboard for executive analysis of fraud triangle."
+        content: "This is the main dashboard, here you can see all relevant data, including events, top endpoints, metrics and data volume graphs. You can use the dashboard for executive analysis of fraud triangle."
     }, {
-        element: "#elm-alertmodule",
+        element: "#elm-eventmodule",
         placement: 'bottom',
-        title: "Alerts",
-        content: "Here you can see the alerts produced by the Fraud Triangle Analytics methodology based on the Fraud Triangle theory from Donald R. Cressey. By clicking here you will be redirected to the Alert module."
+        title: "Events",
+        content: "Here you can see the events produced by the Fraud Triangle Analytics methodology based on the Fraud Triangle theory from Donald R. Cressey. By clicking here you will be redirected to the Events module."
+    }, {
+        element: "#elm-analytics",
+        placement: 'bottom',
+        title: "Analytics",
+        content: "You can do horizontal, vertical and diagonal analytics with the main graph and source data. All events are placed in a scatter plot graph that represents pressure, opportunity and rationalization."
     }, {
         element: "#elm-endpoints",
         placement: 'bottom',
         title: "Endpoint administration",
         content: "This is the module for endpoint administration, you can use it for search, set department, view the amount of data collected, send commands to endpoints and view some statistics and scores."
-    }, {
-        element: "#elm-analytics",
-        placement: 'bottom',
-        title: "Analytics",
-        content: "You can do horizontal, vertical and diagonal analytics with the main graph and source data. All alerts are placed in a scatter plot graph that represents pressure, opportunity and rationalization."
-    }, {
+    },  {
         element: "#elm-ruleset",
         placement: 'bottom',
         title: "Ruleset / Phrase library",
         content: "This software provides a base phrase library of pressure, opportunity and rationalization expressions. You can view and edit that library here and map them to departments in your company."
-    }, {
-        element: "#elm-configuration",
-        placement: 'bottom',
-        title: "Main configuration",
-        content: "In the main configuration you can specify a password for endpoints connection, enable or disable sample data, set the admin password and stablish the fraud score criticity for fraud alerts."
     }, {
         element: "#elm-roles",
         placement: 'bottom',
         title: "Roles and profiles",
         content: "Here you can create, delete or modify users and assign a domain as a context for administration segregation. Only the admin user can get into this option, other user can't access this role setting."
     }, {
+        element: "#elm-configuration",
+        placement: 'bottom',
+        title: "Main configuration",
+        content: "In the main configuration you can specify a password for endpoints connection, enable or disable sample data, set the admin password and stablish the fraud score criticity for fraud triangle events."
+    }, {
         element: "#elm-maintenance",
         placement: 'bottom',
         title: "Maintenance",
-        content: "You can purge many records in this module, for example, the phrase collected, the fraud triangle analytics alerts, the general status and the endpoint dead sessions (people leaving the company)."
+        content: "You can purge many records in this module, for example, the phrase collected, the fraud triangle analytics events, the general status and the endpoint dead sessions (people leaving the company)."
     }, {
-        element: "#elm-top50alerts",
+        element: "#elm-top50events",
         placement: 'top',
-        title: "TOP 50 Alerts",
-        content: "You can see here a list of top alerts by fraud triangle analytics ordered by date. You can clic on View alerts button to expand them in a new page. Hold the mouse in info icon to see more data."
+        title: "TOP 50 Events",
+        content: "You can see here a list of top events by fraud triangle analytics ordered by date. You can clic on View events button to expand them in a new page. Hold the mouse in info icon to see more data."
     }, {
-        element: "#elm-viewallalerts",
+        element: "#elm-viewallevents",
         placement: 'top',
-        title: "View All alerts",
-        content: "This button open a new page in the current browser window and show all alerts in extended mode. You can review an alert, order the result in pagination, analyze and mark it as a false positive."
+        title: "View all events",
+        content: "This button open a new page in the current browser window and show all events in extended mode. You can review an event, order the result in pagination, analyze and mark it as a false positive."
     }, {
         element: "#elm-termstatistics",
         placement: 'top',
         title: "Term statistics",
-        content: "This graph show an average of fraud triangle term alerts in count. You can use this graph to quick view the amount of alerts triggered by pressure, opportunity and rationalization in your company."
+        content: "This graph show an average of fraud triangle term events in count. You can use this graph to quick view the amount of events triggered by pressure, opportunity and rationalization in your company."
     }, {
         element: "#elm-top50endpoints",
         placement: 'bottom',
         title: "Top 50 Endpoints",
-        content: "You can see here a list of top endpoints ordered by number of alerts triggered in total, with score and ruleset (department). You can clic on Download as CSV to get this list in XLS format."
+        content: "You can see here a list of top endpoints ordered by number of events triggered in total, with score and ruleset (department). You can clic on Download as CSV to get this list in XLS format."
     }, {
         element: "#elm-generalstatistics",
         placement: 'bottom',
         title: "Statistics graph",
-        content: "This graph show a global count of important endpoint data like the number of users covered, the number of sessions, alerts, dead endpoints (more than 30 days) and users that are typing phrases."
+        content: "This graph show a global count of important endpoint data like the number of users covered, the number of sessions, events, dead endpoints (more than 30 days) and users that are typing phrases."
     }, {
         element: "#elm-counters",
         placement: 'bottom',
@@ -222,7 +217,7 @@ var tour = new Tour({
     }, {
         element: "#footer",
         placement: 'auto',
-        title: "Application footer and context",
+        title: "Application context",
         content: "You can see some helper links and bug report, also, The Fraud Explorer is a multi company solution, you can see here the context of the company that can use with your actual login credentials."
     }]
 });

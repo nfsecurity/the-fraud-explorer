@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for update machine status
  */
@@ -27,7 +27,7 @@ function queryOrDie($query)
     return $query;
 }
 
-function getAgentIP() 
+function getEndpointIP() 
 {
     $ipaddress = '';
 
@@ -41,24 +41,24 @@ function getAgentIP()
     return $ipaddress;
 }
 
-$macAgent = strtolower(decRijndael(filter($_GET['token'])));
+$endpointIdentification = strtolower(decRijndael(filter($_GET['token'])));
 $os = decRijndael(filter($_GET['s']));
 $version = "v" . decRijndael(filter($_GET['v']));
 $key = decRijndael(filter($_GET['k']));
 $domain = strtolower(decRijndael(filter($_GET['d'])));
-$agent=$macAgent;
+$endpoint=$endpointIdentification;
 $configFile = parse_ini_file("config.ini");
-$ipAddress = getAgentIP();
+$ipAddress = getEndpointIP();
 $keyquery = mysql_query("SELECT password FROM t_crypt");
 $keypass = mysql_fetch_array($keyquery);
 
 if (empty($domain)) $domain = "mydomain.loc";
 
-/* If agent has the correct key (password), then connect */
+/* If endpoint has the correct key (password), then connect */
 
 if ($key == $keypass[0])
 {
-    $result=mysql_query("SELECT count(*) FROM t_agents WHERE agent='".$agent."'");
+    $result=mysql_query("SELECT count(*) FROM t_agents WHERE agent='".$endpoint."'");
     if ($row_a = mysql_fetch_array($result)) { $count = $row_a[0]; }
     $date=date('Y-M-d H:i:s');
 
@@ -66,20 +66,20 @@ if ($key == $keypass[0])
     {
         date_default_timezone_set($configFile['php_timezone']);
         $datecalendar=date('Y-m-d');
-        $result=mysql_query("Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$agent."'");
+        $result=mysql_query("Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
     }
     else
     {
-        if(strlen($macAgent)<60)
+        if(strlen($endpointIdentification)<60)
         {
             /* Heartbeat data */
 
-            $query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $agent . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
+            $query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $endpoint . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
             queryOrDie($query);
 
-            /* Primary agent table */
+            /* Primary endpoint table */
 
-            $query="CREATE TABLE t_".$macAgent."(command varchar(50), response varchar(65000), finished boolean, date DATETIME, id_uniq_command int, showed boolean, PRIMARY KEY (date)) ENGINE = MyISAM";
+            $query="CREATE TABLE t_".$endpointIdentification."(command varchar(50), response varchar(65000), finished boolean, date DATETIME, id_uniq_command int, showed boolean, PRIMARY KEY (date)) ENGINE = MyISAM";
             queryOrDie($query);
         }
     }

@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Agent specific functions
+ * Description: Endpoint specific functions
  */ 
 
 function queryOrDie($query)
@@ -57,17 +57,17 @@ function samplerStatus($sessionDomain)
     }
 }
 
-function agentInsights($location, $gender, $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName)
+function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName)
 {
     if ($location == "endPoints") echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">';
     
     if ($score == 0)
     {
-        echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding">'.$agentName.'</span></span></td>'; 
+        echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Events by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding">'.$endpointName.'</span></span></td>'; 
     }
     else
     {
-        echo '<a class="tooltip-custom" href=alertData?agent='.$agent_enc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Alerts by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding">'.$agentName.'</span></a></td>';        
+        echo '<a class="tooltip-custom" href=eventData?endpoint='.$endpointEnc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Events by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding">'.$endpointName.'</span></a></td>';        
     }
 }
 
@@ -95,9 +95,9 @@ function discoverOnline()
     }
 }
 
-function searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset)
+function searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset)
 {
-    $rulesetquery = mysql_query(sprintf($queryRuleset, $agent_decSQ));
+    $rulesetquery = mysql_query(sprintf($queryRuleset, $endpointDECSQL));
     $ruleset = mysql_fetch_array($rulesetquery);
     
     if (is_null($ruleset[0])) $ruleset[0] = "BASELINE"; 

@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Code for get data from the agent
+ * Description: Code for get data from the endpoint
  */
 
 include "lbs/globalVars.php";
@@ -39,19 +39,19 @@ function minute_difference($update_date)
     return $minutes;
 } 
 
-$macAgent = decRijndael(filter($_GET['m']));
+$endpointIdentification = decRijndael(filter($_GET['m']));
 $id_uniq_command = decRijndael(filter($_GET['id']));
 $finished = filter($_GET['end']);
 $command = filter($_GET['c']);
 $content = decRijndael(filter($_GET['response']));
-$table='t_'.$macAgent;
+$table='t_'.$endpointIdentification;
 
 $result_a=mysql_query("SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");
 
-if (is_bool($result_a) === true) exit; 
+if (is_bool($result_a) === true) exit;
 else $row_a = mysql_fetch_array($result_a);
 
-/* If the agent exists or not */
+/* If the endpoint exists or not */
 
 if($row_a[0]>0)
 {

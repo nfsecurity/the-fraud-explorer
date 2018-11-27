@@ -34,6 +34,7 @@
 .search-input
 {
     float:right !important;
+    border-radius: 5px 0px 0px 5px !important;
 }
 
 .counters
@@ -55,9 +56,16 @@
     font-size: 12px;
 }
 
-.input-search, .button-totals
+.input-search
 {
     outline: 0 !important;
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+.button-totals
+{
+    outline: 0 !important;
+    border-radius: 5px !important;
 }
 
 .fade-scale 
@@ -76,4 +84,9 @@
 {
     opacity: 1;
     transform: scale(1);
+}
+
+.search_text
+{
+    border-radius: 5px 0px 0px 5px !important;
 }

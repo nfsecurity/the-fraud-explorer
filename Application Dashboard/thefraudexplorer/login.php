@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v0.9.67-beta
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for login
  */
@@ -40,7 +40,7 @@ class Process
     function procLogin()
     {
         global $session, $form;
-        $retval = $session->login($_POST['user'], $_POST['pass'], $_POST["captcha"]);
+        $retval = $session->login($_POST['user'], $_POST['pass']);
 
         if($retval)
         {

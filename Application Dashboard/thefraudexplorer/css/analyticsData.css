@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2018-12
-* Revision: v1.2.1
+* Date: 2019-01
+* Revision: v1.2.2-ai
 *
 * Description: CSS Code
 */
@@ -266,7 +266,7 @@ li a:hover:not(.active)
     right: 47px;
     top: 93px;
     bottom: 110px;
-    background-color: #E8E9E8;
+    background-color: white;
 }
 
 .tl 
@@ -281,6 +281,7 @@ li a:hover:not(.active)
     border-width: 0 3px 3px 0; 
     z-index: -1; 
     text-align: right;
+    border-radius: 5px 0px 0px 0px;
 }
 
 .tr 
@@ -296,6 +297,7 @@ li a:hover:not(.active)
     z-index: -1;
     text-align: left;
     font-family: 'FFont-Bold';
+    border-radius: 0px 5px 0px 0px;
 }
 
 .bl 
@@ -310,6 +312,7 @@ li a:hover:not(.active)
     border-width: 0 3px 0 0; 
     z-index: -1;
     text-align: right;
+    border-radius: 0px 0px 0px 5px;
 }
 
 .br 
@@ -323,4 +326,5 @@ li a:hover:not(.active)
     z-index: -1;
     text-align: left;
     font-family: 'FFont-Bold';
+    border-radius: 0px 0px 5px 0px;
 }

@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2018-12
-* Revision: v1.2.1
+* Date: 2019-01
+* Revision: v1.2.2-ai
 *
 * Description: CSS Code
 */
@@ -23,11 +23,10 @@ dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td 
 {
-    margin:0;
-    padding:0;
-    border:0;
-    outline:0;
-    font-size:100%;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    font-size: 100%;
 }
 
 ::-webkit-scrollbar 
@@ -119,18 +118,20 @@ a:active
     bottom: 125px; 
     top: 53px; 
     left: 8px;
-    right: 8px; 
+    right: 8px;
 }
 
 table 
 {
-    overflow:hidden;
-    border: 1px solid #d3d3d3;
-    background: #fefefe;
+    overflow: hidden;
+    border: 2px solid #d3d3d3;
+    background: #d3d3d3;
     width: 100%;
     border-spacing: 0px;
-    table-layout:fixed;
+    table-layout: fixed;
     height: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
 }
 
 table thead
@@ -203,7 +204,7 @@ th
     width: 1px;
 }
 
-.agentth   
+.endpointth   
 { 
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size:12px; 
@@ -344,7 +345,7 @@ th
     background: white;
 }
 
-.agenttd
+.endpointtd
 {
     overflow: hidden;
     display: table-cell;
@@ -361,14 +362,15 @@ th
     overflow: hidden; 
     display: table-cell; 
     white-space: nowrap; 
-    font-family: 'FFont', sans-serif; font-size:12px; color: #474747; 
     text-align: center;
     vertical-align: middle;
     width: 150px;
     min-width: 150px;
-    border-right:0px solid #F8F8F8;
+    border-right:1px solid #F8F8F8;
     border-left:1px solid #F8F8F8;
     background: white;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 11.5px;
 }
 
 .vertd   
@@ -640,7 +642,7 @@ input[type=checkbox]
     visibility: hidden;
 }
 
-.checkboxAgent
+.checkboxEndpoint
 {
     width: 15px;
     height: 15px;
@@ -649,7 +651,7 @@ input[type=checkbox]
     position: relative;
 }
 
-.checkboxAgent label 
+.checkboxEndpoint label 
 {
     display: block;
     width: 11px;
@@ -669,7 +671,7 @@ input[type=checkbox]
     background: #FFFFFF;
 }
 
-.checkboxAgent input[type=checkbox]:checked + label 
+.checkboxEndpoint input[type=checkbox]:checked + label 
 {
     background: #13923D;
 }
@@ -812,6 +814,7 @@ input[type=checkbox]
     right: 8px;
     border: 1px solid #d3d3d3;
     background: #FFFFFF;
+    border-radius: 5px;
 }
 
 .pager-inside
@@ -824,7 +827,7 @@ input[type=checkbox]
     border: 0px solid red;
 }
 
-.pager-inside-agent
+.pager-inside-endpoint
 {
     display: table-cell;
     padding: 2px 0px 0px 15px;
@@ -917,7 +920,7 @@ input[type=checkbox]
     border-radius: 4px;
 }
 
-.delete-agent, .setup-agent
+.delete-endpoint, .setup-endpoint
 {
     outline: 0 !important;
 }
@@ -1003,4 +1006,14 @@ input[type=checkbox]
 .enable-analytics-button:active 
 {
     transform: translateY(2px);
+}
+
+.department-button
+{
+    border: 0px solid gray; 
+    background-color: #e0e0e0; 
+    color: #888888; 
+    border-radius: 5px; 
+    padding: 5px 5px 5px 5px; 
+    margin: 5px 10px 5px 10px;
 }

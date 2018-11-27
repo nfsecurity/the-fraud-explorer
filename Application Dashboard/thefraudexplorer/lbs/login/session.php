@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for login
  */
@@ -83,7 +83,7 @@ class Session
         }
     }
 
-    function login($subuser, $subpass, $subcaptcha)
+    function login($subuser, $subpass)
     {
         global $database, $form;  
         $result = $database->confirmIPAddress($this->ip);
@@ -101,9 +101,9 @@ class Session
 
         $error_type = "attempt";
 
-        if(!$subuser || !$subpass || !$subcaptcha || strlen($subuser = trim($subuser)) == 0)
+        if(!$subuser || !$subpass || strlen($subuser = trim($subuser)) == 0)
         {
-            $form->setError($error_type, "Username, password or captcha not entered");
+            $form->setError($error_type, "Username or passphrase not entered");
         }
 
         if($form->num_errors > 0)
@@ -112,11 +112,11 @@ class Session
         }
 
         $subuser = stripslashes($subuser);
-        $result = $database->confirmUserPass($subuser, $subpass, $subcaptcha);
+        $result = $database->confirmUserPass($subuser, $subpass);
 
         if($result == 1)
         {
-            $form->setError($error_type, "Invalid username, password or captcha");
+            $form->setError($error_type, "Invalid username or passphrase");
             $database->addLoginAttempt($this->ip);
         }
 

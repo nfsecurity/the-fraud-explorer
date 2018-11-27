@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for ruleset setup
  */
@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 
 ?>
 
@@ -48,6 +48,7 @@ include "../lbs/agentMethods.php";
     .div-container
     {
         margin: 20px;
+        background-color: white;
     }
 
     .table-ruleset
@@ -56,6 +57,7 @@ include "../lbs/agentMethods.php";
         border: 0px solid gray;
         width: 100%;
         border-spacing: 0px;
+        background-color: white;
     }
 
     .table-thead-ruleset
@@ -93,6 +95,8 @@ include "../lbs/agentMethods.php";
         height: 302px !important; 
         max-height: 302px !important;
         overflow-y: scroll; 
+        border-radius: 5px 5px 5px 5px;
+        background-color: white;
     }
 
     .table-tr-ruleset

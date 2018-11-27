@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for artificial intelligence
  */
@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 require '../vendor/autoload.php';
 include "../lbs/elasticsearch.php";
 
@@ -58,6 +58,8 @@ include "../lbs/elasticsearch.php";
         border: 0px solid gray;
         width: 100%;
         border-spacing: 0px;
+        border-collapse: collapse;
+        border-radius: 5px;
     }
 
     .table-thead-expert
@@ -109,7 +111,8 @@ include "../lbs/elasticsearch.php";
         width: 100%;
         height: auto !important; 
         max-height: 124px !important;
-        overflow-y: scroll; 
+        overflow-y: scroll;
+        border-radius: 5px;
     }
 
     .table-tr-expert
@@ -339,10 +342,10 @@ include "../lbs/elasticsearch.php";
                 {
                     $application = (strlen($row_a['application']) > 12) ? substr($row_a['application'], 0, 7) . " ..." : $endpointsFraud['agent'] ;
                     $timeDate = substr($row_a['date'], 0, 10);
-                    $agent = (strlen($row_a['endpoint']) > 12) ? substr($row_a['endpoint'], 0, 12) . " ..." : $row_a['endpoint'];
+                    $endpoint = (strlen($row_a['endpoint']) > 12) ? substr($row_a['endpoint'], 0, 12) . " ..." : $row_a['endpoint'];
 
                     echo '<tr class="table-tr-expert">';
-                    echo '<td class="table-td-expert-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$agent.'</td>';
+                    echo '<td class="table-td-expert-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$endpoint.'</td>';
                     echo '<td class="table-td-expert"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$row_a['deduction'].' %</td>';
                     echo '<td class="table-td-expert"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$timeDate.'</td>';
                     echo '<td class="table-td-expert-app"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$application.'</td>';

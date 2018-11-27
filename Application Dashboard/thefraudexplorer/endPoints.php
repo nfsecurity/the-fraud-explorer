@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for endPoints
  */
@@ -110,7 +110,7 @@ $_SESSION['instance'] = "endPoints";
                         </div>
 
                         <div class="modal-body">
-                            <p style="text-align:left; font-size: 12px;"><br>You are about to delete the agent, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                            <p style="text-align:left; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
                             <p class="debug-url window-debug"></p>
                         </div>
 
@@ -123,7 +123,7 @@ $_SESSION['instance'] = "endPoints";
             </div>
         </div>
 
-        <!-- Modal for agent setup -->
+        <!-- Modal for endpoint setup -->
 
         <div class="modal" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
@@ -182,7 +182,7 @@ var tour = new Tour({
         element: "#elm-endpoints-dashboard",
         placement: 'bottom',
         title: "Endpoints",
-        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, alerts by pressure, oportunity, rationalization, score and data representation."
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization, score and data representation."
     }, {
         element: "#elm-ruleset-dashboard",
         placement: 'bottom',
@@ -197,7 +197,7 @@ var tour = new Tour({
         element: "#elm-status-dashboard",
         placement: 'bottom',
         title: "Status",
-        content: "You will see here the endpoint status, connected or disconnected. If the agent is disconnected means that the PC is offline or is working without an internet connection to send data."
+        content: "You will see here the endpoint status, connected or disconnected. If the endpoint is disconnected means that the PC is offline or is working without an internet connection to send data."
     }, {
         element: "#elm-last-dashboard",
         placement: 'bottom',
@@ -207,7 +207,7 @@ var tour = new Tour({
         element: "#elm-triangle-dashboard",
         placement: 'bottom',
         title: "Fraud Triangle data",
-        content: "You can see here a consolidation of alerts for each endpoint in relation to the fraud triangle vertices, pressure, opportunity and rationalization. It's for rapid view of fraud triangle data."
+        content: "You can see here a consolidation of events for each endpoint in relation to the fraud triangle vertices, pressure, opportunity and rationalization. It's for rapid view of fraud triangle data."
     }, {
         element: "#elm-level-dashboard",
         placement: 'bottom',
@@ -217,7 +217,7 @@ var tour = new Tour({
         element: "#elm-score-dashboard",
         placement: 'bottom',
         title: "Score",
-        content: "The score is the average value from the amount of alerts in the fraud triangle vertices, pressure, opportunity and rationalization. You can clic the number to enter directly in alert data."
+        content: "The score is the average value from the amount of events in the fraud triangle vertices, pressure, opportunity and rationalization. You can clic the number to enter directly in events data."
     }, {
         element: "#elm-command-dashboard",
         placement: 'bottom',

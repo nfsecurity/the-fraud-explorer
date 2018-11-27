@@ -367,15 +367,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Fraud Explorer"
-        "ProductCode" = "8:{35151FC0-3ADE-4E7E-B567-AB8B0915D5BF}"
-        "PackageCode" = "8:{A5BF8F9D-A613-4EC0-8FED-798CFBAFBF1C}"
+        "ProductCode" = "8:{CEC5B5D1-AB47-47BE-84C1-DA6CA34AAFE7}"
+        "PackageCode" = "8:{144FAFCB-342F-4421-AAEE-321C2028B789}"
         "UpgradeCode" = "8:{C0DC7C39-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.0"
+        "ProductVersion" = "8:1.2.2"
         "Manufacturer" = "8:NF S.A.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -953,7 +953,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             {
-            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Release\\end64svc.exe"
+            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Debug\\end64svc.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"

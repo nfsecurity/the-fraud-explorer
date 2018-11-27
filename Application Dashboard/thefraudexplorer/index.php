@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for login page
  */
@@ -42,8 +42,8 @@
         ?>
 
         <div align="center">
-            <table>
-            <th class="logotype"><img src="images/the-fraud-explorer.svg" style="vertical-align:middle">&ensp;The Fraud Explorer<br></th>
+            <table class="login-table">
+            <th class="logotype"><img src="images/the-fraud-explorer.svg" class="logotype-image">&ensp;The Fraud Explorer<br></th>
                 <tbody>
                     <tr>
                         <td class="login-container">
@@ -53,34 +53,27 @@
                                     <table class="sub-container">
                                         <tr>
                                             <td>
-                                                Login
+                                                Username
                                             </td>
                                             <td>
-                                                <input type="text" name="user" id="user" autofocus="autofocus" autocomplete="off" tabindex=1 placeholder=":enter your username" class="input-login" maxlength="30" value="<?php echo $form->value("user"); ?>">
-                                            </td>
-                                            <td rowspan="3" style="border-top:0px solid #e0e0e0; border-right:0px solid #e0e0e0;">
-                                                <center><img src="helpers/captcha"/></center><br>
-                                                &nbsp;<input type="submit" name="loginok" value="Sign In Now" class="sign-in-button">
+                                                <input type="text" name="user" id="user" autofocus="autofocus" autocomplete="off" tabindex=1 placeholder=":enter your company username" class="input-login" maxlength="30" value="<?php echo $form->value("user"); ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                Password&nbsp;&nbsp;
+                                                Passphrase
                                             </td>
                                             <td>
-                                                <input type="password" name="pass" id="pass" tabindex=2 placeholder=":enter your password" class="input-login" maxlength="60" value="<?php echo $form->value("pass"); ?>">
+                                                <input type="password" name="pass" id="pass" tabindex=2 placeholder=":enter your assigned password" class="input-login" maxlength="60" value="<?php echo $form->value("pass"); ?>">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                Captcha&nbsp;&nbsp;
-                                            </td>
-                                            <td>
-                                                <input type="captcha" name="captcha" id="captcha" autocomplete="off" tabindex=3 placeholder=":enter captcha value" class="input-login" maxlength="10" value="<?php echo $form->value("captcha"); ?>"> 
+                                            <td colspan="2">
+                                                <input type="submit" name="loginok" value="Secure login to the platform" class="sign-in-button">
                                             </td>
                                             <input type="hidden" name="sublogin" value="1">
                                         </tr>
-                                    </table><br>
+                                    </table>
                                 </center>
                             </form>
                         </td>

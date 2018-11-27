@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for maintenance
  */
@@ -175,7 +175,7 @@ include "../lbs/openDBconn.php";
         <div class="master-container">
             <div class="left-container">              
                 
-                <p class="title-config">Delete endpoint phrases (purge old records)</p><br>
+                <p class="title-config">Purge old endpoint phrases</p><br>
                 <select class="select-option-styled" name="deletephrases" id="deletephrases">
                     <option value="1month">Preserve last month</option>
                     <option value="2month">Preserve last 2 months</option>
@@ -186,7 +186,7 @@ include "../lbs/openDBconn.php";
             </div>
             <div class="right-container">
                    
-                <p class="title-config">Delete endpoint alerts (purge old records)</p><br>
+                <p class="title-config">Purge old endpoint events</p><br>
                 <select class="select-option-styled" name="deletealerts" id="deletealerts">
                     <option value="1month">Preserve last month</option>
                     <option value="2month">Preserve last 2 months</option>
@@ -211,11 +211,19 @@ include "../lbs/openDBconn.php";
                 curl_close($ch);
 
                 $resultSize = json_decode($resultSize, true);
-                $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024/1024;
-                $dataCount = $resultSize['_all']['total']['docs']['count'];
-                
-                echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." GB";
-                
+
+                if (isset($resultSize['_all']['total']['store']['size_in_bytes']))
+                {
+                    $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024/1024;
+                    $dataCount = $resultSize['_all']['total']['docs']['count'];
+
+                    echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." GB";
+                }
+                else
+                {
+                    echo "You don't have any data yet";
+                }
+
                 ?>
                 
             </div>
@@ -232,10 +240,18 @@ include "../lbs/openDBconn.php";
                 curl_close($ch);
 
                 $resultSize = json_decode($resultSize, true);
-                $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024;
-                $dataCount = $resultSize['_all']['total']['docs']['count'];
+
+                if (isset($resultSize['_all']['total']['store']['size_in_bytes']))
+                {
+                    $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024;
+                    $dataCount = $resultSize['_all']['total']['docs']['count'];
                 
-                echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." MB";
+                    echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." MB";
+                }
+                else
+                {
+                    echo "You don't have any data yet";
+                }
                 
                 ?>
                 
@@ -254,7 +270,7 @@ include "../lbs/openDBconn.php";
             </div>
             <div class="right-container">
                    
-                <p class="title-config">Delete old alerts status records</p><br>
+                <p class="title-config">Delete old events status records</p><br>
                 <select class="select-option-styled" name="alertstatus" id="alertstatus">
                     <option value="1month">Preserve last month</option>
                     <option value="preserveall" selected="selected">Preserve all</option>
@@ -289,10 +305,18 @@ include "../lbs/openDBconn.php";
                 curl_close($ch);
 
                 $resultSize = json_decode($resultSize, true);
-                $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024;
-                $dataCount = $resultSize['_all']['total']['docs']['count'];
+
+                if (isset($resultSize['_all']['total']['store']['size_in_bytes']))
+                {
+                    $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024;
+                    $dataCount = $resultSize['_all']['total']['docs']['count'];
                 
-                echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." MB";
+                    echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." MB";
+                }
+                else
+                {
+                    echo "You don't have any data yet";
+                }
                 
                 ?>
                 

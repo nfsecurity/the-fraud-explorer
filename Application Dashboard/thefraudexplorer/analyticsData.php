@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for Chart
  */
@@ -28,7 +28,7 @@ $_SESSION['instance'] = "analyticsData";
 
 require 'vendor/autoload.php';
 include "lbs/openDBconn.php";
-include "lbs/agentMethods.php";
+include "lbs/endpointMethods.php";
 include "lbs/elasticsearch.php";
 
 ?>
@@ -103,12 +103,12 @@ var tour = new Tour({
         element: "#scatterplot",
         placement: 'top',
         title: "Scatter graph",
-        content: "This is the module used for doing horizontal and vertical analytics. The circles represents alerts and are plotted using the pressure, opportunity and rationlaization axis with a score variable."
+        content: "This is the module used for doing horizontal and vertical analytics. The circles represents events and are plotted using the pressure, opportunity and rationlaization axis with a score variable."
     }, {
         element: "#elm-analyticsaccess",
         placement: 'bottom',
         title: "Analytics data access",
-        content: "You can access all alerts data, see the data source that produces this scatter graph and enter to the artificial intelligence deductions. Use this modules as the principal source for decision taking."
+        content: "You can access all events data, see the data source that produces this scatter graph and enter to the artificial intelligence deductions. Use this modules as the principal source for decision taking."
     }, {
         element: "#elm-scope",
         placement: 'right',
@@ -118,7 +118,7 @@ var tour = new Tour({
         element: "#elm-legend",
         placement: 'right',
         title: "Graph leyend",
-        content: "Depends of the data, the alert can be represented in various forms. A red point indicates that the endpoint has a high score and a yellow point indicates that endpoint has a lower score."
+        content: "Depends of the data, the event can be represented in various forms. A red point indicates that the endpoint has a high score and a yellow point indicates that endpoint has a lower score."
     }, {
         element: "#elm-opportunity",
         placement: 'right',

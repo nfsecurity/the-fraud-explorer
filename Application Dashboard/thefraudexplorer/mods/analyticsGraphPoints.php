@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for graph points visualization
  */
@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endPointMethods.php";
 
 $coordinates = filter($_GET['coordinates']);
 $coordinates = str_replace('\\', '', $coordinates);
@@ -111,7 +111,8 @@ $graphPoints = json_decode($coordinates, true);
         width: 100%;
         height: auto !important; 
         max-height: 302px !important;
-        overflow-y: scroll; 
+        overflow-y: scroll;
+        border-radius: 5px;
     }
 
     .table-tr-graphdata
@@ -240,19 +241,19 @@ $graphPoints = json_decode($coordinates, true);
             {
                 do
                 {
-                    $agentName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
-                    $agentEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
+                    $endpointName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
+                    $endpointEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
                     $totalWordHits = $endpointsFraud['totalwords'];
                     $countPressure = $endpointsFraud['pressure'];
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
-                    $totalAlerts = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
+                    $totalEvents = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
                     
-                    if ($totalAlerts != 0) 
+                    if ($totalEvents != 0) 
                     {
                         echo '<tr class="table-tr-graphdata">';
                         echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>';
-                        echo '<span class="pseudolink" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'">'.$agentName.'</span></td>';
+                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?endpoint='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
                     }
                     else continue;
                         
@@ -260,7 +261,7 @@ $graphPoints = json_decode($coordinates, true);
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
                     echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countRationalization.'</td>';
-                    echo '<td class="table-td-graphdata-score">'.number_format($totalAlerts/3, 1).'</td>';
+                    echo '<td class="table-td-graphdata-score">'.number_format($totalEvents/3, 1).'</td>';
                     echo '</tr>';
                     
                     $counter++;

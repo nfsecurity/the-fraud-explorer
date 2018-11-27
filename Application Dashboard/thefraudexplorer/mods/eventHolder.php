@@ -9,10 +9,10 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
- * Description: Code for paint agent data table
+ * Description: Code for paint endpoint data table
  */
 
 include "../lbs/login/session.php";
@@ -27,7 +27,7 @@ if(!$session->logged_in)
 require '../vendor/autoload.php';
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 include "../lbs/elasticsearch.php";
 include "../lbs/cryptography.php";
 
@@ -36,9 +36,9 @@ include "../lbs/cryptography.php";
 $client = Elasticsearch\ClientBuilder::create()->build();
 $configFile = parse_ini_file("../config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
-$agent_decES = base64_decode(base64_decode($_SESSION['agentIDh']))."*";
-$agent_decSQ = base64_decode(base64_decode($_SESSION['agentIDh']));
-$agent_enc = $_SESSION['agentIDh'];
+$endpointDECES = base64_decode(base64_decode($_SESSION['endpointIDh']))."*";
+$endpointDECSQL = base64_decode(base64_decode($_SESSION['endpointIDh']));
+$endpointDec = $_SESSION['endpointIDh'];
 
 /* Global data variables */
 
@@ -103,34 +103,34 @@ else
 }
 
 $resultWords = json_decode($resultWords, true);
-$allAlertsSwitch = false;
+$allEventsSwitch = false;
 
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0";
 
 $wordCounter = 0;
-$alertCounter = 0;
+$eventCounter = 0;
 
-if ($agent_decSQ != "all")
+if ($endpointDECSQL != "all")
 {
-    $matchesDataAgent = getAgentIdData($agent_decES, $ESAlerterIndex, "AlertEvent");
-    $agentData = json_decode(json_encode($matchesDataAgent),true);
+    $matchesDataEndpoint = getAgentIdData($endpointDECES, $ESAlerterIndex, "AlertEvent");
+    $endpointData = json_decode(json_encode($matchesDataEndpoint),true);
 }
 else
 {
     if ($session->domain != "all") 
     {
-        if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESAlerterIndex, $session->domain, "enabled", "allalerts");
-        else $alertMatches = getAllFraudTriangleMatches($ESAlerterIndex, $session->domain, "disabled", "allalerts");
+        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, $session->domain, "enabled", "allalerts");
+        else $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, $session->domain, "disabled", "allalerts");
     }
     else 
     {
-        if (samplerStatus($session->domain) == "enabled") $alertMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "enabled", "allalerts");
-        else $alertMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
+        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "enabled", "allalerts");
+        else $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
     }
                 
-    $alertData = json_decode(json_encode($alertMatches), true);
-    $allAlertsSwitch = true;
+    $eventData = json_decode(json_encode($eventMatches), true);
+    $allEventsSwitch = true;
 }
     
 /* Local styles */
@@ -152,29 +152,29 @@ $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
 
 /* Endpoint domain */
 
-$domainQuery = mysql_query(sprintf($queryDomain, $agent_decSQ));
+$domainQuery = mysql_query(sprintf($queryDomain, $endpointDECSQL));
 $domain = mysql_fetch_array($domainQuery);
 
 /* Main Table */
 
-if ($agent_decSQ != "all")
+if ($endpointDECSQL != "all")
 {
-    echo '<table id="agentDataTable" class="tablesorter">';
+    echo '<table id="endpointDataTable" class="tablesorter">';
     echo '<thead><tr>';
-    echo '<th class="detailsth" id="elm-details-alert"><span class="fa fa-list fa-lg">&nbsp;</span></th>';
-    echo '<th class="timestampth" id="elm-date-alert"><span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE</th>';
-    echo '<th class="alerttypeth" id="elm-type-alert">VERTICE</th>';
-    echo '<th class="windowtitleth" id="elm-windowtitle-alert"><span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION CONTEXT</th>';
-    echo '<th class="phrasetypedth" id="elm-phrasetyped-alert"><span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>PHRASE TYPED</th>';
-    echo '<th style="display: none;">PHRASE HISTORY</th>';
-    echo '<th class="falseth" id="elm-mark-alert">MARK</th>';
+    echo '<th class="detailsth" id="elm-details-event"><span class="fa fa-list fa-lg">&nbsp;</span></th>';
+    echo '<th class="timestampth" id="elm-date-event"><span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE</th>';
+    echo '<th class="eventtypeth" id="elm-type-event">BEHAVIOUR</th>';
+    echo '<th class="windowtitleth" id="elm-windowtitle-event"><span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION INSTANCE</th>';
+    echo '<th class="phrasetypedth" id="elm-phrasetyped-event"><span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>';
+    echo '<th style="display: none;">EXPRESSION HISTORY</th>';
+    echo '<th class="falseth" id="elm-mark-event">MARK</th>';
     echo '</tr></thead><tbody>';
 
-    foreach ($agentData['hits']['hits'] as $result)
+    foreach ($endpointData['hits']['hits'] as $result)
     {        
         echo '<tr>';
 
-        /* Alert Details */
+        /* Event Details */
 
         $date = $result['_source']['eventTime'];
         $date = substr($date, 0, strpos($date, ","));
@@ -182,7 +182,7 @@ if ($agent_decSQ != "all")
         $wordTyped = decRijndael($result['_source']['wordTyped']);
         $stringHistory = decRijndael($result['_source']['stringHistory']);
         $searchValue = "/".$result['_source']['phraseMatch']."/";
-        $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
+        $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
     
         echo '<td class="detailstd">';
@@ -196,13 +196,15 @@ if ($agent_decSQ != "all")
         echo date_format($date, 'Y-m-d H:i');
         echo '</td>';
         
-        /* AlertType */
+        /* EventType */
 
-        echo '<td class="alerttypetd">';
+        echo '<td class="eventtypetd">';
+        echo '<div class="behavior-button">';
         echo '<center>'.strtoupper(ucfirst($result['_source']['alertType'])).'</center>';
+        echo '</div>';
         echo '</td>';
 
-        /* Window title */
+        /* Application title */
 
         echo '<td class="windowtitletd">';
         echo '<span class="fa fa-list-alt font-icon-gray fa-padding"></span>'.$windowTitle;
@@ -211,7 +213,7 @@ if ($agent_decSQ != "all")
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -225,11 +227,11 @@ if ($agent_decSQ != "all")
         $regid = $result['_id'];
         $agentId = $result['_source']['agentId'];
     
-        $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
+        $urlEventValue="http://localhost:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
+        curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         $resultValues=curl_exec($ch);
         curl_close($ch);
@@ -239,7 +241,7 @@ if ($agent_decSQ != "all")
     
         echo '<td class="falsetd">';
         
-        echo '<a class="false-positive" href="mods/alertMarking?regid='.$result['_id'].'&agent='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singlealerts" data-toggle="modal" data-target="#alertMarking" href="#">';
+        echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
     
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
@@ -253,36 +255,36 @@ if ($agent_decSQ != "all")
 }
 else
 {
-    echo '<table id="allalerts" class="tablesorter">';
+    echo '<table id="allevents" class="tablesorter">';
     echo '<thead>';
     echo '<tr>';
-    echo '<th class="detailsth-all" id="elm-details-alert">';
+    echo '<th class="detailsth-all" id="elm-details-event">';
     echo '<span class="fa fa-list fa-lg awfont-padding-right"></span>';
     echo '</th>';
-    echo '<th class="timestampth-all" id="elm-date-alert">';
+    echo '<th class="timestampth-all" id="elm-date-event">';
     echo '<span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE';
     echo '</th>';
-    echo '<th class="alerttypeth-all" id="elm-type-alert">';
-    echo 'VERTICE';
+    echo '<th class="eventtypeth-all" id="elm-type-event">';
+    echo 'BEHAVIOUR';
     echo '</th>';
-    echo '<th class="endpointth-all" id="elm-endpoint-alert">';
-    echo '<span class="fa fa-users fa-lg font-icon-color-gray-low awfont-padding-right"></span>COMPANY PEOPLE';
+    echo '<th class="endpointth-all" id="elm-endpoint-event">';
+    echo '<span class="fa fa-briefcase fa-lg font-icon-color-gray-low awfont-padding-right"></span>HUMAN AUDIENCE';
     echo '</th>';
-    echo '<th class="windowtitleth-all" id="elm-windowtitle-alert">';
-    echo '<span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION CONTEXT';
+    echo '<th class="windowtitleth-all" id="elm-windowtitle-event">';
+    echo '<span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
     echo '</th>';
-    echo '<th class="phrasetypedth-all" id="elm-phrasetyped-alert">';
-    echo '<span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>PHRASE TYPED';
+    echo '<th class="phrasetypedth-all" id="elm-phrasetyped-event">';
+    echo '<span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
     echo '</th>';
-    echo '<th style="display: none;">PHRASE HISTORY</th>';
-    echo '<th class="falseth-all" id="elm-mark-alert">';
+    echo '<th style="display: none;">EXPRESSION HISTORY</th>';
+    echo '<th class="falseth-all" id="elm-mark-event">';
     echo '<center>MARK</center>';
     echo '</th>';
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
     
-    foreach ($alertData['hits']['hits'] as $result)
+    foreach ($eventData['hits']['hits'] as $result)
     {
         if (isset($result['_source']['tags'])) continue;
         
@@ -295,9 +297,9 @@ else
         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
         $searchValue = "/".$result['_source']['phraseMatch']."/";
         $endPoint = explode("_", $result['_source']['agentId']);
-        $agent_decSQ = $endPoint[0];
+        $endpointDECSQL = $endPoint[0];
         $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
-        $searchResult = searchJsonFT($jsonFT, $searchValue, $agent_decSQ, $queryRuleset);
+        $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
                     
         /* Details */
@@ -312,10 +314,12 @@ else
         echo $date;                 
         echo '</td>';
         
-        /* Alert type */
+        /* Event type */
                     
-        echo '<td class="alerttypetd-all">';
+        echo '<td class="eventtypetd-all">';
+        echo '<div class="behavior-button">';
         echo '<center>'.strtoupper($result['_source']['alertType']).'</center>';
+        echo '</div>';
         echo '</td>';
         
         /* Endpoint */
@@ -325,8 +329,8 @@ else
         $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
         $userDomain = mysql_fetch_assoc($queryUserDomain);
-        $agentName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
-        $agent_enc = base64_encode(base64_encode($userDomain['agent']));
+        $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+        $endpointDec = base64_encode(base64_encode($userDomain['agent']));
         $totalWordHits = $userDomain['totalwords'];
         $countPressure = $userDomain['pressure'];
         $countOpportunity = $userDomain['opportunity'];
@@ -338,16 +342,16 @@ else
                     
         echo '<span class="fa fa-laptop font-icon-color-green awfont-padding-right"></span>';
                                     
-        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") endpointInsights("dashBoard", "na", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         else 
         {
-            $agentName = $userDomain['name'];
-            agentInsights("dashBoard", "na", $agent_enc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $agentName);
+            $endpointName = $userDomain['name'];
+            endpointInsights("dashBoard", "na", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
                     
         echo '</td>';
         
-        /* Application */
+        /* Application  title */
         
         echo '<td class="windowtitletd-all">';
         echo '<span class="fa fa-list-alt font-icon-color-gray-low awfont-padding-right"></span>'.$windowTitle;
@@ -356,7 +360,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="alert-phrase-viewer" href="mods/alertPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#alert-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -370,11 +374,11 @@ else
         $regid = $result['_id'];
         $agentId = $result['_source']['agentId'];
     
-        $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
+        $urlEventValue="http://localhost:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
+        curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         $resultValues=curl_exec($ch);
         curl_close($ch);
@@ -383,14 +387,14 @@ else
         $falsePositiveValue = $jsonResultValue->_source->falsePositive;
     
         echo '<td class="falsetd-all">';
-        echo '<a class="false-positive" href="mods/alertMarking?regid='.$result['_id'].'&agent='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allalerts" data-toggle="modal" data-target="#alertMarking" href="#">';
+        echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
         
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
 
         echo '</tr>';
         
-        $alertCounter++;
+        $eventCounter++;
     }
 }
 
@@ -400,14 +404,14 @@ else
 
 <?php
 
-if ($allAlertsSwitch != true)
+if ($allEventsSwitch != true)
 {
     echo '<div id="pager" class="pager">';
-    echo '<div class="pager-layout" id="elm-pager-alerts">';
+    echo '<div class="pager-layout" id="elm-pager-events">';
     echo '<div class="pager-inside">';
-    echo '<div class="pager-inside-agent">';
+    echo '<div class="pager-inside-endpoint">';
     
-    $endpointName = $agent_decSQ."@".between('@', '.', "@".$domain[0]);
+    $endpointName = $endpointDECSQL."@".between('@', '.', "@".$domain[0]);
     
     echo 'There are '.$wordCounter.' regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span>'.$endpointName.' stored in database';
     echo '</div>';
@@ -420,11 +424,11 @@ if ($allAlertsSwitch != true)
     echo '<span class="fa fa-arrow-circle-o-right fa-lg next"></span>&nbsp;';
     echo '<span class="fa fa-fast-forward fa-lg last"></span>&nbsp;&nbsp;';
     echo '<select class="pagesize select-styled">';
-    echo '<option value="20"> by 20 alerts</option>';
-    echo '<option value="50"> by 50 alerts</option>';
-    echo '<option value="100"> by 100 alerts</option>';
-    echo '<option value="500"> by 500 alerts</option>';
-    echo '<option value="all"> All Alerts</option>';
+    echo '<option value="20"> by 20 events</option>';
+    echo '<option value="50"> by 50 events</option>';
+    echo '<option value="100"> by 100 events</option>';
+    echo '<option value="500"> by 500 events</option>';
+    echo '<option value="all"> All events</option>';
     echo '</select>';
                     
     echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>';
@@ -463,10 +467,10 @@ else
     /* Pager */
     
     echo '<div id="pagerAll" class="pager pager-screen">';
-    echo '<div class="pager-layout" id="elm-pager-alerts">';
+    echo '<div class="pager-layout" id="elm-pager-events">';
     echo '<div class="pager-inside">';
-    echo '<div class="pager-inside-agent">';
-    echo 'There are '.$alertCounter.' total alerts, '.$fraudTerms['pressure'].' from pressure, '.$fraudTerms['opportunity'].' from opportunity and '.$fraudTerms['rationalization'].' from rationalization';
+    echo '<div class="pager-inside-endpoint">';
+    echo 'There are '.$eventCounter.' total events, '.$fraudTerms['pressure'].' from pressure, '.$fraudTerms['opportunity'].' from opportunity and '.$fraudTerms['rationalization'].' from rationalization';
     echo '</div>';
 
     echo '<div class="pager-inside-pager">';
@@ -477,11 +481,11 @@ else
     echo '<span class="fa fa-arrow-circle-o-right fa-lg next"></span>&nbsp;';
     echo '<span class="fa fa-fast-forward fa-lg last"></span>&nbsp;&nbsp;';
     echo '<select class="pagesize select-styled">';
-    echo '<option value="20"> by 20 alerts</option>';
-    echo '<option value="50"> by 50 alerts</option>';
-    echo '<option value="100"> by 100 alerts</option>';
-    echo '<option value="500"> by 500 alerts</option>';
-    echo '<option value="all"> All Alerts</option>';
+    echo '<option value="20"> by 20 events</option>';
+    echo '<option value="50"> by 50 events</option>';
+    echo '<option value="100"> by 100 events</option>';
+    echo '<option value="500"> by 500 events</option>';
+    echo '<option value="all"> All events</option>';
     echo '</select>';
                     
     echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>';
@@ -498,11 +502,11 @@ else
 <!-- Modal for Phrase viewer -->
 
 <script>
-    $('#alert-phrases').on('show.bs.modal', function(e) {
-        $(this).find('.alert-phrase-viewer').attr('href', $(e.relatedTarget).data('href'));
+    $('#event-phrases').on('show.bs.modal', function(e) {
+        $(this).find('.event-phrase-viewer').attr('href', $(e.relatedTarget).data('href'));
     });
     
-    $('#alert-phrases').on('hidden.bs.modal', function () {
+    $('#event-phrases').on('hidden.bs.modal', function () {
         $(this).removeData('bs.modal');
     });
 </script>
@@ -513,10 +517,10 @@ else
     $(function(){
         
         $('.download-csv').click(function(){
-            $("#agentDataTable").trigger('outputTable');
+            $("#endpointDataTable").trigger('outputTable');
         });
         
-        $("#agentDataTable").tablesorter({
+        $("#endpointDataTable").tablesorter({
             widgets: [ 'filter', 'output' ],
             widgetOptions : 
             {
@@ -533,7 +537,7 @@ else
                 output_includeHTML: false,
                 output_trimSpaces: true,
                 output_wrapQuotes: false,
-                output_saveFileName: 'alertsList.csv',
+                output_saveFileName: 'eventsList.csv',
                 output_callback: function (data) {
                     return true;
                 },
@@ -568,10 +572,10 @@ else
         });
         
         $('.download-csv').click(function(){
-            $("#allalerts").trigger('outputTable');
+            $("#allevents").trigger('outputTable');
         });
         
-        $("#allalerts").tablesorter({
+        $("#allevents").tablesorter({
             widgets: [ 'filter', 'output' ],
             widgetOptions : 
             {
@@ -588,7 +592,7 @@ else
                 output_includeHTML: false,
                 output_trimSpaces: true,
                 output_wrapQuotes: false,
-                output_saveFileName: 'allAlertsList.csv',
+                output_saveFileName: 'allEventsList.csv',
                 output_callback: function (data) {
                     return true;
                 },

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for graphic data
  */
@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/agentMethods.php";
+include "../lbs/endpointMethods.php";
 
 ?>
 
@@ -56,6 +56,8 @@ include "../lbs/agentMethods.php";
         border: 0px solid gray;
         width: 100%;
         border-spacing: 0px;
+        border-collapse: collapse;
+        border-radius: 5px !important;
     }
 
     .table-thead-graphdata
@@ -107,7 +109,8 @@ include "../lbs/agentMethods.php";
         width: 100%;
         height: 302px !important; 
         max-height: 302px !important;
-        overflow-y: scroll; 
+        overflow-y: scroll;
+        border-radius: 5px;
     }
 
     .table-tr-graphdata
@@ -210,7 +213,7 @@ include "../lbs/agentMethods.php";
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Endpoint triangle alerts</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Endpoint triangle events</h4>
 </div>
 
 <?php
@@ -250,7 +253,7 @@ include "../lbs/agentMethods.php";
         echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the graph</div>';
         echo '<div class="modal-footer window-footer-config">';
         echo '<br>';
-        echo '<a class="btn btn-default" style="outline: 0 !important;" href="alertData?agent=WVd4cw==">Access all alerts</a>';
+        echo '<a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>';
         echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>';
         echo '</div>';
         echo '</div>';
@@ -280,20 +283,20 @@ include "../lbs/agentMethods.php";
                 
                 do
                 {
-                    $agentName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
-                    $agentEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
+                    $endpointName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
+                    $endpointEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
                     $totalWordHits = $endpointsFraud['totalwords'];
                     $countPressure = $endpointsFraud['pressure'];
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
-                    $totalAlerts = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
+                    $totalEvents = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
                                     
-                    if ($totalAlerts != 0) 
+                    if ($totalEvents != 0) 
                     {
                         echo '<tr class="table-tr-graphdata">';
                         
                         echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
-                        echo '<span class="pseudolink" onclick="javascript:location.href=\'alertData?agent='.$agentEncoded.'\'">'.$agentName.'</span></td>';
+                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?endpoint='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
                     }
                     else continue;
                         
@@ -301,7 +304,7 @@ include "../lbs/agentMethods.php";
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
                     echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countRationalization.'</td>';
-                    echo '<td class="table-td-graphdata-score">'.number_format($totalAlerts/3, 1).'</td>';
+                    echo '<td class="table-td-graphdata-score">'.number_format($totalEvents/3, 1).'</td>';
                     echo '</tr>';
                     
                     $counter++;
@@ -322,7 +325,7 @@ include "../lbs/agentMethods.php";
     
     <div class="modal-footer window-footer-config">
         <br>
-        <a class="btn btn-default" style="outline: 0 !important;" href="alertData?agent=WVd4cw==">Access all alerts</a>
+        <a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>
     </div>
 

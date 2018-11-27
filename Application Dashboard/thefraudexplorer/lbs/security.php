@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.0
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Security methods
  */
@@ -33,7 +33,7 @@ function checkEndpoint($endPoint, $domain)
     return false;
 }
 
-function checkAlert($endPoint)
+function checkEvent($endPoint)
 {
     include "lbs/openDBconn.php";    
     $result = mysql_query(sprintf("SELECT * FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s'", $endPoint));

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2018-12
- * Revision: v1.2.1
+ * Date: 2019-01
+ * Revision: v1.2.2-ai
  *
  * Description: Code for false positive marking
  */
@@ -27,21 +27,21 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 
 $regid=filter($_GET['regid']);
-$agent=filter($_GET['agent']);
+$endpoint=filter($_GET['endpoint']);
 $index=filter($_GET['index']);
 $type=filter($_GET['type']);
 $urlrefer=filter($_GET['urlrefer']);
 
-if (!empty($_POST['toggle-alert']))
+if (!empty($_POST['toggle-event']))
 {
     /* Query actual falsePositive value */
 
-    $urlAlertValue="http://localhost:9200/".$index."/".$type."/".$regid;
+    $urlEventValue="http://localhost:9200/".$index."/".$type."/".$regid;
     
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $urlAlertValue);
+    curl_setopt($ch, CURLOPT_URL, $urlEventValue);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     $resultValues=curl_exec($ch);
     curl_close($ch);
@@ -54,21 +54,21 @@ if (!empty($_POST['toggle-alert']))
 
     /* Toggle falsePositive value */
 
-    $urlAlerts="http://localhost:9200/".$index."/".$type."/".$regid."/_update?pretty&pretty";
+    $urlEvents="http://localhost:9200/".$index."/".$type."/".$regid."/_update?pretty&pretty";
     $params = '{ "doc" : { "falsePositive" : "'.$mark.'" } } }';
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$urlAlerts);
+    curl_setopt($ch, CURLOPT_URL,$urlEvents);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    $resultAlerts=curl_exec($ch);
+    $resultEvents=curl_exec($ch);
     curl_close($ch);
 }
-else if (!empty($_POST['delete-alert']))
+else if (!empty($_POST['delete-event']))
 {
-    /* Delete agent elasticsearch documents */
+    /* Delete endpoint elasticsearch documents */
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/".$index."/".$type."/".$regid); 
@@ -80,8 +80,8 @@ else if (!empty($_POST['delete-alert']))
 
 /* Return to refering url */
 
-if ($urlrefer == "allalerts") header ("location: ../alertData?agent=".base64_encode(base64_encode("all")));
-else header ("location: ../alertData?agent=".$agent);
+if ($urlrefer == "allevents") header ("location: ../eventData?endpoint=".base64_encode(base64_encode("all")));
+else header ("location: ../eventData?endpoint=".$endpoint);
 
 ?>
 
