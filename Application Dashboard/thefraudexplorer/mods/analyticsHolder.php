@@ -260,8 +260,8 @@ include "../lbs/elasticsearch.php";
             
             <div class="fraudtriangle-bubble-container">
                 <div class="tl"><br>High Pressures&emsp;</div>
-                <div class="tr"><br>&emsp;Fraud Triangle Consolidation</div>
-                <div class="bl"><br>Low Fraud Triangle Behaviors&emsp;</div>
+                <div class="tr"><br>&emsp;High Fraud Triangle Behaviors</div>
+                <div class="bl"><br>Fraud Triangle Behaviors&emsp;</div>
                 <div class="br"><br>&emsp;High Rationalizations</div>
                 <canvas id="fraudtriangle-graph"></canvas>
             </div>
