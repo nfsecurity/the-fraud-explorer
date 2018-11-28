@@ -26,7 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
-include "../lbs/endPointMethods.php";
+include "../lbs/endpointMethods.php";
 
 $coordinates = filter($_GET['coordinates']);
 $coordinates = str_replace('\\', '', $coordinates);
