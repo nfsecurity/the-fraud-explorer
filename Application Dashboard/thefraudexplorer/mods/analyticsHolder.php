@@ -126,22 +126,10 @@ include "../lbs/elasticsearch.php";
 
             <span style="line-height: 0.3"><br></span>
             <table class="table-leyend" id="elm-legend">
-                <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Score legend</th>
+                <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Graph legend</th>
                 <tr>
-                    <td class="table-leyend-point"><span class="point-red"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_critic_from'].">"; ?></td>
-                    <td class="table-leyend-point"><span class="point-green"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
-                </tr>
-            </table>
-            <span style="line-height: 0.1"><br></span>
-            <table class="table-leyend" id="elm-opportunity">
-                <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Opportunity</th>
-                <tr>
-                    <td class="table-leyend-point"><span class="point-opportunity-low"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_low_to']; ?></td>
-                    <td class="table-leyend-point"><span class="point-opportunity-medium"></span><br><?php echo $scoreResult['score_ts_medium_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
-                </tr>
-                <tr>
-                    <td class="table-leyend-point"><span class="point-opportunity-high"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_high_to']; ?></td>
-                    <td class="table-leyend-point"><span class="point-opportunity-critic"></span><br><?php echo $scoreResult['score_ts_critic_from'].">"; ?></td>
+                    <td class="table-leyend-point"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br><?php echo $scoreResult['score_ts_low_from']."-".$scoreResult['score_ts_medium_to']; ?></td>
+                    <td class="table-leyend-point"><span class="fa fa-3x fa-asterisk asterisk-color-high"></span><br><?php echo $scoreResult['score_ts_high_from']."-".$scoreResult['score_ts_critic_from'].">"; ?></td>
                 </tr>
             </table>
             <span style="line-height: 0.1"><br></span>
@@ -370,123 +358,599 @@ include "../lbs/elasticsearch.php";
             
             if ($countRationalization == 0 && $countOpportunity == 0 && $countPressure == 0) continue;
                       
-            /* Low criticality */
+            /* Low criticality Pressure */
     
-            if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']+0.9)
+            if ($countPressure >= $scoreResult['score_ts_low_from'] && $countPressure <= $scoreResult['score_ts_low_to']+0.9)
             {
-                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
-                {
-                    $radiusPoint = 10;
+                /* Low Opportunity */
 
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(128,216,135,0.3)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
-                }
-                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
-                {
-                    $radiusPoint = 10;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
-                }
-                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
-                {
-                    $radiusPoint = 10;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
-                }
-                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
-                {
-                    $radiusPoint = 10;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
-                }
-            }
-            
-            /* Medium criticality */
-            
-            else if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']+0.9)
-            {
                 if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
                 {
-                    $radiusPoint = 12;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* Medium Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
                 {
-                    $radiusPoint = 12;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization*/
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* High Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
                 {
-                    $radiusPoint = 12;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
-                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+
+                /* Critical Opportunity */
+
+                if ($countOpportunity  >= $scoreResult['score_ts_critic_from']) 
                 {
-                    $radiusPoint = 12;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                   /* Rationalization */
+
+                   if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
             }
             
-            /* High criticality */
+            /* Medium criticality Pressure */
             
-            else if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']+0.9)
+            else if ($countPressure >= $scoreResult['score_ts_medium_from'] && $countPressure <= $scoreResult['score_ts_medium_to']+0.9)
             {
+                /* Low Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
                 {
-                    $radiusPoint = 13;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* Medium Opportunity */ 
+
                 if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
                 {
-                    $radiusPoint = 13;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* High Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
                 {
-                    $radiusPoint = 13;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* Critical Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
                 {
-                    $radiusPoint = 13;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
             }
             
-            /* Critical criticality */
+            /* High criticality Pressure */
             
-            else if ($score >= $scoreResult['score_ts_critic_from'] && $score <= $scoreResult['score_ts_critic_to']+0.9)
+            else if ($countPressure >= $scoreResult['score_ts_high_from'] && $countPressure <= $scoreResult['score_ts_high_to']+0.9)
             {
+                /* Low Opportunity */
+
+                if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to'])) 
+                {
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                }
+
+                /* Medium Opportunity */
+
+                if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
+                {
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                }
+
+                /* High opportunity */
+
+                if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
+                {
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                }
+
+                /* Critical Opportunity */
+
+                if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
+                {
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                }
+            }
+            
+            /* Critical Pressure criticality */
+            
+            else if ($countPressure >= $scoreResult['score_ts_critic_from'] && $countPressure <= $scoreResult['score_ts_critic_to']+0.9)
+            {
+                /* Low Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_low_from'] && $countOpportunity <= ($scoreResult['score_ts_low_to']))
                 {
-                    $radiusPoint = 15;
-                    
-                    echo '{ label: "Endpoints matching", backgroundColor: "rgba(85,195,89,0.6)", borderWidth: 1.8, borderColor: "rgba(24,131,47,1)", hoverBackgroundColor: "rgba(128,216,135,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* Medium Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
                 {
-                    $radiusPoint = 15;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* High Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_high_from'] && $countOpportunity <= ($scoreResult['score_ts_high_to'])) 
                 {
-                    $radiusPoint = 15;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'circle').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
+
+                /* Critical Opportunity */
+
                 if ($countOpportunity >= $scoreResult['score_ts_critic_from']) 
                 {
-                    $radiusPoint = 15;
-                    
-                    echo '{ label: \''.$row_a["agent"].'\', backgroundColor: "rgba(253,140,139,0.3)", borderWidth: 1.8, borderColor: "rgba(249,62,77,1)", hoverBackgroundColor: "rgba(253,140,139,0.7)", hoverBorderWidth: 1, pointStyle: \''.($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2) ? 'triangle' : 'star').'\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    /* Rationalization */
+
+                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
+                    if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
+                    {
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
+                        else $radiusPoint = 8;
+
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                    }
                 }
             }
             $counter++;

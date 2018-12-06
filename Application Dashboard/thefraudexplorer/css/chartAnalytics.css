@@ -110,61 +110,14 @@ html,body
     font-family: 'FFont', sans-serif; font-size:12px; color: #474747;
 }
 
-.point-red, .point-green
+.asterisk-color-low
 {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #FF4136;
-    border: 1px solid #d3d3d3;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
+    color: #73B481;
 }
 
-.point-green
+.asterisk-color-high
 {
-    background: #2ECC40;
-}
-
-.point-opportunity-low, .point-opportunity-medium, .point-opportunity-high, .point-opportunity-critic 
-{
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #d5d5d5;
-    border: 1px solid #FFFFFF;
-    opacity: 0.5;
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-}
-
-.point-opportunity-low
-{
-    width: 27px;
-    height: 27px;
-}
-
-.point-opportunity-medium
-{
-    width: 29px;
-    height: 29px;
-}
-
-.point-opportunity-high
-{
-    width: 31px;
-    height: 31px;
-}
-
-.point-opportunity-critic
-{
-    width: 33px;
-    height: 33px;
+    color: #328E45;
 }
 
 hr 
@@ -223,10 +176,17 @@ table
     border-radius: 5px;
 }
 
-.table-leyend-point, .table-insights-score, .table-dictionary-score
+.table-insights-score, .table-dictionary-score
 {
     text-align: center;
     padding: 2px 5px 3px 5px;
+    border-radius: 5px;
+}
+
+.table-leyend-point
+{
+    text-align: center;
+    padding: 8px 5px 8px 5px;
     border-radius: 5px;
 }
 
