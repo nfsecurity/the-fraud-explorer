@@ -370,31 +370,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -406,31 +406,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -442,31 +442,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -478,31 +478,31 @@ include "../lbs/elasticsearch.php";
 
                    if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
             }
@@ -519,31 +519,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -555,31 +555,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -591,31 +591,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -627,31 +627,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
             }
@@ -668,31 +668,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -704,31 +704,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -740,31 +740,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -776,31 +776,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
             }
@@ -817,31 +817,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -853,31 +853,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -889,31 +889,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
 
@@ -925,31 +925,31 @@ include "../lbs/elasticsearch.php";
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 3, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(132,191,148,1)", borderWidth: 4, borderColor: "rgba(132,191,148,1)", hoverBackgroundColor: "rgba(132,191,148,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
                     {
-                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 10;
-                        else $radiusPoint = 8;
+                        if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) $radiusPoint = 12;
+                        else $radiusPoint = 10;
 
-                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 3, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 3, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                        echo '{ backgroundColor: "rgba(60,156,86,1)", borderWidth: 4, borderColor: "rgba(60,156,86,1)", hoverBackgroundColor: "rgba(60,156,86,1)", hoverBorderWidth: 4, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                     }
                 }
             }
