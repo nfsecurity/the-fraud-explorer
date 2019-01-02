@@ -1028,6 +1028,7 @@ input[type=checkbox]
     border: 1px solid #ccc;
     background-color: #fff;
     outline: 0 !important;
+    z-index: 1000;
 }
 
 .departmentsUploadStyle
@@ -1044,11 +1045,12 @@ form
 
 .departmentsUploadStyle input.upload
     {
-        position: absolute;
-        top: 0;
-        right: 0;
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
         margin: 0;
         padding: 0;
+        width: 120px;
         cursor: pointer;
         opacity: 0;
         filter: alpha(opacity=0);

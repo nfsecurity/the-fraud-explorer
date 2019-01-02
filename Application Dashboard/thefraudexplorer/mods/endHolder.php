@@ -370,14 +370,14 @@ if ($row_a = mysql_fetch_array($result_a))
                     <?php 
                     
                         echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Export & Download</button>&nbsp;';
-                        echo '<a href="helpers/authAccess?file=msi/endpoint_x64-v1.2.0.msi" download="endpoint_x64-v1.2.0.msi"><button type="button" class="download-msi" id="elm-msi">Download endpoint</button></a>';
+                        echo '<a href="helpers/authAccess?file=../msi/endpoint_x64-v1.2.2-ai.msi" download="endpoint_x64-v1.2.2-ai.msi"><button type="button" class="download-msi" id="elm-msi">Download endpoint</button></a>';
                     ?>
                     
                 </form>
 
                 <form action="mods/departmentsUpload" id="departmentsUpload" method="post" enctype="multipart/form-data" accept-charset="utf-8">           
                     <div class="departmentsUploadStyle" style="outline: 0 !important;">                                             
-                        <button type="button" class="departments-load" id="departments-msi">Departmentalizing</button>&nbsp;              
+                        <button type="button" class="departments-load" id="departments-msi" onclick="document.getElementById('departmentsToUpload').click();">Departmentalizing</button>            
                         <input type="file" name="departmentsToUpload" id="departmentsToUpload" class="upload" />
                     </div>
                 </form>
