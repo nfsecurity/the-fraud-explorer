@@ -59,17 +59,23 @@ else
               
 	        while (($getData = fgetcsv($file, 100000, ",")) !== FALSE)
 	        {
+                $endpointLogin = $getData[0];
+                $endpointDomain = $getData[1];
                 $endpointName = $getData[2];
+                $endpointDepartment = $getData[3];
+                $endpointGender = $getData[4];
 
-                if($getData[1] == "all")
+                if ($endpointGender != "male" && $endpointGender != "female") $endpointGender = "male";
+
+                if($endpointDomain == "all")
                 {
-                    if(in_array($getData[3], $rulesetInventory)) $sql = "UPDATE t_agents SET name = '".$endpointName."', ruleset = '".$getData[3]."' WHERE agent like '".$getData[0]."\_%'";
-                    else $sql = "UPDATE t_agents SET name = '".$endpointName."', ruleset = 'BASELINE' WHERE agent like '".$getData[0]."\_%'";
+                    if(in_array($getData[3], $rulesetInventory)) $sql = "UPDATE t_agents SET gender = '".$endpointGender."', name = '".$endpointName."', ruleset = '".$endpointDepartment."' WHERE agent like '".$endpointLogin."\_%'";
+                    else $sql = "UPDATE t_agents SET gender = '".$endpointGender."', name = '".$endpointName."', ruleset = 'BASELINE' WHERE agent like '".$endpointLogin."\_%'";
                 }
                 else
                 {
-                    if(in_array($getData[3], $rulesetInventory)) $sql = "UPDATE t_agents SET name = '".$endpointName."', ruleset = '".$getData[3]."' WHERE agent like '".$getData[0]."\_%' AND domain = '".$getData[1]."'";
-                    else $sql = "UPDATE t_agents SET name = '".$endpointName."', ruleset = 'BASELINE' WHERE agent like '".$getData[0]."\_%'  AND domain = '".$getData[1]."'";
+                    if(in_array($endpointDepartment, $rulesetInventory)) $sql = "UPDATE t_agents SET gender = '".$endpointGender."', name = '".$endpointName."', ruleset = '".$endpointDepartment."' WHERE agent like '".$endpointLogin."\_%' AND domain = '".$endpointDomain."'";
+                    else $sql = "UPDATE t_agents SET gender = '".$endpointGender."', name = '".$endpointName."', ruleset = 'BASELINE' WHERE agent like '".$endpointLogin."\_%'  AND domain = '".$endpointDomain."'";
                 }
 
                 $result = mysql_query($sql);
