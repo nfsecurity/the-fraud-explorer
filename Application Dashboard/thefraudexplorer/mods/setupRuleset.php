@@ -254,7 +254,8 @@ include "../lbs/endpointMethods.php";
             }
 
             $fraudTriangleTerms = array('0'=>'pressure','1'=>'opportunity','2'=>'rationalization');
-            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+            $rulesetLanguage = $configFile['fta_lang_selection'];
+            $jsonFT = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
             $dictionaryCount = array();
             $phrasesCount = 0;
 

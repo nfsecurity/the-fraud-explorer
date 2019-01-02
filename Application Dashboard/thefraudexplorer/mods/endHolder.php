@@ -369,15 +369,28 @@ if ($row_a = mysql_fetch_array($result_a))
                     
                     <?php 
                     
-                        echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Download as CSV</button>&nbsp;';
-                        echo '<a href="helpers/authAccess?file=msi/endpoint_x64-v1.2.0.msi" download="endpoint_x64-v1.2.0.msi"><button type="button" class="download-msi" id="elm-msi">Download MSI</button></a>';
+                        echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Export & Download</button>&nbsp;';
+                        echo '<a href="helpers/authAccess?file=msi/endpoint_x64-v1.2.0.msi" download="endpoint_x64-v1.2.0.msi"><button type="button" class="download-msi" id="elm-msi">Download endpoint</button></a>';
                     ?>
                     
+                </form>
+
+                <form action="mods/departmentsUpload" id="departmentsUpload" method="post" enctype="multipart/form-data" accept-charset="utf-8">           
+                    <div class="departmentsUploadStyle" style="outline: 0 !important;">                                             
+                        <button type="button" class="departments-load" id="departments-msi">Departmentalizing</button>&nbsp;              
+                        <input type="file" name="departmentsToUpload" id="departmentsToUpload" class="upload" />
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById("departmentsToUpload").onchange = function() {
+        document.getElementById("departmentsUpload").submit();
+    }
+</script>
 
 <!-- Modal for delete dialog -->
 
