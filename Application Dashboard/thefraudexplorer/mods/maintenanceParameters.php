@@ -32,7 +32,7 @@ if (isset($_POST['deadsessions']))
 {
     $setDeadSessions=filter($_POST['deadsessions']);
      
-    if (!empty($setDeadSessions) && $setDeadSessions == "1month") mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com' ");
+    if (!empty($setDeadSessions) && $setDeadSessions == "1month") mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
 }
 
 /* Delete old phrase indexes (logstash-theraudepxlorer-text-*) */
@@ -58,9 +58,21 @@ if (isset($_POST['deletealerts']))
     $curate90days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts90d.yml';
     $setDeleteAlerts=filter($_POST['deletealerts']);
      
-    if (!empty($setDeleteAlerts) && $setDeletePhrases == "1month") $commandCurator = shell_exec($curate30days);
-    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "2month") $commandCurator = shell_exec($curate60days);
-    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "3month") $commandCurator = shell_exec($curate90days);
+    if (!empty($setDeleteAlerts) && $setDeletePhrases == "1month") 
+    {
+        $commandCurator = shell_exec($curate30days);
+        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+    }
+    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "2month") 
+    {
+        $commandCurator = shell_exec($curate60days);
+        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 60 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+    }
+    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "3month") 
+    {
+        $commandCurator = shell_exec($curate90days);
+        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 90 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+    }
 }
 
 /* Delete old alert status indexes (logstash-alerter-*) */
