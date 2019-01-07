@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for general setup
  */
@@ -36,7 +36,7 @@ if (isset($_POST['key']))
 {
     $keyPass=filter($_POST['key']);
 
-    if (!empty($keyPass)) mysql_query(sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
+    if (!empty($keyPass)) mysqli_query($connection, sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
 }
 
 if (isset($_POST['samplecalculation']))
@@ -45,30 +45,30 @@ if (isset($_POST['samplecalculation']))
 
     if (!empty($setCalculation)) 
     {
-        if ($session->domain == "all") mysql_query(sprintf("UPDATE t_config SET sample_data_calculation='%s'", $setCalculation));
+        if ($session->domain == "all") mysqli_query($connection, sprintf("UPDATE t_config SET sample_data_calculation='%s'", $setCalculation));
         else 
         {
             $domainConfigTable = "t_config_".str_replace(".", "_", $session->domain);
             $queryConfigTable = "UPDATE ".$domainConfigTable." SET sample_data_calculation='".$setCalculation."'";
             
-            mysql_query($queryConfigTable);
+            mysqli_query($connection, $queryConfigTable);
         }
     }
 }
 
-if (isset($_POST['changepassword']))
+if (isset($_POST['password']))
 {
     $username="admin";
     $password=sha1(filter($_POST['password']));
     
-    if (!empty($password)) mysql_query(sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
+    if (!empty($password)) mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
 }
 
 if (isset($_POST['encryption']))
 {
     $encryption=filter($_POST['encryption']);
     
-    if (!empty($encryption)) mysql_query(sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
+    if (!empty($encryption)) mysqli_query($connection, sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
 }
 
 if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfrom']) && isset($_POST['mediumto']) && isset($_POST['highfrom']) && isset($_POST['highto']) && isset($_POST['criticfrom']) && isset($_POST['criticto']))
@@ -84,7 +84,7 @@ if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfr
 
     if (notempty($lowFrom) && notempty($lowTo) && notempty($mediumFrom) && notempty($mediumTo) && notempty($highFrom) && notempty($highTo) && notempty($criticFrom) && notempty($criticTo)) 
     {
-        mysql_query(sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
+        mysqli_query($connection, sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
     }
 }
 

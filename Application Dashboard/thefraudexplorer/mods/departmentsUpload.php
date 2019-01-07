@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for set departments
  */
@@ -78,7 +78,7 @@ else
                     else $sql = "UPDATE t_agents SET gender = '".$endpointGender."', name = '".$endpointName."', ruleset = 'BASELINE' WHERE agent like '".$endpointLogin."\_%'  AND domain = '".$endpointDomain."'";
                 }
 
-                $result = mysql_query($sql);
+                $result = mysqli_query($connection, $sql);
             }
 			fclose($file);	
 		}

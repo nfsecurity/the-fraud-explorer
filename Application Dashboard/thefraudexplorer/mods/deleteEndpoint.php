@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for endpoint deletion
  */
@@ -33,17 +33,18 @@ $endpointID=str_replace(array("."), array("_"), $endpointDec);
 
 /* Delete agent tables */
 
-$queryStatement = "SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(table_name), ';') AS statement FROM information_schema.tables WHERE table_schema = 'thefraudexplorer' AND table_name LIKE 't_%s_%%'";
-$statement = mysql_query(sprintf($queryStatement, $endpointID));
-$rowStatement = mysql_fetch_array($statement);
+$queryStatement = "SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(table_name), ';') AS statement FROM information_schema.tables WHERE table_schema = 'thefraudexplorer' AND table_name LIKE 't_%s\\_%%'";
+$statement = mysqli_query($connection, sprintf($queryStatement, $endpointID));
+$rowStatement = mysqli_fetch_array($statement);
 
-mysql_query($rowStatement[0]);
-mysql_query(sprintf("DELETE FROM t_agents WHERE agent like '%s%%'", $endpointID));
+mysqli_query($connection, $rowStatement[0]);
+mysqli_query($connection, sprintf("DELETE FROM t_agents WHERE agent like '%s\\_%%'", $endpointID));
+mysqli_query($connection, sprintf("DELETE FROM t_inferences WHERE endpoint = '%s'", $endpointID));
 
 /* Delete agent elasticsearch documents */
 
 $urlDelete = "http://localhost:9200/_all/_delete_by_query?pretty";
-$params = '{ "query": { "wildcard" : { "agentId.raw" : "'.$endpointID.'*" } } }';
+$params = '{ "query": { "wildcard" : { "agentId" : "'.$endpointID.'*" } } }';
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -51,6 +52,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL, $urlDelete);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultDelete=curl_exec($ch);
 curl_close($ch);
 

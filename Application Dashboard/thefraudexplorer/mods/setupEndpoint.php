@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for setup endpoint
  */
@@ -117,11 +117,11 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 <div class="div-container">
     <form id="formSetup" name="formSetup" method="post" action="<?php echo 'mods/setupEndpointParameters?endpoint='.$endpointEnc; ?>">
         <p class="title">Endpoint alias</p><br>
-        <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysql_query(sprintf($queryName,$endpointDec)); $alias = mysql_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
+        <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysqli_query($connection, sprintf($queryName,$endpointDec)); $alias = mysqli_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
         <br><br><p class="title">Ruleset or Dictionary</p><br>
 
         <select class="select-ruleset-styled" name="ruleset" id="ruleset">
-            <option selected="selected">Choose the ruleset <?php $rulesetquery = mysql_query(sprintf($queryRule, $endpointDec)); $ruleset = mysql_fetch_array($rulesetquery); if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)'; else echo '(current dictionary: '.$ruleset[0].')'; ?></option>
+            <option selected="selected">Choose the ruleset <?php $rulesetquery = mysqli_query($connection, sprintf($queryRule, $endpointDec)); $ruleset = mysqli_fetch_array($rulesetquery); if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)'; else echo '(current dictionary: '.$ruleset[0].')'; ?></option>
 
             <?php
 
@@ -140,7 +140,7 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
         <br><br><p class="title">Endpoint gender</p><br>
 
         <select class="select-gender-styled" name="gender" id="gender">
-            <option selected="selected">Choose the gender <?php $genderquery = mysql_query(sprintf($queryGender, $endpointDec)); $gender = mysql_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
+            <option selected="selected">Choose the gender <?php $genderquery = mysqli_query($connection, sprintf($queryGender, $endpointDec)); $gender = mysqli_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>

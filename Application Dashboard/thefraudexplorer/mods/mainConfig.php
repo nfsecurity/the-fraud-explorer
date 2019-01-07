@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for main config
  */
@@ -228,16 +228,16 @@ include "../lbs/openDBconn.php";
                         
                         if($session->domain == "all")
                         {
-                            $calculationQuery = mysql_query("SELECT sample_data_calculation FROM t_config"); 
-                            $sampleQuery = mysql_fetch_array($calculationQuery);
+                            $calculationQuery = mysqli_query($connection, "SELECT sample_data_calculation FROM t_config"); 
+                            $sampleQuery = mysqli_fetch_array($calculationQuery);
                             echo $sampleQuery[0]; 
                         }
                         else
                         {
                             $domainConfigTable = "t_config_".str_replace(".", "_", $session->domain);
                             $queryCalc = "SELECT sample_data_calculation FROM ".$domainConfigTable;
-                            $calculationQuery = mysql_query($queryCalc); 
-                            $sampleQuery = mysql_fetch_array($calculationQuery); 
+                            $calculationQuery = mysqli_query($connection, $queryCalc); 
+                            $sampleQuery = mysqli_fetch_array($calculationQuery); 
                             echo $sampleQuery[0];
                         }
                         
@@ -257,8 +257,8 @@ include "../lbs/openDBconn.php";
 
         <?php
         
-        $scoreQuery = mysql_query("SELECT * FROM t_config");
-        $scoreResult = mysql_fetch_array($scoreQuery);
+        $scoreQuery = mysqli_query($connection, "SELECT * FROM t_config");
+        $scoreResult = mysqli_fetch_array($scoreQuery);
         
         ?>
 

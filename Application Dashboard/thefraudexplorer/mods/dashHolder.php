@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  * 
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for paint dashboard
  */
@@ -48,6 +48,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL,$urlWords);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -62,6 +63,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -79,6 +81,7 @@ else
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -93,6 +96,7 @@ else
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -140,16 +144,16 @@ else $totalSystemWords= "0";
                     
                     if ($session->domain == "all")
                     {
-                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
-                        else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
+                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL);
+                        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
                     }
                     else
                     {
-                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
-                        else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
+                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain);
+                        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
                     }
 
-                    if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
+                    if($endpointsFraud = mysqli_fetch_assoc($queryEndpoints))
                     {
                         do
                         {
@@ -190,7 +194,7 @@ else $totalSystemWords= "0";
                             echo '<center><span class="fa fa-line-chart font-icon-color-green awfont-padding-right"></span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
                             echo '</td>';
                         }
-                        while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
+                        while ($endpointsFraud = mysqli_fetch_assoc($queryEndpoints));
                     }
 
                     ?>
@@ -237,16 +241,16 @@ else $totalSystemWords= "0";
     
     if ($session->domain == "all")
     {
-        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQL);
-        else $queryTerms = mysql_query($queryTermsSQL_wOSampler);
+        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQL);
+        else $queryTerms = mysqli_query($connection, $queryTermsSQL_wOSampler);
     }
     else
     {
-        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQLDomain);
-        else $queryTerms = mysql_query($queryTermsSQLDomain_wOSampler);
+        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQLDomain);
+        else $queryTerms = mysqli_query($connection, $queryTermsSQLDomain_wOSampler);
     }
         
-    $fraudTerms = mysql_fetch_assoc($queryTerms);
+    $fraudTerms = mysqli_fetch_assoc($queryTerms);
     $fraudScore = ($fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'])/3;
     
     ?>
@@ -358,9 +362,9 @@ else $totalSystemWords= "0";
                     
                         echo '<td class="td">';
                  
-                        $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+                        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
-                        $userDomain = mysql_fetch_assoc($queryUserDomain);
+                        $userDomain = mysqli_fetch_assoc($queryUserDomain);
                         $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
                         $endpointEnc = base64_encode(base64_encode($userDomain['agent']));
                         $totalWordHits = $userDomain['totalwords'];
@@ -428,14 +432,14 @@ if ($session->domain == "all")
         $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM t_agents) AS agents GROUP BY agent) AS totals";
         $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents";
         $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY)";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM ((SELECT agent FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM (SELECT agent FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus;";
     }
     else 
     {
         $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain NOT LIKE 'thefraudexplorer.com'";      
         $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
         $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain NOT LIKE 'thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain NOT LIKE 'thefraudexplorer.com'";
     }
 }
 else
@@ -445,21 +449,21 @@ else
         $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
         $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
         $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' OR domain='thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
     }
     else 
     {
         $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
         $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
         $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM ((SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing)) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
+        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
     }
 }
 
-$countUniques = mysql_fetch_assoc(mysql_query($queryUniqueEndpoints));
-$countSessions = mysql_fetch_assoc(mysql_query($queryEndpointSessions));
-$countDead = mysql_fetch_assoc(mysql_query($queryDeadEndpoints));
-$countTyping = mysql_fetch_assoc(mysql_query($queryTyping));
+$countUniques = mysqli_fetch_assoc(mysqli_query($connection, $queryUniqueEndpoints));
+$countSessions = mysqli_fetch_assoc(mysqli_query($connection, $queryEndpointSessions));
+$countDead = mysqli_fetch_assoc(mysqli_query($connection, $queryDeadEndpoints));
+$countTyping = mysqli_fetch_assoc(mysqli_query($connection, $queryTyping));
 $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'];
 
 ?>

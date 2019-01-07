@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for Chart
  */
@@ -98,8 +98,8 @@ include "../lbs/elasticsearch.php";
                 if (samplerStatus($session->domain) == "enabled")
                 {
                     $queryEndpointsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryEndpointsGraphSQLDomain = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLDomain = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE (domain='thefraudexplorer.com' OR domain='".$session->domain."') AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                     $queryEndpointsGraphSQL = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                     $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
@@ -119,8 +119,8 @@ include "../lbs/elasticsearch.php";
 
             <?php
 
-            $scoreQuery = mysql_query($queryEndpointsGraphSQLLeyend);
-            $scoreResult = mysql_fetch_array($scoreQuery);
+            $scoreQuery = mysqli_query($connection, $queryEndpointsGraphSQLLeyend);
+            $scoreResult = mysqli_fetch_array($scoreQuery);
 
             ?>
 
@@ -145,14 +145,81 @@ include "../lbs/elasticsearch.php";
             $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
 
             /* Matches data */
-            
-            $matchesRationalizationCount = countAllFraudTriangleMatches($fraudTriangleTerms['r'], $configFile['es_alerter_index'], $session->domain, samplerStatus($session->domain));
-            $matchesOpportunityCount = countAllFraudTriangleMatches($fraudTriangleTerms['o'], $configFile['es_alerter_index'], $session->domain, samplerStatus($session->domain));
-            $matchesPressureCount = countAllFraudTriangleMatches($fraudTriangleTerms['p'], $configFile['es_alerter_index'], $session->domain, samplerStatus($session->domain));
 
-            $countRationalizationTotal = $matchesRationalizationCount['count'];        
-            $countOpportunityTotal = $matchesOpportunityCount['count'];
-            $countPressureTotal = $matchesPressureCount['count'];
+            if($session->domain == "all")
+            {
+                if (samplerStatus($session->domain) == "enabled")
+                {
+                    if ($_SESSION['rulesetScope'] == "ALL") 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents");
+                    }
+                    else 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."'");
+                    }
+                }
+                else
+                {
+                    if ($_SESSION['rulesetScope'] == "ALL") 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'");
+                    }
+                    else 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com'");
+                    }
+                }
+            }
+            else
+            {
+                if (samplerStatus($session->domain) == "enabled")
+                {
+                    if ($_SESSION['rulesetScope'] == "ALL") 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE domain = '".$session->domain."' OR domain = 'thefraudexplorer.com'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE domain = '".$session->domain."' OR domain = 'thefraudexplorer.com'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE domain = '".$session->domain."' OR domain = 'thefraudexplorer.com'");
+                    }
+                    else 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND (domain = '".$session->domain."' OR domain = 'thefraudexplorer.com')");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND (domain = '".$session->domain."' OR domain = 'thefraudexplorer.com')");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND (domain = '".$session->domain."' OR domain = 'thefraudexplorer.com')");
+                    }
+                }
+                else
+                {
+                    if ($_SESSION['rulesetScope'] == "ALL") 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE domain = '".$session->domain."'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE domain = '".$session->domain."'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE domain = '".$session->domain."'");
+                    }
+                    else 
+                    {
+                        $resultCountPressure = mysqli_query($connection, "SELECT SUM(pressure) AS totalPressure FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain = '".$session->domain."'");
+                        $resultCountOpportunity = mysqli_query($connection, "SELECT SUM(opportunity) AS totalOpportunity FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain = '".$session->domain."'");
+                        $resultCountRationalization = mysqli_query($connection, "SELECT SUM(rationalization) AS totalRationalization FROM t_agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain = '".$session->domain."'");
+                    }
+                }
+            }
+
+            $resultCountPressure = mysqli_fetch_array($resultCountPressure);
+            $resultCountOpportunity = mysqli_fetch_array($resultCountOpportunity);
+            $resultCountRationalization = mysqli_fetch_array($resultCountRationalization);
+
+            $countPressureTotal = ($resultCountPressure['totalPressure'] == NULL ? 0 : $resultCountPressure['totalPressure']);              
+            $countOpportunityTotal = ($resultCountOpportunity['totalOpportunity'] == NULL ? 0 : $resultCountOpportunity['totalOpportunity']);
+            $countRationalizationTotal = ($resultCountRationalization['totalRationalization'] == NULL ? 0 : $resultCountRationalization['totalRationalization']); 
 
             echo '<table class="table-insights" id="elm-phrasecounts">';
             echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Phrase counts</th>';
@@ -208,18 +275,18 @@ include "../lbs/elasticsearch.php";
         
             if($session->domain == "all")
             {
-                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysql_query($queryEndpointsGraphSQL);
-                else $result_axis = mysql_query($queryEndpointsGraphSQLRuleset);
+                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysqli_query($connection, $queryEndpointsGraphSQL);
+                else $result_axis = mysqli_query($connection, $queryEndpointsGraphSQLRuleset);
 
             }
             else
             {
-                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysql_query($queryEndpointsGraphSQLDomain);
-                else $result_axis = mysql_query($queryEndpointsGraphSQLRulesetDomain);
+                if ($_SESSION['rulesetScope'] == "ALL") $result_axis = mysqli_query($connection, $queryEndpointsGraphSQLDomain);
+                else $result_axis = mysqli_query($connection, $queryEndpointsGraphSQLRulesetDomain);
             }
 
             $axisCounter = 0;
-            $row_axis = mysql_fetch_array($result_axis);
+            $row_axis = mysqli_fetch_array($result_axis);
             
             do
             {    
@@ -227,7 +294,7 @@ include "../lbs/elasticsearch.php";
                 $axisPressure[$axisCounter] = $row_axis['pressure'];
                 $axisCounter++;
             }
-            while ($row_axis = mysql_fetch_array($result_axis));
+            while ($row_axis = mysqli_fetch_array($result_axis));
                 
             $xAxisGraph = max($axisPressure);
             $yAxisGraph = max($axisRationalization);
@@ -281,41 +348,41 @@ include "../lbs/elasticsearch.php";
         {
             if ($_SESSION['rulesetScope'] == "ALL")
             {
-                $result_a = mysql_query($queryEndpointsGraphSQL);
-                $result_b = mysql_query($queryEndpointsGraphSQL);
+                $result_a = mysqli_query($connection, $queryEndpointsGraphSQL);
+                $result_b = mysqli_query($connection, $queryEndpointsGraphSQL);
             }
             else
             {
-                $result_a = mysql_query($queryEndpointsGraphSQLRuleset);
-                $result_b = mysql_query($queryEndpointsGraphSQLRuleset);
+                $result_a = mysqli_query($connection, $queryEndpointsGraphSQLRuleset);
+                $result_b = mysqli_query($connection, $queryEndpointsGraphSQLRuleset);
             }
         }
         else
         {
             if ($_SESSION['rulesetScope'] == "ALL")
             {
-                $result_a = mysql_query($queryEndpointsGraphSQLDomain);
-                $result_b = mysql_query($queryEndpointsGraphSQLDomain);
+                $result_a = mysqli_query($connection, $queryEndpointsGraphSQLDomain);
+                $result_b = mysqli_query($connection, $queryEndpointsGraphSQLDomain);
             }
             else
             {
-                $result_a = mysql_query($queryEndpointsGraphSQLRulesetDomain);
-                $result_b = mysql_query($queryEndpointsGraphSQLRulesetDomain);
+                $result_a = mysqli_query($connection, $queryEndpointsGraphSQLRulesetDomain);
+                $result_b = mysqli_query($connection, $queryEndpointsGraphSQLRulesetDomain);
             }
         }
         
         /* Graph Logic */
         
         $counter = 1;
-        $row_a = mysql_fetch_array($result_a);
+        $row_a = mysqli_fetch_array($result_a);
     
         do
         {
             /* Endpoint data */
             
             $queryOpportunity = "SELECT opportunity FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE agent='".$row_a['agent']."'";
-            $result_opportunity = mysql_query($queryOpportunity);
-            $opportunityValue = mysql_fetch_array($result_opportunity);
+            $result_opportunity = mysqli_query($connection, $queryOpportunity);
+            $opportunityValue = mysqli_fetch_array($result_opportunity);
          
             $countRationalization = $row_a['rationalization'];
             $countOpportunity = $opportunityValue['opportunity'];
@@ -329,7 +396,7 @@ include "../lbs/elasticsearch.php";
             
                 /* Get max count value for both axis */
                 
-                $row_aT = mysql_fetch_array($result_b);
+                $row_aT = mysqli_fetch_array($result_b);
                 
                 do
                 {
@@ -339,7 +406,7 @@ include "../lbs/elasticsearch.php";
                     $countPressureT[$subCounter] = $row_aT['pressure'];
                     $subCounter++;
                 }
-                while ($row_aT = mysql_fetch_array($result_b));
+                while ($row_aT = mysqli_fetch_array($result_b));
                 
                 $GLOBALS['maxYAxis'] = max($countPressureT);
                 $GLOBALS['maxXAxis'] = max($countRationalizationT);
@@ -1339,7 +1406,7 @@ include "../lbs/elasticsearch.php";
             }
             $counter++;
         }
-        while ($row_a = mysql_fetch_array($result_a));
+        while ($row_a = mysqli_fetch_array($result_a));
         
     ?>
      

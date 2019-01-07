@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for get data from the endpoint
  */
@@ -22,8 +22,10 @@ include "lbs/security.php";
 
 function queryOrDie($query)
 {
-    $query = mysql_query($query);
-    if (! $query) exit(mysql_error());
+    global $connection;
+
+    $query = mysqli_query($connection, $query);
+    if (! $query) exit(mysqli_error());
     return $query;
 }
 
@@ -46,25 +48,25 @@ $command = filter($_GET['c']);
 $content = decRijndael(filter($_GET['response']));
 $table='t_'.$endpointIdentification;
 
-$result_a=mysql_query("SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");
+$result_a=mysqli_query($connection, "SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");
 
 if (is_bool($result_a) === true) exit;
-else $row_a = mysql_fetch_array($result_a);
+else $row_a = mysqli_fetch_array($result_a);
 
 /* If the endpoint exists or not */
 
 if($row_a[0]>0)
 {
-    $result_b=mysql_query("SELECT * FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command);
-    $row_b = mysql_fetch_array($result_b);
+    $result_b=mysqli_query($connection, "SELECT * FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command);
+    $row_b = mysqli_fetch_array($result_b);
 
     if($finished==0)
     {
-        $result=mysql_query("Update ".$table." set date=now(), response='".$row_b["response"].$content."' where id_uniq_command=".$id_uniq_command);
+        $result=mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."' where id_uniq_command=".$id_uniq_command);
     }
     else
     {
-        $result=mysql_query("Update ".$table." set date=now(), response='".$row_b["response"].$content."', finished=true where id_uniq_command=".$id_uniq_command);
+        $result=mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."', finished=true where id_uniq_command=".$id_uniq_command);
     }
 }
 else

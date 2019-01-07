@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for artificial intelligence
  */
@@ -286,26 +286,26 @@ include "../lbs/elasticsearch.php";
     {
         if (samplerStatus($session->domain) == "enabled")
         {
-            $result_a = mysql_query($queryDeductions);
+            $result_a = mysqli_query($connection, $queryDeductions);
         }
         else
         {
-            $result_a = mysql_query($queryDeductions_wOSampler);
+            $result_a = mysqli_query($connection, $queryDeductions_wOSampler);
         }
     }
     else
     {
         if (samplerStatus($session->domain) == "enabled")
         {
-            $result_a = mysql_query($queryDeductionsDomain);
+            $result_a = mysqli_query($connection, $queryDeductionsDomain);
         }       
         else
         {
-            $result_a = mysql_query($queryDeductionsDomain_wOSampler);
+            $result_a = mysqli_query($connection, $queryDeductionsDomain_wOSampler);
         }
     }
     
-    if(mysql_num_rows($result_a) == 0)
+    if(mysqli_num_rows($result_a) == 0)
     {
         echo '<div class="div-container">';
         echo '<p class="not-inferences">There is no deductions or inferences at the moment. When we have one we will show it here, please come back later and please note that the artificial intelligence engine (through the expert system) runs every hour or every time your administrator scheduled it.</p><br>';
@@ -336,7 +336,7 @@ include "../lbs/elasticsearch.php";
 
             <?php
 
-            if ($row_a = mysql_fetch_array($result_a))
+            if ($row_a = mysqli_fetch_array($result_a))
             {
                 do
                 {
@@ -353,7 +353,7 @@ include "../lbs/elasticsearch.php";
                     echo '<td class="table-td-expert-view"><a id="viewAlert" href="#" onclick="showAlert(this.id, \''.$row_a['alertid'].'\')"><span class="fa fa-diamond fa-lg font-icon-color-green"></span></a></td>';
                     echo '</tr>';
                 }
-                while ($row_a = mysql_fetch_array($result_a));
+                while ($row_a = mysqli_fetch_array($result_a));
             }    
             
             ?>

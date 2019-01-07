@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
@@ -18,6 +18,10 @@
 /* External includes */
 
 include "/var/www/html/thefraudexplorer/lbs/cryptography.php";
+
+/* Error control */
+
+//error_reporting(E_ERROR | E_PARSE);
 
 /* Current time */
 
@@ -49,7 +53,7 @@ $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
 /* Unique agentID List */
 
 $queryAgentList = "SELECT agent FROM t_agents";    
-$resultQueryAgentList = mysql_query($queryAgentList);
+$resultQueryAgentList = mysqli_query($connection, $queryAgentList);
 
 /* Start the loop for each agent */
 
@@ -124,7 +128,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     $arrayCounter = 0;
     $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
-    $arrayLenght = mysql_num_rows($resultQueryAgentList);
+    $arrayLenght = mysqli_num_rows($resultQueryAgentList);
        
     if ($endpointSelected == "all" && $singleEndpoint == false)
     {
@@ -133,9 +137,9 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
         $maxProcesses = cpuCores();
     
         pcntl_signal(SIGCHLD, "childFinished");   
-        mysql_close();
+        mysqli_close($connection);
         
-        while($row = mysql_fetch_array($resultQueryAgentList))
+        while($row = mysqli_fetch_array($resultQueryAgentList))
         {
             $pid = pcntl_fork();
 
@@ -195,7 +199,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             $lastArrayElement = true;
             
             startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
-        }           
+        }        
     }
 
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
@@ -216,7 +220,7 @@ else
     $arrayCounter = 0;
     $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
-    $arrayLenght = mysql_num_rows($resultQueryAgentList);
+    $arrayLenght = mysqli_num_rows($resultQueryAgentList);
     
     if ($endpointSelected == "all" && $singleEndpoint == false)
     {
@@ -225,9 +229,9 @@ else
         $maxProcesses = cpuCores();
     
         pcntl_signal(SIGCHLD, "childFinished");   
-        mysql_close();
+        mysqli_close($connection);
         
-        while($row = mysql_fetch_array($resultQueryAgentList))
+        while($row = mysqli_fetch_array($resultQueryAgentList))
         {
             $pid = pcntl_fork();
 

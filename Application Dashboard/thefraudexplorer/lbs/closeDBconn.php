@@ -9,12 +9,12 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for closing MySQL DB Session
  */
 
-mysql_close($connection);
+mysqli_close($connection);
 
 ?>

@@ -7,16 +7,16 @@ namespace Elasticsearch\ConnectionPool\Selectors;
  *
  * @category Elasticsearch
  * @package  Elasticsearch\Connections\Selectors
- * @author   Zachary Tong <zachary.tong@elasticsearch.com>
+ * @author   Zachary Tong <zach@elastic.co>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elasticsearch.org
+ * @link     http://elastic.co
  */
 interface SelectorInterface
 {
     /**
      * Perform logic to select a single ConnectionInterface instance from the array provided
      *
-     * @param  ConnectionInterface[] $connections an array of ConnectionInterface instances to choose from
+     * @param  \Elasticsearch\Connections\ConnectionInterface[] $connections an array of ConnectionInterface instances to choose from
      *
      * @return \Elasticsearch\Connections\ConnectionInterface
      */

@@ -9,16 +9,18 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Endpoint specific functions
  */ 
 
 function queryOrDie($query)
 {
-    $query = mysql_query($query);
-    if (! $query) exit(mysql_error());
+    global $connection;
+
+    $query = mysqli_query($connection, $query);
+    if (! $query) exit(mysqli_error());
     return $query;
 }
 
@@ -41,18 +43,20 @@ function getTextSist($system)
 
 function samplerStatus($sessionDomain)
 {
+    global $connection;
+
     if ($sessionDomain != "all") 
     {
         $domainConfigTable = "t_config_".str_replace(".", "_", $sessionDomain);
         $queryCalc = "SELECT sample_data_calculation FROM ".$domainConfigTable;
-        $calculationQuery = mysql_query($queryCalc); 
-        $sampleQuery = mysql_fetch_array($calculationQuery);
+        $calculationQuery = mysqli_query($connection, $queryCalc); 
+        $sampleQuery = mysqli_fetch_array($calculationQuery);
         return $sampleQuery[0];
     }
     else
     {
-        $calculationQuery = mysql_query("SELECT sample_data_calculation FROM t_config");
-        $sampleQuery = mysql_fetch_array($calculationQuery);
+        $calculationQuery = mysqli_query($connection, "SELECT sample_data_calculation FROM t_config");
+        $sampleQuery = mysqli_fetch_array($calculationQuery);
         return $sampleQuery[0];
     }
 }
@@ -73,10 +77,12 @@ function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $cou
 
 function discoverOnline()
 {
+    global $connection;
+
     $orderQuery = "SELECT agent, heartbeat, now() FROM t_agents";
-    $order = mysql_query($orderQuery);
+    $order = mysqli_query($connection, $orderQuery);
     
-    if ($row = mysql_fetch_array($order))
+    if ($row = mysqli_fetch_array($order))
     {
         do
         {
@@ -91,57 +97,67 @@ function discoverOnline()
                 queryOrDie($sendquery);
             }
         }
-        while ($row = mysql_fetch_array($order));
+        while ($row = mysqli_fetch_array($order));
     }
 }
 
 function searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset)
 {
-    $rulesetquery = mysql_query(sprintf($queryRuleset, $endpointDECSQL));
-    $ruleset = mysql_fetch_array($rulesetquery);
+    global $connection;
+
+    $rulesetquery = mysqli_query($connection, sprintf($queryRuleset, $endpointDECSQL));
+    $ruleset = mysqli_fetch_array($rulesetquery);
     
-    if (is_null($ruleset[0])) $ruleset[0] = "BASELINE"; 
+    if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
+    $rule = $ruleset[0];
     
     $baselineRuleset = "BASELINE";
+    $dict = "dictionary";
     $fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
 
     foreach($fraudTriangleTerms as $term)
     {
-        foreach($jsonFT->dictionary->$ruleset[0]->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
-        foreach($jsonFT->dictionary->$baselineRuleset->$term as $keyName => $value) if(strcmp($value, $searchValue) == 0) return $keyName;
+        foreach($jsonFT->$dict->$rule->$term as $keyName => $value) 
+        {
+            if(strcmp($value, $searchValue) == 0) return $keyName;
+        }
+        foreach($jsonFT->$dict->$baselineRuleset->$term as $keyName => $value) 
+        {
+            if(strcmp($value, $searchValue) == 0) return $keyName;
+        }
     }
 }
 
-function after ($this, $inthat)
+function after ($thisparam, $inthat)
 {
-    if (!is_bool(strpos($inthat, $this)))
-    return substr($inthat, strpos($inthat,$this)+strlen($this));
+    if (!is_bool(strpos($inthat, $thisparam)))
+    return substr($inthat, strpos($inthat,$thisparam)+strlen($thisparam));
 }
 
-function after_last ($this, $inthat)
+function after_last ($thisparam, $inthat)
 {
-    if (!is_bool(strrevpos($inthat, $this)))
-    return substr($inthat, strrevpos($inthat, $this)+strlen($this));
+    if (!is_bool(strrevpos($inthat, $thisparam)))
+    return substr($inthat, strrevpos($inthat, $thisparam)+strlen($thisparam));
 }
 
-function before ($this, $inthat)
+function before ($thisparam, $inthat)
 {
-    return substr($inthat, 0, strpos($inthat, $this));
+    return substr($inthat, 0, strpos($inthat, $thisparam));
 }
 
-function before_last ($this, $inthat)
+function before_last ($thisparam, $inthat)
 {
-    return substr($inthat, 0, strrevpos($inthat, $this));
+    return substr($inthat, 0, strrevpos($inthat, $thisparam));
 }
 
-function between ($this, $that, $inthat)
+function between ($thisparam, $that, $inthat)
 {
-    return before ($that, after($this, $inthat));
+    return before ($that, after($thisparam, $inthat));
 }
 
-function between_last ($this, $that, $inthat)
+function between_last ($thisparam, $that, $inthat)
 {
-    return after_last($this, before_last($that, $inthat));
+    return after_last($thisparam, before_last($that, $inthat));
 }
 
 function strrevpos($instr, $needle)

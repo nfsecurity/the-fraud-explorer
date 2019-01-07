@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for role administration
  */
@@ -199,9 +199,9 @@ include "../lbs/openDBconn.php";
 
                 <?php
 
-                $userQuery = mysql_query("SELECT user, domain FROM t_users"); 
+                $userQuery = mysqli_query($connection, "SELECT user, domain FROM t_users"); 
 
-                while($userEntry = mysql_fetch_assoc($userQuery))
+                while($userEntry = mysqli_fetch_assoc($userQuery))
                 {
                     echo '<tr class="table-tr-role">';
                     echo '<td class="table-td-role"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$userEntry['user'].'</td>';

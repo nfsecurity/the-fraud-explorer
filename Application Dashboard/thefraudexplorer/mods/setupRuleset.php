@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for ruleset setup
  */
@@ -279,8 +279,8 @@ include "../lbs/endpointMethods.php";
                 $total = @$dictionaryCount[$ruleset]['pressure'] + @$dictionaryCount[$ruleset]['opportunity'] + @$dictionaryCount[$ruleset]['rationalization'];	
                 echo '<td class="table-td-ruleset-total">'.$total.'</td>';
 
-                $rulesetQuery = mysql_query(sprintf($countQuery,$ruleset));
-                $rule = mysql_fetch_array($rulesetQuery);
+                $rulesetQuery = mysqli_query($connection, sprintf($countQuery,$ruleset));
+                $rule = mysqli_fetch_array($rulesetQuery);
                 echo '<td class="table-td-ruleset-endpoint">'.$rule[0].'</td>';
                 echo '</tr>';
             }

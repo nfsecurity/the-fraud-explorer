@@ -10,9 +10,9 @@ use Psr\Log\LoggerInterface;
  *
  * @category Elasticsearch
  * @package  Elasticsearch\Connections
- * @author   Zachary Tong <zachary.tong@elasticsearch.com>
+ * @author   Zachary Tong <zach@elastic.co>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elasticsearch.org
+ * @link     http://elastic.co
  */
 interface ConnectionFactoryInterface
 {
@@ -23,8 +23,13 @@ interface ConnectionFactoryInterface
      * @param LoggerInterface $logger
      * @param LoggerInterface $tracer
      */
-    public function __construct(callable $handler, array $connectionParams,
-                                SerializerInterface $serializer, LoggerInterface $logger, LoggerInterface $tracer);
+    public function __construct(
+        callable $handler,
+        array $connectionParams,
+        SerializerInterface $serializer,
+        LoggerInterface $logger,
+        LoggerInterface $tracer
+    );
 
     /**
      * @param $hostDetails

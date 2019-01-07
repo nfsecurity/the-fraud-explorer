@@ -8,8 +8,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for phrase review
  */
@@ -43,10 +43,9 @@ if (isset($_POST['reviewPhrasesTextArea']))
     curl_setopt($ch, CURLOPT_URL, $urlReview);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultReview=curl_exec($ch);
     curl_close($ch);
-    
-    echo $resultReview;
 }   
     
 header('Location: ' . $_SERVER['HTTP_REFERER']);

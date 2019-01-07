@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  * 
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Functions extension file
  */
@@ -71,7 +71,7 @@ function extractTypedWordsFromAgentID($agentID, $index)
         'body' => [
             'size' => 10000,
             'query' => [
-                'term' => [ 'agentId.raw' => $agentID ]
+                'term' => [ 'agentId' => $agentID ]
             ],
             'sort' => [
                 '@timestamp' => [ 'order' => 'asc' ]
@@ -96,7 +96,7 @@ function extractTypedWordsFromAgentIDWithDate($agentID, $index, $from, $to)
             'query' => [
                 'bool' => [
                     'must' => [
-                        'term' => [ 'agentId.raw' => $agentID ]
+                        'term' => [ 'agentId' => $agentID ]
                     ],
                     'filter' => [
                         'range' => [
@@ -170,17 +170,19 @@ function childFinished($signo)
 
 function syncRuleset()
 {   
+    global $connection;
+
     $queryEndpoints = "SELECT agent FROM t_agents";    
-    $resultEndpoints = mysql_query($queryEndpoints);
+    $resultEndpoints = mysqli_query($connection, $queryEndpoints);
 
     $openProcesses = 0; 
     $procs = array();
     $maxProcesses = cpuCores();
     
     pcntl_signal(SIGCHLD, "childFinished");   
-    mysql_close();
+    mysqli_close($connection);
 
-    while($row = mysql_fetch_array($resultEndpoints))
+    while($row = mysqli_fetch_array($resultEndpoints))
     {
         $pid = pcntl_fork();
 
@@ -193,13 +195,13 @@ function syncRuleset()
         
             $queryRule = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat ASC) AS tbl WHERE agent='%s' LIMIT 1";
             
-            $rulesetQuery = mysql_query(sprintf($queryRule, $endPoint)); 
-            $rulesetArray = mysql_fetch_array($rulesetQuery);
+            $rulesetQuery = mysqli_query($connection, sprintf($queryRule, $endPoint)); 
+            $rulesetArray = mysqli_fetch_array($rulesetQuery);
                
             if ($rulesetArray[0] == NULL) $ruleset = "BASELINE";
             else $ruleset = $rulesetArray[0];
         
-            mysql_query(sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endPoint));
+            mysqli_query($connection, sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endPoint));
             exit();
         }
         else
@@ -227,6 +229,7 @@ function deleteAlertIndex()
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_URL, $urlAlertData);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultAlertData=curl_exec($ch);
     curl_close($ch);
     
@@ -235,6 +238,7 @@ function deleteAlertIndex()
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_URL, $urlAlertStatus);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultAlertStatus=curl_exec($ch);
     curl_close($ch);
 }
@@ -388,9 +392,11 @@ function checkRegexp($fraudTriangleTerms, $jsonFT, $ruleset)
 
 function getRuleset($agentID)
 {
+    global $connection;
+
     $rulesetQuery = sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'", $agentID);
-    $rulesetExecution = mysql_query($rulesetQuery);
-    $rowRuleset = mysql_fetch_assoc($rulesetExecution);
+    $rulesetExecution = mysqli_query($connection, $rulesetQuery);
+    $rowRuleset = mysqli_fetch_assoc($rulesetExecution);
     $ruleset = $rowRuleset['ruleset'];
 
     return $ruleset;
@@ -407,8 +413,8 @@ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
             'query' => [
                 'bool' => [
                     'must' => [
-                        [ 'term' => [ 'agentId.raw' => $agentID ] ],
-                        [ 'term' => [ 'alertType.raw' => $fraudTerm ] ]
+                        [ 'term' => [ 'agentId' => $agentID ] ],
+                        [ 'term' => [ 'alertType' => $fraudTerm ] ]
                     ],
                     'must_not' => [
                             [ 'match' => [ 'falsePositive' => '1'] ]
@@ -433,12 +439,7 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
         'type' => 'TextEvent',
         'body' => [
             'query' => [
-                'bool' => [
-                    'must' => [
-                        [ 'term' => [ 'agentId.raw' => $agentID ] ],
-                        [ 'term' => [ 'eventType.raw' => $alertType ] ]
-                    ]
-                ]
+                'term' => [ 'agentId' => $agentID ]
             ]
         ]
     ];
@@ -453,21 +454,23 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
 
 function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
 {
+    global $connection;
+
     echo "[INFO] Populating SQL-Database with Fraud Triangle Analytics Insights by agent ...\n";
 
     sleep(10);
     include "../lbs/openDBconn.php";
     
-    $resultQuery = mysql_query("SELECT agent FROM t_agents");
+    $resultQuery = mysqli_query($connection, "SELECT agent FROM t_agents");
     
     $openProcesses = 0; 
     $procs = array();
     $maxProcesses = cpuCores();
     
     pcntl_signal(SIGCHLD, "childFinished");
-    mysql_close();
+    mysqli_close($connection);
 
-    if ($row_a = mysql_fetch_array($resultQuery))
+    if ($row_a = mysqli_fetch_array($resultQuery))
     {
         do
         {
@@ -486,9 +489,9 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
                 $totalPressure = $matchesPressure['count'];
                 $totalOpportunity = $matchesOpportunity['count'];
                 $totalRationalization = $matchesRationalization['count'];
-                
-                $result = mysql_query("UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
-                
+
+                $result = mysqli_query($connection, "UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
+
                 exit();
             }
             else
@@ -502,7 +505,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
             }
             
         }
-        while ($row_a = mysql_fetch_array($resultQuery));
+        while ($row_a = mysqli_fetch_array($resultQuery));
         
         while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
     }
@@ -510,8 +513,10 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
 
 function getUserDomain($agentID)
 {
-    $result = mysql_query("SELECT domain FROM t_agents WHERE agent='".$agentID."'");
-    $row = mysql_fetch_array($result);
+    global $connection;
+
+    $result = mysqli_query($connection, "SELECT domain FROM t_agents WHERE agent='".$agentID."'");
+    $row = mysqli_fetch_array($result);
     return $row['domain'];
 }
 
@@ -551,13 +556,15 @@ function checkPhrases($string, $language)
 
 function repopulateSampler()
 {
+    global $connection;
+
     $deleteQuery = "DELETE FROM t_agents WHERE agent in ('johndoe_90214c1_agt', 'nigel_abc14c1_agt', 'desmond_402vcc4_agt', 'spruce_s0214ck_agt', 'fletch_80j14g1_agt', 'ingredia_tq2v4c1_agt', 'archibald_b0314cm_agt', 'niles_1011jcl_agt', 'lurch_t021ycp_agt', 'eleanor_1114c3_agt', 'gordon_bbb94cc_agt', 'gustav_cht14f2_agt', 'jason_j8g12cg_agt', 'burgundy_18hg4cj_agt', 'benjamin_0001kc9_agt')";
     
-    $resultQuery = mysql_query($deleteQuery);
+    $resultQuery = mysqli_query($connection, $deleteQuery);
     
     $insertQuery = "INSERT INTO t_agents (agent, heartbeat, system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization) VALUES ('johndoe_90214c1_agt', '2017-04-15 07:46:12', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.7', 'John Doe', 'BASELINE', 'male', '12723', '8', '10', '7'), ('nigel_abc14c1_agt', '2017-04-15 08:21:10', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.8', 'Nigel Eagle', 'BASELINE', 'female', '7321', '25', '0', '0'), ('desmond_402vcc4_agt', '2017-04-15 09:34:18', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.9', 'Desmond Wiedenbauer', 'BASELINE', 'male', '1983', '0', '25', '0'), ('spruce_s0214ck_agt', '2017-04-06 05:36:20', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.10', 'Spruce Bellevedere', 'BASELINE', 'male', '3000', '0', '0', '25'), ('fletch_80j14g1_agt', '2017-04-15 17:01:12', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.11', 'Fletch Nigel', 'BASELINE', 'male', '1560', '10', '10', '5'), ('ingredia_tq2v4c1_agt', '2017-04-06 03:11:02', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.12', 'Ingredia Douchebag', 'BASELINE', 'female', '3489', '5', '5', '15'), ('archibald_b0314cm_agt', '2017-04-06 09:14:37', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.13', 'Archibald Gibson', 'BASELINE', 'male', '921', '20', '2', '3'), ('niles_1011jcl_agt', '2017-04-15 02:37:13', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.14', 'Niles Ameter', 'BASELINE', 'male', '7528', '9', '13', '3'), ('lurch_t021ycp_agt', '2017-04-15 19:33:49', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.15', 'Lurch Barrow', 'BASELINE', 'male', '9800', '9', '5', '11'), ('eleanor_1114c3_agt', '2017-04-15 03:36:11', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.16', 'Eleanor Rails', 'BASELINE', 'female', '2899', '17', '3', '5'), ('gordon_bbb94cc_agt', '2017-04-15 04:16:09', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.17', 'Gordon Mondover', 'BASELINE', 'male', '1488', '7', '18', '0'), ('gustav_cht14f2_agt', '2017-04-15 06:46:22', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.18', 'Gustav Deck', 'BASELINE', 'male', '23900', '4', '9', '12'), ('jason_j8g12cg_agt', '2017-04-15 09:56:37', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.19', 'Jason Posture', 'BASELINE', 'male', '249', '0', '16', '9'), ('burgundy_18hg4cj_agt', '2017-04-15 17:12:43', '6.2', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.20', 'Burgundy Skinner', 'BASELINE', 'male', '76', '9', '9', '7'), ('benjamin_0001kc9_agt', '2017-04-15 21:00:51', '6.1', 'v1.0.0', 'inactive', 'thefraudexplorer.com', '172.16.10.21', 'Benjamin Evalent', 'BASELINE', 'male', '7599', '7', '7', '11')";
     
-    $resultQuery = mysql_query($insertQuery);
+    $resultQuery = mysqli_query($connection, $insertQuery);
 }
 
 /* Send log data to external file & syslog */
@@ -668,6 +675,8 @@ function is_in_array($array, $key, $key_value)
 
 function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
 {
+    global $connection;
+
     echo "[INFO] Starting fraud inferences, checking alerts ...\n";
 
     /* SQL queries */
@@ -675,7 +684,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
     include "../lbs/openDBconn.php";
 
     $endPointHasAlerts = "SELECT agent, ruleset, heartbeat, domain, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, heartbeat, domain, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE trianglesum > 0 GROUP BY agent";
-    $resultEndPointsHasAlerts = mysql_query($endPointHasAlerts);
+    $resultEndPointsHasAlerts = mysqli_query($connection, $endPointHasAlerts);
 
     /* Expert System Inference Engine */
 
@@ -690,7 +699,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
 
     /* Main Logic */
 
-    if ($rowEndPointsHasAlerts = mysql_fetch_array($resultEndPointsHasAlerts))
+    if ($rowEndPointsHasAlerts = mysqli_fetch_array($resultEndPointsHasAlerts))
     {
         do
         {
@@ -762,12 +771,12 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                 if ($deductionMatch == true)
                 {
                     $queryDeductionsExist = "SELECT * FROM t_inferences WHERE alertid = '".$alertID."'";    
-                    $resultDeductionsExist =  mysql_query($queryDeductionsExist);
+                    $resultDeductionsExist =  mysqli_query($connection, $queryDeductionsExist);
 
-                    if (mysql_num_rows($resultDeductionsExist) == 0) 
+                    if (mysqli_num_rows($resultDeductionsExist) == 0) 
                     {
                         $queryDeduction = sprintf("INSERT INTO t_inferences (endpoint, domain, ruleset, application, date, reason, alertid, deduction) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", rtrim($endPoint, "*"), $domain, $ruleset, $application, $timeStamp, $matchReason, $alertID, $fraudProbDeduction);
-                        $resultDeduction = mysql_query($queryDeduction);
+                        $resultDeduction = mysqli_query($connection, $queryDeduction);
 
                         logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
                     
@@ -782,7 +791,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                 $counter++;
             }
         }
-        while ($rowEndPointsHasAlerts = mysql_fetch_array($resultEndPointsHasAlerts));
+        while ($rowEndPointsHasAlerts = mysqli_fetch_array($resultEndPointsHasAlerts));
     }
 }
 

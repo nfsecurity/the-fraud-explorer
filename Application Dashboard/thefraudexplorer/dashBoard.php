@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for dashboard
  */
@@ -187,7 +187,7 @@ var tour = new Tour({
     }, {
         element: "#elm-top50events",
         placement: 'top',
-        title: "TOP 50 Events",
+        title: "Latest events",
         content: "You can see here a list of top events by fraud triangle analytics ordered by date. You can clic on View events button to expand them in a new page. Hold the mouse in info icon to see more data."
     }, {
         element: "#elm-viewallevents",
@@ -202,7 +202,7 @@ var tour = new Tour({
     }, {
         element: "#elm-top50endpoints",
         placement: 'bottom',
-        title: "Top 50 Endpoints",
+        title: "Top Endpoints",
         content: "You can see here a list of top endpoints ordered by number of events triggered in total, with score and ruleset (department). You can clic on Download as CSV to get this list in XLS format."
     }, {
         element: "#elm-generalstatistics",

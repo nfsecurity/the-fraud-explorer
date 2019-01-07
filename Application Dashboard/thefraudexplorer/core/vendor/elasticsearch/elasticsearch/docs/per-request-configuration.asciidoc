@@ -25,9 +25,7 @@ $params = [
     'index'  => 'test_missing',
     'type'   => 'test',
     'id'     => 1,
-    'client' => [ 
-        'ignore' => 404  <1>
-    ]
+    'client' => [ 'ignore' => 404 ] <1>
 ];
 echo $client->get($params);
 

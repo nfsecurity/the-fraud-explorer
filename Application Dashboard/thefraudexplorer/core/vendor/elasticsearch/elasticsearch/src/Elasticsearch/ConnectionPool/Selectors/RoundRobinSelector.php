@@ -9,9 +9,9 @@ use Elasticsearch\Connections\ConnectionInterface;
  *
  * @category Elasticsearch
  * @package  Elasticsearch\ConnectionPool\Selectors\ConnectionPool
- * @author   Zachary Tong <zachary.tong@elasticsearch.com>
+ * @author   Zachary Tong <zach@elastic.co>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elasticsearch.org
+ * @link     http://elastic.co
  */
 class RoundRobinSelector implements SelectorInterface
 {
@@ -29,8 +29,10 @@ class RoundRobinSelector implements SelectorInterface
      */
     public function select($connections)
     {
+        $returnConnection = $connections[$this->current % count($connections)];
+
         $this->current += 1;
 
-        return $connections[$this->current % count($connections)];
+        return $returnConnection;
     }
 }

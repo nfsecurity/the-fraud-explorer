@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for login
  */
@@ -24,15 +24,14 @@ class MySQLDB
 
     function MySQLDB()
     {
-        $this->connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
-        mysql_select_db(DB_NAME, $this->connection) or die(mysql_error());
+        $this->connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME) or die(mysqli_error());
     }
 
     function confirmIPAddress($value) 
     {
         $q = "SELECT attempts, (CASE when lastlogin is not NULL and DATE_ADD(LastLogin, INTERVAL ".TIME_PERIOD." MINUTE)>NOW() then 1 else 0 end) as Denied FROM ".TBL_ATTEMPTS." WHERE ip = '$value'";
-        $result = mysql_query($q, $this->connection);
-        $data = mysql_fetch_array($result);   
+        $result = mysqli_query($this->connection, $q);
+        $data = mysqli_fetch_array($result);   
 
         if (!$data) 
         {
@@ -58,8 +57,8 @@ class MySQLDB
     function addLoginAttempt($value) 
     {
         $q = "SELECT * FROM ".TBL_ATTEMPTS." WHERE ip = '$value'"; 
-        $result = mysql_query($q, $this->connection);
-        $data = mysql_fetch_array($result);
+        $result = mysqli_query($this->connection, $q);
+        $data = mysqli_fetch_array($result);
 
         if($data)
         {
@@ -68,18 +67,18 @@ class MySQLDB
             if($attempts==3) 
             {
                 $q = "UPDATE ".TBL_ATTEMPTS." SET attempts=".$attempts.", lastlogin=NOW() WHERE ip = '$value'";
-                $result = mysql_query($q, $this->connection);
+                $result = mysqli_query($this->connection, $q);
             }
             else 
             {
                 $q = "UPDATE ".TBL_ATTEMPTS." SET attempts=".$attempts." WHERE ip = '$value'";
-                $result = mysql_query($q, $this->connection);
+                $result = mysqli_query($this->connection, $q);
             }
         }
         else 
         {
             $q = "INSERT INTO ".TBL_ATTEMPTS." (attempts,IP,lastlogin) values (1, '$value', NOW())";
-            $result = mysql_query($q, $this->connection);
+            $result = mysqli_query($this->connection, $q);
         }
     }
 
@@ -91,14 +90,14 @@ class MySQLDB
         }
 
         $q = "SELECT password FROM ".TBL_USERS." WHERE user = '$username'";
-        $result = mysql_query($q, $this->connection);
+        $result = mysqli_query($this->connection, $q);
 
-        if(!$result || (mysql_numrows($result) < 1))
+        if(!$result || (mysqli_num_rows($result) < 1))
         {
             return 1; 
         }
 
-        $dbarray = mysql_fetch_array($result);
+        $dbarray = mysqli_fetch_array($result);
         $dbarray['password'] = stripslashes($dbarray['password']);
         $password = stripslashes($password);
 
@@ -122,9 +121,9 @@ class MySQLDB
         }
 
         $q = "SELECT * FROM ".TBL_USERS." WHERE user = '$username'";
-        $result = mysql_query($q, $this->connection);
+        $result = mysqli_query($this->connection, $q);
 
-        if(!$result || (mysql_numrows($result) < 1))
+        if(!$result || (mysqli_num_rows($result) < 1))
         {
             return 1;
         } 
@@ -135,42 +134,42 @@ class MySQLDB
     function clearLoginAttempts($value) 
     {
         $q = "UPDATE ".TBL_ATTEMPTS." SET attempts = 0 WHERE ip = '$value'"; 
-        return mysql_query($q, $this->connection);
+        return mysqli_query($this->connection, $q);
     }
 
     function getUserInfo($username)
     {
         $q = "SELECT * FROM ".TBL_USERS." WHERE user = '$username'";
-        $result = mysql_query($q, $this->connection);
+        $result = mysqli_query($this->connection, $q);
 
-        if(!$result || (mysql_numrows($result) < 1))
+        if(!$result || (mysqli_num_rows($result) < 1))
         {
             return NULL;
         }
 
-        $dbarray = mysql_fetch_array($result);
+        $dbarray = mysqli_fetch_array($result);
         return $dbarray;
     }
 
     function getUserDomain($username)
     {
         $q = "SELECT domain FROM ".TBL_USERS." WHERE user = '$username'";
-        $result = mysql_query($q, $this->connection);
+        $result = mysqli_query($this->connection, $q);
 
-        if(!$result || (mysql_numrows($result) < 1))
+        if(!$result || (mysqli_num_rows($result) < 1))
         {
             return NULL;
         }
 
-        $dbarray = mysql_fetch_array($result);
+        $dbarray = mysqli_fetch_array($result);
         return $dbarray;
     }
 
     function displayAttempts($value)
     {
         $q = "SELECT ip, attempts,lastlogin FROM ".TBL_ATTEMPTS." WHERE ip = '$value' ORDER BY lastlogin";
-        $result = mysql_query($q, $this->connection);
-        $num_rows = mysql_numrows($result);
+        $result = mysqli_query($this->connection, $q);
+        $num_rows = mysqli_num_rows($result);
 
         if($num_rows == 0)
         {
@@ -180,14 +179,28 @@ class MySQLDB
 
         for($i=0; $i<$num_rows; $i++)
         {
-            $uip  = mysql_result($result,$i,"ip");
-            $uattempt = mysql_result($result,$i,"attempts");
-            $ulogin = mysql_result($result,$i,"lastlogin");
+            $uip  = mysqli_result($result,$i,"ip");
+            $uattempt = mysqli_result($result,$i,"attempts");
+            $ulogin = mysqli_result($result,$i,"lastlogin");
 
             echo "Your failed attempts: $uattempt from $uip at $ulogin";
         }
     }
 };
+
+function mysqli_result($res, $row=0, $col=0)
+{
+    $numrows = mysqli_num_rows($res);
+
+    if ($numrows && $row <= ($numrows-1) && $row >=0)
+    {
+        mysqli_data_seek($res,$row);
+        $resrow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+
+        if (isset($resrow[$col])) return $resrow[$col];
+    }
+    return false;
+}
 
 $database = new MySQLDB;
 include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";

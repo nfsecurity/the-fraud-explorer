@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for graph points visualization
  */
@@ -226,18 +226,18 @@ $graphPoints = json_decode($coordinates, true);
                     
             if ($session->domain == "all")
             {
-                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
-                else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
+                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL);
+                else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
             }
             else
             {
-                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
-                else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
+                if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain);
+                else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
             }
             
             $counter = 0;
 
-            if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
+            if($endpointsFraud = mysqli_fetch_assoc($queryEndpoints))
             {
                 do
                 {
@@ -266,7 +266,7 @@ $graphPoints = json_decode($coordinates, true);
                     
                     $counter++;
                 }
-                while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
+                while ($endpointsFraud = mysqli_fetch_assoc($queryEndpoints));
             }
 
             ?>

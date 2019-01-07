@@ -9,15 +9,16 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Security methods
  */
 
 function filter($variable)
 {
-    return mysql_real_escape_string($variable);
+    include "/var/www/html/thefraudexplorer/lbs/openDBconn.php";
+    return mysqli_real_escape_string($connection, $variable);
 }
 
 function checkEndpoint($endPoint, $domain)
@@ -26,7 +27,7 @@ function checkEndpoint($endPoint, $domain)
     
     if ($domain == "all" && $endPoint == "all") return true;
     
-    $result = mysql_query(sprintf("SELECT * FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s' AND domain='%s'", $endPoint, $domain));
+    $result = mysqli_query($connection, sprintf("SELECT * FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s' AND domain='%s'", $endPoint, $domain));
     include "lbs/closeDBconn.php";
     
     if(mysql_fetch_array($result) !== false) return true;
@@ -36,10 +37,10 @@ function checkEndpoint($endPoint, $domain)
 function checkEvent($endPoint)
 {
     include "lbs/openDBconn.php";    
-    $result = mysql_query(sprintf("SELECT * FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s'", $endPoint));
+    $result = mysqli_query($connection, sprintf("SELECT * FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s'", $endPoint));
     include "lbs/closeDBconn.php";
     
-    if(mysql_fetch_array($result) !== false) return true;
+    if(mysqli_fetch_array($result) !== false) return true;
     else if ($endPoint == "all") return true;
     return false;
 }

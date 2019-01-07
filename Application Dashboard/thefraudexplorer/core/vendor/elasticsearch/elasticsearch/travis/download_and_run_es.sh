@@ -4,8 +4,10 @@ if [ -z $ES_VERSION ]; then
     exit 1;
 fi;
 
-
 killall java 2>/dev/null
+
+which java
+java -version
 
 
 echo "Downloading Elasticsearch v${ES_VERSION}-SNAPSHOT..."
@@ -18,16 +20,15 @@ unzip "elasticsearch-latest-SNAPSHOT.zip"
 echo "Adding repo to config..."
 find . -name "elasticsearch.yml" | while read TXT ; do echo 'repositories.url.allowed_urls: ["http://*"]' >> $TXT ; done
 find . -name "elasticsearch.yml" | while read TXT ; do echo 'path.repo: ["/tmp"]' >> $TXT ; done
-
-
+find . -name "elasticsearch.yml" | while read TXT ; do echo 'node.max_local_storage_nodes: 1' >> $TXT ; done
+find . -name "elasticsearch.yml" | while read TXT ; do echo 'cluster.routing.allocation.disk.watermark.low: 0.1%' >> $TXT ; done
+find . -name "elasticsearch.yml" | while read TXT ; do echo 'cluster.routing.allocation.disk.watermark.high: 0.1%' >> $TXT ; done
+find . -name "elasticsearch.yml" | while read TXT ; do echo 'node.attr.testattr: test' >> $TXT ; done
+find . -name "elasticsearch.yml" | while read TXT ; do echo 'script.max_compilations_rate: 2048/1m' >> $TXT ; done
 
 echo "Starting Elasticsearch v${ES_VERSION}"
-./elasticsearch-*/bin/elasticsearch \
-    -Des.network.host=localhost \
-    -Des.discovery.zen.ping.multicast.enabled=false \
-    -Des.discovery.zen.ping_timeout=1s \
-    -Des.http.port=9200 \
-    -Des.node.testattr=test \
-    -d
+
+./elasticsearch-*/bin/elasticsearch -d
+
 
 sleep 3

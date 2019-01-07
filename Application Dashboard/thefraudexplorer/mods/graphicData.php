@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for graphic data
  */
@@ -107,7 +107,7 @@ include "../lbs/endpointMethods.php";
         display: block;
         border: 1px solid #e8e9e8;
         width: 100%;
-        height: 302px !important; 
+        height: auto !important; 
         max-height: 302px !important;
         overflow-y: scroll;
         border-radius: 5px;
@@ -237,16 +237,16 @@ include "../lbs/endpointMethods.php";
      
     if ($session->domain == "all")
     {
-        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQL);
-        else $queryEndpoints = mysql_query($queryEndpointsSQL_wOSampler);
+        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL);
+        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
     }
     else
     {
-        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysql_query($queryEndpointsSQLDomain);
-        else $queryEndpoints = mysql_query($queryEndpointsSQLDomain_wOSampler);
+        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain);
+        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
     }
 
-    if(mysql_num_rows($queryEndpoints) == 0)
+    if(mysqli_num_rows($queryEndpoints) == 0)
     {
         echo '<div class="div-container">';
         echo '<p class="not-ruleset">There is no data at this time regarding this ruleset, maybe you did not have categorized/organized your endpoints according to the organization chart. Please spend some time clasifying your users and get back later to see their representation.</p>';
@@ -277,7 +277,7 @@ include "../lbs/endpointMethods.php";
 
             <?php
 
-            if($endpointsFraud = mysql_fetch_assoc($queryEndpoints))
+            if($endpointsFraud = mysqli_fetch_assoc($queryEndpoints))
             {
                 $counter = 0;
                 
@@ -309,7 +309,7 @@ include "../lbs/endpointMethods.php";
                     
                     $counter++;
                 }
-                while ($endpointsFraud = mysql_fetch_assoc($queryEndpoints));
+                while ($endpointsFraud = mysqli_fetch_assoc($queryEndpoints));
             }
 
             ?>

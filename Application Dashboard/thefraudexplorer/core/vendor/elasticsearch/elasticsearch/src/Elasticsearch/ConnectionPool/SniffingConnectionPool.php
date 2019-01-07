@@ -6,7 +6,7 @@ use Elasticsearch\Common\Exceptions\Curl\OperationTimeoutException;
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use Elasticsearch\ConnectionPool\Selectors\SelectorInterface;
 use Elasticsearch\Connections\Connection;
-use Elasticsearch\Connections\ConnectionFactory;
+use Elasticsearch\Connections\ConnectionFactoryInterface;
 
 class SniffingConnectionPool extends AbstractConnectionPool implements ConnectionPoolInterface
 {
@@ -16,7 +16,10 @@ class SniffingConnectionPool extends AbstractConnectionPool implements Connectio
     /** @var  int */
     private $nextSniff = -1;
 
-    public function __construct($connections, SelectorInterface $selector, ConnectionFactory $factory, $connectionPoolParams)
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($connections, SelectorInterface $selector, ConnectionFactoryInterface $factory, $connectionPoolParams)
     {
         parent::__construct($connections, $selector, $factory, $connectionPoolParams);
 
@@ -125,13 +128,13 @@ class SniffingConnectionPool extends AbstractConnectionPool implements Connectio
 
     private function parseClusterState($transportSchema, $nodeInfo)
     {
-        $pattern       = '/\/([^:]*):([0-9]+)\]/';
+        $pattern       = '/([^:]*):([0-9]+)/';
         $schemaAddress = $transportSchema . '_address';
         $hosts         = array();
 
         foreach ($nodeInfo['nodes'] as $node) {
-            if (isset($node[$schemaAddress]) === true) {
-                if (preg_match($pattern, $node[$schemaAddress], $match) === 1) {
+            if (isset($node['http']) === true && isset($node['http']['publish_address']) === true) {
+                if (preg_match($pattern, $node['http']['publish_address'], $match) === 1) {
                     $hosts[] = array(
                         'host' => $match[1],
                         'port' => (int) $match[2],

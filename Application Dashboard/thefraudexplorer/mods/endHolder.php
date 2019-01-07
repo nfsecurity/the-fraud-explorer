@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for paint main endpoints list
  */
@@ -69,6 +69,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
         
@@ -76,10 +77,11 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryEndpointsSQL);
+        $result_a = mysqli_query($connection, $queryEndpointsSQL);
     }
     else
     {
@@ -94,6 +96,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
         
@@ -104,10 +107,11 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryEndpointsSQL_wOSampler);
+        $result_a = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
     }
 }
 else
@@ -125,6 +129,7 @@ else
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
         
@@ -135,10 +140,11 @@ else
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryEndpointsSQLDomain);
+        $result_a = mysqli_query($connection, $queryEndpointsSQLDomain);
     }
     else
     {
@@ -153,6 +159,7 @@ else
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
         
@@ -163,10 +170,11 @@ else
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
         
-        $result_a = mysql_query($queryEndpointsSQLDomain_wOSampler);
+        $result_a = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
     }
 }
 
@@ -174,6 +182,7 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL,$urlSize);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultSize=curl_exec($ch);
 curl_close($ch);
 
@@ -203,7 +212,7 @@ echo '<th class="specialth" id="elm-delete-dashboard">DEL</th>';
 echo '<th class="specialth" id="elm-set-dashboard">SET</th></tr>';
 echo '</thead><tbody>';
 
-if ($row_a = mysql_fetch_array($result_a))
+if ($row_a = mysqli_fetch_array($result_a))
 {
     do
     {
@@ -287,8 +296,8 @@ if ($row_a = mysql_fetch_array($result_a))
 
         /* Fraud triangle counts and score */
 
-        $scoreQuery = mysql_query($queryConfig);
-        $scoreResult = mysql_fetch_array($scoreQuery);
+        $scoreQuery = mysqli_query($connection, $queryConfig);
+        $scoreResult = mysqli_fetch_array($scoreQuery);
 
         $level = "low";
         if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']) $level="low";
@@ -311,7 +320,7 @@ if ($row_a = mysql_fetch_array($result_a))
         echo '<td class="specialtd"><a class="setup-endpoint" href="mods/setupEndpoint?endpoint='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
         echo '</tr>';
     }
-    while ($row_a = mysql_fetch_array($result_a));
+    while ($row_a = mysqli_fetch_array($result_a));
 
     echo '</tbody></table>'; 
     

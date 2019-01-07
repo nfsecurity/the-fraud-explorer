@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for update machine status
  */
@@ -22,8 +22,10 @@ include "lbs/security.php";
 
 function queryOrDie($query)
 {
-    $query = mysql_query($query);
-    if (! $query) exit(mysql_error());
+    global $connection;
+
+    $query = mysqli_query($connection, $query);
+    if (! $query) exit(mysqli_error($connection));
     return $query;
 }
 
@@ -49,8 +51,8 @@ $domain = strtolower(decRijndael(filter($_GET['d'])));
 $endpoint=$endpointIdentification;
 $configFile = parse_ini_file("config.ini");
 $ipAddress = getEndpointIP();
-$keyquery = mysql_query("SELECT password FROM t_crypt");
-$keypass = mysql_fetch_array($keyquery);
+$keyquery = mysqli_query($connection, "SELECT password FROM t_crypt");
+$keypass = mysqli_fetch_array($keyquery);
 
 if (empty($domain)) $domain = "mydomain.loc";
 
@@ -58,15 +60,15 @@ if (empty($domain)) $domain = "mydomain.loc";
 
 if ($key == $keypass[0])
 {
-    $result=mysql_query("SELECT count(*) FROM t_agents WHERE agent='".$endpoint."'");
-    if ($row_a = mysql_fetch_array($result)) { $count = $row_a[0]; }
-    $date=date('Y-M-d H:i:s');
+    $result = mysqli_query($connection, "SELECT count(*) FROM t_agents WHERE agent='".$endpoint."'");
+    if ($row_a = mysqli_fetch_array($result)) { $count = $row_a[0]; }
+    $date = date('Y-M-d H:i:s');
 
     if($count[0]>0)
     {
         date_default_timezone_set($configFile['php_timezone']);
         $datecalendar=date('Y-m-d');
-        $result=mysql_query("Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
+        $result=mysqli_query($connection, "Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
     }
     else
     {

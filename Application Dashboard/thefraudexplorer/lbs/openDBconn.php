@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for setup DB connection
  */
@@ -20,7 +20,6 @@ $dbhost = $configFile['db_dbhost'];
 $dbuser = $configFile['db_user'];
 $dbpassword = $configFile['db_password'];
 $db = $configFile['db_db'];
-$connection = mysql_connect($dbhost, $dbuser, $dbpassword, true);
-mysql_select_db($db, $connection);
+$connection = mysqli_connect($dbhost, $dbuser, $dbpassword, $db);
 
 ?>

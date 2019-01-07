@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for top menu
  */
@@ -65,9 +65,9 @@ else
 }
 
 include "../lbs/openDBconn.php";
-$count_all = mysql_fetch_assoc(mysql_query($queryCountTotalsSQL));
-$count_online = mysql_fetch_assoc(mysql_query($queryCountActiveSQL));
-$count_offline = mysql_fetch_assoc(mysql_query($queryCountInactiveSQL));
+$count_all = mysqli_fetch_assoc(mysqli_query($connection, $queryCountTotalsSQL));
+$count_online = mysqli_fetch_assoc(mysqli_query($connection, $queryCountActiveSQL));
+$count_offline = mysqli_fetch_assoc(mysqli_query($connection, $queryCountInactiveSQL));
 include "../lbs/closeDBconn.php";
 
 ?>

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types = 1);
+
 require_once '../vendor/autoload.php';
 
 $loader = new Twig_Loader_Filesystem('templates');
@@ -179,7 +181,13 @@ function generateTemplate($path, $template)
 
     $data['url']['processed'] = processURLPaths($data);
     $data['url']['default'] = getDefaultPath($data['url']['processed'][count($data['url']['processed'])-1]);
-
+    if (count($data['methods']) > 1) {
+        if (in_array("GET", $data['methods'])) {
+            $data['methods'] = "GET";
+        } else {
+            $data['methods'] = $data['methods'][0];
+        }
+    }
     $renderVars = array(
         'json'      => $json,
         'data'      => $data,

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for cryptography
  */
@@ -19,8 +19,10 @@ include "/var/www/html/thefraudexplorer/lbs/openDBconn.php";
 
 function encRijndael($unencrypted)
 {
-    $result_key=mysql_query("SELECT * FROM t_crypt");
-    $row_key = mysql_fetch_array($result_key);
+    global $connection;
+
+    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];
     $iv_utf = mb_convert_encoding($iv, 'UTF-8');
@@ -31,8 +33,10 @@ function encRijndael($unencrypted)
 
 function decRijndael($encrypted)
 {
-    $result_key=mysql_query("SELECT * FROM t_crypt");
-    $row_key = mysql_fetch_array($result_key);
+    global $connection;
+
+    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];
     $iv_utf = mb_convert_encoding($iv, 'UTF-8');
@@ -43,8 +47,10 @@ function decRijndael($encrypted)
 
 function decRijndaelWOSC($encrypted)
 {
-    $result_key=mysql_query("SELECT * FROM t_crypt");
-    $row_key = mysql_fetch_array($result_key);
+    global $connection;
+
+    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];
     $iv_utf = mb_convert_encoding($iv, 'UTF-8');

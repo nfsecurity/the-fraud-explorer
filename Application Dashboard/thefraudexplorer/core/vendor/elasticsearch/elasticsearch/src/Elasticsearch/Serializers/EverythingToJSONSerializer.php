@@ -2,14 +2,16 @@
 
 namespace Elasticsearch\Serializers;
 
+use Elasticsearch\Common\Exceptions\RuntimeException;
+
 /**
  * Class EverythingToJSONSerializer
  *
  * @category Elasticsearch
  * @package  Elasticsearch\Serializers
- * @author   Zachary Tong <zachary.tong@elasticsearch.com>
+ * @author   Zachary Tong <zach@elastic.co>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
- * @link     http://elasticsearch.org
+ * @link     http://elastic.co
  */
 class EverythingToJSONSerializer implements SerializerInterface
 {
@@ -22,7 +24,10 @@ class EverythingToJSONSerializer implements SerializerInterface
      */
     public function serialize($data)
     {
-        $data = json_encode($data);
+        $data = json_encode($data, JSON_PRESERVE_ZERO_FRACTION);
+        if ($data === false) {
+            throw new RuntimeException("Failed to JSON encode: ".json_last_error());
+        }
         if ($data === '[]') {
             return '{}';
         } else {

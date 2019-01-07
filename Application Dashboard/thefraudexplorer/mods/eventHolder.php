@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for paint endpoint data table
  */
@@ -51,7 +51,8 @@ if ($session->domain == "all")
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$urlWords);
+        curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -66,6 +67,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -83,6 +85,7 @@ else
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -97,6 +100,7 @@ else
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
     }
@@ -152,8 +156,8 @@ $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
 
 /* Endpoint domain */
 
-$domainQuery = mysql_query(sprintf($queryDomain, $endpointDECSQL));
-$domain = mysql_fetch_array($domainQuery);
+$domainQuery = mysqli_query($connection, sprintf($queryDomain, $endpointDECSQL));
+$domain = mysqli_fetch_array($domainQuery);
 
 /* Main Table */
 
@@ -233,6 +237,7 @@ if ($endpointDECSQL != "all")
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultValues=curl_exec($ch);
         curl_close($ch);
     
@@ -326,9 +331,9 @@ else
         
         echo '<td class="endpointtd-all">';
          
-        $queryUserDomain = mysql_query(sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
                     
-        $userDomain = mysql_fetch_assoc($queryUserDomain);
+        $userDomain = mysqli_fetch_assoc($queryUserDomain);
         $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
         $endpointDec = base64_encode(base64_encode($userDomain['agent']));
         $totalWordHits = $userDomain['totalwords'];
@@ -380,6 +385,7 @@ else
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultValues=curl_exec($ch);
         curl_close($ch);
     
@@ -452,16 +458,16 @@ else
     
     if ($session->domain == "all")
     {
-        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQL);
-        else $queryTerms = mysql_query($queryTermsSQL_wOSampler);
+        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQL);
+        else $queryTerms = mysqli_query($connection, $queryTermsSQL_wOSampler);
     }
     else
     {
-        if ($samplerStatus == "enabled") $queryTerms = mysql_query($queryTermsSQLDomain);
-        else $queryTerms = mysql_query($queryTermsSQLDomain_wOSampler);
+        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQLDomain);
+        else $queryTerms = mysqli_query($connection, $queryTermsSQLDomain_wOSampler);
     }
         
-    $fraudTerms = mysql_fetch_assoc($queryTerms);
+    $fraudTerms = mysqli_fetch_assoc($queryTerms);
     $fraudScore = ($fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'])/3;
     
     /* Pager */

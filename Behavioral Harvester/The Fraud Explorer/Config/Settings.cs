@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Internal configuration
  */
@@ -265,7 +265,7 @@ namespace TFE_core.Config
             if (type == "aesKey") return "1uBu8ycVugDIJz61";
             if (type == "aesIV") return "1uBu8ycVugDIJz61";
             if (type == "serverPassword") return "KGBz77";
-            if (type == "harvesterVersion") return "1.2.2";
+            if (type == "harvesterVersion") return "1.3.1";
             if (type == "agentPostfix") return "_agt";
             if (type == "textPort") return "5965";
             else return "";

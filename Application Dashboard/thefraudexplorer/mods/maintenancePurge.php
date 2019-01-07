@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for maintenance
  */
@@ -207,6 +207,7 @@ include "../lbs/openDBconn.php";
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 $resultSize=curl_exec($ch);
                 curl_close($ch);
 
@@ -236,6 +237,7 @@ include "../lbs/openDBconn.php";
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 $resultSize=curl_exec($ch);
                 curl_close($ch);
 
@@ -285,7 +287,7 @@ include "../lbs/openDBconn.php";
                 <?php
                 
                 $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY)";
-                $countDead = mysql_fetch_assoc(mysql_query($queryDeadEndpoints));
+                $countDead = mysqli_fetch_assoc(mysqli_query($connection, $queryDeadEndpoints));
                 
                 echo $countDead['total']." sessions in dead status (30 days)";
                 
@@ -301,6 +303,7 @@ include "../lbs/openDBconn.php";
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
                 $resultSize=curl_exec($ch);
                 curl_close($ch);
 

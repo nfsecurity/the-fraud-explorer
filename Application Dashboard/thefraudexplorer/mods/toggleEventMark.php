@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-01
- * Revision: v1.2.2-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Code for false positive marking
  */
@@ -43,6 +43,7 @@ if (!empty($_POST['toggle-event']))
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $urlEventValue);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultValues=curl_exec($ch);
     curl_close($ch);
 
@@ -63,6 +64,7 @@ if (!empty($_POST['toggle-event']))
     curl_setopt($ch, CURLOPT_URL,$urlEvents);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultEvents=curl_exec($ch);
     curl_close($ch);
 }
@@ -74,6 +76,7 @@ else if (!empty($_POST['delete-event']))
     curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/".$index."/".$type."/".$regid); 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_exec($ch); 
     curl_close($ch); 
 }
