@@ -1,0 +1,19 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php
+
+# Deny access to config file
+
+<files config.ini>
+  order deny,allow
+  deny from all
+</files>
+
+# Deny access to PHP Composer files
+
+<FilesMatch "composer\.json|composer\.lock|\.!51118!composer\.phar|composer\.phar">
+  order deny,allow
+  deny from all
+</FilesMatch>
+
