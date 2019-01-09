@@ -16,7 +16,7 @@ A través de endpoints instalados en los equipos de las personas en un entorno c
 
 ## Instalación y configuración
 
-En la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki) se describen los dos mecanismos de instalación, el manual y el automático basado en Appliance virtual, por favor siga las guías oficiales de instalación, todo lo que se necesita para implementar *The Fraud Explorer está aquí*.
+En la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki) se describen los dos mecanismos de instalación, el manual y el automático basado en Appliance virtual, por favor siga las guías oficiales de instalación, todo lo que se necesita para implementar *The Fraud Explorer* está aquí.
 
 ## Qué obtiene usted al implementar esta solución
 
