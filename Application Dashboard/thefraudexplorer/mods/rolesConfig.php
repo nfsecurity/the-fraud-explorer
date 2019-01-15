@@ -58,6 +58,7 @@ include "../lbs/openDBconn.php";
     .window-footer-config
     {
         padding: 0px 0px 0px 0px;
+        margin: 15px 0px 0px 0px;
     }
 
     .div-container
@@ -214,7 +215,6 @@ include "../lbs/openDBconn.php";
             </tbody>
         </table>
 
-        <br>
         <div class="modal-footer window-footer-config">
             <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
             <input type="submit" name="delete" class="btn btn-danger setup" value="Delete User" style="outline: 0 !important;">

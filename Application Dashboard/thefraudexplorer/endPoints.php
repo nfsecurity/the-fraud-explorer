@@ -109,7 +109,7 @@ $_SESSION['instance'] = "endPoints";
                             <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
                         </div>
 
-                        <div class="modal-body">
+                        <div class="modal-body" style="margin: 0px 10px 15px 10px;">
                             <p style="text-align:left; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
                             <p class="debug-url window-debug"></p>
                         </div>
@@ -149,7 +149,7 @@ $_SESSION['instance'] = "endPoints";
                                 <h4 class="modal-title window-title" id="myModalLabel">Phrase collection switching</h4>
                             </div>
 
-                            <div class="modal-body">
+                            <div class="modal-body" style="margin: 0px 10px 15px 10px;">
                                 <p style="text-align:justify; font-size: 12px;"><br>You are about to switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server, and The Fraud Explorer can't do the work. You can switch the times you want. Do you want to proceed ?</p>
                                 <p class="debug-url window-debug"></p>
                             </div>

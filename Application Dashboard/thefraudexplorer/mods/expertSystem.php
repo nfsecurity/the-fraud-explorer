@@ -208,6 +208,7 @@ include "../lbs/elasticsearch.php";
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
+        margin: 0px 0px 15px 0px;
     }
     
     .font-icon-gray 

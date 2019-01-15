@@ -67,6 +67,7 @@ include "../lbs/openDBconn.php";
     .window-footer-config
     {
         padding: 0px 0px 0px 0px;
+        margin: 15px 0px 0px 0px;
     }
 
     .div-container

@@ -66,8 +66,8 @@ $urlrefer=filter($_GET['urlrefer']);
 <div class="div-container">
     <form id="formConfig" name="formConfig" method="post" action=<?php echo '"mods/toggleEventMark?regid='.$regid.'&endpoint='.$endpoint.'&index='.$index.'&type='.$type.'&urlrefer='.$urlrefer.'"'; ?>>
         
-        <div class="modal-body window-body">
-            <p style="text-align:justify; font-size: 12px;"><br>You are about to mark this fraud triangle event as inactive, active, false positive or viceversa, this procedure disable or enable this event in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
+        <div class="modal-body window-body" style="margin: 0px 10px 15px 10px;">
+            <p style="text-align:justify; font-size: 12px;">You are about to mark this fraud triangle event as inactive, active, false positive or viceversa, this procedure disable or enable this event in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>
             <p class="debug-url window-debug"></p>
         </div>
 
