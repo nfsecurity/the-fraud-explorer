@@ -386,7 +386,7 @@ if ($row_a = mysqli_fetch_array($result_a))
 
                 <form action="mods/departmentsUpload" id="departmentsUpload" method="post" enctype="multipart/form-data" accept-charset="utf-8">           
                     <div class="departmentsUploadStyle" style="outline: 0 !important;">                                             
-                        <button type="button" class="departments-load" id="departments-msi" onclick="document.getElementById('departmentsToUpload').click();">Departmentalizing</button>            
+                        <button type="button" class="departments-load" id="elm-departments" onclick="document.getElementById('departmentsToUpload').click();">Departmentalizing</button>            
                         <input type="file" name="departmentsToUpload" id="departmentsToUpload" class="upload" />
                     </div>
                 </form>

@@ -100,15 +100,25 @@ var tour = new Tour({
     smartPlacement: false,
     backdrop: false,
     steps: [{
-        element: "#scatterplot",
-        placement: 'top',
+        element: "#elm-bubble",
+        placement: 'left',
         title: "Scatter graph",
-        content: "This is the module used for doing horizontal and vertical analytics. The circles represents events and are plotted using the pressure, opportunity and rationlaization axis with a score variable."
+        content: "This is the module used for doing horizontal and vertical analytics. The points represents events and are plotted using the pressure, opportunity and rationlaization axis with a score variable."
+    }, {
+        element: "#elm-vertical",
+        placement: 'bottom',
+        title: "Vertical analytics",
+        content: "This is the module where you can do vertical analytics, examining data flow and viewing source tables. With vertical analytics you see all events and data hints usefull for deep behavior analysis."
     }, {
         element: "#elm-analyticsaccess",
         placement: 'bottom',
+        title: "Access all events",
+        content: "With this link you can access the main events database that originates this graph. In that module you will see all behaviors regarding fraud triangle theory from Donald Ray Cressey."
+    }, {
+        element: "#elm-ai",
+        placement: 'bottom',
         title: "Analytics data access",
-        content: "You can access all events data, see the data source that produces this scatter graph and enter to the artificial intelligence deductions. Use this modules as the principal source for decision taking."
+        content: "this is the Artificial Intelligence module where you can see the deductions and inferences that the expert system produces based on the knowledge and facts database."
     }, {
         element: "#elm-scope",
         placement: 'right',
@@ -118,12 +128,7 @@ var tour = new Tour({
         element: "#elm-legend",
         placement: 'right',
         title: "Graph leyend",
-        content: "Depends of the data, the event can be represented in various forms. A red point indicates that the endpoint has a high score and a yellow point indicates that endpoint has a lower score."
-    }, {
-        element: "#elm-opportunity",
-        placement: 'right',
-        title: "Opportunity variable",
-        content: "The scatter graph has 4 variables, 2 of them represented in axes. Another variable is represented by the size of the point and the last variable is represented by score. Here is the opportunity variable values."
+        content: "Depends of the data, the event can be represented in various forms. A dark star indicates that the endpoint has a high score and a light star indicates that endpoint has a lower score."
     }, {
         element: "#elm-phrasecounts",
         placement: 'right',

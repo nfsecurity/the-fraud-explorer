@@ -139,11 +139,6 @@ var tour = new Tour({
     smartPlacement: false,
     backdrop: false,
     steps: [{
-        element: "#elm-details-event",
-        placement: 'right',
-        title: "Event details",
-        content: "Hover mouse pointer over this icon, you will see the event consolidation data. This icon show all the event data you can see in the main table plus the regular expression matched by the phrase."
-    }, {
         element: "#elm-date-event",
         placement: 'bottom',
         title: "Event date",

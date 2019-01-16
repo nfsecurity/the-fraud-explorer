@@ -174,11 +174,6 @@ var tour = new Tour({
     smartPlacement: false,
     backdrop: false,
     steps: [{
-        element: "#elm-details-dashboard",
-        placement: 'right',
-        title: "Endpoint details",
-        content: "You can hover the mouse pointer over this icon to see some endpoint data, like identification, corporate domain, operating system, IP address, sessions and connection status."
-    }, {
         element: "#elm-endpoints-dashboard",
         placement: 'bottom',
         title: "Endpoints",
@@ -241,13 +236,18 @@ var tour = new Tour({
     }, {
         element: "#elm-csv",
         placement: 'top',
-        title: "Download data in CSV",
+        title: "Export endpoints",
         content: "By pressing thus button you can export the endpoint list in a comma separated value (CSV) file. This file is useful when you need to filter and make some reports in an executive manner."
     }, {
         element: "#elm-msi",
-        placement: 'left',
+        placement: 'top',
         title: "Download MSI Endpoint",
         content: "The MSI file you obtain here is useful for deploy the software in the Active Directory enviromnet of your organization. Please note that this MSI is only valid for your public IP address."
+    }, {
+        element: "#elm-departments",
+        placement: 'top',
+        title: "Departments",
+        content: "You can clic this button to upload a CSV file with the content of departments for each user you can specify in the format login, domain, full name, department or ruleset, gender."
     }, {
         element: "#elm-switch-phrase-collection",
         placement: 'top',

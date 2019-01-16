@@ -305,17 +305,17 @@ include "../lbs/elasticsearch.php";
             
             /* Data Table & Events */
             
-            echo '<div class="data-table-icon" id="elm-analyticsaccess"><br>';
-            echo '<span class="fa fa-cogs font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#">Expert deductions</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="eventData?endpoint='.base64_encode(base64_encode("all")).'">Access all events</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#">Vertical analytics</a>';
+            echo '<div class="data-table-icon"><br>';
+            echo '<span class="fa fa-cogs font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai">Expert deductions</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="eventData?endpoint='.base64_encode(base64_encode("all")).'" id="elm-analyticsaccess">Access all events</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
             echo '</div>';
                     
             ?>
             
             <div class="fraudtriangle-bubble-container">
                 <div class="tl"><br>High Pressures&emsp;</div>
-                <div class="tr"><br>&emsp;High Fraud Triangle Behaviors</div>
+                <div class="tr" id="elm-bubble"><br>&emsp;High Fraud Triangle Behaviors</div>
                 <div class="bl"><br>Fraud Triangle Behaviors&emsp;</div>
                 <div class="br"><br>&emsp;High Rationalizations</div>
                 <canvas id="fraudtriangle-graph"></canvas>
