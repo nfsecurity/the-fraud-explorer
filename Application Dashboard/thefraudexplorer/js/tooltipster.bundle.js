@@ -7,14 +7,14 @@
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
-    define(["jQuery"], function (a0) {
+    define(["jquery"], function (a0) {
       return (factory(a0));
     });
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(require("jQuery"));
+    module.exports = factory(require("jquery"));
   } else {
     factory(jQuery);
   }
@@ -39,9 +39,9 @@ var defaults = {
 		IEmin: 6,
 		interactive: false,
 		multiple: false,
-		// must be 'body' for now, or an element positioned at (0, 0)
+		// will default to document.body, or must be an element positioned at (0, 0)
 		// in the document, typically like the very top views of an app.
-		parent: 'body',
+		parent: null,
 		plugins: ['sideTip'],
 		repositionOnScroll: false,
 		restoration: 'none',
@@ -69,9 +69,10 @@ var defaults = {
 		updateAnimation: 'rotate',
 		zIndex: 9999999
 	},
-	// we'll avoid using window as a global. To run in Node,
-	// window must be mocked up through $.tooltipster.__setWindow
-	win = (window !== undefined) ? window : null,
+	// we'll avoid using the 'window' global as a good practice but npm's
+	// jquery@<2.1.0 package actually requires a 'window' global, so not sure
+	// it's useful at all
+	win = (typeof window != 'undefined') ? window : null,
 	// env will be proxied by the core for plugins to have access its properties
 	env = {
 		// detect if this device can trigger touch events. Better have a false
@@ -79,14 +80,16 @@ var defaults = {
 		// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/touchevents.js
 		// http://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
 		hasTouchCapability: !!(
-				'ontouchstart' in win
-			||	(win.DocumentTouch && document instanceof DocumentTouch)
-			||	navigator.maxTouchPoints
+			win
+			&&	(	'ontouchstart' in win
+				||	(win.DocumentTouch && win.document instanceof win.DocumentTouch)
+				||	win.navigator.maxTouchPoints
+			)
 		),
 		hasTransitions: transitionSupport(),
 		IE: false,
 		// don't set manually, it will be updated by a build task after the manifest
-		semVer: '4.0.4',
+		semVer: '4.2.6',
 		window: win
 	},
 	core = function() {
@@ -429,9 +432,8 @@ $.Tooltipster = function(element, options) {
 	this.__Content;
 	// for the size tracker
 	this.__contentBcr;
-	// to disable the tooltip once the destruction has begun
+	// to disable the tooltip after destruction
 	this.__destroyed = false;
-	this.__destroying = false;
 	// we can't emit directly on the instance because if a method with the same
 	// name as the event exists, it will be called by jQuery. Se we use a plain
 	// object as emitter. This emitter is for internal use by plugins,
@@ -528,7 +530,20 @@ $.Tooltipster.prototype = {
 				self.__contentSet(self.__options.content);
 			}
 			else {
-				self.__contentSet(initialTitle);
+				
+				var selector = self._$origin.attr('data-tooltip-content'),
+					$el;
+				
+				if (selector){
+					$el = $(selector);
+				}
+				
+				if ($el && $el[0]) {
+					self.__contentSet($el.first());
+				}
+				else {
+					self.__contentSet(initialTitle);
+				}
 			}
 			
 			self._$origin
@@ -552,7 +567,7 @@ $.Tooltipster.prototype = {
 			
 			// to detect swiping
 			if (env.hasTouchCapability) {
-				$('body').on('touchmove.'+ self.__namespace +'-triggerOpen', function(event) {
+				$(env.window.document.body).on('touchmove.'+ self.__namespace +'-triggerOpen', function(event) {
 					self._touchRecordEvent(event);
 				});
 			}
@@ -859,8 +874,8 @@ $.Tooltipster.prototype = {
 		geo.origin.windowOffset.right = geo.origin.windowOffset.left + geo.origin.size.width;
 		geo.origin.windowOffset.bottom = geo.origin.windowOffset.top + geo.origin.size.height;
 		
-		geo.origin.offset.left = geo.origin.windowOffset.left + env.window.scrollX;
-		geo.origin.offset.top = geo.origin.windowOffset.top + env.window.scrollY;
+		geo.origin.offset.left = geo.origin.windowOffset.left + geo.window.scroll.left;
+		geo.origin.offset.top = geo.origin.windowOffset.top + geo.window.scroll.top;
 		geo.origin.offset.bottom = geo.origin.offset.top + geo.origin.size.height;
 		geo.origin.offset.right = geo.origin.offset.left + geo.origin.size.width;
 		
@@ -947,7 +962,10 @@ $.Tooltipster.prototype = {
 		}
 		
 		// determine the future parent
-		if (typeof this.__options.parent == 'string') {
+		if (this.__options.parent === null) {
+			this.__options.parent = $(env.window.document.body);
+		}
+		else if (typeof this.__options.parent == 'string') {
 			this.__options.parent = $(this.__options.parent);
 		}
 		
@@ -1009,7 +1027,10 @@ $.Tooltipster.prototype = {
 				
 				// auto-destruct if the origin is gone
 				if (!bodyContains(self._$origin)) {
-					self.destroy();
+					
+					self.close(function(){
+						self.destroy();
+					});
 				}
 			}, 20000);
 		}
@@ -1178,106 +1199,116 @@ $.Tooltipster.prototype = {
 		}
 		else {
 			
-			// if the scroll happened on the window
-			if (event.target === env.window.document) {
+			// if the origin or tooltip have been removed: do nothing, the tracker will
+			// take care of it later
+			if (bodyContains(self._$origin) && bodyContains(self._$tooltip)) {
 				
-				// if the origin has a fixed lineage, window scroll will have no
-				// effect on its position nor on the position of the tooltip
-				if (!self.__Geometry.origin.fixedLineage) {
+				var geo = null;
+				
+				// if the scroll happened on the window
+				if (event.target === env.window.document) {
 					
-					// we don't need to do anything unless repositionOnScroll is true
-					// because the tooltip will already have moved with the window
-					// (and of course with the origin)
-					if (self.__options.repositionOnScroll) {
-						self.reposition(event);
+					// if the origin has a fixed lineage, window scroll will have no
+					// effect on its position nor on the position of the tooltip
+					if (!self.__Geometry.origin.fixedLineage) {
+						
+						// we don't need to do anything unless repositionOnScroll is true
+						// because the tooltip will already have moved with the window
+						// (and of course with the origin)
+						if (self.__options.repositionOnScroll) {
+							self.reposition(event);
+						}
 					}
 				}
-			}
-			// if the scroll happened on another parent of the tooltip, it means
-			// that it's in a scrollable area and now needs to have its position
-			// adjusted or recomputed, depending ont the repositionOnScroll
-			// option. Also, if the origin is partly hidden due to a parent that
-			// hides its overflow, we'll just hide (not close) the tooltip.
-			else {
-				
-				var g = self.__geometry(),
-					overflows = false;
-				
-				// a fixed position origin is not affected by the overflow hiding
-				// of a parent
-				if (self._$origin.css('position') != 'fixed') {
-					
-					self.__$originParents.each(function(i, el) {
-						
-						var $el = $(el),
-							overflowX = $el.css('overflow-x'),
-							overflowY = $el.css('overflow-y');
-						
-						if (overflowX != 'visible' || overflowY != 'visible') {
-							
-							var bcr = el.getBoundingClientRect();
-							
-							if (overflowX != 'visible') {
-								
-								if (	g.origin.windowOffset.left < bcr.left
-									||	g.origin.windowOffset.right > bcr.right
-								) {
-									overflows = true;
-									return false;
-								}
-							}
-							
-							if (overflowY != 'visible') {
-								
-								if (	g.origin.windowOffset.top < bcr.top
-									||	g.origin.windowOffset.bottom > bcr.bottom
-								) {
-									overflows = true;
-									return false;
-								}
-							}
-						}
-						
-						// no need to go further if fixed, for the same reason as above
-						if ($el.css('position') == 'fixed') {
-							return false;
-						}
-					});
-				}
-				
-				if (overflows) {
-					self._$tooltip.css('visibility', 'hidden');
-				}
+				// if the scroll happened on another parent of the tooltip, it means
+				// that it's in a scrollable area and now needs to have its position
+				// adjusted or recomputed, depending ont the repositionOnScroll
+				// option. Also, if the origin is partly hidden due to a parent that
+				// hides its overflow, we'll just hide (not close) the tooltip.
 				else {
-					self._$tooltip.css('visibility', 'visible');
 					
-					// reposition
-					if (self.__options.repositionOnScroll) {
-						self.reposition(event);
-					}
-					// or just adjust offset
-					else {
+					geo = self.__geometry();
+					
+					var overflows = false;
+					
+					// a fixed position origin is not affected by the overflow hiding
+					// of a parent
+					if (self._$origin.css('position') != 'fixed') {
 						
-						// we have to use offset and not windowOffset because this way,
-						// only the scroll distance of the scrollable areas are taken into
-						// account (the scrolltop value of the main window must be
-						// ignored since the tooltip already moves with it)
-						var offsetLeft = g.origin.offset.left - self.__Geometry.origin.offset.left,
-							offsetTop = g.origin.offset.top - self.__Geometry.origin.offset.top;
-						
-						// add the offset to the position initially computed by the display plugin
-						self._$tooltip.css({
-							left: self.__lastPosition.coord.left + offsetLeft,
-							top: self.__lastPosition.coord.top + offsetTop
+						self.__$originParents.each(function(i, el) {
+							
+							var $el = $(el),
+								overflowX = $el.css('overflow-x'),
+								overflowY = $el.css('overflow-y');
+							
+							if (overflowX != 'visible' || overflowY != 'visible') {
+								
+								var bcr = el.getBoundingClientRect();
+								
+								if (overflowX != 'visible') {
+									
+									if (	geo.origin.windowOffset.left < bcr.left
+										||	geo.origin.windowOffset.right > bcr.right
+									) {
+										overflows = true;
+										return false;
+									}
+								}
+								
+								if (overflowY != 'visible') {
+									
+									if (	geo.origin.windowOffset.top < bcr.top
+										||	geo.origin.windowOffset.bottom > bcr.bottom
+									) {
+										overflows = true;
+										return false;
+									}
+								}
+							}
+							
+							// no need to go further if fixed, for the same reason as above
+							if ($el.css('position') == 'fixed') {
+								return false;
+							}
 						});
 					}
+					
+					if (overflows) {
+						self._$tooltip.css('visibility', 'hidden');
+					}
+					else {
+						
+						self._$tooltip.css('visibility', 'visible');
+						
+						// reposition
+						if (self.__options.repositionOnScroll) {
+							self.reposition(event);
+						}
+						// or just adjust offset
+						else {
+							
+							// we have to use offset and not windowOffset because this way,
+							// only the scroll distance of the scrollable areas are taken into
+							// account (the scrolltop value of the main window must be
+							// ignored since the tooltip already moves with it)
+							var offsetLeft = geo.origin.offset.left - self.__Geometry.origin.offset.left,
+								offsetTop = geo.origin.offset.top - self.__Geometry.origin.offset.top;
+							
+							// add the offset to the position initially computed by the display plugin
+							self._$tooltip.css({
+								left: self.__lastPosition.coord.left + offsetLeft,
+								top: self.__lastPosition.coord.top + offsetTop
+							});
+						}
+					}
 				}
+				
+				self._trigger({
+					type: 'scroll',
+					event: event,
+					geo: geo
+				});
 			}
-			
-			self._trigger({
-				type: 'scroll',
-				event: event
-			});
 		}
 		
 		return self;
@@ -1412,10 +1443,11 @@ $.Tooltipster.prototype = {
 	 * 
 	 * @param event
 	 * @param callback
+	 * @param force Set to true to override a potential refusal of the user's function
 	 * @returns {self}
 	 * @protected
 	 */
-	_close: function(event, callback) {
+	_close: function(event, callback, force) {
 		
 		var self = this,
 			ok = true;
@@ -1428,8 +1460,8 @@ $.Tooltipster.prototype = {
 			}
 		});
 		
-		// a destroying tooltip may not refuse to close
-		if (ok || self.__destroying) {
+		// a destroying tooltip (force == true) may not refuse to close
+		if (ok || force) {
 			
 			// save the method custom callback and cancel any open method custom callbacks
 			if (callback) self.__callbacks.close.push(callback);
@@ -1473,7 +1505,11 @@ $.Tooltipster.prototype = {
 				// the opening animation, which is not great.
 				if (self.__state == 'disappearing') {
 					
-					if (newClosingTime > self.__closingTime) {
+					if (	newClosingTime > self.__closingTime
+						// in case closing is actually overdue because the script
+						// execution was suspended. See #679
+						&&	self.__options.animationDuration[1] > 0
+					) {
 						necessary = false;
 					}
 				}
@@ -1520,7 +1556,7 @@ $.Tooltipster.prototype = {
 						// clear the array to prevent memory leaks
 						self.__$originParents = null;
 						
-						$('body').off('.'+ self.__namespace +'-triggerClose');
+						$(env.window.document.body).off('.'+ self.__namespace +'-triggerClose');
 						
 						self._$origin.off('.'+ self.__namespace +'-triggerClose');
 						
@@ -1539,7 +1575,8 @@ $.Tooltipster.prototype = {
 						// call our constructor custom callback function
 						if (self.__options.functionAfter) {
 							self.__options.functionAfter.call(self, self, {
-								event: event
+								event: event,
+								origin: self._$origin[0]
 							});
 						}
 						
@@ -1623,10 +1660,10 @@ $.Tooltipster.prototype = {
 	},
 	
 	/**
-	 * Opens the tooltip right away
+	 * Opens the tooltip right away.
 	 *
 	 * @param event
-	 * @param callback
+	 * @param callback Will be called when the opening animation is over
 	 * @returns {self}
 	 * @protected
 	 */
@@ -1818,7 +1855,17 @@ $.Tooltipster.prototype = {
 							$(env.window)
 								// reposition on resize
 								.on('resize.'+ self.__namespace +'-triggerClose', function(e) {
-									self.reposition(e);
+									
+									var $ae = $(document.activeElement);
+									
+									// reposition only if the resize event was not triggered upon the opening
+									// of a virtual keyboard due to an input field being focused within the tooltip
+									// (otherwise the repositioning would lose the focus)
+									if (	(!$ae.is('input') && !$ae.is('textarea'))
+										||	!$.contains(self._$tooltip[0], $ae[0])
+									) {
+										self.reposition(e);
+									}
 								})
 								// same as below for parents
 								.on('scroll.'+ self.__namespace +'-triggerClose', function(e) {
@@ -1835,7 +1882,6 @@ $.Tooltipster.prototype = {
 									self.__scrollHandler(e);
 								});
 							});
-							
 							
 							if (	self.__options.triggerClose.mouseleave
 								||	(self.__options.triggerClose.touchleave && env.hasTouchCapability)
@@ -1954,7 +2000,9 @@ $.Tooltipster.prototype = {
 									
 									if (self.__state != 'closed') {
 										
-										var eventNames = '';
+										var eventNames = '',
+											$body = $(env.window.document.body);
+										
 										if (self.__options.triggerClose.click) {
 											eventNames += 'click.'+ self.__namespace +'-triggerClose ';
 										}
@@ -1962,7 +2010,7 @@ $.Tooltipster.prototype = {
 											eventNames += 'touchend.'+ self.__namespace +'-triggerClose';
 										}
 										
-										$('body').on(eventNames, function(event) {
+										$body.on(eventNames, function(event) {
 											
 											if (self._touchIsMeaningfulEvent(event)) {
 												
@@ -1977,7 +2025,7 @@ $.Tooltipster.prototype = {
 										// needed to detect and ignore swiping
 										if (self.__options.triggerClose.tap && env.hasTouchCapability) {
 											
-											$('body').on('touchstart.'+ self.__namespace +'-triggerClose', function(event) {
+											$body.on('touchstart.'+ self.__namespace +'-triggerClose', function(event) {
 												self._touchRecordEvent(event);
 											});
 										}
@@ -2459,94 +2507,98 @@ $.Tooltipster.prototype = {
 		
 		if (!self.__destroyed) {
 			
-			if (!self.__destroying) {
+			if(self.__state != 'closed'){
 				
-				self.__destroying = true;
+				// no closing delay
+				self.option('animationDuration', 0)
+					// force closing
+					._close(null, null, true);
+			}
+			else {
+				// there might be an open timeout still running
+				self.__timeoutsClear();
+			}
+			
+			// send event
+			self._trigger('destroy');
+			
+			self.__destroyed = true;
+			
+			self._$origin
+				.removeData(self.__namespace)
+				// remove the open trigger listeners
+				.off('.'+ self.__namespace +'-triggerOpen');
+			
+			// remove the touch listener
+			$(env.window.document.body).off('.' + self.__namespace +'-triggerOpen');
+			
+			var ns = self._$origin.data('tooltipster-ns');
+			
+			// if the origin has been removed from DOM, its data may
+			// well have been destroyed in the process and there would
+			// be nothing to clean up or restore
+			if (ns) {
 				
-				self._close(null, function() {
+				// if there are no more tooltips on this element
+				if (ns.length === 1) {
 					
-					self._trigger('destroy');
-					
-					self.__destroying = false;
-					self.__destroyed = true;
-					
-					self._$origin
-						.removeData(self.__namespace)
-						// remove the open trigger listeners
-						.off('.'+ self.__namespace +'-triggerOpen');
-					
-					// remove the touch listener
-					$('body').off('.' + self.__namespace +'-triggerOpen');
-					
-					var ns = self._$origin.data('tooltipster-ns');
-					
-					// if the origin has been removed from DOM, its data may
-					// well have been destroyed in the process and there would
-					// be nothing to clean up or restore
-					if (ns) {
+					// optional restoration of a title attribute
+					var title = null;
+					if (self.__options.restoration == 'previous') {
+						title = self._$origin.data('tooltipster-initialTitle');
+					}
+					else if (self.__options.restoration == 'current') {
 						
-						// if there are no more tooltips on this element
-						if (ns.length === 1) {
-							
-							// optional restoration of a title attribute
-							var title = null;
-							if (self.__options.restoration == 'previous') {
-								title = self._$origin.data('tooltipster-initialTitle');
-							}
-							else if (self.__options.restoration == 'current') {
-								
-								// old school technique to stringify when outerHTML is not supported
-								title = (typeof self.__Content == 'string') ?
-									self.__Content :
-									$('<div></div>').append(self.__Content).html();
-							}
-							
-							if (title) {
-								self._$origin.attr('title', title);
-							}
-							
-							// final cleaning
-							
-							self._$origin.removeClass('tooltipstered');
-							
-							self._$origin
-								.removeData('tooltipster-ns')
-								.removeData('tooltipster-initialTitle');
-						}
-						else {
-							// remove the instance namespace from the list of namespaces of
-							// tooltips present on the element
-							ns = $.grep(ns, function(el, i) {
-								return el !== self.__namespace;
-							});
-							self._$origin.data('tooltipster-ns', ns);
-						}
+						// old school technique to stringify when outerHTML is not supported
+						title = (typeof self.__Content == 'string') ?
+							self.__Content :
+							$('<div></div>').append(self.__Content).html();
 					}
 					
-					// last event
-					self._trigger('destroyed');
+					if (title) {
+						self._$origin.attr('title', title);
+					}
 					
-					// unbind private and public event listeners
-					self._off();
-					self.off();
+					// final cleaning
 					
-					// remove external references, just in case
-					self.__Content = null;
-					self.__$emitterPrivate = null;
-					self.__$emitterPublic = null;
-					self.__options.parent = null;
-					self._$origin = null;
-					self._$tooltip = null;
+					self._$origin.removeClass('tooltipstered');
 					
-					// make sure the object is no longer referenced in there to prevent
-					// memory leaks
-					$.tooltipster.__instancesLatestArr = $.grep($.tooltipster.__instancesLatestArr, function(el, i) {
-						return self !== el;
+					self._$origin
+						.removeData('tooltipster-ns')
+						.removeData('tooltipster-initialTitle');
+				}
+				else {
+					// remove the instance namespace from the list of namespaces of
+					// tooltips present on the element
+					ns = $.grep(ns, function(el, i) {
+						return el !== self.__namespace;
 					});
-					
-					clearInterval(self.__garbageCollector);
-				});
+					self._$origin.data('tooltipster-ns', ns);
+				}
 			}
+			
+			// last event
+			self._trigger('destroyed');
+			
+			// unbind private and public event listeners
+			self._off();
+			self.off();
+			
+			// remove external references, just in case
+			self.__Content = null;
+			self.__$emitterPrivate = null;
+			self.__$emitterPublic = null;
+			self.__options.parent = null;
+			self._$origin = null;
+			self._$tooltip = null;
+			
+			// make sure the object is no longer referenced in there to prevent
+			// memory leaks
+			$.tooltipster.__instancesLatestArr = $.grep($.tooltipster.__instancesLatestArr, function(el, i) {
+				return self !== el;
+			});
+			
+			clearInterval(self.__garbageCollector);
 		}
 		else {
 			self.__destroyError();
@@ -2698,7 +2750,7 @@ $.Tooltipster.prototype = {
 	 */
 	open: function(callback) {
 		
-		if (!this.__destroyed && !this.__destroying) {
+		if (!this.__destroyed) {
 			this._open(null, callback);
 		}
 		else {
@@ -2771,27 +2823,31 @@ $.Tooltipster.prototype = {
 		
 		if (!self.__destroyed) {
 			
-			// if the tooltip has not been removed from DOM manually (or if it
-			// has been detached on purpose)
-			if (bodyContains(self._$tooltip) || tooltipIsDetached) {
+			// if the tooltip is still open and the origin is still in the DOM
+			if (self.__state != 'closed' && bodyContains(self._$origin)) {
 				
-				if (!tooltipIsDetached) {
-					// detach in case the tooltip overflows the window and adds
-					// scrollbars to it, so __geometry can be accurate
-					self._$tooltip.detach();
-				}
-				
-				// refresh the geometry object before passing it as a helper
-				self.__Geometry = self.__geometry();
-				
-				// let a plugin fo the rest
-				self._trigger({
-					type: 'reposition',
-					event: event,
-					helper: {
-						geo: self.__Geometry
+				// if the tooltip has not been removed from DOM manually (or if it
+				// has been detached on purpose)
+				if (tooltipIsDetached || bodyContains(self._$tooltip)) {
+					
+					if (!tooltipIsDetached) {
+						// detach in case the tooltip overflows the window and adds
+						// scrollbars to it, so __geometry can be accurate
+						self._$tooltip.detach();
 					}
-				});
+					
+					// refresh the geometry object before passing it as a helper
+					self.__Geometry = self.__geometry();
+					
+					// let a plugin fo the rest
+					self._trigger({
+						type: 'reposition',
+						event: event,
+						helper: {
+							geo: self.__Geometry
+						}
+					});
+				}
 			}
 		}
 		else {
@@ -2822,7 +2878,6 @@ $.Tooltipster.prototype = {
 		
 		return {
 			destroyed: this.__destroyed,
-			destroying: this.__destroying,
 			enabled: this.__enabled,
 			open: this.__state !== 'closed',
 			state: this.__state
@@ -3057,7 +3112,7 @@ Ruler.prototype = {
 		
 		this.$container = $('<div class="tooltipster-ruler"></div>')
 			.append(this.__$tooltip)
-			.appendTo('body');
+			.appendTo(env.window.document.body);
 	},
 	
 	/**
@@ -3170,12 +3225,15 @@ Ruler.prototype = {
 		
 		this.__forceRedraw();
 		
-		var tooltipBrc = this.__$tooltip[0].getBoundingClientRect(),
+		var tooltipBcr = this.__$tooltip[0].getBoundingClientRect(),
 			result = { size: {
-				// brc.width/height are not defined in IE8- but in this
-				// case, brc.right/bottom will have the same value
-				height: tooltipBrc.bottom,
-				width: tooltipBrc.right
+				// bcr.width/height are not defined in IE8- but in this
+				// case, bcr.right/bottom will have the same value
+				// except in iOS 8+ where tooltipBcr.bottom/right are wrong
+				// after scrolling for reasons yet to be determined.
+				// tooltipBcr.top/left might not be 0, see issue #514
+				height: tooltipBcr.height || (tooltipBcr.bottom - tooltipBcr.top),
+				width: tooltipBcr.width || (tooltipBcr.right - tooltipBcr.left)
 			}};
 		
 		if (this.constraints) {
@@ -3192,28 +3250,33 @@ Ruler.prototype = {
 			
 			var $content = this.__$tooltip.find('.tooltipster-content'),
 				height = this.__$tooltip.outerHeight(),
-				contentBrc = $content[0].getBoundingClientRect(),
+				contentBcr = $content[0].getBoundingClientRect(),
 				fits = {
 					height: height <= this.constraints.height,
 					width: (
 						// this condition accounts for min-width property that
 						// may apply
-						tooltipBrc.width <= this.constraints.width
+						tooltipBcr.width <= this.constraints.width
 							// the -1 is here because scrollWidth actually returns
-							// a rounded value, and may be greater than brc.width if
+							// a rounded value, and may be greater than bcr.width if
 							// it was rounded up. This may cause an issue for contents
 							// which actually really overflow  by 1px or so, but that
 							// should be rare. Not sure how to solve this efficiently.
 							// See http://blogs.msdn.com/b/ie/archive/2012/02/17/sub-pixel-rendering-and-the-css-object-model.aspx
-						&&	contentBrc.width >= $content[0].scrollWidth - 1
+						&&	contentBcr.width >= $content[0].scrollWidth - 1
 					)
 				};
 			
 			result.fits = fits.height && fits.width;
 		}
 		
-		// old versions of IE get the width wrong for some reason
-		if (env.IE && env.IE <= 11) {
+		// old versions of IE get the width wrong for some reason and it causes
+		// the text to be broken to a new line, so we round it up. If the width
+		// is the width of the screen though, we can assume it is accurate.
+		if (	env.IE
+			&&	env.IE <= 11
+			&&	result.size.width !== env.window.document.documentElement.clientWidth
+		) {
 			result.size.width = Math.ceil(result.size.width) + 1;
 		}
 		
@@ -3257,7 +3320,10 @@ else if (uA.toLowerCase().indexOf('edge/') != -1) env.IE = parseInt(uA.toLowerCa
 
 // detecting support for CSS transitions
 function transitionSupport() {
+	
 	// env.window is not defined yet when this is called
+	if (!win) return false;
+	
 	var b = win.document.body || win.document.documentElement,
 		s = b.style,
 		p = 'transition',
@@ -3274,7 +3340,7 @@ function transitionSupport() {
 
 // we'll return jQuery for plugins not to have to declare it as a dependency,
 // but it's done by a build task since it should be included only once at the
-// end when we concatenate the core file with a plugin
+// end when we concatenate the main file with a plugin
 // sideTip is Tooltipster's default plugin.
 // This file will be UMDified by a build task.
 
@@ -3546,7 +3612,13 @@ $.tooltipster._plugin({
 			var $clone = self.__instance._$tooltip.clone(),
 				// start position tests session
 				ruler = $.tooltipster._getRuler($clone),
-				satisfied = false;
+				satisfied = false,
+				animation = self.__instance.option('animation');
+			
+			// an animation class could contain properties that distort the size
+			if (animation) {
+				$clone.removeClass('tooltipster-'+ animation);
+			}
 			
 			// start evaluating scenarios
 			$.each(['window', 'document'], function(i, container) {
@@ -3989,7 +4061,6 @@ $.tooltipster._plugin({
 			
 			if (self.__options.functionPosition) {
 				
-				
 				var result = self.__options.functionPosition.call(self, self.__instance, helper, finalResultClone);
 				
 				if (result) finalResult = result;
@@ -3998,7 +4069,6 @@ $.tooltipster._plugin({
 			// end the positioning tests session (the user might have had a
 			// use for it during the position event, now it's over)
 			ruler.destroy();
-			
 			
 			// compute the position of the target relatively to the tooltip root
 			// element so we can place the arrow and make the needed adjustments
