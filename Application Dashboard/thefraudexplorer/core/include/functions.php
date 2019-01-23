@@ -67,7 +67,6 @@ function extractTypedWordsFromAgentID($agentID, $index)
 {
     $specificAgentTypedWordsParams = [
         'index' => $index,
-        'type' => 'TextEvent',
         'body' => [
             'size' => 10000,
             'query' => [
@@ -90,7 +89,6 @@ function extractTypedWordsFromAgentIDWithDate($agentID, $index, $from, $to)
 {
     $specificAgentTypedWordsParams = [
         'index' => $index, 
-        'type' => 'TextEvent',
         'body' =>[
             'size' => 10000,
             'query' => [
@@ -436,7 +434,6 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
 {
     $matchesParams = [
         'index' => $index,
-        'type' => 'TextEvent',
         'body' => [
             'query' => [
                 'term' => [ 'agentId' => $agentID ]

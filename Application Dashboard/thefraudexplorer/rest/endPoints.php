@@ -17,6 +17,7 @@
 
 include "authValidation.php";
 include "functions.php";
+include "/var/www/html/thefraudexplorer/lbs/cryptography.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -60,9 +61,19 @@ switch($method)
         }
         else echo json_encode("You must specify the query parameter");
         break;
+    case 'POST':
+        if (isset($_GET['id']))
+        {
+            $endpoint = $_GET['id'];
+            $receivedJSON = file_get_contents("php://input",  TRUE);
+
+            endPointsPOSTQuery($endpoint, $receivedJSON);
+        }
+        else echo json_encode("You must specify the endpoint id");
+        break;
     default:
         header('HTTP/1.1 405 Method not allowed');
-        header('Allow: GET, PUT, DELETE');
+        header('Allow: GET, PUT, POST, DELETE');
         break;
 }
 

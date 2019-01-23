@@ -279,4 +279,208 @@ function endPointsDELETEQuery($username, $endpoint)
     }
 }
 
+/* Insert Endpoint phrases */
+
+function endPointsPOSTQuery($endpoint, $rawJSON)
+{
+    global $dbConnection;
+
+    $receivedJSON = json_decode($rawJSON, true);
+    $keyquery = mysqli_query($dbConnection, "SELECT password FROM t_crypt");
+    $keypass = mysqli_fetch_array($keyquery);
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $timeZone = $configFile['php_timezone'];
+    $sockLT = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    $endpointQuery = mysqli_query($dbConnection, "SELECT * FROM t_agents WHERE agent='".$endpoint."'");
+    $countRows = mysqli_num_rows($endpointQuery);
+
+    if($countRows > 0)
+    {
+        if(!isJson($rawJSON))
+        {
+            echo json_encode("You have a JSON syntax error");
+            exit;
+        }
+        else
+        {
+            if(isset($receivedJSON['hostPrivateIP']) && isset($receivedJSON['userDomain']) && isset($receivedJSON['appTitle']) && isset($receivedJSON['phrases']))
+            {
+                $textPhrases = $receivedJSON['phrases'];
+                $words = explode(" ", $textPhrases);
+
+                foreach ($words as $word)
+                {
+                    $now = DateTime::createFromFormat('U.u', microtime(true));
+                    $now->setTimezone(new DateTimeZone($timeZone));
+                    $wordTime = $now->format("Y-m-d H:i:s,v");
+                    usleep(10 * 1000);
+
+                    $msgData = $wordTime." a: ".$receivedJSON['hostPrivateIP']." b: ".$receivedJSON['userDomain']." c: ".$endpoint." d: TextEvent - e: ".encRijndael($receivedJSON['appTitle'])." f: ".encRijndael($word);
+                    $lenData = strlen($msgData);
+                    socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_webservice_text_port']);
+                }
+
+                echo json_encode("Seccesfully sent data with paragraph: ".$receivedJSON['phrases']);
+            }
+            else 
+            {
+                echo json_encode("Insufficient JSON keys");
+                exit;
+            }
+        }
+    }
+    else echo json_encode("The endpoint doesn't exist");
+}
+
+/* Check if it's JSON */
+
+function isJson($string) 
+{
+    json_decode($string, true);
+    return (json_last_error() == JSON_ERROR_NONE);
+}
+
+/* FTa Events GET function */
+
+function ftaEventsGETQuery($username, $endpoint)
+{
+    global $dbConnection;
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $ESAlerterIndex = $configFile['es_alerter_index'];
+
+    if ($endpoint == "all")
+    {
+        if (getUserContext($username) == "all")
+        {
+            $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
+            $eventData = json_decode(json_encode($eventMatches), true);
+            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
+
+            foreach ($eventData['hits']['hits'] as $result)
+            {
+                if (isset($result['_source']['tags'])) continue;
+
+                $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                $wordTyped = decRijndael($result['_source']['wordTyped']);
+                $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                $endpointID = $result['_source']['agentId'];
+                $domain = $result['_source']['userDomain'];
+                $endPoint = explode("_", $result['_source']['agentId']);
+                $endpointDECSQL = $endPoint[0];
+                $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+                $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
+                $ruleset = mysqli_fetch_array($rulesetquery);
+                if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
+                $rule = $ruleset[0];
+                $regExpression = htmlentities($result['_source']['phraseMatch']);
+
+                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+            }
+
+            echo json_encode($eventsMatrix);
+        }
+        else
+        {
+            $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, getUserContext($username), "disabled", "allalerts");
+            $eventData = json_decode(json_encode($eventMatches), true);
+            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
+
+            foreach ($eventData['hits']['hits'] as $result)
+            {
+                if (isset($result['_source']['tags'])) continue;
+
+                $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                $wordTyped = decRijndael($result['_source']['wordTyped']);
+                $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $domain = $result['_source']['userDomain'];
+                $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                $endpointID = $result['_source']['agentId'];
+                $endPoint = explode("_", $result['_source']['agentId']);
+                $endpointDECSQL = $endPoint[0];
+                $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+                $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
+                $ruleset = mysqli_fetch_array($rulesetquery);
+                if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
+                $rule = $ruleset[0];
+                $regExpression = htmlentities($result['_source']['phraseMatch']);
+
+                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+            }
+
+            echo json_encode($eventsMatrix);
+        }
+    }
+    else
+    {
+        if (getUserContext($username) == "all")
+        {
+            $endpointWildcard = $endpoint."*";
+            $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
+            $eventData = json_decode(json_encode($matchesDataEndpoint), true);
+
+            foreach ($eventData['hits']['hits'] as $result)
+            {
+                if (isset($result['_source']['tags'])) continue;
+
+                $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                $endpointID = $result['_source']['agentId'];
+                $domain = $result['_source']['userDomain'];
+                $endPoint = explode("_", $result['_source']['agentId']);
+                $endpointDECSQL = $endPoint[0];
+                $wordTyped = decRijndael($result['_source']['wordTyped']);
+                $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+                $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
+                $ruleset = mysqli_fetch_array($rulesetquery);
+                if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
+                $rule = $ruleset[0];
+                $regExpression = htmlentities($result['_source']['phraseMatch']);
+
+                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+            }
+
+            echo json_encode($eventsMatrix); 
+        }
+        else
+        {
+            $endpointWildcard = $endpoint."*";
+            $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
+            $eventData = json_decode(json_encode($matchesDataEndpoint), true);
+            $endpointsMatched = false;
+
+            foreach ($eventData['hits']['hits'] as $result)
+            {
+                if (isset($result['_source']['tags'])) continue;
+
+                $domain = $result['_source']['userDomain'];
+
+                if (!($domain == getUserContext($username))) continue;
+
+                $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                $endpointID = $result['_source']['agentId'];
+                $endPoint = explode("_", $result['_source']['agentId']);
+                $endpointDECSQL = $endPoint[0];
+                $wordTyped = decRijndael($result['_source']['wordTyped']);
+                $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
+                $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
+                $ruleset = mysqli_fetch_array($rulesetquery);
+                if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
+                $rule = $ruleset[0];
+                $regExpression = htmlentities($result['_source']['phraseMatch']);
+                $endpointsMatched = true;
+
+                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+            }
+
+            if ($endpointsMatched == true) echo json_encode($eventsMatrix); 
+            else echo json_encode("No events with your criteria");
+            
+        }
+    }
+}
+
 ?>
