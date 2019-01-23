@@ -340,14 +340,13 @@ function isJson($string)
     return (json_last_error() == JSON_ERROR_NONE);
 }
 
-/* FTa Events GET function */
+/* FTA Events GET function */
 
 function ftaEventsGETQuery($username, $endpoint)
 {
     global $dbConnection;
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $ESAlerterIndex = $configFile['es_alerter_index'];
-
     if ($endpoint == "all")
     {
         if (getUserContext($username) == "all")
@@ -355,11 +354,9 @@ function ftaEventsGETQuery($username, $endpoint)
             $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
             $eventData = json_decode(json_encode($eventMatches), true);
             $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
-
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
-
                 $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
                 $wordTyped = decRijndael($result['_source']['wordTyped']);
                 $stringHistory = decRijndael($result['_source']['stringHistory']);
@@ -374,10 +371,8 @@ function ftaEventsGETQuery($username, $endpoint)
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-
                 $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
-
             echo json_encode($eventsMatrix);
         }
         else
@@ -385,11 +380,9 @@ function ftaEventsGETQuery($username, $endpoint)
             $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, getUserContext($username), "disabled", "allalerts");
             $eventData = json_decode(json_encode($eventMatches), true);
             $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
-
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
-
                 $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
                 $wordTyped = decRijndael($result['_source']['wordTyped']);
                 $stringHistory = decRijndael($result['_source']['stringHistory']);
@@ -404,10 +397,8 @@ function ftaEventsGETQuery($username, $endpoint)
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-
                 $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
-
             echo json_encode($eventsMatrix);
         }
     }
@@ -418,11 +409,9 @@ function ftaEventsGETQuery($username, $endpoint)
             $endpointWildcard = $endpoint."*";
             $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
             $eventData = json_decode(json_encode($matchesDataEndpoint), true);
-
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
-
                 $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
                 $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
                 $endpointID = $result['_source']['agentId'];
@@ -437,10 +426,8 @@ function ftaEventsGETQuery($username, $endpoint)
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-
                 $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
-
             echo json_encode($eventsMatrix); 
         }
         else
@@ -449,15 +436,11 @@ function ftaEventsGETQuery($username, $endpoint)
             $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
             $eventData = json_decode(json_encode($matchesDataEndpoint), true);
             $endpointsMatched = false;
-
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
-
                 $domain = $result['_source']['userDomain'];
-
                 if (!($domain == getUserContext($username))) continue;
-
                 $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
                 $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
                 $endpointID = $result['_source']['agentId'];
@@ -472,15 +455,85 @@ function ftaEventsGETQuery($username, $endpoint)
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
                 $endpointsMatched = true;
-
                 $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
-
             if ($endpointsMatched == true) echo json_encode($eventsMatrix); 
-            else echo json_encode("No events with your criteria");
-            
+            else echo json_encode("No events with your criteria");      
         }
     }
+}
+
+/* AI Alerts GET function */
+
+function aiAlertsGETQuery($username)
+{
+    global $dbConnection;
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $ESalerterIndex = $configFile['es_alerter_index'];
+
+    if (getUserContext($username) == "all")
+    {
+        $queryDeductions = "SELECT * from t_inferences";
+        $resultQuery = mysqli_query($dbConnection, $queryDeductions);
+
+        if ($row = mysqli_fetch_array($resultQuery))
+        {
+            do
+            {
+                $application = $row['application'];
+                $timeDate = $row['date'];
+                $endpoint = $row['endpoint'];
+                $domain = $row['domain'];
+                $rule = $row['ruleset'];
+                $alertid = $row['alertid'];
+                $reason = $row['reason'];
+                $deduction = $row['deduction'];
+
+                $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
+                $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+                $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+                foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+                    
+                $alertsMatrix[] = ["Endpoint"=>$endpoint, "Alert date"=>$timeDate, "Domain"=>$domain, "Application Title"=>$application, "Phrase typed"=>"$sanitizedPhrases", "Ruleset"=>$rule, "Reason"=>$reason, "Deduction"=>$deduction];
+            }
+            while ($row = mysqli_fetch_array($resultQuery));
+
+            echo json_encode($alertsMatrix);
+        }
+        else echo json_encode("No deductions at this time"); 
+    }
+    else
+    {
+        $queryDeductions = "SELECT * from t_inferences WHERE domain='".getUserContext($username)."'";
+        $resultQuery = mysqli_query($dbConnection, $queryDeductions);
+
+        if ($row = mysqli_fetch_array($resultQuery))
+        {
+            do
+            {
+                $application = $row['application'];
+                $timeDate = $row['date'];
+                $endpoint = $row['endpoint'];
+                $domain = $row['domain'];
+                $rule = $row['ruleset'];
+                $alertid = $row['alertid'];
+                $reason = $row['reason'];
+                $deduction = $row['deduction'];
+
+                $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
+                $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+                $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+                foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+                    
+                $alertsMatrix[] = ["Endpoint"=>$endpoint, "Alert date"=>$timeDate, "Domain"=>$domain, "Application Title"=>$application, "Phrase typed"=>"$sanitizedPhrases", "Ruleset"=>$rule, "Reason"=>$reason, "Deduction"=>$deduction];
+            }
+            while ($row = mysqli_fetch_array($resultQuery));
+
+            echo json_encode($alertsMatrix);
+        }
+        else echo json_encode("No deductions at this time"); 
+    }
+        
 }
 
 ?>

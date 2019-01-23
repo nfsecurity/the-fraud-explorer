@@ -32,7 +32,13 @@ switch($method)
 
             ftaEventsGETQuery($username, filter($_GET['endpoint']));
         }
-        else echo json_encode("You must specify the endpoint parameter");
+        else if (isset($_GET['ai']))
+        {
+            $username = $headers['username'];
+
+            aiAlertsGETQuery($username);
+        }
+        else echo json_encode("You must specify the endpoint or ai parameter");
         break;
     default:
         header('HTTP/1.1 405 Method not allowed');
