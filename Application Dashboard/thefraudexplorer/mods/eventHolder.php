@@ -437,7 +437,7 @@ if ($allEventsSwitch != true)
     echo '<option value="all"> All events</option>';
     echo '</select>';
                     
-    echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>';
+    echo '&nbsp;<button type="button" class="download-csv">Export & Download</button>';
                     
     echo '</form>';
     echo '</div>';
@@ -494,7 +494,7 @@ else
     echo '<option value="all"> All events</option>';
     echo '</select>';
                     
-    echo '&nbsp;<button type="button" class="download-csv">Download as CSV</button>';
+    echo '&nbsp;<button type="button" class="download-csv">Export & Download</button>';
                     
     echo '</form>';
     echo '</div>';
