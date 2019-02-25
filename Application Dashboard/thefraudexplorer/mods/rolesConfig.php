@@ -61,7 +61,7 @@ include "../lbs/openDBconn.php";
         margin: 15px 0px 0px 0px;
     }
 
-    .div-container
+    .div-container-roles
     {
         margin: 20px;
     }
@@ -75,6 +75,12 @@ include "../lbs/openDBconn.php";
         border-radius: 5px 5px 5px 5px;
     }
 
+    .table-role tbody 
+    {
+        background-image: none;
+        background-color: white;
+    }
+
     .table-thead-role
     {
         display: block;
@@ -83,6 +89,8 @@ include "../lbs/openDBconn.php";
         border-top: 0px solid gray;
         border-left: 0px solid gray;
         border-right: 0px solid gray;
+        background-color: white;
+        border-radius: 5px 5px 0px 0px;
         width: 100%;
         height: 30px;
     }
@@ -94,7 +102,7 @@ include "../lbs/openDBconn.php";
         border-top: 0px solid gray;
         border-left: 0px solid gray;
         border-right: 0px solid gray;
-        background: white;
+        background-color: white;
         min-width: calc(555px / 2);
         width: calc(555px / 2);
         text-align: center;
@@ -180,7 +188,7 @@ include "../lbs/openDBconn.php";
     <h4 class="modal-title window-title" id="myModalLabel">Role Administration</h4>
 </div>
 
-<div class="div-container">
+<div class="div-container-roles">
     <form id="formRoles" name="formRoles" method="post" action="mods/rolesParameters">
         <p class="title-config">Type the user name</p><br>
         <input class="input-value-text-config" type="text" name="username" id="username" autocomplete="off" placeholder=":username here">
