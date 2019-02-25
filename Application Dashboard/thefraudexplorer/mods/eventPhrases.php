@@ -36,6 +36,7 @@ $documentId = filter($_GET['id']);
 $indexId = filter($_GET['idx']);
 $eventPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
 $regExp = filter($_GET['regexp']);
+$phraseTyped = filter($_GET['phrase']);
 
 ?>
 
@@ -86,6 +87,13 @@ $regExp = filter($_GET['regexp']);
         padding: 8px 8px 8px 8px;
     }
 
+    .matchedStyle
+    {
+        color: black;
+        font-family: 'FFont-Bold', sans-serif;
+        font-style: italic;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -108,12 +116,12 @@ $regExp = filter($_GET['regexp']);
     {
         
         echo '<div id="reviewPhrasesDivArea" class="phrase-viewer" contenteditable=true>';
-        echo $sanitizedPhrases;
+        echo '<p>'.$sanitizedPhrases.'</p>';
     }
     else
     {
         echo '<div class="phrase-viewer" contenteditable=false>';
-        echo $sanitizedPhrases;
+        echo '<p>'.$sanitizedPhrases.'</p>';
     }
         
     ?>
@@ -147,3 +155,17 @@ $regExp = filter($_GET['regexp']);
     </div>
    
 </div>
+
+<!-- Style matched expression -->
+
+<script>
+
+var matchedPhrase="<?php echo base64_decode($phraseTyped); ?>";
+
+$('p:contains('+matchedPhrase+')', document.body).each(function(){
+      $(this).html($(this).html().replace(
+            new RegExp(matchedPhrase, 'g'), '<span class="matchedStyle">'+matchedPhrase+'</span>'
+      ));
+});
+
+</script>

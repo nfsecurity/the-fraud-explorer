@@ -217,7 +217,7 @@ if ($endpointDECSQL != "all")
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -365,7 +365,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
