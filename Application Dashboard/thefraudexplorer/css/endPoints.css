@@ -931,6 +931,12 @@ input[type=checkbox]
     text-decoration: none;
 }
 
+.switch-phrase-collection-button
+{
+    color: white !important;
+    text-decoration: none; 
+}
+
 .fade-scale 
 {
     -webkit-transform: scale(0.7);
