@@ -50,7 +50,7 @@ namespace TFE_core.Installer
         public override void Uninstall(IDictionary savedState)
         {
             base.Uninstall(savedState);
-            fullUninstall();
+            FullUninstall();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace TFE_core.Installer
 
         #region Uninstall procedure
 
-        private static void fullUninstall()
+        private static void FullUninstall()
         {
             try
             {
