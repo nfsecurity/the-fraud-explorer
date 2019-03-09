@@ -26,7 +26,7 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-/* Delete dead endpoint sessions*/
+/* Delete dead endpoint sessions */
 
 if (isset($_POST['deadsessions']))
 {

@@ -7,16 +7,14 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Text Analytics
  */
 
 using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -201,7 +199,10 @@ namespace TFE_core.Analytics
                     }
                 }
             }
-            catch { };
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while processing analytics : " + ex);
+            }
         }
     }
     internal static class MIMKeys

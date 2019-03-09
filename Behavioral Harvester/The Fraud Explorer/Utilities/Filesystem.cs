@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Filesystem
  */
@@ -17,8 +17,6 @@ using System;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Threading;
-using TFE_core.Networking;
 
 namespace TFE_core.Config
 {
@@ -51,7 +49,10 @@ namespace TFE_core.Config
             {
                 System.IO.File.Copy(path, newFilename, true);
             }
-            catch {};
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while copying file : " + ex);
+            }
         }
 
         #endregion
@@ -70,7 +71,10 @@ namespace TFE_core.Config
                 info.Attributes = info.Attributes | FileAttributes.Hidden | FileAttributes.System;
                 SetFullFilePermissions(path);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown protecting file : " + ex);
+            }
         }
 
         #endregion
@@ -100,7 +104,10 @@ namespace TFE_core.Config
                 security.ModifyAccessRule(AccessControlModification.Add, inheritedAccessRule, out inheritedResult);
                 info.SetAccessControl(security);
             }
-            catch { };
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while setting full directory permissions : " + ex);
+            }
         }
 
         #endregion
@@ -121,43 +128,50 @@ namespace TFE_core.Config
                 accessControl.AddAccessRule(new FileSystemAccessRule(allUsers, FileSystemRights.FullControl, AccessControlType.Allow));
                 fileInfo.SetAccessControl(accessControl);
             }
-            catch { };
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while setting full file permissions : " + ex);
+            }
         }
 
         #endregion
 
         /// <summary>
-        /// Wipe files and directories
+        /// Manage application log
         /// </summary>
 
-        #region Wipe files an directories
+        #region Manage application log
 
-        private readonly Shredder wipeF = new Shredder();
-        public static string Wipe_filename = String.Empty;
-        private void StartWipeFile() { wipeF.WipeFile(0, Wipe_filename, 7); }
-
-        public void ShreddFile(string command, string uniqueID, string file)
-        {
-            Wipe_filename = file;
-            Thread wipeThread = new Thread(StartWipeFile);
-            wipeThread.Start();
-            Network.SendData("shredded!", command, uniqueID, 1);
-        }
-
-        public void ShreddFolder(string command, string uniqueID, string folder)
+        public static void WriteLog(string strLog)
         {
             try
             {
-                if (System.IO.Directory.Exists(@folder))
+                StreamWriter log;
+                FileStream fileStream = null;
+                DirectoryInfo logDirInfo = null;
+                FileInfo logFileInfo;
+                string finalLogToWrite = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " [" + Environment.UserName.ToLower() + "] - " + strLog;
+
+                string logFilePath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Software\\app.log";
+                logFileInfo = new FileInfo(logFilePath);
+                logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+
+                if (!logDirInfo.Exists) logDirInfo.Create();
+                if (!logFileInfo.Exists)
                 {
-                    var allFilesToDelete = Directory.EnumerateFiles(@folder, "*.*", SearchOption.AllDirectories);
-                    Shredder wipeD = new Shredder();
-                    foreach (var file in allFilesToDelete) wipeD.WipeFile(0,file,7);
-                    System.IO.Directory.Delete(@folder, true);
+                    fileStream = logFileInfo.Create();
+                    SetFullFilePermissions(logFilePath);
                 }
-                Network.SendData("shredded!", command, uniqueID, 1);
-            } 
-            catch {};
+                else
+                {
+                    fileStream = new FileStream(logFilePath, FileMode.Append);
+                }
+
+                log = new StreamWriter(fileStream);
+                log.WriteLine(finalLogToWrite);
+                log.Close();
+            }
+            catch { }
         }
 
         #endregion

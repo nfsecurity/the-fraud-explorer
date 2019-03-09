@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Analytics
  */
@@ -43,7 +43,7 @@ namespace TFE_core.Analytics
 
             UdpAppender UdpAppenderTA = new UdpAppender();
             UdpAppenderTA.RemoteAddress = analyticsIPAddress;
-            UdpAppenderTA.RemotePort = Convert.ToInt32(SQLStorage.retrievePar(Settings.TPORTFLAG));
+            UdpAppenderTA.RemotePort = Convert.ToInt32(SQLStorage.RetrievePar("textPort"));
             UdpAppenderTA.Threshold = log4net.Core.Level.All;
             UdpAppenderTA.Layout = patternLayout_TextAnalytics;
             UdpAppenderTA.ActivateOptions();

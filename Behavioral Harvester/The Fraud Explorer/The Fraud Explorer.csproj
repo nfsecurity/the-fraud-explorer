@@ -84,7 +84,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Config\Modules.cs" />
-    <Compile Include="Utilities\Shredder.cs" />
     <Compile Include="Database\SQLStorage.cs" />
     <Compile Include="Networking\XMLReader.cs" />
     <Page Include="MainWindow.xaml">

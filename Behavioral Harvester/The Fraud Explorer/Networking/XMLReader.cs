@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: XML reader
  */
@@ -50,7 +50,8 @@ namespace TFE_core.Networking
             try
             {
                 xDoc.Load(Settings.XML);
-            } catch {};
+            }
+            catch {}
         }
 
         #endregion
@@ -103,16 +104,16 @@ namespace TFE_core.Networking
 
                                     switch (XMLCommand.ToUpper())
                                     {
-                                        case "UPDATE":
-                                            Settings.Updater(XMLParameters, XMLCommand, XMLUniqueID);
-                                            break;
-                                        case "MODULE": SQLStorage.modifyPar(XMLCommand, XMLParameters, XMLUniqueID);
+                                        case "MODULE": SQLStorage.ModifyPar(XMLCommand, XMLParameters, XMLUniqueID);
                                             break;
                                         default: break;
                                     }
                                 }
                             }
-                            catch { };
+                            catch (Exception ex)
+                            {
+                                Filesystem.WriteLog("ERROR : Exception trown while executing XML command : " + ex);
+                            }
                         }
                     }
                 }

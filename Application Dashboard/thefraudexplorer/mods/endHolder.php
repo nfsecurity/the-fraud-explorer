@@ -379,7 +379,7 @@ if ($row_a = mysqli_fetch_array($result_a))
                     <?php 
                     
                         echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Export & Download</button>&nbsp;';
-                        echo '<a href="helpers/authAccess?file=../msi/endpoint_x64-v1.2.2-ai.msi" download="endpoint_x64-v1.2.2-ai.msi"><button type="button" class="download-msi" id="elm-msi">Download endpoint</button></a>';
+                        echo '<a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint">Build endpoint</a>';
                     ?>
                     
                 </form>
@@ -430,6 +430,14 @@ if ($row_a = mysqli_fetch_array($result_a))
 <script>
     $('#switch-phrase-collection').on('show.bs.modal', function(e){
         $(this).find('.switch-phrase-collection-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for build endpoint -->
+
+<script>
+    $('#build-endpoint').on('show.bs.modal', function(e){
+        $(this).find('.build-endpoint-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

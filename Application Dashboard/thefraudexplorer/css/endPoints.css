@@ -978,9 +978,10 @@ input[type=checkbox]
     outline: 0 !important;
 }
 
-.download-msi
+.build-endpoint-button
 {
     cursor: pointer;
+    padding: 2px 8px 3px 8px;
     border-radius: 5px;
     height: 20px;
     position: relative;
@@ -988,6 +989,12 @@ input[type=checkbox]
     background-color: #fff;
     outline: 0 !important;
     color: #434343;
+}
+
+a.build-endpoint-button:link, a.build-endpoint-button:visited, a.build-endpoint-button:hover, a.build-endpoint-button:active
+{
+    color: #434343 !important;
+    text-decoration: none;
 }
 
 .enable-analytics-button

@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Analytics Helpers
  */
@@ -45,9 +45,7 @@ namespace TFE_core.Analytics
 
         #region Words Sanitizer
 
-        public static string[] excludeWords = { "www", "http", "ftp", "notepad", "cmd", "calc", "msconfig", "dxdiag", "cleanmgr", "regedit", "iexplore", "mspaint", "resmon", "sysedit", "taskmgr", "winver", "explorer",
-                                                "ipconfig", "pbrush", "perfmon", "telnet"
-                                              };
+        public static string[] excludeWords = { "www", "http", "ftp", "notepad", "cmd", "calc", "msconfig", "dxdiag", "cleanmgr", "regedit", "iexplore", "mspaint", "resmon", "sysedit", "taskmgr", "winver", "explorer", "ipconfig", "pbrush", "perfmon", "telnet" };
 
         public static bool WordsSanitizer(string text)
         {

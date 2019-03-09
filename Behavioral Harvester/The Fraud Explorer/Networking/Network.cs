@@ -7,17 +7,15 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Network
  */
 
 using System;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using TFE_core.Config;
 
@@ -60,7 +58,10 @@ namespace TFE_core.Networking
                 request.Abort();
                 return response.StatusCode == HttpStatusCode.OK;
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

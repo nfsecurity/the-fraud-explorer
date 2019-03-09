@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Cryptography
  */
@@ -37,7 +37,7 @@ namespace TFE_core.Crypto
 
             using (MemoryStream ms = new MemoryStream(textBytes.Length))
             {
-                using (CryptoStream objCryptoStream = new CryptoStream(ms, cripto.CreateEncryptor(Settings.AppAESkey,Settings.AppAESiv), CryptoStreamMode.Write))
+                using (CryptoStream objCryptoStream = new CryptoStream(ms, cripto.CreateEncryptor(Settings.AppAESkey, Settings.AppAESiv), CryptoStreamMode.Write))
                 {
                     objCryptoStream.Write(textBytes, 0, textBytes.Length);
                     objCryptoStream.Flush();
@@ -53,39 +53,21 @@ namespace TFE_core.Crypto
             string text;
             var cipher = Convert.FromBase64String(cipherText);
             RijndaelManaged cripto = new RijndaelManaged();
+
             if (!isURL) cripto.Padding = PaddingMode.Zeros;
 
             using (var msDecrypt = new MemoryStream(cipher))
             {
                 using (var csDecrypt = new CryptoStream(msDecrypt, cripto.CreateDecryptor(Settings.AppAESkey, Settings.AppAESiv), CryptoStreamMode.Read))
                 {
-                    using (var srDecrypt = new StreamReader(csDecrypt)) { text = srDecrypt.ReadToEnd(); srDecrypt.Close(); }
+                    using (var srDecrypt = new StreamReader(csDecrypt))
+                    {
+                        text = srDecrypt.ReadToEnd();
+                        srDecrypt.Close();
+                    }
                 }
             }
             return text;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Decrypt variables from binary
-        /// </summary>
-
-        #region Decrypt variables from binary
-
-        public static string DecryptAddress(string text)
-        {
-            string output = string.Empty;
-            Random keyGen = new Random(int.MaxValue - (int)(int.MaxValue * 0.2333));
-
-            string[] chars = text.Split('~');
-
-            foreach (string c in chars)
-            {
-                int cByteVal = (int.Parse(c) / keyGen.Next(10000));
-                output += Convert.ToChar(cByteVal).ToString();
-            }
-            return output;
         }
 
         #endregion

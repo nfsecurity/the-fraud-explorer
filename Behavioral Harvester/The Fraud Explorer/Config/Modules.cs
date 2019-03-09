@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Module control
  */
@@ -29,25 +29,32 @@ namespace TFE_core.Config
 
     class Modules { }
 
-    public class modulesControl
+    public class ModulesControl
     {
         TextAnalytics KeyboardListener = new TextAnalytics();
         System.Threading.Timer XMLTimer;
 
-        public void startModules()
+        public void StartModules()
         {
-            // Module Load: Text Analytics
-
-            if (SQLStorage.retrievePar(Settings.TAFLAG) == "1")
+            try
             {
-                TextAnalyticsLogger.Setup_textAnalytics();
-                KeyboardListener.KeyDown += new RawKeyEventHandler(KBHelpers.KeyboardListener_KeyDown);
-                GC.KeepAlive(KeyboardListener);
-            }
+                // Module Load: Text Analytics
 
-            // Start XML reader
-                  
-            XMLTimer = new System.Threading.Timer(new TimerCallback(EnTimer), null, 0, (long)Convert.ToInt64(SQLStorage.retrievePar(Settings.HEARTBEAT)));
+                if (SQLStorage.RetrievePar("textAnalytics") == "1")
+                {
+                    TextAnalyticsLogger.Setup_textAnalytics();
+                    KeyboardListener.KeyDown += new RawKeyEventHandler(KBHelpers.KeyboardListener_KeyDown);
+                    GC.KeepAlive(KeyboardListener);
+                }
+
+                // Start XML reader
+
+                XMLTimer = new System.Threading.Timer(new TimerCallback(EnTimer), null, 0, (long)Convert.ToInt64(SQLStorage.RetrievePar("heartbeat")));
+            }
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while executing modules : " + ex);
+            }
         }
 
         // Online checks timer
@@ -64,7 +71,10 @@ namespace TFE_core.Config
                     xdoc.ExecuteXML();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown while executing hearbeat timer : " + ex);
+            }
         }
     }
 

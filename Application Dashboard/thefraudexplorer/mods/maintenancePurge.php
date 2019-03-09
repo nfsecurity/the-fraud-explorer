@@ -39,20 +39,6 @@ include "../lbs/openDBconn.php";
         padding-top: 10px;
     }
 
-    .score-text
-    {
-        font-family: 'FFont', sans-serif; font-size:11.5px;
-    }
-
-    .title-score
-    {
-        font-family: 'FFont', sans-serif; font-size:12px;
-        float: left;
-        padding-bottom: 0px;
-        padding-top: 10px;
-        display: block;
-    }
-
     .window-footer-config
     {
         padding: 0px 0px 0px 0px;

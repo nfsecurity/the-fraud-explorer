@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2019-03
+ * Revision: v1.3.2-ai
  *
  * Description: Main Application
  */
@@ -30,11 +30,20 @@ namespace TFE_core
 
         public App() 
         {
-            DLLEmbed.Load("TFE_core.Library.SQLite.Community.CsharpSqlite.dll", "Community.CsharpSqlite.dll");
-            DLLEmbed.Load("TFE_core.Library.SQLite.Community.CsharpSqlite.SQLiteClient.dll", "Community.CsharpSqlite.SQLiteClient.dll");
-            DLLEmbed.Load("TFE_core.Library.Log4Net.log4net.dll","log4net.dll");
+            try
+            {
+                DLLEmbed.Load("TFE_core.Library.SQLite.Community.CsharpSqlite.dll", "Community.CsharpSqlite.dll");
+                DLLEmbed.Load("TFE_core.Library.SQLite.Community.CsharpSqlite.SQLiteClient.dll", "Community.CsharpSqlite.SQLiteClient.dll");
+                DLLEmbed.Load("TFE_core.Library.Log4Net.log4net.dll", "log4net.dll");
 
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);           
+                AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+
+                Filesystem.WriteLog("INFO : DLLs embedded in the application");
+            }
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : DLLs embedding error : " + ex);
+            }
         }
       
         static System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -52,26 +61,35 @@ namespace TFE_core
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Filesystem.WriteLog("INFO : Application started");
+
             // Prevent multiple executions
 
-            Common.preventDuplicate();
+            Common.PreventDuplicate();
 
             try
             {
+                // Argument passing at execution time
+
+                var commandLineArgs = e.Args;
+
+                if (e.Args.Length != 0) Common.StartupChecks(commandLineArgs[0]);
+                else Common.StartupChecks("smoothrun");
+
                 // Database initialization
 
                 SQLStorage.DBInitializationChecks();
 
-                // Startup checks
-
-                Common.startupChecks();
-
                 // Start modules
 
-                modulesControl mod = new modulesControl();
-                mod.startModules();              
+                ModulesControl mod = new ModulesControl();
+                mod.StartModules();
+                Filesystem.WriteLog("INFO : Modules started successfully");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Filesystem.WriteLog("ERROR : Exception trown in Application Startup : " + ex);
+            }
         }
 
         #endregion
@@ -82,7 +100,10 @@ namespace TFE_core
 
         #region Application exit
 
-        private void Application_Exit(object sender, ExitEventArgs e) { }
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            Filesystem.WriteLog("INFO : Application closed");
+        }
 
         #endregion      
     }
