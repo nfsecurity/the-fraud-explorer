@@ -136,6 +136,20 @@ $_SESSION['instance'] = "endPoints";
                 </div>
             </div>
         </div>
+
+	<!-- Modal for Build Endpoint -->
+
+        <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- Modal for switch phrases collection -->
 
