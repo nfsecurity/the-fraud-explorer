@@ -137,7 +137,7 @@ $_SESSION['instance'] = "endPoints";
             </div>
         </div>
 
-	<!-- Modal for Build Endpoint -->
+        <!-- Modal for Build Endpoint -->
 
         <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
@@ -253,10 +253,10 @@ var tour = new Tour({
         title: "Export endpoints",
         content: "By pressing thus button you can export the endpoint list in a comma separated value (CSV) file. This file is useful when you need to filter and make some reports in an executive manner."
     }, {
-        element: "#elm-msi",
+        element: "#elm-build-endpoint",
         placement: 'top',
         title: "Download MSI Endpoint",
-        content: "The MSI file you obtain here is useful for deploy the software in the Active Directory enviromnet of your organization. Please note that this MSI is only valid for your public IP address."
+        content: "You can build your own personalized endpoint in MSI (Microsoft Installer) format. You must specify the server Address, IP, Platform and the option to disable or enable phrase collection."
     }, {
         element: "#elm-departments",
         placement: 'top',
