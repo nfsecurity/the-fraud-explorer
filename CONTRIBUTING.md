@@ -8,6 +8,10 @@
 4. Haga Push de su branch (```git push origin mi-nueva-funcionalidad```)
 5. Cree un nuevo Pull Request
 
+# CLA (Constributor License Agreement)
+
+Esto sólo es un acuerdo de licencia: no transfiere la propiedad intelectual y no cambia tus derechos a usar tus propias contribuciones para cualquier otro propósito. Cuando contribuyes a este proyecto das garantía perpetua, mundial, no exclusiva, sin cargo, libre de royalties por derechos de autor y de manera irrevocable para reproducir, hacer trabajos derivados, mostrar públicamente, sublicenciary distribuir las contribuciones y los trabajos derivados.
+
 ## Guía para hacer Pull Requests
 
 1. Respete el estilo de código usado en *The Fraud Explorer* 
