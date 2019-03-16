@@ -58,10 +58,14 @@ if (isset($_POST['samplecalculation']))
 
 if (isset($_POST['password']))
 {
+    $originPasword = $_POST['password'];
     $username="admin";
-    $password=sha1(filter($_POST['password']));
-    
-    if (!empty($password)) mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
+
+    if (!empty($originPasword)) 
+    {
+        $password=sha1(filter($_POST['password']));
+        mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
+    }
 }
 
 if (isset($_POST['encryption']))
