@@ -56,11 +56,9 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultDelete=curl_exec($ch);
 curl_close($ch);
 
-/* Return to home */
+/* Referer Return */
 
-header ("location: endPoints");
-
-include "../lbs/closeDBconn.php";
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 ?>
 
