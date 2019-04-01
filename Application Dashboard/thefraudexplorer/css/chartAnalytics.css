@@ -167,6 +167,7 @@ table
 {
     width: 100%;
     border-radius: 5px;
+    border: 1px solid #d3d3d3;
 }
 
 .table-leyend-header, .table-insights-header, .table-dictionary-header

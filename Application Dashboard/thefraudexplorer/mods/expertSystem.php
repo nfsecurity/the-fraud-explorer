@@ -373,7 +373,7 @@ include "../lbs/elasticsearch.php";
     <div class="modal-footer window-footer-config">
         <br>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Good inferences</button>
-        <a href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" class="btn btn-danger" style="outline: 0 !important;">I think AI is failing</a>
+        <a href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" class="btn btn-danger" style="outline: 0 !important; color: white;">I think AI is failing</a>
     </div>
 </div> 
 

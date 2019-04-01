@@ -254,12 +254,12 @@ include "../lbs/elasticsearch.php";
             }
 
             echo '<table class="table-dictionary" id="elm-dictionarysize">';
-            echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Dictionary DB</th>';
-            echo ' <tr>';
+            echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Library Database</th>';
+            echo '<tr>';
             echo '<td class="table-dictionary-triangle">Pressure</td>';
             echo '<td class="table-dictionary-score">'.$dictionaryCount['pressure'].'</td>';
-            echo ' </tr>';
-            echo ' <tr>';
+            echo '</tr>';
+            echo '<tr>';
             echo '<td class="table-dictionary-triangle">Opportunity</td>';
             echo '<td class="table-dictionary-score">'.$dictionaryCount['opportunity'].'</td>';
             echo '</tr>';
@@ -268,7 +268,11 @@ include "../lbs/elasticsearch.php";
             echo '<td class="table-dictionary-score">'.$dictionaryCount['rationalization'].'</td>';
             echo '</tr>';
             echo '</table>';
-            echo '<br>';
+
+            /* Add, delete or modify rules */
+
+            echo '<span style="line-height: 0.3"><br></span>';
+            echo '<a href="../mods/fraudTriangleRules" data-toggle="modal" class="fraud-triangle-rules-button btn btn-success" data-target="#fraudTriangleRules" href="#" id="elm-fraud-triangle-rules">Library workshop</a>';
             echo '</div>';
             
             /* Axis calculation */
@@ -323,6 +327,14 @@ include "../lbs/elasticsearch.php";
         </div>
     </div>
 </center>
+
+<!-- Modal for Fraud Triangle Rulest -->
+
+<script>
+    $('#fraudTriangleRules').on('show.bs.modal', function(e){
+        $(this).find('.fraud-triangle-rules-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
 
 <!-- Scatterplot -->
 
@@ -1544,6 +1556,20 @@ include "../lbs/elasticsearch.php";
                     <h4 class="modal-title window-title" id="myModalLabel">Coordinate zoom</h4>
                 </div>
                 <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Fraud Triangle Rules -->
+
+<div class="modal" id="fraudTriangleRules" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center" style="width: 760px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
             </div>
         </div>
     </div>

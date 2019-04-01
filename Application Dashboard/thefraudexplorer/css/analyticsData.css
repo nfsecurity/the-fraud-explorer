@@ -255,7 +255,7 @@ li a:hover:not(.active)
 .pseudolink 
 {
     outline: none;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .fraudtriangle-bubble-container
@@ -327,4 +327,10 @@ li a:hover:not(.active)
     text-align: left;
     font-family: 'FFont-Bold';
     border-radius: 0px 0px 5px 0px;
+}
+
+.fraud-triangle-rules-button
+{
+    color: white !important;
+    width: 100%;
 }
