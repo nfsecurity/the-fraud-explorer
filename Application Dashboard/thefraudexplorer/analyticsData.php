@@ -139,6 +139,11 @@ var tour = new Tour({
         placement: 'right',
         title: "Dictionary size",
         content: "This data represents the size of the expression or phrase library size. Each phrase under pressure, opportunity and rationalization can has many expansions due to the use of regular expressions."
+    }, {
+        element: "#elm-fraud-triangle-rules",
+        placement: 'right',
+        title: "Library workshop",
+        content: "You can use this option to add, modify or delete rules in the phrase library database based on JSON representation. Please note that is neccesary that you have knowledge in regular expressions."
     }]
 });
 
