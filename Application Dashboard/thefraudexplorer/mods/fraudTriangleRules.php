@@ -404,15 +404,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            if ($session->username != "admin") 
-            {
-                echo '<input type="submit" class="btn btn-success setup disabled" value="Add rule" style="outline: 0 !important;">';
-            }
-            else 
-            {
-                echo '<button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to analytics</button>';
-                echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download rules</a>';
-            }
+            echo '<button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to analytics</button>';
+            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download rules</a>';
 
             ?>
         
