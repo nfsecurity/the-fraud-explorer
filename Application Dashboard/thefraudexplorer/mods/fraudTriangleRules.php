@@ -112,7 +112,7 @@ include "../lbs/openDBconn.php";
         margin: 20px;
     }
 
-    .select-option-styled
+    .select-option-styled-rulesworkshop
     {
         position: relative;
         border: 1px solid #ccc;
@@ -125,7 +125,7 @@ include "../lbs/openDBconn.php";
         outline: 0 !important;
     }
 
-    .select-option-styled:before
+    .select-option-styled-rulesworkshop:before
     {
         content: '';
         position: absolute;
@@ -140,7 +140,7 @@ include "../lbs/openDBconn.php";
         pointer-events: none;
     }
 
-    .select-option-styled select
+    .select-option-styled-rulesworkshop select
     {
         padding: 5px 8px;
         width: 165px;
@@ -294,7 +294,7 @@ include "../lbs/openDBconn.php";
 
                 <!-- Rule department -->
 
-                <select class="select-option-styled" name="ruleset-add" id="ruleset-add">
+                <select class="select-option-styled-rulesworkshop" name="ruleset-add" id="ruleset-add">
                     <option selected="selected">BASELINE</option>
 
                     <?php
@@ -347,7 +347,7 @@ include "../lbs/openDBconn.php";
 
                 <!-- Rule department -->
 
-                <select class="select-option-styled" name="ruleset-delmodify" id="ruleset-delmodify">
+                <select class="select-option-styled-rulesworkshop" name="ruleset-delmodify" id="ruleset-delmodify">
                     <option selected="selected">BASELINE</option>
 
                     <?php
