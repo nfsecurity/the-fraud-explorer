@@ -17,6 +17,7 @@
 
 include "../lbs/login/session.php";
 include "../lbs/security.php";
+include "../lbs/cronManager.php";
 
 if(!$session->logged_in)
 {
@@ -29,12 +30,12 @@ include "../lbs/openDBconn.php";
 
 function notempty($var)
 {
-    return ($var==="0"||$var);
+    return ($var === "0" || $var);
 }
 
 if (isset($_POST['key']))
 {
-    $keyPass=filter($_POST['key']);
+    $keyPass = filter($_POST['key']);
 
     if (!empty($keyPass)) mysqli_query($connection, sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
 }
@@ -59,7 +60,7 @@ if (isset($_POST['samplecalculation']))
 if (isset($_POST['password']))
 {
     $originPasword = $_POST['password'];
-    $username="admin";
+    $username = "admin";
 
     if (!empty($originPasword)) 
     {
@@ -77,18 +78,29 @@ if (isset($_POST['encryption']))
 
 if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfrom']) && isset($_POST['mediumto']) && isset($_POST['highfrom']) && isset($_POST['highto']) && isset($_POST['criticfrom']) && isset($_POST['criticto']))
 {
-    $lowFrom=filter($_POST['lowfrom']);
-    $lowTo=filter($_POST['lowto']);
-    $mediumFrom=filter($_POST['mediumfrom']);
-    $mediumTo=filter($_POST['mediumto']);
-    $highFrom=filter($_POST['highfrom']);
-    $highTo=filter($_POST['highto']);
-    $criticFrom=filter($_POST['criticfrom']);
-    $criticTo=filter($_POST['criticto']);
+    $lowFrom = filter($_POST['lowfrom']);
+    $lowTo = filter($_POST['lowto']);
+    $mediumFrom = filter($_POST['mediumfrom']);
+    $mediumTo = filter($_POST['mediumto']);
+    $highFrom = filter($_POST['highfrom']);
+    $highTo = filter($_POST['highto']);
+    $criticFrom = filter($_POST['criticfrom']);
+    $criticTo = filter($_POST['criticto']);
 
     if (notempty($lowFrom) && notempty($lowTo) && notempty($mediumFrom) && notempty($mediumTo) && notempty($highFrom) && notempty($highTo) && notempty($criticFrom) && notempty($criticTo)) 
     {
         mysqli_query($connection, sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
+    }
+}
+
+if (isset($_POST['ftacron']))
+{
+    if (!empty($_POST['ftacron'])) 
+    {
+        $cronJobMinutes = filter($_POST['ftacron']);
+        $cron_manager = new CronManager();
+        $remove_cron_result = $cron_manager->remove_cronjob('fta-ai-processor');
+        $cron_add_result = $cron_manager->add_cronjob('*/'.$cronJobMinutes.' * * * * cd /var/www/html/thefraudexplorer/core/ ; /usr/bin/php AIFraudTriangleProcessor.php', 'fta-ai-processor');
     }
 }
 

@@ -26,6 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cronManager.php";
 
 ?>
 
@@ -182,6 +183,45 @@ include "../lbs/openDBconn.php";
         background-image: none;
         appearance: none;
     }
+
+    .select-ftacron-styled
+    {
+        position: relative;
+        border: 1px solid #ccc;
+        width: 100%;
+        font-family: 'FFont', sans-serif; font-size: 12px;
+        color: #757575;
+        height: 30px;
+        overflow: scroll;
+        background-color: #fff;
+        outline: 0 !important;
+    }
+
+    .select-ftacron-styled:before
+    {
+        content: '';
+        position: absolute;
+        right: 5px;
+        top: 7px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 7px 5px 0 5px;
+        border-color: #000000 transparent transparent transparent;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .select-ftacron-styled select
+    {
+        padding: 5px 8px;
+        width: 130%;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+        background-image: none;
+        appearance: none;
+    }
     
     .master-container
     {
@@ -189,7 +229,7 @@ include "../lbs/openDBconn.php";
         height: 70px;
     }
     
-    .key-container
+    .key-container, .encryption-container
     {
         width: calc(50% - 5px); 
         height: 100%; 
@@ -197,7 +237,7 @@ include "../lbs/openDBconn.php";
         float: left;
     }
     
-    .sample-calculation-container
+    .sample-calculation-container, .cron-container
     {
         width: calc(50% - 5px); 
         height: 100%; 
@@ -251,7 +291,31 @@ include "../lbs/openDBconn.php";
             </div>
         </div>
 
-        <p class="title-config">Change 16Bit Encryption key & vector</p><br><input class="input-value-text-config" type="text" name="encryption" id="encryption" autocomplete="off" placeholder=":encryption key/vector here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+        <div class="master-container">
+            <div class="encryption-container">
+                <p class="title-config">Change 16Bit Encryption key & vector</p><br>
+                <input class="input-value-text-config" type="text" name="encryption" id="encryption" autocomplete="off" placeholder=":encryption key/vector here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+            </div>
+            <div class="cron-container">
+                <p class="title-config">Run FTA AI-Processor every</p><br>
+                    <select class="select-ftacron-styled" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+                     <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); echo $minutes;?>" selected="selected"> 
+                        
+                        <?php
+
+                            $cron_manager = new CronManager();
+                            $minutes = $cron_manager->cron_get_minutes("fta-ai-processor");
+                            echo $minutes . " minutes"; 
+                        ?>
+                        
+                    </option>
+                    <option value="10">10 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="60">60 minutes</option>
+                    <option value="90">90 minutes</option>
+                </select>               
+            </div>
+        </div>
 
         <br><p class="title-config">Admin password modification</p><br>
         <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
