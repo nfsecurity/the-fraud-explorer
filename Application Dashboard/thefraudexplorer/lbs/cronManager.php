@@ -112,7 +112,7 @@ class CronManager
 
             return $minutes;
         }
-        else return "not found";
+        else return "false";
     }
 
     public function add_cronjob($command, $cron_tag): array

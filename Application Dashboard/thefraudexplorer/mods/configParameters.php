@@ -100,7 +100,7 @@ if (isset($_POST['ftacron']))
         $cronJobMinutes = filter($_POST['ftacron']);
         $cron_manager = new CronManager();
         $remove_cron_result = $cron_manager->remove_cronjob('fta-ai-processor');
-        $cron_add_result = $cron_manager->add_cronjob('*/'.$cronJobMinutes.' * * * * cd /var/www/html/thefraudexplorer/core/ ; /usr/bin/php AIFraudTriangleProcessor.php', 'fta-ai-processor');
+        if($_POST['ftacron'] != "disabled") $cron_add_result = $cron_manager->add_cronjob('*/'.$cronJobMinutes.' * * * * cd /var/www/html/thefraudexplorer/core/ ; /usr/bin/php AIFraudTriangleProcessor.php', 'fta-ai-processor');
     }
 }
 

@@ -299,16 +299,19 @@ include "../lbs/cronManager.php";
             <div class="cron-container">
                 <p class="title-config">Run FTA AI-Processor every</p><br>
                     <select class="select-ftacron-styled" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
-                     <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); echo $minutes;?>" selected="selected"> 
+                     <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); if ($minutes != "false") echo $minutes; else echo "disabled"; ?>" selected="selected"> 
                         
                         <?php
 
                             $cron_manager = new CronManager();
                             $minutes = $cron_manager->cron_get_minutes("fta-ai-processor");
-                            echo $minutes . " minutes"; 
+
+                            if ($minutes != "false") echo $minutes . " minutes";
+                            else echo "disabled";
                         ?>
                         
                     </option>
+                    <option value="disabled">disabled</option>
                     <option value="10">10 minutes</option>
                     <option value="30">30 minutes</option>
                     <option value="60">60 minutes</option>
