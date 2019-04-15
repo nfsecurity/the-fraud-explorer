@@ -317,7 +317,7 @@ include "../lbs/cronManager.php";
             </div>
         </div>
 
-        <br><p class="title-config">Admin password modification</p><br>
+        <p class="title-config">Admin password modification</p><br>
         <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
 
         <?php
