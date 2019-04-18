@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for dashboard
  */
@@ -81,6 +81,11 @@ $_SESSION['instance'] = "dashBoard";
         <!-- Footer -->
 
         <link rel="stylesheet" type="text/css" href="css/footer.css" />
+
+        <!-- JQuery nice select -->
+
+        <script src="js/jquery.nice-select.js"></script>
+        <link rel="stylesheet" href="css/nice-select.css">
     </head>
     <body>
         <div align="center" style="height:100%;">

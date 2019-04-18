@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for managing cron jobs
  */

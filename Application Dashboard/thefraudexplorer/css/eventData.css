@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2019-03
-* Revision: v1.3.2-ai
+* Date: 2019-05
+* Revision: v1.3.3-ai
 *
 * Description: CSS Code
 */
@@ -753,14 +753,14 @@ li a:hover:not(.active)
 .pager-inside-endpoint
 {
     display: table-cell;
-    padding: 2px 0px 0px 15px;
+    padding: 2px 0px 0px 10px;
     float: left;
 }
 
 .pager-inside-pager
 {
     display: table-cell;
-    padding: 0px 25px 0px 0px;
+    padding: 0px 5px 0px 0px;
     float: right;	
 }
 
@@ -772,43 +772,28 @@ li a:hover:not(.active)
     width: calc(100% - 16px);
 }
 
-.select-styled 
+.select-styled
 {
+    min-width: 150px !important;
+    max-height: 20px !important;
+    min-height: 20px !important;
+    margin-left: 5px;
+    border: 1px solid #ccc !important;
+    font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+    color: #757575 !important;
+    line-height: 11.6px !important;
+    padding: 3px 0px 0px 10px !important;
     position: relative;
-    border: 1px solid #ccc;
-    width: 150px;
-    height: 20px;
-    overflow: hidden;
-    background-color: #fff;
-    outline: 0 !important;
 }
 
-.select-styled:before 
+.select-styled .list
 {
-    content: '';
-    position: absolute;
-    right: 5px;
-    top: 7px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 7px 5px 0 5px;
-    border-color: #000000 transparent transparent transparent;
-    z-index: 5;
-    pointer-events: none;
-    outline: 0 !important;
-}
-
-.select-styled select 
-{
-    padding: 5px 8px;
-    width: 130%;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    appearance: none;
-    outline: 0 !important;
+    min-width: 150px;
+    margin-left: 5px !important;
+    overflow-y: scroll !important;
+    font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    background: #f9f9f9 !important;
 }
 
 .tablesorter-default .header,
@@ -906,6 +891,7 @@ li a:hover:not(.active)
     position: relative;
     border: 1px solid #ccc;
     background-color: #fff;
+    color: #808080;
     outline: 0 !important;
 }
 

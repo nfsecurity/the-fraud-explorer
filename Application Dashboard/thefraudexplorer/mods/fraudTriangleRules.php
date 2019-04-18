@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for fraud triangle rules
  */
@@ -39,6 +39,7 @@ include "../lbs/openDBconn.php";
         width: 100%;
         padding-bottom: 10px;
         padding-top: 10px;
+        margin-left: 2px;
     }
 
     .title-config-bold
@@ -49,6 +50,7 @@ include "../lbs/openDBconn.php";
         width: 100%;
         padding-bottom: 10px;
         padding-top: 10px;
+        margin-left: 2px;
     }
 
     .input-value-text-id-add
@@ -75,7 +77,7 @@ include "../lbs/openDBconn.php";
 
     .input-value-text-regexp-add
     {
-        width: calc(100% - 180px);
+        width: calc(100% - 184px);
         height: 30px; 
         padding: 5px;
         margin-right: -6px !important;
@@ -90,15 +92,17 @@ include "../lbs/openDBconn.php";
 
     .input-value-text-regexp-delmodify
     {
-        width: calc(100% - 180px); 
+        width: calc(100% - 184px); 
         height: 30px; 
         padding: 5px;
         margin-right: -6px !important;
         margin-left: 0px !important;
-        border: solid 1px #c9c9c9; 
+        border-left: 0px;
+        border-top: solid 1px #c9c9c9;
+        border-bottom: solid 1px #c9c9c9;
         outline: none;
         font-family: Courier; font-size: 12px;
-        border-radius: 5px;
+        border-radius: 0px 0px 0px 0px;
     }
 
     .window-footer-config
@@ -114,82 +118,51 @@ include "../lbs/openDBconn.php";
 
     .select-option-styled-rulesworkshop
     {
-        position: relative;
-        border: 1px solid #ccc;
         width: 165px;
-        font-family: 'FFont', sans-serif; font-size: 12px;
-        color: #757575;
-        height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
     }
 
-    .select-option-styled-rulesworkshop:before
+    .select-option-styled-rulesworkshop .list
     {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .select-option-styled-rulesworkshop select
-    {
-        padding: 5px 8px;
         width: 165px;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
+        max-height: 200px;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
     .select-option-styled-fraudvertice
     {
-        position: relative;
-        border: 1px solid #ccc;
         width: 140px;
-        font-family: 'FFont', sans-serif; font-size: 12px;
-        color: #757575;
+        margin-right: 0px;
+    }
+
+    .select-option-styled-fraudvertice .list
+    {
+        width: 140px;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .nice-select
+    {
         height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
+        border: 1px solid #ccc;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
+        color: #757575;
+        padding: 8px 0px 0px 10px;
+        position: relative;
+        line-height: 11.6px;
     }
 
-    .select-option-styled-fraudvertice:before
-    {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
+    .nice-select .list 
+    { 
+        overflow-y: scroll;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
-    .select-option-styled-fraudvertice select
-    {
-        padding: 5px 8px;
-        width: 140px;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
-    }
-    
     .master-container-library
     {
         width: 100%; 
@@ -252,7 +225,8 @@ include "../lbs/openDBconn.php";
         width: 20px;
         height: 30px;
         border-radius: 5px 0px 0px 5px;
-        margin-left: 0px !important;
+        margin-top: 1px;
+        margin-left: 2px !important;
         font-family: Courier; font-size: 14px;
         border: 0px solid #c9c9c9;
         text-align: center;
@@ -263,12 +237,13 @@ include "../lbs/openDBconn.php";
     {
         background: #c9c9c9;
         width: 20px;
-        height: 30px;
+        height: 31px;
         border-radius: 0px 5px 5px 0px;
         margin-left: 0px !important;
         font-family: Courier; font-size: 14px;
-        border: 0px solid #c9c9c9;
+        border-top: 1px solid #f2f2f2;
         text-align: center;
+        margin-bottom: 0px;
     }
 
     .warning
@@ -295,7 +270,6 @@ include "../lbs/openDBconn.php";
                 <!-- Rule department -->
 
                 <select class="select-option-styled-rulesworkshop" name="ruleset-add" id="ruleset-add">
-                    <option selected="selected">BASELINE</option>
 
                     <?php
 
@@ -304,7 +278,8 @@ include "../lbs/openDBconn.php";
 
                     foreach ($jsonFT['dictionary'] as $ruleset => $value)
                     {
-                        echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">'.$ruleset.'</option>';
+                        else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
                     }
 
                     ?>
@@ -348,7 +323,6 @@ include "../lbs/openDBconn.php";
                 <!-- Rule department -->
 
                 <select class="select-option-styled-rulesworkshop" name="ruleset-delmodify" id="ruleset-delmodify">
-                    <option selected="selected">BASELINE</option>
 
                     <?php
 
@@ -357,7 +331,8 @@ include "../lbs/openDBconn.php";
 
                     foreach ($jsonFT['dictionary'] as $ruleset => $value)
                     {
-                        echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">'.$ruleset.'</option>';
+                        else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
                     }
 
                     ?>
@@ -473,4 +448,12 @@ include "../lbs/openDBconn.php";
     });
   });
 
+</script>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
 </script>

@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2019-03
-* Revision: v1.3.2-ai
+* Date: 2019-05
+* Revision: v1.3.3-ai
 *
 * Description: CSS Code
 */
@@ -27,7 +27,7 @@ table, caption, tbody, tfoot, thead, tr, th, td
     padding:0;
     border:0;
     outline:0;
-    font-size: 11px;
+    font-size: 11.6px;
     background: transparent;
 }
 
@@ -73,6 +73,12 @@ a
     src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
 }
 
+@font-face
+{
+    font-family: 'Awesome-Font';
+    src: url('../fonts/fontawesome-webfont.ttf');
+}
+
 html,body 
 { 
     height: 100%; 
@@ -100,7 +106,7 @@ html,body
 .graph-insights
 {
     position: absolute;
-    width: 150px;
+    width: 152px;
     bottom: 56px;
     left: 30px;
     top: 40px;
@@ -263,39 +269,25 @@ table
 
 .select-scope-styled
 {
+    min-width: 152px !important;
+    margin-bottom: 5px;
+    max-height: 33px !important;
+    min-height: 33px !important;
+    border: 1px solid #ccc !important;
+    font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+    color: #757575 !important;
+    line-height: 11.6px !important;
+    padding: 10px 0px 0px 10px !important;
     position: relative;
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 30px;
-    overflow: scroll;
-    background-color: #fff;
-    outline: 0 !important;
 }
 
-.select-scope-styled:before
+.select-scope-styled .list
 {
-    content: '';
-    position: absolute;
-    right: 5px;
-    top: 7px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 7px 5px 0 5px;
-    border-color: #000000 transparent transparent transparent;
-    z-index: 5;
-    pointer-events: none;
-    outline: 0 !important;
-}
-
-.select-scope-styled select
-{
-    padding: 5px 8px;
-    width: 130%;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    appearance: none;
-    outline: 0 !important;
+    min-width: 165px;
+    max-height: 320px;
+    margin-left: 5px !important;
+    overflow-y: scroll !important;
+    font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    background: #f9f9f9 !important;
 }

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for dashboard
  */
@@ -46,6 +46,6 @@ if(!$session->logged_in)
         <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
         <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
         <span class="fa fa-bank fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Business [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;
-        <span class="fa fa-codepen fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Version v1.3.2-ai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="fa fa-codepen fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Version v1.3.3-ai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
 </div>

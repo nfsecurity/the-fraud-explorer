@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for Chart
  */
@@ -50,7 +50,7 @@ include "../lbs/elasticsearch.php";
 
             <form name="scope" method="post" id="elm-scope">
                 <select class="select-scope-styled" name="ruleset" id="ruleset">
-                    <option selected="selected"> <?php echo $_SESSION['rulesetScope']; ?></option>
+                    <option selected="selected">&#xf07b;&nbsp;&nbsp;<?php echo $_SESSION['rulesetScope']; ?></option>
 
                     <?php
 
@@ -58,11 +58,9 @@ include "../lbs/elasticsearch.php";
                     $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
                     $GLOBALS['listRuleset'] = null;
 
-                    echo '<option value="ALL">ALL</option>';
-
                     foreach ($jsonFT['dictionary'] as $ruleset => $value)
                     {
-                        echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        echo '<option value="'.$ruleset.'">&#xf07b;&nbsp;&nbsp;'.$ruleset.'</option>';
                     }
 
                     ?>
@@ -70,7 +68,7 @@ include "../lbs/elasticsearch.php";
                 </select>
 
                 <span style="line-height: 0.7"><br><br></span>
-                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important;" />
+                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important; margin-bottom: 0px;" />
             </form>
 
             <!-- SQL Queries -->
@@ -1515,6 +1513,14 @@ include "../lbs/elasticsearch.php";
     }
 });
  
+</script>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
 </script>
 
 <!-- Modal for Artificial Intelligence -->

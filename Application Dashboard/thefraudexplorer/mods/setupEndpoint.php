@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for setup endpoint
  */
@@ -62,39 +62,23 @@ $endpointDec=base64_decode(base64_decode($endpointEnc));
 
     .select-ruleset-styled, .select-gender-styled
     {
-        position: relative;
+        margin-right: 0px;
+        min-height: 30px !important;
+        max-height: 30px !important;
+        padding: 8px 0px 8px 10px;
+        line-height: 11.6px;
         border: 1px solid #ccc;
-        width: 100%;
-        height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
+        color: #757575;
     }
 
-    .select-ruleset-styled:before, .select-gender-styled:before
+    .select-ruleset-styled .list, .select-gender-styled .list
     {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .select-ruleset-styled select, .select-gender-styled select
-    {
-        padding: 5px 8px;
-        width: 130%;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        overflow-y: scroll;
+        max-height: 200px !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
 </style>
@@ -120,8 +104,8 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
         <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysqli_query($connection, sprintf($queryName,$endpointDec)); $alias = mysqli_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
         <br><br><p class="title">Ruleset or Dictionary</p><br>
 
-        <select class="select-ruleset-styled" name="ruleset" id="ruleset">
-            <option selected="selected">Choose the ruleset <?php $rulesetquery = mysqli_query($connection, sprintf($queryRule, $endpointDec)); $ruleset = mysqli_fetch_array($rulesetquery); if ($ruleset[0] == NULL) echo '(current dictionary: BASELINE)'; else echo '(current dictionary: '.$ruleset[0].')'; ?></option>
+        <select class="select-ruleset-styled wide" name="ruleset" id="ruleset">
+            <option selected="selected"><?php $rulesetquery = mysqli_query($connection, sprintf($queryRule, $endpointDec)); $ruleset = mysqli_fetch_array($rulesetquery); $selectedRuleset = $ruleset[0]; if ($selectedRuleset == NULL) echo 'BASELINE'; else echo $selectedRuleset; ?></option>
 
             <?php
 
@@ -131,21 +115,21 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 
             foreach ($jsonFT['dictionary'] as $ruleset => $value)
             {
-                echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                if ($selectedRuleset != $ruleset) echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
             }
 
             ?>
         </select> 
 
-        <br><br><p class="title">Endpoint gender</p><br>
+        <br><br><br><p class="title">Endpoint gender</p><br>
 
-        <select class="select-gender-styled" name="gender" id="gender">
-            <option selected="selected">Choose the gender <?php $genderquery = mysqli_query($connection, sprintf($queryGender, $endpointDec)); $gender = mysqli_fetch_array($genderquery); if ($gender[0] == NULL) echo '(current value: Not gender yet)'; else echo '(current value: '.$gender[0].')'; ?></option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+        <select class="select-gender-styled wide" name="gender" id="gender">
+            <option selected="selected"><?php $genderquery = mysqli_query($connection, sprintf($queryGender, $endpointDec)); $gender = mysqli_fetch_array($genderquery); $selectedGender = $gender[0]; if ($selectedGender == NULL) { echo 'Male'; $selectedGender = "male"; } else echo ucfirst($selectedGender); ?></option>
+            <?php if ($selectedGender != "male") echo '<option value="male">Male</option>'; ?>
+            <?php if ($selectedGender != "female") echo '<option value="female">Female</option>'; ?>
         </select>
 
-        <br><br>
+        <br><br><br><br>
         <div class="modal-footer window-footer">
             <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
             <input type="submit" class="btn btn-danger setup" value="Set values" style="outline: 0 !important;">
@@ -154,3 +138,11 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 </div>
 
 <?php include "../lbs/closeDBconn.php"; ?>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+</script>

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for paint endpoint data table
  */
@@ -429,12 +429,13 @@ if ($allEventsSwitch != true)
     echo '<span class="pagedisplay"></span>&nbsp;';
     echo '<span class="fa fa-arrow-circle-o-right fa-lg next"></span>&nbsp;';
     echo '<span class="fa fa-fast-forward fa-lg last"></span>&nbsp;&nbsp;';
-    echo '<select class="pagesize select-styled">';
-    echo '<option value="20"> by 20 events</option>';
-    echo '<option value="50"> by 50 events</option>';
-    echo '<option value="100"> by 100 events</option>';
-    echo '<option value="500"> by 500 events</option>';
-    echo '<option value="all"> All events</option>';
+
+     echo '<select class="pagesize select-styled right">';
+    echo '<option value="20"> Show by 20 events</option>';
+    echo '<option value="50"> Show by 50 events</option>';
+    echo '<option value="100"> Show by 100 events</option>';
+    echo '<option value="500"> Show by 500 events</option>';
+    echo '<option value="all"> Show all events</option>';
     echo '</select>';
                     
     echo '&nbsp;<button type="button" class="download-csv">Export & Download</button>';
@@ -486,12 +487,13 @@ else
     echo '<span class="pagedisplay"></span>&nbsp;';
     echo '<span class="fa fa-arrow-circle-o-right fa-lg next"></span>&nbsp;';
     echo '<span class="fa fa-fast-forward fa-lg last"></span>&nbsp;&nbsp;';
-    echo '<select class="pagesize select-styled">';
-    echo '<option value="20"> by 20 events</option>';
-    echo '<option value="50"> by 50 events</option>';
-    echo '<option value="100"> by 100 events</option>';
-    echo '<option value="500"> by 500 events</option>';
-    echo '<option value="all"> All events</option>';
+    
+    echo '<select class="pagesize select-styled right">';
+    echo '<option value="20"> Show by 20 events</option>';
+    echo '<option value="50"> Show by 50 events</option>';
+    echo '<option value="100"> Show by 100 events</option>';
+    echo '<option value="500"> Show by 500 events</option>';
+    echo '<option value="all"> Show all events</option>';
     echo '</select>';
                     
     echo '&nbsp;<button type="button" class="download-csv">Export & Download</button>';
@@ -646,5 +648,13 @@ else
             delay: 0,
             animationDuration: 0
         });
+    });
+</script>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
     });
 </script>

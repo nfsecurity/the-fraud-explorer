@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for main config
  */
@@ -147,82 +147,47 @@ include "../lbs/cronManager.php";
     
     .select-ruleset-styled
     {
+        max-height: 30px !important;
+        min-height: 30px !important;
+        border: 1px solid #ccc !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        color: #757575 !important;
+        line-height: 11.6px !important;
+        padding: 8px 0px 0px 10px !important;
         position: relative;
-        border: 1px solid #ccc;
-        width: 100%;
-        font-family: 'FFont', sans-serif; font-size: 12px;
-        color: #757575;
-        height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
     }
 
-    .select-ruleset-styled:before
+    .select-ruleset-styled .list
     {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .select-ruleset-styled select
-    {
-        padding: 5px 8px;
-        width: 130%;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
+        margin-left: 5px;
+        overflow-y: scroll !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        background: #f9f9f9 !important;
     }
 
     .select-ftacron-styled
     {
+        max-height: 30px !important;
+        min-height: 30px !important;
+        border: 1px solid #ccc !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        color: #757575 !important;
+        line-height: 11.6px !important;
+        padding: 8px 0px 0px 10px !important;
         position: relative;
-        border: 1px solid #ccc;
-        width: 100%;
-        font-family: 'FFont', sans-serif; font-size: 12px;
-        color: #757575;
-        height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
     }
 
-    .select-ftacron-styled:before
+    .select-ftacron-styled .list
     {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
+        margin-left: 5px;
+        max-height: 120px;
+        overflow-y: scroll !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        background: #f9f9f9 !important;
     }
 
-    .select-ftacron-styled select
-    {
-        padding: 5px 8px;
-        width: 130%;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
-    }
-    
     .master-container
     {
         width: 100%; 
@@ -262,7 +227,7 @@ include "../lbs/cronManager.php";
             </div>
             <div class="sample-calculation-container">
                 <p class="title-config">Sample data calculation</p><br>
-                <select class="select-ruleset-styled" name="samplecalculation" id="samplecalculation">
+                <select class="select-ruleset-styled wide" name="samplecalculation" id="samplecalculation">
                     <option selected="selected"> 
                         
                         <?php
@@ -285,8 +250,7 @@ include "../lbs/cronManager.php";
                         ?>
                         
                     </option>
-                    <option value="enabled">enabled</option>
-                    <option value="disabled">disabled</option>
+                    <?php if ($sampleQuery[0] == "disabled") echo '<option value="enabled">enabled</option>'; else echo '<option value="disabled">disabled</option>';  ?>
                 </select>
             </div>
         </div>
@@ -298,7 +262,7 @@ include "../lbs/cronManager.php";
             </div>
             <div class="cron-container">
                 <p class="title-config">Run FTA AI-Processor every</p><br>
-                    <select class="select-ftacron-styled" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+                    <select class="select-ftacron-styled wide" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
                      <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); if ($minutes != "false") echo $minutes; else echo "disabled"; ?>" selected="selected"> 
                         
                         <?php
@@ -311,11 +275,11 @@ include "../lbs/cronManager.php";
                         ?>
                         
                     </option>
-                    <option value="disabled">disabled</option>
-                    <option value="10">10 minutes</option>
-                    <option value="30">30 minutes</option>
-                    <option value="60">60 minutes</option>
-                    <option value="90">90 minutes</option>
+                    <?php if ($minutes != "false") echo '<option value="disabled">disabled</option>'; ?>
+                    <?php if ($minutes != "10") echo '<option value="10">10 minutes</option>'; ?>
+                    <?php if ($minutes != "30") echo '<option value="30">30 minutes</option>'; ?>
+                    <?php if ($minutes != "60") echo '<option value="60">60 minutes</option>'; ?>
+                    <?php if ($minutes != "90") echo '<option value="90">90 minutes</option>'; ?>
                 </select>               
             </div>
         </div>
@@ -355,4 +319,12 @@ include "../lbs/cronManager.php";
             <input type="submit" class="btn btn-danger setup" value="Apply configuration" style="outline: 0 !important;">
         </div>
     </form>
-</div> 
+</div>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+</script>

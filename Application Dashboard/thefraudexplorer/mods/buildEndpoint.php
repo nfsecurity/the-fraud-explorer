@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for build endpoint
  */
@@ -99,43 +99,25 @@ include "../lbs/openDBconn.php";
         margin: 10px 0px 0px 0px;
     }
     
-    .select-option-styled
+    .select-option-build-styled
     {
-        position: relative;
+        margin-right: 0px;
+        min-height: 30px !important;
+        max-height: 30px !important;
+        padding: 8px 0px 8px 10px;
+        line-height: 11.6px;
         border: 1px solid #ccc;
-        width: 100%;
-        font-family: 'FFont', sans-serif; font-size: 12px;
         color: #757575;
-        height: 30px;
-        overflow: scroll;
-        background-color: #fff;
-        outline: 0 !important;
     }
 
-    .select-option-styled:before
+    .select-option-build-styled .list
     {
-        content: '';
-        position: absolute;
-        right: 5px;
-        top: 7px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 7px 5px 0 5px;
-        border-color: #000000 transparent transparent transparent;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    .select-option-styled select
-    {
-        padding: 5px 8px;
-        width: 130%;
-        border: none;
-        box-shadow: none;
-        background-color: transparent;
-        background-image: none;
-        appearance: none;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        overflow-y: scroll;
+        max-height: 200px !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
     
     .master-container
@@ -174,7 +156,7 @@ include "../lbs/openDBconn.php";
             <div class="left-container">              
                 
                 <p class="title-config">Select platform</p><br>
-                <select class="select-option-styled" name="platform" id="platform">
+                <select class="select-option-build-styled wide" name="platform" id="platform">
                     <option value="windows" selected="selected">Windows 32 & 64 Bits</option>
                     <option value="linux" disabled>RedHat Linux based distributions</option>
                     <option value="macosx" disabled>MacOS X 64 Bits Intel</option>
@@ -214,7 +196,7 @@ include "../lbs/openDBconn.php";
             <div class="left-container">              
                 
                 <p class="title-config">Enable or disable phrase collection</p><br>
-                <select class="select-option-styled" name="pcenabled" id="pcenabled">
+                <select class="select-option-build-styled wide" name="pcenabled" id="pcenabled">
                     <option value="enable" selected="selected">Enable collection inside endpoint</option>
                     <option value="disable">I'd like to enable it another day</option>
                 </select>            
@@ -261,4 +243,12 @@ include "../lbs/openDBconn.php";
         
         </div>
     </form>
-</div> 
+</div>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+</script>

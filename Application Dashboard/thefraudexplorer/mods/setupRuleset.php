@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-05
+ * Revision: v1.3.3-ai
  *
  * Description: Code for ruleset setup
  */
@@ -310,7 +310,7 @@ include "../lbs/endpointMethods.php";
             if ($session->username == "admin")  echo '<div class="fileUpload btn btn-success" style="outline: 0 !important;">';
             else echo '<div class="fileUpload btn btn-success disabled" style="outline: 0 !important;">';
             
-            echo 'Upload rule';
+            echo 'Upload rule file';
             echo '<input type="file" name="fileToUpload" id="fileToUpload" class="upload" />';
             echo '</div>';
             
