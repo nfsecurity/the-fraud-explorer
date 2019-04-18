@@ -368,12 +368,12 @@ if ($row_a = mysqli_fetch_array($result_a))
                     <span class="pagedisplay"></span>
                     <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
                     <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
-                    <select class="pagesize select-styled">
-                        <option value="20"> by 20 endpoints</option>
-                        <option value="50"> by 50 endpoints</option>
-                        <option value="100"> by 100 endpoints</option>
-                        <option value="500"> by 500 endpoints</option>
-                        <option value="all"> All Endpoints</option>
+                    <select class="pagesize select-styled right">
+                        <option value="20"> Show by 20 endpoints</option>
+                        <option value="50"> Show by 50 endpoints</option>
+                        <option value="100"> Show by 100 endpoints</option>
+                        <option value="500"> Show by 500 endpoints</option>
+                        <option value="all"> Show all Endpoints</option>
                     </select>
                     
                     <?php 
@@ -521,5 +521,13 @@ if ($row_a = mysqli_fetch_array($result_a))
             delay: 0,
             animationDuration: 0
         });
+    });
+</script>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
     });
 </script>

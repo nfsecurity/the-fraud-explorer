@@ -74,6 +74,11 @@ $_SESSION['instance'] = "endPoints";
 
         <link rel="stylesheet" type="text/css" href="css/footer.css" />
 
+        <!-- JQuery nice select -->
+
+        <script src="js/jquery.nice-select.js"></script>
+        <link rel="stylesheet" href="css/nice-select.css">
+
         <style>
             .font-icon-color-white { color: #FFFFFF; }
         </style>
