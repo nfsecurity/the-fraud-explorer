@@ -315,7 +315,7 @@ include "../lbs/cronManager.php";
         </div>
 
         <div class="modal-footer window-footer-config">
-            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Exit without saving</button>
             <input type="submit" class="btn btn-danger setup" value="Apply configuration" style="outline: 0 !important;">
         </div>
     </form>

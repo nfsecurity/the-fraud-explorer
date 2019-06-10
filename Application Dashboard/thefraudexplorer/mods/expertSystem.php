@@ -200,7 +200,7 @@ include "../lbs/elasticsearch.php";
 
     .font-icon-color-green
     {
-        color: green;
+        color: #4B906F;
     }
     
     .footer-statistics

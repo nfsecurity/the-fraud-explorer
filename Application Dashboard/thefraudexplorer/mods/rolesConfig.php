@@ -168,7 +168,7 @@ include "../lbs/openDBconn.php";
     
      .font-icon-color-green
     {
-        color: green;
+        color: #4B906F;
     }
     
     .font-icon-gray 
@@ -179,6 +179,18 @@ include "../lbs/openDBconn.php";
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+
+    .btn-success, .btn-success:active, .btn-success:visited 
+    {
+        background-color: #4B906F !important;
+        border: 1px solid #4B906F !important;
+    }
+
+    .btn-success:hover
+    {
+        background-color: #57a881 !important;
+        border: 1px solid #57a881 !important;
     }
 
 </style>
@@ -224,9 +236,8 @@ include "../lbs/openDBconn.php";
         </table>
 
         <div class="modal-footer window-footer-config">
-            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-            <input type="submit" name="delete" class="btn btn-danger setup" value="Delete User" style="outline: 0 !important;">
-            <input type="submit" name="createmodify" class="btn btn-success setup" value="Create/Modify User" style="outline: 0 !important;">
+            <br><input type="submit" name="delete" class="btn btn-danger setup" value="Delete profile" style="outline: 0 !important;">
+            <input type="submit" name="createmodify" class="btn btn-success setup" value="Create/Modify profile" style="outline: 0 !important;">
         </div>
     </form>
 </div> 

@@ -97,13 +97,13 @@ a:visited
 
 a:hover 
 {
-    color: green;
+    color: #4B906F;
     text-decoration: none;
 }
 
 a:active 
 {
-    color: green;
+    color: #4B906F;
     text-decoration: none;
 }
 
@@ -515,7 +515,7 @@ li a
 
 li a:hover
 {
-    color: green;
+    color: #4B906F;
 }
 
 li a:hover:not(.active) 
@@ -525,7 +525,7 @@ li a:hover:not(.active)
 
 .active 
 {
-    background-color: #13923D;
+    background-color: #4B906F;
 }
 
 .active:hover
@@ -549,7 +549,7 @@ li a:hover:not(.active)
     height: 35px;
     margin-right: 0;
     color: grey;
-    border: 1px solid #13923D;
+    border: 1px solid #4B906F;
     background: #FFFFFF;
     float: left;
     box-sizing: border-box;
@@ -565,7 +565,7 @@ li a:hover:not(.active)
 #search_button 
 {
     border: 0 none;
-    background: #13923D url(../images/search.svg) center no-repeat;
+    background: #4B906F url(../images/search.svg) center no-repeat;
     width: 60px;
     float: left;
     padding: 0;
@@ -578,7 +578,7 @@ li a:hover:not(.active)
 #totals-menu
 {
     border: 0 none;
-    background: #13923D;
+    background: #4B906F;
     width: 50px;
     float: left;
     padding: 0;
@@ -627,7 +627,7 @@ li a:hover:not(.active)
 
 #footer
 {
-    background-color: #13923D;
+    background-color: #4B906F;
     border-top: 2px solid #d3d3d3; 
     position: fixed;
     bottom: 0px;
@@ -673,7 +673,7 @@ input[type=checkbox]
 
 .checkboxEndpoint input[type=checkbox]:checked + label 
 {
-    background: #13923D;
+    background: #4B906F;
 }
 
 .vertical-alignment-helper 

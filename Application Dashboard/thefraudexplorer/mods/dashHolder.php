@@ -486,13 +486,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     label: "Endpoint statistics",
                     type: 'bar',
                     backgroundColor: [
-                        'rgba(19, 146, 61, 0.25)',
-                        'rgba(19, 146, 61, 0.25)',
-                        'rgba(19, 146, 61, 0.25)',
-                        'rgba(19, 146, 61, 0.25)',
-                        'rgba(19, 146, 61, 0.25)'
+                        'rgb(154, 203, 179, 0.25)',
+                        'rgb(154, 203, 179, 0.25)',
+                        'rgb(154, 203, 179, 0.25)',
+                        'rgb(154, 203, 179, 0.25)',
+                        'rgb(154, 203, 179, 0.25)'
                     ],
                     borderColor: [],
+                    hoverBackgroundColor: 'rgb(205, 229, 217, 0.45)',
                     borderWidth: 1,
                     data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countDead['total'] . ", " . $countTyping['total']; ?> ],
                 },
@@ -502,18 +503,18 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     fill: true,
                     fillColor: "#13923D",
                     lineTension: 0.1,
-                    backgroundColor: "rgba(19, 146, 61, 0.25)",
-                    borderColor: "rgba(19, 146, 61, 0.75)",
+                    backgroundColor: "rgb(75, 144, 111, 0.25)",
+                    borderColor: "rgb(75, 144, 111, 0.75)",
                     borderCapStyle: 'butt',
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(19, 146, 61, 1)",
+                    pointBorderColor: "rgb(75, 144, 111, 1)",
                     pointBackgroundColor: "#fff",
                     pointBorderWidth: 1,
                     pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(19, 146, 61, 0.75)",
-                    pointHoverBorderColor: "rgba(19, 146, 61, 0.25)",
+                    pointHoverBackgroundColor: "rgb(75, 144, 111, 0.5)",
+                    pointHoverBorderColor: "rgb(75, 144, 111, 0.25)",
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
@@ -610,14 +611,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     ?>
                     
                     backgroundColor: [
-                        "#48A969",
-                        "#BDDAC7",
-                        "#94C9A5"
+                        "#78ba9a",
+                        "#9acbb3",
+                        "#bcdccd"
                     ],
                     hoverBackgroundColor: [
-                        "#48A969",
-                        "#BDDAC7",
-                        "#94C9A5"
+                        "#78ba9a",
+                        "#9acbb3",
+                        "#bcdccd"
                     ]
                 }]
         },

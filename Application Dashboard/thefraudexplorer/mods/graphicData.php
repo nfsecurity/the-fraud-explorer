@@ -189,7 +189,7 @@ include "../lbs/endpointMethods.php";
 
     .font-icon-color-green
     {
-        color: green;
+        color: #4B906F;
     }
     
     .footer-statistics
@@ -202,12 +202,24 @@ include "../lbs/endpointMethods.php";
     
     .font-icon-gray 
     { 
-        color: #B4BCC2;; 
+        color: #B4BCC2;
     }
     
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+
+    .btn-success, .btn-success:active, .btn-success:visited 
+    {
+        background-color: #4B906F !important;
+        border: 1px solid #4B906F !important;
+    }
+
+    .btn-success:hover
+    {
+        background-color: #57a881 !important;
+        border: 1px solid #57a881 !important;
     }
 
 </style>

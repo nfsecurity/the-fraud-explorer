@@ -98,13 +98,13 @@ a:visited
 
 a:hover 
 {
-    color: green;
+    color: #4B906F;
     text-decoration: none;
 }
 
 a:active 
 {
-    color: green;
+    color: #4B906F;
     text-decoration: none;
 }
 
@@ -240,7 +240,7 @@ a:active
     justify-content: center; 
     align-items: center; 
     position: relative; 
-    border: 0px solid green; 
+    border: 0px solid #4B906F; 
     height: calc(100%/3);
 }
 
@@ -258,7 +258,7 @@ a:active
 {
     position: relative; 
     width: 55px; 
-    background-color: #BEDAC7; 
+    background-color: #9acbb3; 
     height: 55px; 
     float: left;
     border-radius: 5px;
@@ -268,7 +268,7 @@ a:active
 {
     position: relative; 
     width: 55px; 
-    background-color: #4CA86B; 
+    background-color: #78ba9a; 
     height: 55px; 
     float: left;
     border-radius: 5px;
@@ -278,7 +278,7 @@ a:active
 {
     position: relative; 
     width: 55px; 
-    background-color: #96C8A6; 
+    background-color: #bcdccd; 
     height: 55px; 
     float: left;
     border-radius: 5px;
@@ -507,7 +507,7 @@ a:active
 
 .font-icon-color-green
 {
-    color: #95C8A6;
+    color: #4B906F;
 }
 
 .font-icon-color-white 
@@ -544,7 +544,7 @@ li a
 
 li a:hover
 {
-    color: green;
+    color: #4B906F;
 }
 
 li a:hover:not(.active) 
@@ -554,7 +554,7 @@ li a:hover:not(.active)
 
 .active 
 {
-    background-color: #13923D;
+    background-color: #4B906F;
 }
 
 .active:hover
@@ -578,7 +578,7 @@ li a:hover:not(.active)
     height: 35px;
     margin-right: 0;
     color: grey;
-    border: 1px solid #13923D;
+    border: 1px solid #4B906F;
     background: #FFFFFF;
     float: left;
     box-sizing: border-box;
@@ -594,7 +594,7 @@ li a:hover:not(.active)
 #search_button 
 {
     border: 0 none;
-    background: #13923D url(../images/search.svg) center no-repeat;
+    background: #4B906F url(../images/search.svg) center no-repeat;
     width: 60px;
     float: left;
     padding: 0;
@@ -607,7 +607,7 @@ li a:hover:not(.active)
 #totals-menu
 {
     border: 0 none;
-    background: #13923D;
+    background: #4B906F;
     width: 50px;
     float: left;
     padding: 0;
@@ -621,7 +621,7 @@ li a:hover:not(.active)
 
 #footer
 {
-    background-color: #13923D;
+    background-color: #4B906F;
     border-top: 2px solid #d3d3d3; 
     position: fixed;
     bottom: 0px;
@@ -847,5 +847,5 @@ li a:hover:not(.active)
 
 a.welcome
 {
-    color: green;
+    color: #4B906F;
 }

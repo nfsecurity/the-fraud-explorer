@@ -248,7 +248,7 @@ if ($endpointDECSQL != "all")
         
         echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
     
-        if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
+        if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
 
         echo '</tr>';
@@ -395,7 +395,7 @@ else
         echo '<td class="falsetd-all">';
         echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
         
-        if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-green"></span></a></td>';
+        if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
 
         echo '</tr>';

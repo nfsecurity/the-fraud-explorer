@@ -188,7 +188,7 @@ include "../lbs/endpointMethods.php";
     
     .font-icon-color-green
     {
-        color: green;
+        color: #4B906F;
     }
     
     .footer-statistics
@@ -206,6 +206,11 @@ include "../lbs/endpointMethods.php";
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+    
+    .btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited 
+    {
+        background-color: #4B906F !important;
     }
 
 </style>
@@ -317,7 +322,6 @@ include "../lbs/endpointMethods.php";
             ?>
             
         </form>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
     </div>
 </div> 
 

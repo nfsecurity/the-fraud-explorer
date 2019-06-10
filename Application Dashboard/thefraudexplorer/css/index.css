@@ -93,7 +93,7 @@ a
 table
 {
     overflow: hidden;
-    border: 1px solid #13923D;
+    border: 1px solid #4B906F;
     background:#fefefe;
     width: 500px;
     height: 200px; 
@@ -108,7 +108,7 @@ tbody
 .table-footer 
 {
     padding: 8px 10px 8px 10px;
-    background: #13923D;
+    background: #4B906F;
     font: 12px 'FFont', "Helvetica Neue", Arial, Helvetica, sans-serif;
     text-align: center;
     border: 0px solid #d3d3d3;
@@ -128,7 +128,7 @@ td
 th 
 {
     padding: 20px 12px 20px 12px;
-    background: #13923D;
+    background: #4B906F;
     font: 16px 'FFont', "Helvetica Neue", Arial, Helvetica, sans-serif;
     text-align: center;
     border: 0px solid #d3d3d3;

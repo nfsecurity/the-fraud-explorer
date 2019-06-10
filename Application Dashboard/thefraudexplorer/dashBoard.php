@@ -86,6 +86,23 @@ $_SESSION['instance'] = "dashBoard";
 
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
+
+        <style>
+
+            .btn-success, .btn-success:active, .btn-success:visited 
+            {
+                background-color: #4B906F !important;
+                border: 1px solid #4B906F !important;
+            }
+
+            .btn-success:hover
+            {
+                background-color: #57a881 !important;
+                border: 1px solid #57a881 !important;
+            }
+
+        </style>
+
     </head>
     <body>
         <div align="center" style="height:100%;">
