@@ -8,7 +8,7 @@ Las instrucciones de instalación y configuración las encontrará en la [Wiki](
 
 *The Fraud Explorer* está siendo desarrollado por [NF S.A.S](https://www.nfsec.co). El sitio oficial es https://www.thefraudexplorer.com.
 
-![The Fraud Explorer Footer](https://www.thefraudexplorer.com/img/mainPictureFooter.png)
+![The Fraud Explorer Footer](https://www.thefraudexplorer.com/img/mainPicture.png)
 
 ## Metodología y estrategia
 
