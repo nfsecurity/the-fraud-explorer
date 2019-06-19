@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-06
+ * Revision: v1.3.3-ai
  *
  * Description: Analytics Helpers
  */
@@ -16,6 +16,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using TFE_core.Database;
 
 namespace TFE_core.Analytics
 {
@@ -84,6 +85,23 @@ namespace TFE_core.Analytics
                 else return false;
             }
             return true;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Excluded Apps
+        /// </summary>
+
+        #region Excluded Apps
+
+        public static string appsInventory = SQLStorage.RetrievePar("excludedApps").ToLower();
+        
+        public static bool AppsExclusion(string activeApp)
+        {
+            if (appsInventory.Equals("NoExcludedApps")) return false;
+            else if (activeApp.ToLower().Contains(appsInventory)) return true;
+            else return false;
         }
 
         #endregion

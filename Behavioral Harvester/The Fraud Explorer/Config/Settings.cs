@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-06
+ * Revision: v1.3.3-ai
  *
  * Description: Internal configuration
  */
@@ -181,7 +181,7 @@ namespace TFE_core.Config
         public static String serverAddress = "https://cloud.thefraudexplorer.com/update.xml";
         public static String serverIP = "10.1.1.253";
         public static String textAnalytics = "0";
-        public static String applicationAnalytics = "1";
+        public static String excludedApps = "NoExcludedApps";
         public static String heartbeat = "3500000";
         public static String sqlitePassword = "0x15305236576e366832727a304f6a4731";
         public static String exeName = "end64svc.exe";
@@ -189,10 +189,9 @@ namespace TFE_core.Config
         public static String aesIV = "1uBu8ycVugDIJz61";
         public static String MSIAESKeyIV = "3uVv7ycVegRIdz37";
         public static String serverPassword = "KGBz77";
-        public static String harvesterVersion = "1.3.2";
+        public static String harvesterVersion = "1.3.3";
         public static String agentPostfix = "_agt";
         public static String textPort = "5965";
-        public static String applicationPort = "5961";
 
         #endregion
     }

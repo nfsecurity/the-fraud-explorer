@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-03
- * Revision: v1.3.2-ai
+ * Date: 2019-06
+ * Revision: v1.3.3-ai
  *
  * Description: SQL Storage
  */
@@ -85,6 +85,9 @@ namespace TFE_core.Database
                 insertSQL.ExecuteNonQuery();
 
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('aesKey', '" + globalConfigParams.aesKey + "')", connection);
+                insertSQL.ExecuteNonQuery();
+
+                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('excludedApps', '" + globalConfigParams.excludedApps + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('aesIV', '" + globalConfigParams.aesIV + "')", connection);
@@ -198,6 +201,7 @@ namespace TFE_core.Database
                     globalConfigParams.aesKey = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.aesIV = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.serverPassword = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/srvpwd").ToString()).Replace("\0", String.Empty);
+                    globalConfigParams.excludedApps = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/apps").ToString()).Replace("\0", String.Empty);
 
                     SQLStorage db = new SQLStorage();
                     db.CreateDB();
