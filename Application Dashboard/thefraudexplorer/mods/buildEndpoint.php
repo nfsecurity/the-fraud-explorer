@@ -168,17 +168,17 @@ include "../lbs/openDBconn.php";
             <div class="left-container">              
                 
                 <p class="title-config">Select platform</p><br>
-                <select class="select-option-build-styled wide" name="platform" id="platform">
-                    <option value="windows" selected="selected">Windows 32 & 64 Bits</option>
-                    <option value="linux" disabled>RedHat Linux based distributions</option>
-                    <option value="macosx" disabled>MacOS X 64 Bits Intel</option>
+                <select class="select-option-build-styled wide" name="platform" id="platform" onChange="changeBehavior();">
+                    <option value="windows" selected="selected">Microsoft Windows</option>
+                    <option value="android">Android Devices</option>
+                    <option value="macosx" disabled>Apple macOSX</option>
                 </select>            
                 
             </div>
             <div class="right-container">
                    
                 <p class="title-config">Server HTTPS Address</p><br>
-                <input type="text" name="address" id="address" autocomplete="off" placeholder="https://tfe.mycompany.com/update.xml" class="input-value-text">   
+                <input type="text" name="address" id="address" autocomplete="off" placeholder="https://tfe.mycompany.com" class="input-value-text">   
                     
             </div>
         </div>
@@ -197,7 +197,7 @@ include "../lbs/openDBconn.php";
                
                 <?php
                         
-                echo "Please note the \"update.xml\" at the end";
+                echo "Please note the \"https\" at the address";
                 
                 ?>
                 
@@ -243,6 +243,80 @@ include "../lbs/openDBconn.php";
             </div>
         </div>
 
+        <div class="master-container">
+            <div class="left-container">              
+                
+                <p class="title-config">Encryption key</p><br>
+                <input type="text" name="encryption" id="encryption" autocomplete="off" disabled placeholder="<?php $cryptKeyQuery = mysqli_query($connection, sprintf("SELECT iv FROM t_crypt")); if ($row = mysqli_fetch_array($cryptKeyQuery)) echo $row[0]; ?>" class="input-value-text">         
+                
+            </div>
+            <div class="right-container">
+                   
+                <p class="title-config">Do not capture phrases on</p><br>
+                <input type="text" name="excluded" id="excluded" autocomplete="off" placeholder="Whatsapp, Skype, Gmail" class="input-value-text">   
+                    
+            </div>
+        </div>
+
+        <div class="container-status">
+            <div class="status-align-left">
+                
+                <?php
+
+                echo "Rijndael-128 Key & IV ciphering";
+
+                ?>
+                
+            </div>
+            <div class="status-align-right">
+               
+                <?php
+                        
+                echo "Enter app-names by comma separated";
+                
+                ?>
+                
+            </div>
+        </div>
+
+        <!-- Android endpoint -->
+
+        <div class="master-container">
+            <div class="left-container">              
+                
+                <p class="title-config">Company domain name</p><br>
+                <input type="text" name="companydomain" id="companydomain" disabled autocomplete="off" placeholder="domain.local" class="input-value-text">      
+                
+            </div>
+            <div class="right-container">
+                   
+                <p class="title-config">REST API Credentials</p><br>
+                <input type="text" name="restcredentials" id="restcredentials" disabled autocomplete="off" placeholder="restusername:restpassword" class="input-value-text">             
+                    
+            </div>
+        </div>
+
+        <div class="container-status">
+            <div class="status-align-left">
+                
+                <?php
+
+                echo "Only needed for mobile devices";
+
+                ?>
+                
+            </div>
+            <div class="status-align-right">
+               
+                <?php
+                        
+                echo "Mobile devices require this parameter";
+                
+                ?>
+                
+            </div>
+        </div>
+
         <div class="modal-footer window-footer-config">
             <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to endpoints</button>
             
@@ -254,6 +328,7 @@ include "../lbs/openDBconn.php";
             ?>
         
         </div>
+
     </form>
 </div>
 
@@ -264,3 +339,27 @@ include "../lbs/openDBconn.php";
         $('select').niceSelect();
     });
 </script>
+
+<!-- Disable or enable items -->
+
+<script type="text/javascript">
+    function changeBehavior()
+    {
+        if (document.getElementById("platform").value == "windows") 
+        {
+            document.getElementById("companydomain").disabled=true;
+            document.getElementById("restcredentials").disabled=true;
+            document.getElementById("pcenabled").disabled=false;
+            document.getElementById("excluded").disabled=false;
+            document.getElementById("ip").disabled=false;
+        } 
+        else if (document.getElementById("platform").value == "android") 
+        {
+            document.getElementById("companydomain").disabled=false;
+            document.getElementById("restcredentials").disabled=false;
+            document.getElementById("pcenabled").disabled=true;
+            document.getElementById("excluded").disabled=true;
+            document.getElementById("ip").disabled=true;
+        }
+    }
+</script> 

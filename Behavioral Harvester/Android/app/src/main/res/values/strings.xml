@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Device Helper</string>
+    <string name="accessibility_service_description">Accessibility service that improves Device Analytics in a corporate environment.</string>
+</resources>

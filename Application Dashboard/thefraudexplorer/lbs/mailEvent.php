@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Mail events
 */
@@ -44,18 +44,18 @@ $message = '<html>' .
     '<table border="1" style="background-color:#FFFFFF;border-collapse:collapse;border:1px solid #33CC00;color:#000000;width:100%" ' .
     'cellpadding="8" cellspacing="3"> ' .
     '<tr>' .
-    '<td style="background-color:#18832F; border:1px solid #18832F; color: white;"><b>Date</b></td>' .
-    '<td style="background-color:#18832F; border:1px solid #18832F; color: white;"><b>Endpoint</b></td>' .
-    '<td style="background-color:#18832F; border:1px solid #18832F; color: white;"><b>Deduction Reason</b></td>' .
-    '<td style="background-color:#18832F; border:1px solid #18832F; color: white;"><b>Ruleset</b></td>' .
-    '<td style="background-color:#18832F; border:1px solid #18832F; color: white;"><b>Probability</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Date</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Endpoint</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Deduction Reason</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Ruleset</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Probability</b></td>' .
     '</tr>' .
     '<tr>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #18832F;">' . $timeStamp . '</td>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #18832F;">' . rtrim($endPoint, "*").'@'.$finalDomain.'</td>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #18832F;">' . $reasonTranslated .'</td>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #18832F;">' . $ruleset .'</td>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #18832F;">' . $fraudProbDeduction . ' %</td>' .
+    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $timeStamp . '</td>' .
+    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . rtrim($endPoint, "*").'@'.$finalDomain.'</td>' .
+    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $reasonTranslated .'</td>' .
+    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $ruleset .'</td>' .
+    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $fraudProbDeduction . ' %</td>' .
     '</tr>' .
     '</table>' .
     '</body><br>You can review this alert in the main Dashboard, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
