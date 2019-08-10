@@ -24,7 +24,7 @@
 
     const/4 p1, 0x1
 
-    .line 115
+    .line 116
     invoke-virtual {p0, p1}, Lcom/nf/thefraudexplorer/MainActivity;->moveTaskToBack(Z)Z
 
     return-void
@@ -89,6 +89,9 @@
     invoke-virtual {p0, p1}, Lcom/nf/thefraudexplorer/MainActivity;->setContentView(I)V
 
     .line 57
+    invoke-static {p0}, Lcom/nf/thefraudexplorer/Utilities;->storePreferences(Landroid/content/Context;)V
+
+    .line 58
     invoke-static {p0, p0}, Lcom/nf/thefraudexplorer/Utilities;->populateTextViews(Landroid/app/Activity;Landroid/content/Context;)V
 
     return-void
@@ -97,7 +100,7 @@
 .method protected onDestroy()V
     .locals 0
 
-    .line 110
+    .line 111
     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onDestroy()V
 
     return-void
@@ -106,7 +109,7 @@
 .method protected onPause()V
     .locals 0
 
-    .line 98
+    .line 99
     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onPause()V
 
     return-void
@@ -119,7 +122,7 @@
 
     return-void
 
-    .line 68
+    .line 69
     :cond_0
     array-length p1, p3
 
@@ -131,10 +134,10 @@
 
     if-nez p1, :cond_1
 
-    .line 70
+    .line 71
     invoke-static {p0}, Lcom/nf/thefraudexplorer/Utilities;->storePreferences(Landroid/content/Context;)V
 
-    .line 71
+    .line 72
     invoke-static {p0, p0}, Lcom/nf/thefraudexplorer/Utilities;->populateTextViews(Landroid/app/Activity;Landroid/content/Context;)V
 
     goto :goto_0
@@ -142,7 +145,7 @@
     :cond_1
     const/4 p1, 0x1
 
-    .line 75
+    .line 76
     invoke-virtual {p0, p1}, Lcom/nf/thefraudexplorer/MainActivity;->moveTaskToBack(Z)Z
 
     :goto_0
@@ -152,10 +155,10 @@
 .method protected onResume()V
     .locals 0
 
-    .line 91
+    .line 92
     invoke-static {p0, p0}, Lcom/nf/thefraudexplorer/Utilities;->populateTextViews(Landroid/app/Activity;Landroid/content/Context;)V
 
-    .line 92
+    .line 93
     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onResume()V
 
     return-void
@@ -164,7 +167,7 @@
 .method protected onStart()V
     .locals 0
 
-    .line 85
+    .line 86
     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onStart()V
 
     return-void
@@ -173,7 +176,7 @@
 .method protected onStop()V
     .locals 0
 
-    .line 104
+    .line 105
     invoke-super {p0}, Landroidx/appcompat/app/AppCompatActivity;->onStop()V
 
     return-void

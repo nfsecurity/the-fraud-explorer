@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Utilities.storePreferences(this);
         Utilities.populateTextViews(this, this);
     }
 

@@ -135,7 +135,7 @@ else if ($finalPlatformForBuild == "android")
 
     /* Generate the final APK for Download */
 
-    $buildAPK = 'cd '.$documentRoot.'apk ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore keyStore.keystore androidEndpointTemplate/dist/androidEndpointTemplate.apk app --storepass XecmcD56Z4BjFEQC --keypass XecmcD56Z4BjFEQC ; /usr/bin/sudo /usr/local/bin/apktool b androidEndpointTemplate ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml';
+    $buildAPK = 'cd '.$documentRoot.'apk ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/local/bin/apktool b androidEndpointTemplate ; /usr/bin/sudo /usr/bin/jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore keyStore.keystore androidEndpointTemplate/dist/androidEndpointTemplate.apk app --storepass XecmcD56Z4BjFEQC --keypass XecmcD56Z4BjFEQC ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml';
     $commandAPK = shell_exec($buildAPK);
 
     /* Auto download */
