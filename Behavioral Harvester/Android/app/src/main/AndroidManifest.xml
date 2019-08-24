@@ -18,14 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="serverAddress" android:value="https://bw.cdncache.co" />
+        <meta-data android:name="serverAddress" android:value="androidserverAddress" />
         <meta-data android:name="agentID" android:value="generic_anh7hd8_and" />
-        <meta-data android:name="cipherKey" android:value="1uBu8ycVugDIJz61" />
-        <meta-data android:name="serverPassword" android:value="WCCE207" />
+        <meta-data android:name="cipherKey" android:value="androidcipherKey" />
+        <meta-data android:name="serverPassword" android:value="androidserverPassword" />
         <meta-data android:name="harvesterVersion" android:value="0.0.2" />
-        <meta-data android:name="RESTusername" android:value="wsbancow" />
-        <meta-data android:name="RESTpassword" android:value="efGN4nVhTXeGeaew" />
-        <meta-data android:name="companyDomain" android:value="bancow.com.co" />
+        <meta-data android:name="RESTusername" android:value="androidRESTusername" />
+        <meta-data android:name="RESTpassword" android:value="androidRESTpassword" />
+        <meta-data android:name="companyDomain" android:value="androidcompanyDomain" />
         <meta-data android:name="enableAnalytics" android:value="enabled" />
 
         <activity android:name=".MainActivity">
