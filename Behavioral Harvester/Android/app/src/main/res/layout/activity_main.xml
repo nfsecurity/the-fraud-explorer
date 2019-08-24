@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4B906F"
+    android:gravity="center"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Device Helper Properties"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        />
+
+    <EditText
+        android:id="@+id/agentidtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_edit_text_bg"
+        android:drawableLeft="@drawable/ic_agentid"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="10dp"
+        />
+
+    <EditText
+        android:id="@+id/serveridtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_edit_text_bg"
+        android:drawableLeft="@drawable/ic_server"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="10dp"
+        />
+
+    <EditText
+        android:id="@+id/serviceidtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_edit_text_bg"
+        android:drawableLeft="@drawable/ic_service"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="10dp"
+        />
+
+    <Button
+        android:id="@+id/close"
+        android:onClick="closeApplication"
+        android:text="ACCEPT AND CONTINUE"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:background="@drawable/button_corners"
+        android:textColor="#FFFFFF"
+        android:textSize="15dp"
+        />
+
+</LinearLayout>
