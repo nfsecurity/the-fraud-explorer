@@ -357,7 +357,7 @@ include "../lbs/openDBconn.php";
         {
             document.getElementById("companydomain").disabled=false;
             document.getElementById("restcredentials").disabled=false;
-            document.getElementById("pcenabled").disabled=true;
+            document.getElementById("pcenabled").disabled=false;
             document.getElementById("excluded").disabled=true;
             document.getElementById("ip").disabled=true;
         }

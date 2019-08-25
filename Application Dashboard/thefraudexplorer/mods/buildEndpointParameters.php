@@ -100,21 +100,21 @@ if ($finalPlatformForBuild == "windows")
 {
     /* Replace data in the MSI XML template */
 
-    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/10.1.1.253/'.$finalIPAddress.'/g;s/NoExcludedApps/'.$finalExcludedApps.'/g" '.$documentRoot.'msi/endpointInstaller.xml > '.$documentRoot.'msi/endpointInstallerForDownload.xml';
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/10.1.1.253/'.$finalIPAddress.'/g;s/NoExcludedApps/'.$finalExcludedApps.'/g" '.$documentRoot.'endpoints/msi/endpointInstaller.xml > '.$documentRoot.'endpoints/msi/endpointInstallerForDownload.xml';
     $commandReplacements = shell_exec($replaceParams);
 
     /* Generate the final MSI for Download */
 
-    $buildMSI = 'cd '.$documentRoot.'msi ; /usr/bin/sudo /usr/bin/wine '.$documentRoot.'msi/bin/xml2msi.exe endpointInstallerForDownload.xml';
+    $buildMSI = 'cd '.$documentRoot.'endpoints/msi ; /usr/bin/sudo /usr/bin/wine '.$documentRoot.'endpoints/msi/bin/xml2msi.exe endpointInstallerForDownload.xml';
     $commandMSI = shell_exec($buildMSI);
 
     /* Auto download */
 
-    $msiFile = $documentRoot.'msi/endpointInstallerForDownload.MSI';
+    $msiFile = $documentRoot.'endpoints/msi/endpointInstallerForDownload.MSI';
 
     if (file_exists($msiFile)) 
     {
-        $original_filename = $documentRoot.'msi/endpointInstallerForDownload.MSI';
+        $original_filename = $documentRoot.'endpoints/msi/endpointInstallerForDownload.MSI';
         $new_filename = 'endpointInstaller.msi';
 
         header("Content-Type: application/octet-stream");
@@ -130,21 +130,22 @@ else if ($finalPlatformForBuild == "android")
 {
     /* Replace data in the AndroidManifest XML template */
 
-    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/androidcipherKey/'.$finalCryptKey.'/g;s/androidserverPassword/'.$finalSrvPwd.'/g;s/androidserverAddress/'.$finalServerHTTPSAddress.'/g;s/androidRESTusername/'.$finalRESTusername.'/g;s/androidRESTpassword/'.$finalRESTpassword.'/g;s/androidcompanyDomain/'.$finalCompanyDomain.'/g" '.$documentRoot.'apk/AndroidManifestTemplate.xml > '.$documentRoot.'apk/androidEndpointTemplate/AndroidManifest.xml';
+    $analyticsEnabled = ($finalPCEnabled == 1 ? true : false);
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/androidcipherKey/'.$finalCryptKey.'/g; s/enabled/'.$analyticsEnabled.'/g;s/androidserverPassword/'.$finalSrvPwd.'/g;s/androidserverAddress/'.$finalServerHTTPSAddress.'/g;s/androidRESTusername/'.$finalRESTusername.'/g;s/androidRESTpassword/'.$finalRESTpassword.'/g;s/androidcompanyDomain/'.$finalCompanyDomain.'/g" '.$documentRoot.'endpoints/apk/AndroidManifestTemplate.xml > '.$documentRoot.'endpoints/apk/androidEndpointTemplate/AndroidManifest.xml';
     $commandReplacements = shell_exec($replaceParams);
 
     /* Generate the final APK for Download */
 
-    $buildAPK = 'cd '.$documentRoot.'apk ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/local/bin/apktool b androidEndpointTemplate ; /usr/bin/sudo /usr/bin/jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore keyStore.keystore androidEndpointTemplate/dist/androidEndpointTemplate.apk app --storepass XecmcD56Z4BjFEQC --keypass XecmcD56Z4BjFEQC ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml';
+    $buildAPK = 'cd '.$documentRoot.'endpoints/apk ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/local/bin/apktool b androidEndpointTemplate ; /usr/bin/sudo /usr/bin/jarsigner -sigalg SHA1withRSA -digestalg SHA1 -keystore keyStore.keystore androidEndpointTemplate/dist/androidEndpointTemplate.apk app --storepass XecmcD56Z4BjFEQC --keypass XecmcD56Z4BjFEQC ; /usr/bin/sudo /usr/bin/chmod 777 androidEndpointTemplate/AndroidManifest.xml ; /usr/bin/sudo /usr/bin/chown apache:apache androidEndpointTemplate/AndroidManifest.xml';
     $commandAPK = shell_exec($buildAPK);
 
     /* Auto download */
 
-    $apkFile = $documentRoot.'apk/androidEndpointTemplate/dist/androidEndpointTemplate.apk';
+    $apkFile = $documentRoot.'endpoints/apk/androidEndpointTemplate/dist/androidEndpointTemplate.apk';
 
     if (file_exists($apkFile)) 
     {
-        $original_filename = $documentRoot.'apk/androidEndpointTemplate/dist/androidEndpointTemplate.apk';
+        $original_filename = $documentRoot.'endpoints/apk/androidEndpointTemplate/dist/androidEndpointTemplate.apk';
         $new_filename = 'androidEndpoint.apk';
 
         header("Content-Type: application/octet-stream");
