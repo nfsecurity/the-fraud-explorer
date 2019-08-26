@@ -130,7 +130,7 @@ else if ($finalPlatformForBuild == "android")
 {
     /* Replace data in the AndroidManifest XML template */
 
-    $analyticsEnabled = ($finalPCEnabled == 1 ? true : false);
+    $analyticsEnabled = ($finalPCEnabled == 1 ? "enabled" : "disabled");
     $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/androidcipherKey/'.$finalCryptKey.'/g; s/enabled/'.$analyticsEnabled.'/g;s/androidserverPassword/'.$finalSrvPwd.'/g;s/androidserverAddress/'.$finalServerHTTPSAddress.'/g;s/androidRESTusername/'.$finalRESTusername.'/g;s/androidRESTpassword/'.$finalRESTpassword.'/g;s/androidcompanyDomain/'.$finalCompanyDomain.'/g" '.$documentRoot.'endpoints/apk/AndroidManifestTemplate.xml > '.$documentRoot.'endpoints/apk/androidEndpointTemplate/AndroidManifest.xml';
     $commandReplacements = shell_exec($replaceParams);
 
