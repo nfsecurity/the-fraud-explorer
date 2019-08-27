@@ -94,7 +94,7 @@ public class AccessibilityHelper extends AccessibilityService
 
                         /* Catch send event */
 
-                        if (nodeInfo.getViewIdResourceName().toString().contains(":id/date"))
+                        if (nodeInfo.getViewIdResourceName().toString().contains(":id/date") || nodeInfo.getViewIdResourceName().toString().contains(":id/quoted_title"))
                         {
                             if (Utilities.finalChatMessage != null && Utilities.finalChatMessage.length() > 3)
                             {
