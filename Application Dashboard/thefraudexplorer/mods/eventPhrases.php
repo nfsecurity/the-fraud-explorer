@@ -37,6 +37,10 @@ $indexId = filter($_GET['idx']);
 $eventPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
 $regExp = filter($_GET['regexp']);
 $phraseTyped = filter($_GET['phrase']);
+$alertDate = filter($_GET['date']);
+$alertType = filter($_GET['alertType']);
+$endPoint = filter($_GET['endpoint']);
+$windowTitle = filter($_GET['windowTitle']);
 
 ?>
 
@@ -80,6 +84,21 @@ $phraseTyped = filter($_GET['phrase']);
         overflow-y: scroll;
     }
 
+    .phrase-viewer-resume
+    {
+        border: 0px solid #e2e2e2;
+        line-height: 20px;
+        width: 100%;
+        border-radius: 4px;
+        text-align: justify;
+        font-family: 'FFont', sans-serif; 
+        font-size: 12px;
+        padding: 0px 0px 0px 0px;
+        background: #FFFFFF;
+        margin-bottom: 0px;
+        overflow-y: none;
+    }
+
     .footer-statistics
     {
         background-color: #e8e9e8;
@@ -90,6 +109,12 @@ $phraseTyped = filter($_GET['phrase']);
     .matchedStyle
     {
         color: black;
+        font-family: 'FFont-Bold', sans-serif;
+        font-style: italic;
+    }
+
+    .matchedStyle-resume
+    {
         font-family: 'FFont-Bold', sans-serif;
         font-style: italic;
     }
@@ -111,6 +136,10 @@ $phraseTyped = filter($_GET['phrase']);
     $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
     
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+
+    echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
+    echo 'At <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.base64_decode($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(base64_decode($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertType).'</span> behavior as shown below<br><br>';
+    echo '</div>';
 
     if($session->username == "admin")
     {

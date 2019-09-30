@@ -188,6 +188,14 @@ if ($endpointDECSQL != "all")
         $searchValue = "/".$result['_source']['phraseMatch']."/";
         $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
+        $index = $result['_index'];
+        $type = $result['_type'];
+        $regid = $result['_id'];
+        $endPoint = explode("_", $result['_source']['agentId']);
+        $agentId = $result['_source']['agentId'];
+        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+        $userDomain = mysqli_fetch_assoc($queryUserDomain);
+        $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
     
         echo '<td class="detailstd">';
         echo '<span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;">&ensp;</span>';
@@ -216,8 +224,10 @@ if ($endpointDECSQL != "all")
 
         /* Phrase typed */
 
+        $alertDate =  date_format($date, 'Y-m-d H:i');
+
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($alertDate).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */
@@ -225,11 +235,6 @@ if ($endpointDECSQL != "all")
         echo '<td style="display: none;">'.$stringHistory.'</td>';
 
         /* Mark false positive */
-    
-        $index = $result['_index'];
-        $type = $result['_type'];
-        $regid = $result['_id'];
-        $agentId = $result['_source']['agentId'];
     
         $urlEventValue="http://localhost:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();
@@ -365,7 +370,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Hidden Phrase zoom, for CSV purposes */

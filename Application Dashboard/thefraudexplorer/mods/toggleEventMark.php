@@ -84,7 +84,7 @@ else if (!empty($_POST['delete-event']))
 /* Return to refering url */
 
 if ($urlrefer == "allevents") header ("location: ../eventData?endpoint=".base64_encode(base64_encode("all")));
-else header ("location: ../eventData?endpoint=".$endpoint);
+else header ("location: ../eventData?endpoint=".base64_encode(base64_encode($endpoint)));
 
 ?>
 

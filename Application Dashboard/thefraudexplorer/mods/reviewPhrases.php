@@ -29,12 +29,12 @@ include "../lbs/openDBconn.php";
 
 if (isset($_POST['reviewPhrasesTextArea']))
 {
-    $textArea=encRijndael(filter($_POST['reviewPhrasesTextArea']));
+    $textArea = encRijndael(filter_var($_POST['reviewPhrasesTextArea'], FILTER_SANITIZE_STRING));
 
-    if (isset($_GET['id'])) $documentId=filter($_GET['id']);
-    if (isset($_GET['idx'])) $indexId=filter($_GET['idx']);
+    if (isset($_GET['id'])) $documentId = filter($_GET['id']);
+    if (isset($_GET['idx'])) $indexId = filter($_GET['idx']);
 
-    $urlReview="http://localhost:9200/".$indexId."/AlertEvent/".$documentId."/_update?pretty&pretty";
+    $urlReview = "http://localhost:9200/".$indexId."/AlertEvent/".$documentId."/_update?pretty&pretty";
     $params = '{ "doc" : { "stringHistory" : "'.$textArea.'" } }';
 
     $ch = curl_init();
@@ -44,7 +44,7 @@ if (isset($_POST['reviewPhrasesTextArea']))
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $resultReview=curl_exec($ch);
+    $resultReview = curl_exec($ch);
     curl_close($ch);
 }   
     
