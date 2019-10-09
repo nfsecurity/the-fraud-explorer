@@ -203,11 +203,11 @@ include "../lbs/openDBconn.php";
 <div class="div-container-roles">
     <form id="formRoles" name="formRoles" method="post" action="mods/rolesParameters">
         <p class="title-config">Type the user name</p><br>
-        <input class="input-value-text-config" type="text" name="username" id="username" autocomplete="off" placeholder=":username here">
+        <input class="input-value-text-config" type="text" name="username" id="username" autocomplete="new-password" placeholder=":username here">
         <br><p class="title-config">Type password (only for new user option)</p><br>
-        <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="off" placeholder=":password here">
+        <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="new-password" placeholder=":password here">
         <br><p class="title-config">Specify the domain context</p><br>
-        <input class="input-value-text-config" type="text" name="domain" id="domain" autocomplete="off" placeholder=":domain context here">
+        <input class="input-value-text-config" type="text" name="domain" id="domain" autocomplete="new-password" placeholder=":domain context here">
         <br>
         <p class="title-config">List of current users and their domain context</p><br>
 
