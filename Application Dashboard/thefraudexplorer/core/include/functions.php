@@ -275,7 +275,11 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         }
         else
         {
-            if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+            if ($dictEna == "yes") 
+            {
+                $stringOfWords = processBackspaces($stringOfWords);
+                $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+            }
 
             parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
             $counter = 0;
@@ -291,7 +295,11 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
             $lastWindowTitle = $windowTitle;
             $lastTimeStamp = $timeStamp; 
 
-            if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+            if ($dictEna == "yes") 
+            {
+                $stringOfWords = processBackspaces($stringOfWords);
+                $stringOfWords = checkPhrases($stringOfWords, $dictLan);
+            }
 
             parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }
@@ -529,7 +537,7 @@ function checkPhrases($string, $language)
     pspell_config_mode($config_dic, PSPELL_FAST);
     $dictionary = pspell_new_config($config_dic);
     $replacement_suggest = false;
-    $string = explode(' ', trim(str_replace(',', ' ', $string)));
+    $string = explode(' ', $string);
 
     foreach ($string as $key => $value)
     {
@@ -541,16 +549,70 @@ function checkPhrases($string, $language)
             {
                 if(strtolower($suggestion[0]) != strtolower($value))
                 {
-                    $string[$key] = $suggestion[0];
+                    if (strpos($value, ',') !== false) $string[$key] = $suggestion[0] . ",";
+                    else if (strpos($value, '.') !== false) $string[$key] = $suggestion[0] . ".";
+                    else $string[$key] = $suggestion[0];
                     $replacement_suggest = true;
                 }
             }
         }
     }
 
-    $finalWord = iconv("iso-8859-1","UTF-8//IGNORE", implode(' ', $string));
+    return strtr(implode(' ', $string), $unwanted_chars);
+}
 
-    return strtr($finalWord, $unwanted_chars);
+/* Process Backspaces */
+
+function processBackspaces($strInput)
+{
+    $strInput = ltrim($strInput, "# ");
+
+    if (strpos($strInput, '_') !== false)
+    {
+        $strInput = str_replace(" ","", $strInput);
+    }
+
+    $stringStack = new SplQueue();
+    $poppedChar = null;
+    $finalString = null;
+    $search_char = "#";
+
+    for($x = "0"; $x < strlen($strInput); $x++)
+    {
+        $currentChar = substr($strInput, $x, 1);
+
+        switch($currentChar)
+        {
+            case "#":
+
+                try
+                {
+                    $poppedChar = $stringStack->top();
+                    $stringStack->pop();
+                }
+                catch (Exception $e) {}
+
+                break;
+            default:
+                $stringStack->push($currentChar);
+                break;
+        }
+    }
+
+    $stringStack->rewind();
+
+    while($stringStack->valid())
+    {
+        $finalString = $finalString . (string)$stringStack->current();
+        $stringStack->next();
+    }
+
+    $finalString = str_replace("_"," ", $finalString);
+    $finalString = str_replace("^","", $finalString);
+    $finalString = str_replace("|","", $finalString);
+    $finalString = str_replace(",",", ", $finalString);
+
+    return $finalString;
 }
 
 /* Re-populate Sampler data */
