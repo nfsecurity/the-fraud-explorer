@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-06
- * Revision: v1.3.3-ai
+ * Date: 2019-11
+ * Revision: v2.0.1-ai
  *
  * Description: Cryptography
  */

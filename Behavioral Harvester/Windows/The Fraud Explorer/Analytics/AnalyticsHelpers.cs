@@ -1,4 +1,4 @@
-﻿/*
+﻿/*Revision: v2.0.1-ai
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
@@ -7,12 +7,14 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-06
- * Revision: v1.3.3-ai
+ * Date: 2019-11
+ * Revision: v2.0.1-ai
  *
  * Description: Analytics Helpers
  */
 
+using System;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -46,7 +48,8 @@ namespace TFE_core.Analytics
 
         #region Words Sanitizer
 
-        public static string[] excludeWords = { "www", "http", "ftp", "notepad", "cmd", "calc", "msconfig", "dxdiag", "cleanmgr", "regedit", "iexplore", "mspaint", "resmon", "sysedit", "taskmgr", "winver", "explorer", "ipconfig", "pbrush", "perfmon", "telnet" };
+        public static string[] excludeWords = { "www", "http", "ftp", "notepad", "cmd", "calc", "msconfig", "dxdiag", "cleanmgr", "regedit", "iexplore", "mspaint", "resmon", "sysedit", "taskmgr", "winver", "explorer",
+                                                "ipconfig", "pbrush", "perfmon", "telnet", "certmgr", "dxdiag", "mmc", "mspaint", "services", "msinfo", "taskschd" };
 
         public static bool WordsSanitizer(string text)
         {
@@ -68,13 +71,12 @@ namespace TFE_core.Analytics
 
         #region Control keys Sanitizer
 
-        public static string[] excludeKeys = { "Add", "Apps", "Attn", "Back", "CapsLock", "Delete", "Divide", "Down", "End", "Escape", "Help", "Home", "Insert", "Left", "LeftAlt", "LeftControl", "LeftShift", "LeftWindows",
-                                               "Multiply", "NumLock", "PageDown", "PageUp", "Pause", "Play", "Print", "PrintScreen", "Right", "RightAlt", "RightAlt", "RightShift", "RightWindows", "Scroll", "Select",
+        public static string[] excludeKeys = { "Add", "Apps", "Attn", "CapsLock", "Delete", "Divide", "Down", "End", "Escape", "Help", "Home", "Insert", "LeftAlt", "LeftControl", "LeftShift", "LeftWindows", "Left",
+                                               "Multiply", "NumLock", "PageDown", "PageUp", "Pause", "Play", "Print", "PrintScreen", "RightAlt", "RightAlt", "RightShift", "RightWindows", "Scroll", "Select", "Right",
                                                "Separator", "Sleep", "Subtract", "VolumeDown", "VolumeMute", "VolumeUp", "Zoom", "Up", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14",
                                                "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", "NumPad0", "NumPad1", "NumPad2", "NumPad3", "NumPad4", "NumPad5", "NumPad6", "NumPad7", "NumPad8", "NumPad9",
-                                               "OemClear", "OemCloseBrackets", "OemComma", "OemCopy", "OemMinus", "OemOpenBrackets", "OemPeriod", "OemPipe", "OemPlus", "OemQuestion", "OemQuotes", "OemSemicolon", "OemTilde",
-                                               "Oem1", "Oem2", "Oem3", "Oem4", "Oem5", "Oem6", "Oem7", "Oem8", "Oem9", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "Capital", "Shift", "Cancel", "ShiftKey",
-                                               "Control", "ControlKey"
+                                               "OemClear", "OemCloseBrackets", "OemCopy", "OemMinus", "OemOpenBrackets", "OemPipe", "OemSemicolon", "OemTilde", "Oem1", "Oem2", "Oem3", "Oem4", "Oem5", "Oem6", "Oem7", "Oem8",
+                                               "Oem9", "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "Capital", "Shift", "Cancel", "ShiftKey", "Control", "ControlKey"
                                              };
 
         public static bool KeysSanitizer(string sourceKey)
