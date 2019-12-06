@@ -78,8 +78,8 @@ include "../lbs/closeDBconn.php";
 
 <ul class="ul" id="elm-topmenu">
     <li class="li">
-        <p class="fixed-space">&nbsp;</p>
-        &emsp;&ensp;<img src=../images/nftop.svg class="main-logo">
+        <p class="fixed-space">&emsp;&emsp;&emsp;&emsp;</p>
+        <img src=../images/nftop.svg class="main-logo">
     </li>
     <li class="li">
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>

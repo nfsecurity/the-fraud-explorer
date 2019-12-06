@@ -116,8 +116,8 @@ a:active
 .dashboard-container
 {
     position: absolute; 
-    bottom: 50px; 
-    top: 53px;
+    bottom: 45px; 
+    top: 51px;
     left: 0px; 
     right: 0px;
 }
@@ -127,11 +127,11 @@ a:active
     border: 1px solid #d3d3d3; 
     display: block; 
     float: left; 
-    width: -webkit-calc(50% - 12px); 
-    height: -webkit-calc(50% - 5px);
+    width: -webkit-calc(50% - 9px); 
+    height: -webkit-calc(50% - 3px);
     margin: 0px 8px 0px 0px;
     top: 0px;
-    left: 8px;
+    left: 6px;
     position: absolute;
     background: #e8eaeb;
     border-radius: 5px;
@@ -150,11 +150,11 @@ a:active
     border: 1px solid #d3d3d3; 
     display: block; 
     float: right; 
-    width: -webkit-calc(50% - 12px); 
-    height: -webkit-calc(50% - 5px); 
+    width: -webkit-calc(50% - 9px); 
+    height: -webkit-calc(50% - 3px); 
     margin: 0 0px 10px 0px;
     top: 0px;
-    right: 8px;
+    right: 6px;
     position: absolute;
     background: white;
     border-radius: 5px;
@@ -164,8 +164,9 @@ a:active
 {
     position: relative; 
     border: 0px solid red; 
-    height: calc(100% - 60px); 
+    height: calc(100% - 55px); 
     width: calc(100% - 60px);
+    padding-top: 5px; 
 }
 
 .container-bottom-left
@@ -173,10 +174,10 @@ a:active
     border: 1px solid #d3d3d3;
     display: block;
     float: left;
-    width: -webkit-calc(50% - 12px);
-    height: -webkit-calc(50% - 5px);
+    width: -webkit-calc(50% - 9px);
+    height: -webkit-calc(50% - 3px);
     margin: 0 0px 0px 0px;
-    left: 8px;
+    left: 6px;
     bottom: 0px;
     position: absolute;
     background-color: white;
@@ -289,9 +290,9 @@ a:active
     border: 1px solid #d3d3d3; 
     display: block; 
     float: right; 
-    width: -webkit-calc(50% - 12px); 
-    height: -webkit-calc(50% - 5px); 
-    margin: 0px 8px 0px 0px;
+    width: -webkit-calc(50% - 9px); 
+    height: -webkit-calc(50% - 3px); 
+    margin: 0px 6px 0px 0px;
     right: 0px;
     bottom: 0px;
     position: absolute;
@@ -441,8 +442,7 @@ a:active
 
 .table-body
 {
-    height: calc(100% - 35px);
-    
+    height: calc(100% - 28px);
     overflow-y: auto;
     width: 100%;
     background-image: url(../images/pattern-6j3d.png);
@@ -450,14 +450,23 @@ a:active
 
 .table-head th
 {
-    height: 35px;
-    line-height: 35px;
+    height: 25px;
+    line-height: 25px;
     text-shadow: 1px 1px 1px #fff;
     background: #e8eaeb;
     padding-left: 10px;
+    padding-top: 5px !important;
 }
 
-.table-body td, .table-head th
+.table-body td
+{
+    width: calc(100% / 4);
+    float: left;    
+    padding-left: 0px;
+    padding-top: 8px !important;
+}
+
+.table-head th
 {
     width: calc(100% / 4);
     float: left;    
@@ -486,6 +495,7 @@ a:active
     background-color: #F2F2F2;
     font-family: 'FFont-Bold', sans-serif; 
     font-size: 11px;
+    padding-top: 10px !important;
 }
 
 .block-with-text 
@@ -840,9 +850,11 @@ li a:hover:not(.active)
     border: 0px solid gray; 
     background-color: #e0e0e0; 
     color: #888888; 
-    border-radius: 5px; 
-    padding: 2px 5px 2px 5px; 
-    margin: 0px 10px 0px 10px;
+    border-radius: 3px; 
+    padding: 0px 5px 0px 5px !important; 
+    margin: 0px 10px 0px 10px ! important;
+    height: 16px;
+    line-height: 16px;
 }
 
 a.welcome

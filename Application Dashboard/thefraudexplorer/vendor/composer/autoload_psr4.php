@@ -7,8 +7,12 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
+    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'PhpOffice\\PhpSpreadsheet\\' => array($vendorDir . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet'),
+    'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
     'GuzzleHttp\\Stream\\' => array($vendorDir . '/guzzlehttp/streams/src'),
     'GuzzleHttp\\Ring\\' => array($vendorDir . '/guzzlehttp/ringphp/src'),
     'Elasticsearch\\' => array($vendorDir . '/elasticsearch/elasticsearch/src/Elasticsearch'),
+    'Complex\\' => array($vendorDir . '/markbaker/complex/classes/src'),
 );

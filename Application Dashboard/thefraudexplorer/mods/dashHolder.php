@@ -126,10 +126,10 @@ else $totalSystemWords= "0";
 
                 <thead style="display: none;">
                     <tr>
-                        <th>HUMAN AUDIENCE</th>
-                        <th>FTA/EVENT</th>
-                        <th>RULESET</th>
-                        <th>BEHAVIOUR</th>
+                        <th>Employee/Endpoint</th>
+                        <th>Fraud T. events</th>
+                        <th>Department/rules</th>
+                        <th>Behavior score</th>
                     </tr>
                 </thead>
 
@@ -203,16 +203,16 @@ else $totalSystemWords= "0";
                 <tfoot class="table-head">
                     <tr class="tr">
                         <th class="th" style="padding-left: 7px; border-radius: 0px 0px 0px 3px;">
-                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>HUMAN AUDIENCE
+                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Employee/Endpoint
                         </th>
                         <th class="th" style="padding-right: 25px;">
-                            <center><span class="fa fa-warning fa-lg font-icon-color-gray awfont-padding-right"></span>FTA/EVENT</center>
+                            <center><span class="fa fa-bookmark fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud T. events</center>
                         </th>
                         <th class="th" style="padding-right: 25px;">
-                            <center><span class="fa fa-folder-open fa-lg font-icon-color-gray awfont-padding-right"></span>RULESET</center>
+                            <center><span class="fa fa-folder-open fa-lg font-icon-color-gray awfont-padding-right"></span>Business rules</center>
                         </th>
                         <th class="th" style="padding-right: 25px; border-radius: 0px 0px 3px 0px;">
-                            <center><span class="fa fa-envelope-open fa-lg font-icon-color-gray awfont-padding-right"></span>BEHAVIOUR</center>
+                            <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Behavior score</center>
                         </th>
                     </tr>
                 </tfoot>
@@ -264,7 +264,7 @@ else $totalSystemWords= "0";
             <div class="container-bottom-left-sub-one">
                 <div class="container-bottom-left-sub-one-sub">
                     <p class="container-bottom-left-fraud-score"><?php echo round($fraudScore,1); ?></p>
-                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Behavioral score
+                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Behavior score
                 </div>
                 <canvas id="bottom-left" style="z-index:1;"></canvas>
             </div>
@@ -273,7 +273,7 @@ else $totalSystemWords= "0";
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-pressure"></div>
                         <div class="block-with-text ellipsis">
-                            <p class="title-text">[Pressure]</p><p class="content-vertex-text"> personal (addiction, discipline, gambling), corporate (compensation, fear to lose the job) or external (market, ego, image, reputation).</p>
+                            <p class="title-text">Pressure,</p><p class="content-vertex-text"> personal (addiction, discipline, gambling), corporate (compensation, fear to lose the job) or external (market, ego, image, reputation).</p>
                         </div>
                     </div>
                 </div>
@@ -281,7 +281,7 @@ else $totalSystemWords= "0";
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-opportunity"></div>
                         <div class="block-with-text ellipsis">
-                            <p class="title-text">[Opportunity]</p><p class="content-vertex-text"> araises when the fraudster sees a way to use their position of trust to solve a problem, knowing they are unlikely to be caught.</p>
+                            <p class="title-text">Opportunity,</p><p class="content-vertex-text"> araises when the fraudster sees a way to use their position of trust to solve a problem, knowing they are unlikely to be caught.</p>
                         </div>
                     </div>
                 </div>
@@ -289,7 +289,7 @@ else $totalSystemWords= "0";
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-rational"></div>
                         <div class="block-with-text ellipsis">
-                            <p class="title-text">[Rationalization]</p><p class="content-vertex-text"> the final component needed to complete the fraud triangle. It's the ability to persuade yourself that something is really ok.</p>
+                            <p class="title-text">Rationalization,</p><p class="content-vertex-text"> the final component needed to complete the fraud triangle. It's the ability to persuade yourself that something is really ok.</p>
                         </div>
                     </div>
                 </div>
@@ -313,10 +313,10 @@ else $totalSystemWords= "0";
 
                 <thead style="display: none;">
                     <tr>
-                        <th>DATE AND TIME</th>
-                        <th>HUMAN AUDIENCE</th>
-                        <th>BEHAVIOUR</th>
-                        <th>IS/EXPRESSING</th>
+                        <th>Event date/time</th>
+                        <th>Employee/Endpoint</th>
+                        <th>Fraud T. vertice</th>
+                        <th>Feeling/expressing</th>
                     </tr>
                 </thead>
 
@@ -346,7 +346,7 @@ else $totalSystemWords= "0";
                         echo '<tr class="tr">';
                         echo '<td class="td">';
                     
-                        $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+                        $date = date('Y/m/d, h a', strtotime($result['_source']['sourceTimestamp']));
                         $wordTyped = decRijndael($result['_source']['wordTyped']);
                         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
                         $searchValue = "/".$result['_source']['phraseMatch']."/";
@@ -403,16 +403,16 @@ else $totalSystemWords= "0";
                 <tfoot class="table-head">
                     <tr class="tr">
                         <th class="th" style="border-radius: 0px 0px 0px 3px;">
-                            <span class="fa fa-calendar-o fa-lg font-icon-color-gray awfont-padding-right"></span>DATE AND TIME
+                            <span class="fa fa-calendar-o fa-lg font-icon-color-gray awfont-padding-right"></span>Event date/time
                         </th>
                         <th class="th">
-                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>HUMAN AUDIENCE
+                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Employee/Endpoint
                         </th>
                         <th class="th" style="padding-right: 25px;">
-                            <center><span class="fa fa-envelope-open fa-lg font-icon-color-gray awfont-padding-right"></span>BEHAVIOUR</center>
+                            <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud T. vertice</center>
                         </th>
-                        <th class="th" style="padding-left: 1px; border-radius: 0px 0px 3px 0px">
-                            <span class="fa fa-send-o fa-lg font-icon-color-gray awfont-padding-right"></span>IS/EXPRESSING
+                        <th class="th" style="padding-left: 1px; border-radius: 0px 0px 3px 0px;">
+                            <span class="fa fa-comments-o fa-lg font-icon-color-gray awfont-padding-right"></span>Feeling/expressing
                         </th>
                     </tr>
                 </tfoot>
@@ -480,27 +480,12 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
         type: 'bar',
         defaults: defaultOptions,
         data: {
-            labels: [ "Unique", "Events", "Sessions", "Dead", "Typing" ],
+            labels: [ "Unique", "Events", "Sessions", "Typing", "Dead" ],
             datasets: [
                 {
                     label: "Endpoint statistics",
-                    type: 'bar',
-                    backgroundColor: [
-                        'rgb(154, 203, 179, 0.25)',
-                        'rgb(154, 203, 179, 0.25)',
-                        'rgb(154, 203, 179, 0.25)',
-                        'rgb(154, 203, 179, 0.25)',
-                        'rgb(154, 203, 179, 0.25)'
-                    ],
-                    borderColor: [],
-                    hoverBackgroundColor: 'rgb(205, 229, 217, 0.45)',
-                    borderWidth: 1,
-                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countDead['total'] . ", " . $countTyping['total']; ?> ],
-                },
-                 {
-                    label: "Endpoint statistics",
                     type: 'line',
-                    fill: true,
+                    fill: false,
                     fillColor: "#13923D",
                     lineTension: 0.1,
                     backgroundColor: "rgb(75, 144, 111, 0.25)",
@@ -508,7 +493,7 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     borderCapStyle: 'butt',
                     borderDash: [],
                     borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
+                    borderJoinStyle: 'round',
                     pointBorderColor: "rgb(75, 144, 111, 1)",
                     pointBackgroundColor: "#fff",
                     pointBorderWidth: 1,
@@ -518,8 +503,23 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countDead['total'] . ", " . $countTyping['total']; ?> ],
+                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countTyping['total'] . ", " . $countDead['total']; ?> ],
                     spanGaps: false,
+                },
+                {
+                    label: "Endpoint statistics",
+                    type: 'bar',
+                    backgroundColor: [
+                        "#bcdccd",
+                        "#bcdccd",
+                        "#bcdccd",
+                        "#bcdccd",
+                        "#bcdccd"
+                    ],
+                    borderColor: [],
+                    hoverBackgroundColor: "#bcdccd",
+                    borderWidth: 0,
+                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countTyping['total'] . ", " . $countDead['total']; ?> ],
                 }
             ]
         },
@@ -561,22 +561,31 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
             },
             animation: false,
             scales: {
-                xAxes: [{
+                xAxes: [{       
+                    }, {
+                        position: 'top',
+                        ticks: {
+                            display: false
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        }
+                    }],
+                yAxes: [{ 
                     ticks: {
-                        min: 0
-                    },
-                    gridLines: {
-                        offsetGridLines: true
+                        padding: 10,
                     }
-                }],
-                yAxes: [{
-                    ticks: {
-                        min: 0
-                    },
-                    gridLines: {
-                        offsetGridLines: true
-                    }
-                }]
+                    }, {
+                        position: 'right',
+                        ticks: {
+                            display: false
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        }
+                    }]
             }
         }
     });
@@ -619,12 +628,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                         "#78ba9a",
                         "#9acbb3",
                         "#bcdccd"
-                    ]
+                    ],
+                    hoverBorderWidth: 0
                 }]
         },
         options: {
             cutoutPercentage: 60,
             responsive: true,
+            hover: {mode: null},
             maintainAspectRatio: false,
             legend: {
                 display: false

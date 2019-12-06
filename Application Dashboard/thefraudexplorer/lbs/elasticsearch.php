@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Functions extension file for elasticsearch querys
  */ 
@@ -54,6 +54,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
                         ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
                         'query' => [
                             'bool' => [
                                 'must' => [
@@ -76,6 +79,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'size' => $querySize,
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
                         ],
                         'query' => [
                             'bool' => [
@@ -104,6 +110,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
                         ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
                         'query' => [
                             'bool' => [
                                 'should' => [
@@ -127,6 +136,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'size' => $querySize,
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
                         ],
                         'query' => [
                             'bool' => [
@@ -157,6 +169,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
                         ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
                         'query' => [
                             'bool' => [
                                 'must' => [
@@ -179,6 +194,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'size' => $querySize,
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
                         ],
                         'query' => [
                             'bool' => [
@@ -207,6 +225,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
                         ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
                         'query' => [
                             'bool' => [
                                 'should' => [
@@ -230,6 +251,9 @@ function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
                         'size' => $querySize,
                         'sort' => [
                             [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
                         ],
                         'query' => [
                             'bool' => [
@@ -281,6 +305,286 @@ function countFraudTriangleMatches($agentID, $fraudTerm, $index)
     return $agentIdMatches;
 }
 
+/* Count All Fraud Triangle matches by date range */
+
+function countFraudTriangleMatchesWithDateRange($fraudTerm, $index, $from, $to)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ],
+                        [ 'term' => [ 'alertType' => $fraudTerm ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
+/* Search all Fraud Triangle Matches with date range */
+
+function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus, $context, $from, $to)
+{
+    if ($context == "allalerts") $querySize = 10000;
+    else $querySize = 50;
+
+    if ($context != "allalerts")
+    {
+        if ($domain == "all")
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]; 
+            }
+        }
+        else
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'userDomain' => $domain ] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    'match' => [ 'userDomain' => $domain ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];   
+            }
+        }
+    }
+    else
+    {
+        if ($domain == "all")
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]; 
+            }
+        }
+        else
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'userDomain' => $domain ] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    'match' => [ 'userDomain' => $domain ],
+                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];   
+            }
+        }
+    }
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $getAlerts = $client->search($matchesParams);
+
+    return $getAlerts;
+}
+
 /* Count Words typed by agent */
 
 function countWordsTypedByAgent($agentID, $alertType, $index)
@@ -324,6 +628,9 @@ function getAgentIdData($agentID, $index, $alertType)
         'type' => $alertType,
         'body' => [
             'size' => 10000,
+            '_source' => [
+                'exclude' => [ 'message' ]
+            ],
             'query' => [
                 'wildcard' => [ 'agentId' => $agentID ] 
             ]

@@ -61,14 +61,16 @@ if ($session->domain == "all")
 {
     if (samplerStatus($session->domain) == "enabled")
     {
-        $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
-        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-        $urlSize="http://localhost:9200/_all/_stats";
+        $urlWords="http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
+        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize="http://127.0.0.1:9200/_all/_stats";
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
@@ -77,6 +79,8 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
@@ -85,9 +89,9 @@ if ($session->domain == "all")
     }
     else
     {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-        $urlSize="http://localhost:9200/_all/_stats";
+        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize="http://127.0.0.1:9200/_all/_stats";
         
         $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
@@ -95,6 +99,8 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
@@ -106,6 +112,8 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
@@ -118,15 +126,17 @@ else
 {
     if (samplerStatus($session->domain) == "enabled")
     {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-        $urlSize="http://localhost:9200/_all/_stats";
+        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize="http://127.0.0.1:9200/_all/_stats";
         
         $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -138,6 +148,8 @@ else
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -148,9 +160,9 @@ else
     }
     else
     {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://localhost:9200/logstash-alerter-*/_count";
-        $urlSize="http://localhost:9200/_all/_stats";
+        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize="http://127.0.0.1:9200/_all/_stats";
         
         $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
@@ -158,6 +170,8 @@ else
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
@@ -168,6 +182,8 @@ else
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
+        curl_setopt($ch, CURLOPT_ENCODING, ''); 
+        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -181,6 +197,8 @@ else
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_ENCODING, ''); 
+curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
 curl_setopt($ch, CURLOPT_URL,$urlSize);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultSize=curl_exec($ch);
@@ -224,7 +242,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         /* Enpoint Details */
 
         echo '<td class="detailstd">';
-        echo '<span class="fa fa-id-card-o fa-2x font-icon-color" style="font-size: 20px;">&nbsp;&nbsp;</span>';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$row_a["agent"].'&domain='.$row_a["domain"].'" data-toggle="modal" data-target="#endpoint-card" href="#"><span class="fa fa-id-card-o fa-2x font-icon-color" style="font-size: 20px;"></span></a>&nbsp;&nbsp;';
         echo '</td>';
 
         /* Endpoint data retrieval */
@@ -406,6 +424,18 @@ if ($row_a = mysqli_fetch_array($result_a))
 <script>
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.delete').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Endpoint Card -->
+
+<script>
+    $('#endpoint-card').on('show.bs.modal', function(e) {
+        $(this).find('.endpoint-card-viewer').attr('href', $(e.relatedTarget).data('href'));
+    });
+    
+    $('#endpoint-card').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
 

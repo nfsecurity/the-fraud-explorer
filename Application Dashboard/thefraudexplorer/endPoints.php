@@ -26,6 +26,15 @@ if(!$session->logged_in)
 
 $_SESSION['instance'] = "endPoints";
 
+/* Disable browser cache */
+
+header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Connection: close");
+
 ?>
 
 <html>
@@ -172,6 +181,22 @@ $_SESSION['instance'] = "endPoints";
                 </div>
             </div>
         </div>
+
+        <!-- Modal for Endpoint Card -->
+
+        <center>
+            <div class="modal" id="endpoint-card" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
         
         <!-- Modal for switch phrases collection -->
 

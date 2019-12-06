@@ -20,20 +20,22 @@
 
 .main-logo
 {
-    float: right;
+    position: absolute;
+    left: 8px;
 }
 
 .logout-button, logout-button:hover
 {
     font-family: 'FFont', sans-serif; 
-    font-size:12px; 
+    font-size: 12px; 
     color: white !important;
     text-decoration: none !important;
+    height: 43px;
 }
 
 .search-input
 {
-    float:right !important;
+    float: right !important;
     border-radius: 5px 0px 0px 5px !important;
 }
 
@@ -44,15 +46,15 @@
 
 .window-title
 {
-    text-align:center; 
-    font-family:Verdana; 
+    text-align: center; 
+    font-family: Verdana; 
     font-size: 24px;
 }
 
 .window-debug
 {
-    text-align:left; 
-    font-family:Verdana; 
+    text-align: left; 
+    font-family: Verdana; 
     font-size: 12px;
 }
 

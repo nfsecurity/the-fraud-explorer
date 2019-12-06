@@ -117,11 +117,43 @@ if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh'])))))
                 </div>
             </div>
         </center>
+
+        <!-- Modal for Advanced Reports -->
+
+        <center>
+            <div class="modal" id="advanced-reports" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
         
         <!-- Modal for Phrase Viewer -->
 
         <center>
             <div class="modal" id="event-phrases" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+        <!-- Modal for Endpoint Card -->
+
+        <center>
+            <div class="modal" id="endpoint-card" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
@@ -173,6 +205,11 @@ var tour = new Tour({
         placement: 'left',
         title: "Event marking",
         content: "The software provides the ability to mark an event and classify it as a false positive. This is useful when you consider that the event is not relevant and need to disable it from futher calculations."
+    }, {
+        element: "#elm-advanced-reports",
+        placement: 'top',
+        title: "Advanced Reports",
+        content: "In this module you can generate an advance report filtering by endpoint, by fraud vertice, by phrase, by department, by applications and by date and finally get a formatted Excel file."
     }, {
         element: "#elm-pager-events",
         placement: 'top',
