@@ -109,10 +109,87 @@ else $totalSystemWords= "0";
 
 ?>
 
+<div class="dashboard-left-menu">
+    <center>
+        <table class="menu-table">
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Report</div><div class=tooltip-row><div class=tooltip-item>Make and download a fraud triangle<br>report for your organization with<br>various filters</div></div></div>"><a href="../mods/advancedReports" data-toggle="modal" class="advanced-reports-button" data-target="#advanced-reports" href="#" id="elm-advanced-reports"><span class="fa fa-file-text-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>                    
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoint agent</div><div class=tooltip-row><div class=tooltip-item>Make the downloadable and installable<br>agent for your endpoints depending<br>of the platform</div></div></div>"><span class="fa fa-tasks fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Phrase library</div><div class=tooltip-row><div class=tooltip-item>Modify and improve the fraud triangle<br>phrase library with this tool called<br>library workshop</div></div></div>"><span class="fa fa-folder-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span><span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><span class="fa fa-calendar-check-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Vertical analytics</div><div class=tooltip-row><div class=tooltip-item>See the complete table of fraud triangle<br>analytics events with power and<br>useful information</div></div></div>"><span class="fa fa-table fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Business Departments</div><div class=tooltip-row><div class=tooltip-item>Use this option to upload a file<br>in CSV format indicating all the relevant<br>information to clasify endpoints</div></div></div>"><span class="fa fa-building-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><span class="fa fa-film fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Backup and restore</div><div class=tooltip-row><div class=tooltip-item>Generate and download a copy of the<br>entire system for backup and restore<br>purposes. This procedure can take time</div></div></div>"><span class="fa fa-folder-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email alerting rules</div><div class=tooltip-row><div class=tooltip-item>Define the email alert rules based<br>on the results of the artificial intelligence<br>and the expert system</div></div></div>"><span class="fa fa-envelope-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>The fraud tree</div><div class=tooltip-row><div class=tooltip-item>According to ACFE, the corporate fraud tree<br>is composed by corruption, financial fraud<br>and misappropriation</div></div></div>"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    </center>
+                </td>
+            </tr>
+        </table>
+    </center>
+</div>
+
 <div class="dashboard-container">
     <div class="container-upper-left" id="elm-top50endpoints">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Top fraud triangle endpoints</p>
+            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Top fraud triangle endpoints</p>
             <p class="container-window-icon">
                 <?php echo '<a href="eventData?endpoint='.base64_encode(base64_encode("all")).'" class="button-view-all-events">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
@@ -126,7 +203,7 @@ else $totalSystemWords= "0";
 
                 <thead style="display: none;">
                     <tr>
-                        <th>Employee/Endpoint</th>
+                        <th>Employee and Business</th>
                         <th>Fraud T. events</th>
                         <th>Department/rules</th>
                         <th>Behavior score</th>
@@ -169,13 +246,15 @@ else $totalSystemWords= "0";
                             else $dataRepresentation = "0";
                             
                             echo '<tr class="tr">';
-                            echo '<td class="td">';
-                            echo '<span class="fa fa-laptop font-icon-color-green awfont-padding-right"></span>';
+                            echo '<td class="td-endpoints">';
                             
-                            if ($endpointsFraud["name"] == NULL || $endpointsFraud['name'] == "NULL") endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                            if ($endpointsFraud["name"] == NULL || $endpointsFraud['name'] == "NULL") 
+                            {
+                                endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                            }
                             else 
                             {
-                                $endpointName = $endpointsFraud['name'];
+                                $endpointName = $endpointsFraud['name']."@".between('@', '.', "@".$endpointsFraud['domain']);
                                 endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
                             }
 
@@ -184,14 +263,14 @@ else $totalSystemWords= "0";
                             $triangleSum = $endpointsFraud['pressure']+$endpointsFraud['opportunity']+$endpointsFraud['rationalization'];
                             $triangleScore = round($endpointsFraud['score'], 2);
 
-                            echo '<td class="td">';
-                            echo '<center><span class="fa fa-tags font-icon-color-gray awfont-padding-right"></span>'.str_pad($triangleSum, 4, '0', STR_PAD_LEFT).'</center>';
+                            echo '<td class="td-events">';
+                            echo '<center><div class="number-container">'.str_pad($triangleSum, 4, '0', STR_PAD_LEFT).'</div></center>';
                             echo '</td>';
-                            echo '<td class="td td-with-bg">';
-                            echo '<div class="ruleset-button"><center>'.$endpointsFraud['ruleset'].'</center></div>';
+                            echo '<td class="td-ruleset td-with-bg">';
+                            echo '<div class="ruleset-button"><center><div class="rule-title">ruleset</div></center><center>'.$endpointsFraud['ruleset'].'</center></div>';
                             echo '</td>';
-                            echo '<td class="td">';
-                            echo '<center><span class="fa fa-line-chart font-icon-color-green awfont-padding-right"></span>'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</center>';
+                            echo '<td class="td-score">';
+                            echo '<center><div class="number-container-underline">'.str_pad($triangleScore, 6, '0', STR_PAD_LEFT).'</div></center>';
                             echo '</td>';
                         }
                         while ($endpointsFraud = mysqli_fetch_assoc($queryEndpoints));
@@ -202,16 +281,16 @@ else $totalSystemWords= "0";
                 </tbody>
                 <tfoot class="table-head">
                     <tr class="tr">
-                        <th class="th" style="padding-left: 7px; border-radius: 0px 0px 0px 3px;">
-                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Employee/Endpoint
+                        <th class="th-endpoints" style="padding-left: 7px; border-radius: 0px 0px 0px 3px;">
+                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Employee and Business
                         </th>
-                        <th class="th" style="padding-right: 25px;">
+                        <th class="th-events" style="padding-right: 25px;">
                             <center><span class="fa fa-bookmark fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud T. events</center>
                         </th>
-                        <th class="th" style="padding-right: 25px;">
+                        <th class="th-ruleset" style="padding-right: 25px;">
                             <center><span class="fa fa-folder-open fa-lg font-icon-color-gray awfont-padding-right"></span>Business rules</center>
                         </th>
-                        <th class="th" style="padding-right: 25px; border-radius: 0px 0px 3px 0px;">
+                        <th class="th-score" style="padding-right: 25px; border-radius: 0px 0px 3px 0px;">
                             <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Behavior score</center>
                         </th>
                     </tr>
@@ -222,7 +301,7 @@ else $totalSystemWords= "0";
 
     <div class="container-upper-right" id="elm-generalstatistics">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Endpoints general statistics</p>
+            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Endpoints general statistics</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
         </h2><br>
         <div class="container-upper-right-sub">
@@ -257,7 +336,7 @@ else $totalSystemWords= "0";
 
     <div class="container-bottom-left" id="elm-termstatistics">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
+            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
             <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
         </h2><br>
         <div class="container-bottom-left-sub">
@@ -299,7 +378,7 @@ else $totalSystemWords= "0";
 
     <div class="container-bottom-right" id="elm-top50events">
         <h2>
-            <p class="container-title"><span class="fa fa-braille fa-lg">&nbsp;&nbsp;</span>Fraud triangle theory latest events</p>
+            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle theory latest events</p>
             <p class="container-window-icon">
                 <?php echo '<a href="eventData?endpoint='.base64_encode(base64_encode("all")).'" class="button-view-all-events" id="elm-viewallevents">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
@@ -313,8 +392,8 @@ else $totalSystemWords= "0";
 
                 <thead style="display: none;">
                     <tr>
+                        <th>Endpoint and Business</th>
                         <th>Event date/time</th>
-                        <th>Employee/Endpoint</th>
                         <th>Fraud T. vertice</th>
                         <th>Feeling/expressing</th>
                     </tr>
@@ -344,9 +423,9 @@ else $totalSystemWords= "0";
                     foreach ($eventData['hits']['hits'] as $result)
                     {
                         echo '<tr class="tr">';
-                        echo '<td class="td">';
+                        echo '<td class="td-endpoints">';
                     
-                        $date = date('Y/m/d, h a', strtotime($result['_source']['sourceTimestamp']));
+                        $date = date('Y/m/d, H:i', strtotime($result['_source']['sourceTimestamp']));
                         $wordTyped = decRijndael($result['_source']['wordTyped']);
                         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
                         $searchValue = "/".$result['_source']['phraseMatch']."/";
@@ -355,15 +434,7 @@ else $totalSystemWords= "0";
                         $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
                         $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
                         $regExpression = htmlentities($result['_source']['phraseMatch']);
-
-                        echo '<span class="fa fa-id-card-o font-icon-color-green awfont-padding-right"></span>'.$date;
-                    
-                        echo '</td>';
-                    
-                        echo '<td class="td">';
-                 
-                        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
-                    
+                        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));                    
                         $userDomain = mysqli_fetch_assoc($queryUserDomain);
                         $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
                         $endpointEnc = base64_encode(base64_encode($userDomain['agent']));
@@ -375,24 +446,34 @@ else $totalSystemWords= "0";
                             
                         if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
                         else $dataRepresentation = "0";
-                    
-                        echo '<span class="fa fa-laptop font-icon-color-gray awfont-padding-right"></span>';
-                                    
-                        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                        else 
+
+                        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") 
                         {
-                            $endpointName = $userDomain['name'];
                             endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
                         }
+                        else 
+                        {
+                            $endpointName = $endpointsFraud['name']."@".between('@', '.', "@".$endpointsFraud['domain']);
+                            endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                        }
+
+                        echo '</td>';
                     
-                        echo '<td class="td td-with-bg">';
-                        echo '<div class="behavior-button"><center>'.strtoupper($result['_source']['alertType']).'</center></div>';
+                        echo '<td class="td-date">';
+                        
+                        echo '<center><div class="date-container">'.date('H:i',strtotime($date)).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($date)).'</div></div></center>';
+                        echo '</td>';
+
+                        echo '</td>';
+                        echo '<td class="td-phrase">';
+                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($wordTyped, 0, 80)).'</div>';
+                        echo '</td>';
+                    
+                        echo '<td class="td-vertice td-with-bg">';
+                        echo '<center><div class="behavior-button">'.substr(strtoupper($result['_source']['alertType']), 0, 1).'</div></center>';
                         echo '</td>';
                         
-                        echo '</td>';
-                        echo '<td class="td">';
-                        echo '<span class="fa fa-pencil-square-o font-icon-color-green awfont-padding-right"></span>'.strip_tags(substr($wordTyped,0,80));
-                        echo '</td>';
+                        
                                               
                         echo '</tr>';
                     }
@@ -402,17 +483,17 @@ else $totalSystemWords= "0";
                 </tbody>
                 <tfoot class="table-head">
                     <tr class="tr">
-                        <th class="th" style="border-radius: 0px 0px 0px 3px;">
-                            <span class="fa fa-calendar-o fa-lg font-icon-color-gray awfont-padding-right"></span>Event date/time
+                        <th class="th-endpoints" style="border-radius: 0px 0px 0px 3px;">
+                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Endpoint and Business
                         </th>
-                        <th class="th">
-                            <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Employee/Endpoint
+                        <th class="th-phrase">
+                            <span class="fa fa-comments-o fa-lg font-icon-color-gray awfont-padding-right"></span>Is feeling / expressing
                         </th>
-                        <th class="th" style="padding-right: 25px;">
-                            <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud T. vertice</center>
+                        <th class="th-vertice" style="padding-right: 25px;">
+                            Vertice&nbsp;&nbsp;&nbsp;
                         </th>
-                        <th class="th" style="padding-left: 1px; border-radius: 0px 0px 3px 0px;">
-                            <span class="fa fa-comments-o fa-lg font-icon-color-gray awfont-padding-right"></span>Feeling/expressing
+                        <th class="th-date" style="padding-left: 1px; border-radius: 0px 0px 3px 0px;">
+                        <center><span class="fa fa-calendar-o fa-lg font-icon-color-gray awfont-padding-right"></span>Date&nbsp;&nbsp;</center>
                         </th>
                     </tr>
                 </tfoot>
@@ -467,6 +548,14 @@ $countTyping = mysqli_fetch_assoc(mysqli_query($connection, $queryTyping));
 $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'];
 
 ?>
+
+<!-- Modal for Advanced Reports -->
+
+<script>
+    $('#advanced-reports').on('show.bs.modal', function(e){
+        $(this).find('.advanced-reports-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
 
 <script>
     var defaultOptions = {

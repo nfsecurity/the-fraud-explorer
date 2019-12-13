@@ -199,8 +199,8 @@ include "../lbs/cronManager.php";
 
         <div class="master-container">
             <div class="key-container">              
-                <p class="title-config">Endpoints connection key</p><br>
-                <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="new-password" placeholder=":key here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+                <p class="title-config">Endpoints connection secret</p><br>
+                <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="new-password" placeholder=":secret here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
             <div class="sample-calculation-container">
                 <p class="title-config">Sample data calculation</p><br>

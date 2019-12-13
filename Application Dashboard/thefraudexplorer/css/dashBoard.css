@@ -27,7 +27,7 @@ table, caption, tbody, tfoot, thead, tr, th, td
     padding:0;
     border:0;
     outline:0;
-    font-size:100%;
+    font-size: 100%;
 }
 
 ::-webkit-scrollbar 
@@ -113,12 +113,42 @@ a:active
     width:95%;
 }
 
+.dashboard-left-menu
+{
+    position: absolute; 
+    bottom: 35px; 
+    top: 50px;
+    left: 5px; 
+    width: 43px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    padding: 8px 0px 8px 0px;
+    background: #e8eaeb;
+}
+
+.vertical-menu-icon-padding
+{
+    padding-bottom: 0px;
+}
+
+.menu-table
+{
+    height: 100%;
+    border: 0px solid red;
+}
+
+.menu-table td
+{
+    vertical-align: middle;
+    border: 0px solid blue;
+}
+
 .dashboard-container
 {
     position: absolute; 
-    bottom: 45px; 
-    top: 51px;
-    left: 0px; 
+    bottom: 35px; 
+    top: 50px;
+    left: 47px; 
     right: 0px;
 }
 
@@ -313,9 +343,9 @@ a:active
     font-family: 'FFont', sans-serif; font-size: 12px;
     background: #e8eaeb;
     color: #474747;
-    padding: 10px;
+    padding: 8px;
     text-align: left;
-    height: 33px;
+    height: 30px;
     border-radius: 4px 4px 0px 0px;
 }
 
@@ -324,9 +354,9 @@ a:active
     font-family: 'FFont', sans-serif; font-size: 12px;
     background: #e8eaeb;
     color: #474747;
-    padding: 10px;
+    padding: 8px;
     text-align: left;
-    height: 33px;
+    height: 30px;
     border-radius: 4px 4px 0px 0px;
 }
 
@@ -335,9 +365,9 @@ a:active
     font-family: 'FFont', sans-serif; font-size: 12px;
     background: #e8eaeb;
     color: #474747;
-    padding: 10px;
+    padding: 8px;
     text-align: left;
-    height: 33px;
+    height: 30px;
     border-radius: 4px 4px 0px 0px;
 }
 
@@ -346,9 +376,9 @@ a:active
     font-family: 'FFont', sans-serif; font-size: 12px;
     background: #e8eaeb;
     color: #474747;
-    padding: 10px;
+    padding: 8px;
     text-align: left;
-    height: 33px;
+    height: 30px;
     border-radius: 4px 4px 0px 0px;
 }
 
@@ -398,16 +428,15 @@ a:active
 
 .thead th 
 { 
-    height: 35px;
-    line-height: 35px;
-    text-shadow: 1px 1px 1px #fff;
+    height: 25px;
+    line-height: 25px;
     background: #e8eaeb;
     padding-left: 10px;
 }
 
 .tbody 
 {
-    height: calc(100% - 35px);
+    height: calc(100% - 25px);
     overflow-y: auto;
     width: 100%;
     background-image: url(../images/pattern-6j3d.png);
@@ -442,7 +471,7 @@ a:active
 
 .table-body
 {
-    height: calc(100% - 28px);
+    height: calc(100% - 25px);
     overflow-y: auto;
     width: 100%;
     background-image: url(../images/pattern-6j3d.png);
@@ -452,23 +481,113 @@ a:active
 {
     height: 25px;
     line-height: 25px;
-    text-shadow: 1px 1px 1px #fff;
     background: #e8eaeb;
     padding-left: 10px;
     padding-top: 5px !important;
 }
 
-.table-body td
+.td-endpoints
 {
-    width: calc(100% / 4);
+    width: 30%;
     float: left;    
     padding-left: 0px;
     padding-top: 8px !important;
+    border: 0px solid red;
 }
 
-.table-head th
+.td-events
 {
-    width: calc(100% / 4);
+    width: 25%;
+    float: left;    
+    padding-left: 0px;
+    padding-top: 9px !important;
+}
+
+.td-ruleset
+{
+    width: 22.5%;
+    float: left;    
+    padding-left: 0px;
+    padding-top: 0px !important;
+}
+
+.td-score
+{
+    width: 22.5%;
+    float: left;    
+    padding-left: 0px;
+    padding-top: 9px !important;
+}
+
+.th-endpoints
+{
+    width: 30%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.th-events
+{
+    width: 25%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.th-ruleset
+{
+    width: 22.5%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.th-score
+{
+    width: 22.5%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.td-date
+{
+    width: 20%;
+    float: right;    
+    padding-left: 0px;
+    padding-top: 9px !important;
+}
+
+.td-vertice
+{
+    width: 10%;
+    float: left;    
+    padding-left: 0px;
+    padding-top: 0px !important;
+}
+
+.td-phrase
+{
+    width: 40%;
+    float: left;    
+    padding-left: 0px;
+    padding-top: 9px !important;
+}
+
+.th-date
+{
+    width: 20%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.th-vertice
+{
+    width: 10%;
+    float: left;    
+    padding-left: 0px;
+}
+
+.th-phrase
+{
+    width: 40%;
     float: left;    
     padding-left: 0px;
 }
@@ -482,12 +601,13 @@ a:active
 
 .table-class td
 {
-    vertical-align:middle;
+    vertical-align: middle;
     text-align: left;
     padding: 0px 10px 0px 10px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    height: 48px;
 }
 
 .td-with-bg
@@ -533,12 +653,14 @@ a:active
     overflow: hidden;
     background-color: #e8eaeb;
     border-bottom: 2px solid #d3d3d3;
+    color: #555;
 }
 
 .li 
 {
     float: left;
     height: 35px;
+    color: #555;
 }
 
 li a 
@@ -548,7 +670,7 @@ li a
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-family: 'FFont', sans-serif; font-size:12px; color: black;
+    font-family: 'FFont', sans-serif; font-size:12px; color: #555;
     outline:0 !important;
 }
 
@@ -637,16 +759,16 @@ li a:hover:not(.active)
     bottom: 0px;
     left: 0px;
     right: 0px;
-    height: 40px;
+    height: 30px;
     margin-bottom: 0px;
 }
 
 .vertical-alignment-helper 
 {
-    display:table;
+    display: table;
     height: 100%;
     width: 100%;
-    pointer-events:none;
+    pointer-events: none;
 }
 
 .vertical-align-center 
@@ -845,19 +967,117 @@ li a:hover:not(.active)
     font-size: 10px;
 }
 
-.ruleset-button, .behavior-button
+.ruleset-button
 {
-    border: 0px solid gray; 
-    background-color: #e0e0e0; 
+    border: 2px solid #d3d3d3;
+    background-color: #F2F2F2; 
     color: #888888; 
-    border-radius: 3px; 
-    padding: 0px 5px 0px 5px !important; 
-    margin: 0px 10px 0px 10px ! important;
-    height: 16px;
-    line-height: 16px;
+    border-radius: 5px 5px 5px 5px; 
+    padding: 0px 5px 0px 5px !important;
+    height: 28px;
+    line-height: 13px;
+}
+
+.rule-title
+{
+    width: 35px;
+    margin-top: -8px;
+    margin-left: 0px;
+    background:#F2F2F2;
+    text-align: center;
+    font-family: 'FFont', sans-serif; 
+    font-size: 8px;
+}
+
+.behavior-button
+{
+    border: 2px solid #d3d3d3;
+    background-color: #F2F2F2; 
+    color: #888888;
+    width: 40px;
+    border-radius: 5px; 
+    padding: 2px 2px 2px 2px !important;
+    height: 28px;
+    line-height: 20px;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 20px;
+    text-align: center;
 }
 
 a.welcome
 {
     color: #4B906F;
+}
+
+.number-container
+{
+    border: 1px solid #d3d3d3;
+    height: 30px;
+    line-height: 27px;
+    width: 50px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 15px;
+    color: gray;
+    border-radius: 5px;
+}
+
+.number-container-underline
+{
+    border-bottom: 2px solid #4B906F;
+    height: 30px;
+    line-height: 27px;
+    width: 50px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 15px;
+    color: gray;
+    border-radius: 0px;
+}
+
+.date-container
+{
+    border: 1px solid #d3d3d3;
+    height: 30px;
+    line-height: 16px;
+    width: 60px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 12px;
+    color: gray;
+    border-radius: 5px;
+}
+
+.year-container
+{
+    border-top: 1px solid #d3d3d3;
+    height: 8px;
+    line-height: 12px;
+    width: 59px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 8px;
+    color: gray;
+}
+
+.phrase-without-app
+{
+    height: 30px;
+    line-height: 30px;
+    width: calc(100% - 10%);
+    text-align: left;
+    vertical-align: middle;
+    font-family: Verdana, sans-serif; 
+    padding: 0px 10px 0px 10px;
+    font-size: 11px;
+    color: #555;
+    border-radius: 5px;
+    background: #EBEBEB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

@@ -15,14 +15,14 @@
 
 .main-text
 {
-    font-size:8px;
+    font-size: 4px;
 }
 
 .logo-container
 {
-    float:left; 
+    float: left; 
     font-family: 'FFont', sans-serif; 
-    font-size:12px; 
+    font-size: 12px; 
     color: white;
 }
 
@@ -33,9 +33,9 @@
 
 .helpers-container
 {
-    float:right; 
+    float: right; 
     font-family: 'FFont', sans-serif; 
-    font-size:12px; 
+    font-size: 12px; 
     color: white;
 }
 
@@ -44,3 +44,10 @@ a, a:hover
     text-decoration: none !important;
 }
 
+.footer-components
+{
+    position: relative;
+    height: 25px;
+    vertical-align: middle;
+    padding-bottom: 15px;
+}

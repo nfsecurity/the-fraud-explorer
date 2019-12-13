@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Endpoint specific functions
  */ 
@@ -63,6 +63,11 @@ function samplerStatus($sessionDomain)
 
 function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName)
 {
+    $endpointData = explode("@", $endpointName);
+    $spaces = false;
+
+    if (strpos($endpointData[0], ' ') !== false) $spaces = true;
+
     if ($location == "endPoints") echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">';
     
     if ($score == 0)
@@ -71,7 +76,7 @@ function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $cou
     }
     else
     {
-        echo '<a class="tooltip-custom" href=eventData?endpoint='.$endpointEnc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Events by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding">'.$endpointName.'</span></a></td>';        
+        echo '<a class="tooltip-custom" style="color: #555;" href=eventData?endpoint='.$endpointEnc.' title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Insights</div><div class=tooltip-row><div class=tooltip-item>Records stored</div><div class=tooltip-value>'.number_format($totalWordHits, 0, ',', '.').'</div></div><div class=tooltip-row><div class=tooltip-item>Events by pressure</div><div class=tooltip-value>'.$countPressure.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by opportunity</div><div class=tooltip-value>'.$countOpportunity.'</div></div><div class=tooltip-row><div class=tooltip-item>Events by rationalization</div><div class=tooltip-value>'.$countRationalization.'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud triangle score</div><div class=tooltip-value>'.round($score, 1).'</div></div><div class=tooltip-row><div class=tooltip-item>Data representation</div><div class=tooltip-value>'.round($dataRepresentation, 1).' %</div></div></div>"><span class="image-padding"><span class="fa fa-id-badge awfont-padding-right font-icon-color-gray"></span>'.($spaces == true ? $endpointData[0] : $endpointData[0].'@'.$endpointData[1]).'<br><span class="fa fa-chevron-right awfont-padding-right font-icon-color-gray"></span><b>'.$endpointData[1].'</b></span></a></td>';        
     }
 }
 

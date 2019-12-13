@@ -43,7 +43,7 @@
 
         <div align="center">
             <table class="login-table">
-            <th class="logotype"><img src="images/the-fraud-explorer.svg" class="logotype-image">&ensp;The Fraud Explorer<br></th>
+            <th>Let's get login</th>
                 <tbody>
                     <tr>
                         <td class="login-container">
@@ -81,7 +81,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td class="table-footer">Realtime Fraud Triangle Analytics with Artificial Intelligence</td>
+                        <td class="table-footer">Realtime Analytics Platform System with Artificial Intelligence</td>
                     </tr>
                 </tfoot>
             </table>

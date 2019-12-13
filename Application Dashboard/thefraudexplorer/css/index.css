@@ -93,7 +93,7 @@ a
 table
 {
     overflow: hidden;
-    border: 1px solid #4B906F;
+    border: 1px solid #d3d3d3;
     background:#fefefe;
     width: 500px;
     height: 200px; 
@@ -129,9 +129,9 @@ th
 {
     padding: 20px 12px 20px 12px;
     background: #4B906F;
-    font: 16px 'FFont', "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font: 22px 'FFont-Bold', "Helvetica Neue", Arial, Helvetica, sans-serif;
     text-align: center;
-    border: 0px solid #d3d3d3;
+    border-top: 0px solid #e7e7e7;
     color: white;
 }
 
@@ -168,7 +168,7 @@ th
 {
     border: none;
     background-color: #e7e7e7;
-    color: black;
+    color: #555;
     border: 0px solid #d3d3d3;
     font-family: 'FFont', sans-serif; 
     font-size: 12px; 
@@ -194,7 +194,7 @@ th
 {
     font-family: 'FFont', sans-serif; 
     font-size: 18px; 
-    color: white; 
+    color: #555; 
 }
 
 .logotype-image
