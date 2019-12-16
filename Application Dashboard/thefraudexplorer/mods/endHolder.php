@@ -322,7 +322,7 @@ if ($row_a = mysqli_fetch_array($result_a))
 
         $level = "low";
         if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']) $level="low";
-        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']) $level="medium";
+        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']) $level="med";
         if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']) $level="high";
         if ($score >= $scoreResult['score_ts_critic_from']) $level="critic";
 
