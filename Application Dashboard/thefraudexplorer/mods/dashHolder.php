@@ -453,7 +453,7 @@ else $totalSystemWords= "0";
                         }
                         else 
                         {
-                            $endpointName = $endpointsFraud['name']."@".between('@', '.', "@".$endpointsFraud['domain']);
+                            $endpointName = $userDomain['name']."@".between('@', '.', "@".$userDomain['domain']);
                             endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
                         }
 

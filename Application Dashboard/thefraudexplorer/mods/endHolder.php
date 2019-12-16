@@ -280,7 +280,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         }
         else
         {
-            $endpointName = $row_a["name"];
+            $endpointName = $row_a['name']."@".between('@', '.', "@".$row_a['domain']);
             echo '<td class="endpointtd">';
             if ($row_a["gender"] == "male") endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
             else if ($row_a["gender"] == "female") endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);

@@ -282,7 +282,7 @@ else
     echo '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
     echo '</th>';
     echo '<th class="phrasetypedth-all" id="elm-phrasetyped-event">';
-    echo '<span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
+    echo '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
     echo '</th>';
     echo '<th style="display: none;">EXPRESSION HISTORY</th>';
     echo '<th class="falseth-all" id="elm-mark-event">';
@@ -352,7 +352,7 @@ else
         }
         else
         {
-            $endpointName = $userDomain["name"];
+            $endpointName = $userDomain['name']."@".between('@', '.', "@".$userDomain['domain']);
             if ($userDomain["gender"] == "male") endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
             else if ($userDomain["gender"] == "female") endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
             else echo endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
