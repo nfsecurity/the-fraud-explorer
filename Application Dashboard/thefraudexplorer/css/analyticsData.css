@@ -2,13 +2,13 @@
 * The Fraud Explorer
 * https://www.thefraudexplorer.com/
 *
-* Copyright (c) 2014-2019 The Fraud Explorer
+* Copyright (c) 2014-2020 The Fraud Explorer
 * email: customer@thefraudexplorer.com
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2019-05
-* Revision: v1.3.3-ai
+* Date: 2020-01
+* Revision: v1.4.1-ai
 *
 * Description: CSS Code
 */
@@ -207,7 +207,7 @@ li a:hover:not(.active)
     bottom: 0px;
     left: 0px;
     right: 0px;
-    height: 40px;
+    height: 30px;
     margin-bottom: 0px;
 }
 
@@ -261,11 +261,11 @@ li a:hover:not(.active)
 .fraudtriangle-bubble-container
 {
     position: fixed;
-    border: 2px #4B906F;
-    left: 245px;
-    right: 47px;
+    border: 0px solid red;
+    left: 220px;
+    right: 37px;
     top: 93px;
-    bottom: 110px;
+    bottom: 66px;
     background-color: white;
 }
 
@@ -315,6 +315,14 @@ li a:hover:not(.active)
     border-radius: 0px 0px 0px 5px;
 }
 
+.bl-leyend
+{
+    position: absolute;
+    bottom: 16px;
+    right: 12px;
+    z-index: 1;
+}
+
 .br 
 { 
     position: absolute; 
@@ -329,8 +337,60 @@ li a:hover:not(.active)
     border-radius: 0px 0px 5px 0px;
 }
 
+.br-leyend
+{
+    position: absolute;
+    bottom: 16px;
+    left: 12px;
+    z-index: 1;
+}
+
 .fraud-triangle-rules-button
 {
     color: white !important;
     width: 100%;
+}
+
+.x-axis-button
+{
+    position: absolute;
+    left: 12px;
+    top: 15px;
+    border: 2px solid #d3d3d3;
+    background: #e2e5e6;  
+    color: #888888; 
+    border-radius: 5px 5px 5px 5px; 
+    padding: 0px 3px 0px 3px !important;
+    height: 35px;
+    line-height: 17px;
+    font-family: 'FFont-Bold';
+    font-size: 22px;
+}
+
+.y-axis-button
+{
+    position: absolute;
+    left: 12px;
+    top: 60px;
+    border: 2px solid #d3d3d3;
+    background: #e2e5e6;  
+    color: #888888; 
+    border-radius: 5px 5px 5px 5px; 
+    padding: 0px 0px 0px 0px !important;
+    height: 35px;
+    line-height: 17px;
+    font-family: 'FFont-Bold';
+    font-size: 22px;
+    width: 30px;
+}
+
+.axis-button-title
+{
+    width: 20px;
+    margin-top: -11px;
+    margin-left: 0px;
+    background: #e2e5e6; 
+    text-align: center;
+    font-family: 'FFont', sans-serif; 
+    font-size: 8px;
 }

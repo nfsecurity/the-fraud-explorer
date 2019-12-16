@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for graphic data
  */
@@ -339,7 +339,7 @@ include "../lbs/endpointMethods.php";
     <div class="modal-footer window-footer-config">
         <br>
         <a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>
-        <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
     </div>
 
 </div>

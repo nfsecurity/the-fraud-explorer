@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for Chart
  */
@@ -68,7 +68,7 @@ include "../lbs/elasticsearch.php";
                 </select>
 
                 <span style="line-height: 0.7"><br><br></span>
-                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important; margin-bottom: 0px;" />
+                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important; margin-bottom: 2px;" />
             </form>
 
             <!-- SQL Queries -->
@@ -124,10 +124,10 @@ include "../lbs/elasticsearch.php";
 
             <span style="line-height: 0.3"><br></span>
             <table class="table-leyend" id="elm-legend">
-                <th colspan=2 class="table-leyend-header"><span class="fa fa-tags font-aw-color">&nbsp;&nbsp;</span>Graph legend</th>
+                <th colspan=2 class="table-leyend-header"><span class="fa fa-folder-o fa-lg font-aw-color">&nbsp;&nbsp;</span>Plot Graphic legend</th>
                 <tr>
-                    <td class="table-leyend-point"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br>low</td>
-                    <td class="table-leyend-point"><span class="fa fa-3x fa-asterisk asterisk-color-high"></span><br>high</td>
+                    <td class="table-leyend-point-left"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br>low</td>
+                    <td class="table-leyend-point-right"><span class="fa fa-3x fa-asterisk asterisk-color-high"></span><br>high</td>
                 </tr>
             </table>
             <span style="line-height: 0.1"><br></span>
@@ -220,17 +220,17 @@ include "../lbs/elasticsearch.php";
             $countRationalizationTotal = ($resultCountRationalization['totalRationalization'] == NULL ? 0 : $resultCountRationalization['totalRationalization']); 
 
             echo '<table class="table-insights" id="elm-phrasecounts">';
-            echo '<th colspan=2 class="table-insights-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Phrase counts</th>';
+            echo '<th colspan=2 class="table-insights-header-phrase-counts"><span class="fa fa-folder-o fa-lg font-aw-color">&nbsp;&nbsp;</span>Fraud phrase count</th>';
             echo '<tr>';
-            echo '<td class="table-insights-triangle">Pressure</td>';
+            echo '<td class="table-insights-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Pressure</td>';
             echo '<td class="table-insights-score">'.$countPressureTotal.'</td>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td class="table-insights-triangle">Opportunity</td>';
+            echo '<td class="table-insights-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Opportunity</td>';
             echo '<td class="table-insights-score">'.$countOpportunityTotal.'</td>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td class="table-insights-triangle">Rationalization</td>';
+            echo '<td class="table-insights-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Rationalization</td>';
             echo '<td class="table-insights-score">'.$countRationalizationTotal.'</td>';
             echo '</tr>';
             echo '</table>';
@@ -252,24 +252,24 @@ include "../lbs/elasticsearch.php";
             }
 
             echo '<table class="table-dictionary" id="elm-dictionarysize">';
-            echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-align-justify font-aw-color">&nbsp;&nbsp;</span>Library Database</th>';
+            echo '<th colspan=2 class="table-dictionary-header"><span class="fa fa-folder-o fa-lg font-aw-color">&nbsp;&nbsp;</span>Phrases in database</th>';
             echo '<tr>';
-            echo '<td class="table-dictionary-triangle">Pressure</td>';
+            echo '<td class="table-dictionary-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Pressure</td>';
             echo '<td class="table-dictionary-score">'.$dictionaryCount['pressure'].'</td>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td class="table-dictionary-triangle">Opportunity</td>';
+            echo '<td class="table-dictionary-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Opportunity</td>';
             echo '<td class="table-dictionary-score">'.$dictionaryCount['opportunity'].'</td>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td class="table-dictionary-triangle">Rationalization</td>';
+            echo '<td class="table-dictionary-triangle"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Rationalization</td>';
             echo '<td class="table-dictionary-score">'.$dictionaryCount['rationalization'].'</td>';
             echo '</tr>';
             echo '</table>';
 
             /* Add, delete or modify rules */
 
-            echo '<span style="line-height: 0.3"><br></span>';
+            echo '<span style="line-height: 0.5"><br></span>';
             echo '<a href="../mods/fraudTriangleRules" data-toggle="modal" class="fraud-triangle-rules-button btn btn-success" data-target="#fraudTriangleRules" href="#" id="elm-fraud-triangle-rules">Library workshop</a>';
             echo '</div>';
             
@@ -302,24 +302,26 @@ include "../lbs/elasticsearch.php";
             $yAxisGraph = max($axisRationalization);
             
             echo '<div></div>';
-            echo '<div class="y-axis-leyend"><span class="fa fa-bar-chart font-aw-color">&nbsp;&nbsp;</span>Pressure to commit Fraud - scale '.$xAxisGraph.'</div>';
-            echo '<div class="x-axis-leyend"><br><span class="fa fa-line-chart font-aw-color">&nbsp;&nbsp;</span>Unethical behavior, Rationalization - scale '.$yAxisGraph.'</div>';
             
             /* Data Table & Events */
             
             echo '<div class="data-table-icon"><br>';
-            echo '<span class="fa fa-cogs font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai">Expert deductions</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span><a href="eventData?endpoint='.base64_encode(base64_encode("all")).'" id="elm-analyticsaccess">Access all events</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
+            echo '<span class="fa fa-th-large fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai">Artificial intelligence expert deductions</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-th-list fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="eventData?endpoint='.base64_encode(base64_encode("all")).'" id="elm-analyticsaccess">All fraud triangle events</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-table fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
             echo '</div>';
                     
             ?>
             
             <div class="fraudtriangle-bubble-container">
-                <div class="tl"><br>High Pressures&emsp;</div>
-                <div class="tr" id="elm-bubble"><br>&emsp;High Fraud Triangle Behaviors</div>
-                <div class="bl"><br>Fraud Triangle Behaviors&emsp;</div>
-                <div class="br"><br>&emsp;High Rationalizations</div>
+                <div class="tl"><br>
+                    <span class="fa fa-chevron-right font-aw-color">&nbsp;</span>High Pressures&emsp;
+                    <div class="y-axis-button"><center><div class="axis-button-title">axy</div></center><center>P</center></div>
+                    <div class="x-axis-button"><center><div class="axis-button-title">axx</div></center><center>R</center></div>
+                </div>
+                <div class="tr" id="elm-bubble"><br>&emsp;<span class="fa fa-chevron-right font-aw-color">&nbsp;</span>High Behaviors</div>
+                <div class="bl"><br><div class="bl-leyend"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>Some Behaviors</div></div>
+                <div class="br"><br><div class="br-leyend"><span class="fa fa-chevron-right font-aw-color">&nbsp;</span>High Rationals</div></div>
                 <canvas id="fraudtriangle-graph"></canvas>
             </div>
         </div>

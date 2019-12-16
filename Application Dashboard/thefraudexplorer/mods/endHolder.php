@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for paint main endpoints list
  */
@@ -289,8 +289,8 @@ if ($row_a = mysqli_fetch_array($result_a))
 
         /* Company, department or group */
 
-        if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd"><div class="department-button">BASELINE</div></td>';
-        else echo '<td class="comptd"><div class="department-button">' . $row_a["ruleset"] . "</div></td>";
+        if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd"><center><div class="ruleset-button"><center><div class="rule-title">ruleset</div></center><center>BASELINE</center></div></center></td>';
+        else echo '<td class="comptd"><center><div class="ruleset-button"><center><div class="rule-title">ruleset</div></center><center>' . $row_a["ruleset"] . "</center></div></center></td>";
 
         /* Endpoint software version */
 
@@ -309,7 +309,10 @@ if ($row_a = mysqli_fetch_array($result_a))
 
         /* Last connection to the server */
 
-        echo '<td class="lasttd">'.str_replace(array("-"),array("/"),$row_a["heartbeat"]).'</td>';
+        echo '<td class="lasttd">';
+        echo '<center><div class="date-container">'.date('H:i',strtotime($row_a["heartbeat"])).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($row_a["heartbeat"])).'</div></div></center>';
+        echo '</td>';
+        
         echo '<div id="fraudCounterHolder"></div>';
 
         /* Fraud triangle counts and score */
@@ -326,7 +329,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countPressure.'</td>';
         echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
         echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
-        echo '<td class="countctd">'.$level.'</td>';
+        echo '<td class="countctd"><center><div class="score-container-underline">'.$level.'</div></center></td>';
         echo '<td class="scoretd"><a href=eventData?endpoint='.$endpointEnc.'>'.round($score, 1).'</a></td>';
 
         /* Option for delete the endpoint */

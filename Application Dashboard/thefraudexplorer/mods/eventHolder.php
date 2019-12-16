@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for paint endpoint data table
  */
@@ -169,11 +169,11 @@ if ($endpointDECSQL != "all")
 {
     echo '<table id="endpointDataTable" class="tablesorter">';
     echo '<thead><tr>';
-    echo '<th class="detailsth" id="elm-details-event"><span class="fa fa-list fa-lg">&nbsp;</span></th>';
+    echo '<th class="detailsth" id="elm-details-event"><span class="fa fa-list fa-lg awfont-padding-right"></span></th>';
     echo '<th class="timestampth" id="elm-date-event"><span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE</th>';
-    echo '<th class="eventtypeth" id="elm-type-event">BEHAVIOUR</th>';
-    echo '<th class="windowtitleth" id="elm-windowtitle-event"><span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION INSTANCE</th>';
-    echo '<th class="phrasetypedth" id="elm-phrasetyped-event"><span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>';
+    echo '<th class="eventtypeth" id="elm-type-event">BEHAVIOR</th>';
+    echo '<th class="windowtitleth" id="elm-windowtitle-event"><span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE</th>';
+    echo '<th class="phrasetypedth" id="elm-phrasetyped-event"><span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>';
     echo '<th style="display: none;">EXPRESSION HISTORY</th>';
     echo '<th class="falseth" id="elm-mark-event">MARK</th>';
     echo '</tr></thead><tbody>';
@@ -207,22 +207,19 @@ if ($endpointDECSQL != "all")
         /* Timestamp */
 
         echo '<td class="timestamptd">';
-        $date = date_create($date);
-        echo date_format($date, 'Y-m-d H:i');
+        echo '<center><div class="date-container">'.date('H:i',strtotime($date)).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($date)).'</div></div></center>';
         echo '</td>';
         
         /* EventType */
 
         echo '<td class="eventtypetd">';
-        echo '<div class="behavior-button">';
-        echo '<center>'.strtoupper(ucfirst($result['_source']['alertType'])).'</center>';
-        echo '</div>';
+        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($result['_source']['alertType']).'</center></div></center>';
         echo '</td>';
 
         /* Application title */
 
         echo '<td class="windowtitletd">';
-        echo '<span class="fa fa-list-alt font-icon-gray fa-padding"></span>'.$windowTitle;
+        echo '<div class="title-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle, 0, 80)).'</div>';
         echo '</td>';
 
         /* Phrase typed */
@@ -230,7 +227,7 @@ if ($endpointDECSQL != "all")
         $alertDate =  date_format($date, 'Y-m-d H:i');
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($alertDate).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($alertDate).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Mark false positive */
@@ -276,13 +273,13 @@ else
     echo '<span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE';
     echo '</th>';
     echo '<th class="eventtypeth-all" id="elm-type-event">';
-    echo 'BEHAVIOUR';
+    echo 'BEHAVIOR';
     echo '</th>';
     echo '<th class="endpointth-all" id="elm-endpoint-event">';
     echo '<span class="fa fa-briefcase fa-lg font-icon-color-gray-low awfont-padding-right"></span>HUMAN AUDIENCE';
     echo '</th>';
     echo '<th class="windowtitleth-all" id="elm-windowtitle-event">';
-    echo '<span class="fa fa-window-restore fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
+    echo '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
     echo '</th>';
     echo '<th class="phrasetypedth-all" id="elm-phrasetyped-event">';
     echo '<span class="fa fa-pencil fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
@@ -312,7 +309,7 @@ else
         $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
         $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
         $regExpression = htmlentities($result['_source']['phraseMatch']);
-        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, gender, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, gender, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
         $userDomain = mysqli_fetch_assoc($queryUserDomain);
                     
         /* Details */
@@ -323,15 +320,13 @@ else
         /* Date */
         
         echo '<td class="timestamptd-all">';       
-        echo $date;                 
+        echo '<center><div class="date-container">'.date('H:i',strtotime($date)).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($date)).'</div></div></center>';                
         echo '</td>';
         
         /* Event type */
                     
         echo '<td class="eventtypetd-all">';
-        echo '<div class="behavior-button">';
-        echo '<center>'.strtoupper($result['_source']['alertType']).'</center>';
-        echo '</div>';
+        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($result['_source']['alertType']).'</center></div></center>';
         echo '</td>';
         
         /* Endpoint */
@@ -348,28 +343,33 @@ else
                             
         if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
         else $dataRepresentation = "0";
-                    
-        echo '<span class="fa fa-laptop font-icon-color-green awfont-padding-right"></span>';
-                                    
-        if ($userDomain["name"] == NULL || $userDomain['name'] == "NULL") endpointInsights("dashBoard", "na", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-        else 
+
+        if ($userDomain["name"] == NULL || $userDomain["name"] == "NULL")
         {
-            $endpointName = $userDomain['name'];
-            endpointInsights("dashBoard", "na", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            if ($userDomain["gender"] == "male") endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($userDomain["gender"] == "female") endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
-                    
+        else
+        {
+            $endpointName = $userDomain["name"];
+            if ($userDomain["gender"] == "male") endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($userDomain["gender"] == "female") endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else echo endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+        }
+                 
         echo '</td>';
         
         /* Application title */
         
         echo '<td class="windowtitletd-all">';
-        echo '<span class="fa fa-list-alt font-icon-color-gray-low awfont-padding-right"></span>'.$windowTitle;
+        echo '<div class="title-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle, 0, 80)).'</div>';
         echo '</td>';
         
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o font-icon-color-green fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */

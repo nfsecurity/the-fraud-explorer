@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for Phrase viewer
  */
@@ -119,6 +119,12 @@ $windowTitle = filter($_GET['windowTitle']);
         font-style: italic;
     }
 
+    .btn-success, .btn-success:active, .btn-success:visited 
+    {
+        background-color: #4B906F !important;
+        border: 1px solid #4B906F !important;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -138,7 +144,7 @@ $windowTitle = filter($_GET['windowTitle']);
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
 
     echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
-    echo 'At <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.base64_decode($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(base64_decode($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertType).'</span> behavior as shown below<br><br>';
+    echo 'At <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.base64_decode($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(base64_decode($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertType).'</span> behavior as shown below:<br><br>';
     echo '</div>';
 
     if($session->username == "admin")

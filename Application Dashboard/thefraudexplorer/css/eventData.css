@@ -2,13 +2,13 @@
 * The Fraud Explorer
 * https://www.thefraudexplorer.com/
 *
-* Copyright (c) 2014-2019 The Fraud Explorer
+* Copyright (c) 2014-2020 The Fraud Explorer
 * email: customer@thefraudexplorer.com
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2019-05
-* Revision: v1.3.3-ai
+* Date: 2020-01
+* Revision: v1.4.1-ai
 *
 * Description: CSS Code
 */
@@ -117,16 +117,16 @@ a:active
 .table-holder
 {
     position: fixed; 
-    bottom: 80px; 
-    top: 53px; 
-    left: 8px;
-    right: 8px; 
+    bottom: 70px; 
+    top: 50px; 
+    left: 6px;
+    right: 6px; 
 }
 
 table 
 {
     overflow: hidden;
-    border: 2px solid #d3d3d3;
+    border: 1px solid #d3d3d3;
     background: #d3d3d3;
     width: 100%;
     border-spacing: 0px;
@@ -182,7 +182,6 @@ td
 
 th
 {
-    text-shadow: 1px 1px 1px #fff;
     background:#e8eaeb;
     font:11px "Verdana", "Helvetica Neue",Arial, Helvetica, sans-serif;
     text-align: center;
@@ -210,8 +209,8 @@ th
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     color: #555555;
-    min-width: 160px;
-    width: 160px;
+    min-width: 100px;
+    width: 100px;
     display: table-cell;
     white-space: nowrap;
 }
@@ -234,7 +233,7 @@ th
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #555555;
-    max-width: 300px;
+    max-width: 330px;
     display: table-cell;
     overflow: hidden;
     text-align: left;
@@ -304,8 +303,8 @@ th
     border-right:1px solid #F8F8F8;
     text-align: center;
     vertical-align: middle;
-    width: 160px;
-    min-width: 160px;
+    width: 100px;
+    min-width: 100px;
 }
 
 .eventtypetd
@@ -389,8 +388,8 @@ th
     overflow: hidden;
     font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     color: #555555;
-    min-width: 160px;
-    width: 160px;
+    min-width: 100px;
+    width: 100px;
     display: table-cell;
     white-space: nowrap;
 }
@@ -413,8 +412,8 @@ th
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #555555;
-    width: 240px;
-    min-width: 240px;
+    width: 270px;
+    min-width: 270px;
     display: table-cell;
     overflow: hidden;
     text-align: left;
@@ -426,7 +425,7 @@ th
     overflow: hidden; 
     font-family: 'FFont-Bold', sans-serif; font-size: 12px; 
     color: #555555;
-    max-width: 300px;
+    max-width: 330px;
     display: table-cell;
     overflow: hidden;
     text-align: left;
@@ -483,8 +482,8 @@ th
     border-right:1px solid #F8F8F8;
     text-align: center;
     vertical-align: middle;
-    width: 160px;
-    min-width: 160px;
+    width: 100px;
+    min-width: 100px;
 }
 
 .eventtypetd-all
@@ -512,11 +511,11 @@ th
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
     text-align: left;
     vertical-align: middle;
-    width: 240px;
-    min-width: 240px;
+    width: 270px;
+    min-width: 270px;
     border-right:0px solid #F8F8F8;
     border-left:1px solid #F8F8F8;
-    padding: 0px 0px 0px 20px;
+    padding: 15px 0px 0px 20px;
 }
 
 .windowtitletd-all
@@ -676,7 +675,7 @@ li a:hover:not(.active)
     bottom: 0px;
     left: 0px;
     right: 0px;
-    height: 40px;
+    height: 30px;
     margin-bottom: 0px;
 }
 
@@ -731,11 +730,12 @@ li a:hover:not(.active)
 
 .pager-layout
 {
-    position: relative;
+    position: fixed;
     height: 30px;
-    bottom: 15px;
-    width: calc(100% - 2px); 
-    border: 1px solid #d3d3d3; 
+    bottom: 35px;
+    left: 6px;
+    right: 6px;
+    border: 1px solid #d3d3d3;
     background: #FFFFFF;
     border-radius: 5px;
 }
@@ -903,6 +903,11 @@ li a:hover:not(.active)
     color: #B4BCC2;
 }
 
+.font-icon-color-gray 
+{ 
+    color: #B4BCC2; 
+}
+
 .behavior-button
 {
     border: 0px solid gray; 
@@ -926,4 +931,87 @@ li a:hover:not(.active)
     color: #808080 !important;
     margin-top: 0px;
     display: inline-block;
+}
+
+.date-container
+{
+    border: 1px solid #d3d3d3;
+    height: 30px;
+    line-height: 16px;
+    width: 60px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 12px;
+    color: gray;
+    border-radius: 5px;
+}
+
+.year-container
+{
+    border-top: 1px solid #d3d3d3;
+    height: 8px;
+    line-height: 12px;
+    width: 59px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 8px;
+    color: gray;
+}
+
+.title-app
+{
+    height: 30px;
+    line-height: 30px;
+    width: calc(100%);
+    text-align: left;
+    vertical-align: middle;
+    font-family: Verdana, sans-serif; 
+    padding: 0px 10px 0px 10px;
+    font-size: 11px;
+    color: #555;
+    border-radius: 5px;
+    background: #EBEBEB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.behavior-case
+{
+    border: 2px solid #d3d3d3;
+    background-color: #F2F2F2; 
+    color: #888888; 
+    border-radius: 5px 5px 5px 5px; 
+    padding: 0px 5px 0px 5px !important;
+    height: 28px;
+    line-height: 13px;
+    width: 125px;
+}
+
+.behavior-title
+{
+    width: 40px;
+    margin-top: -8px;
+    margin-left: 0px;
+    background: #F2F2F2;
+    text-align: center;
+    font-family: 'FFont', sans-serif; 
+    font-size: 8px;
+}
+
+.gender-container
+{
+    float: left;
+    height: 50px;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+
+.gender-image
+{
+    vertical-align: middle; 
+    width: 35px; 
+    height: 35px;
 }

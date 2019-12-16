@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for dashboard
  */
@@ -144,6 +144,89 @@ $_SESSION['instance'] = "dashBoard";
             </div>
         </center>
 
+        <!-- Modal for Build Endpoint -->
+
+        <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Fraud Triangle Rules -->
+
+        <div class="modal" id="fraudTriangleRules" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center" style="width: 760px;">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for GraphicData -->
+
+        <div class="modal" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Artificial Intelligence -->
+
+        <div class="modal" id="expertSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for switch phrases collection -->
+
+        <center>
+            <div class="modal" id="switch-phrase-collection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title window-title" id="myModalLabel">Phrase collection switching</h4>
+                            </div>
+
+                            <div class="modal-body" style="margin: 0px 10px 15px 10px;">
+                                <p style="text-align:justify; font-size: 12px;"><br>You are about to switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server, and The Fraud Explorer can't do the work. You can switch the times you want. Do you want to proceed ?</p>
+                                <p class="debug-url window-debug"></p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">I'm not sure</button>
+                                <a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">I'm sure, proceed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
         <!-- Modal for Welcome screen -->
 
         <div class="modal" id="welcomeScreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -183,6 +266,11 @@ var tour = new Tour({
         title: "Main menu",
         content: "This is the top menu you can use for navigate the entire solution."
     }, {
+        element: "#elm-left-menu",
+        placement: 'right',
+        title: "Discovery menu",
+        content: "This is the discovery menu, you can access here the most valuable features of the software, like rich reports, endpoint generating, backup, fraud tree, phrase library personalization and much more."
+    }, { 
         element: "#elm-dashboard",
         placement: 'bottom',
         title: "Dashboard",

@@ -4,7 +4,7 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
@@ -68,7 +68,7 @@ function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $cou
 
     if (strpos($endpointData[0], ' ') !== false) $spaces = true;
 
-    if ($location == "endPoints") echo '<img src="images/'.$gender.'-agent.gif" class="gender-image">';
+    if ($location == "endPoints" || $location == "eventData" ) echo '<div class="gender-container"><img src="images/'.$gender.'-agent.gif" class="gender-image"></div>';
     
     if ($score == 0)
     {

@@ -2,13 +2,13 @@
 * The Fraud Explorer
 * https://www.thefraudexplorer.com/
 *
-* Copyright (c) 2014-2019 The Fraud Explorer
+* Copyright (c) 2014-2020 The Fraud Explorer
 * email: customer@thefraudexplorer.com
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2019-05
-* Revision: v1.3.3-ai
+* Date: 2020-01
+* Revision: v1.4.1-ai
 *
 * Description: CSS Code
 */
@@ -983,7 +983,7 @@ li a:hover:not(.active)
     width: 35px;
     margin-top: -8px;
     margin-left: 0px;
-    background:#F2F2F2;
+    background: #F2F2F2;
     text-align: center;
     font-family: 'FFont', sans-serif; 
     font-size: 8px;

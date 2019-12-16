@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for Advanced Reports
  */
@@ -223,7 +223,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="alldaterange" value="alldaterange" autocomplete="off" checked>Press if you want all date range
+                        <input type="checkbox" name="alldaterange" value="alldaterange" autocomplete="off" checked>I want all date range
                     </label>
                 </div>
 
@@ -289,7 +289,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allapplications" value="allapplications" autocomplete="off" checked>Press if you want all applications
+                        <input type="checkbox" name="allapplications" value="allapplications" autocomplete="off" checked>I want all applications
                     </label>
                 </div>           
                     
@@ -336,7 +336,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="alldepartments" value="alldepartments" autocomplete="off" checked>Press if you want all departments
+                        <input type="checkbox" name="alldepartments" value="alldepartments" autocomplete="off" checked>I want all departments
                     </label>
                 </div> 
                 
@@ -349,7 +349,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allphrases" value="allphrases" autocomplete="off" checked>Press if you want all phrases
+                        <input type="checkbox" name="allphrases" value="allphrases" autocomplete="off" checked>I want all phrases
                     </label>
                 </div>
 
@@ -357,7 +357,7 @@ $_SESSION['processingStatus'] = "notstarted";
         </div>
 
         <div class="modal-footer window-footer-config">
-            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to events</button>
+            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
             
             <?php    
             

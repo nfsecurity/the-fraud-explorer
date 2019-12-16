@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  * 
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for paint dashboard
  */
@@ -111,7 +111,7 @@ else $totalSystemWords= "0";
 
 <div class="dashboard-left-menu">
     <center>
-        <table class="menu-table">
+        <table class="menu-table" id="elm-left-menu">
             <tr>
                 <td>
                     <center>
@@ -122,28 +122,28 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoint agent</div><div class=tooltip-row><div class=tooltip-item>Make the downloadable and installable<br>agent for your endpoints depending<br>of the platform</div></div></div>"><span class="fa fa-tasks fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoint agent</div><div class=tooltip-row><div class=tooltip-item>Make the downloadable and installable<br>agent for your endpoints depending<br>of the platform</div></div></div>"><a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint"><span class="fa fa-tasks fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     <center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Phrase library</div><div class=tooltip-row><div class=tooltip-item>Modify and improve the fraud triangle<br>phrase library with this tool called<br>library workshop</div></div></div>"><span class="fa fa-folder-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span><span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Phrase library</div><div class=tooltip-row><div class=tooltip-item>Modify and improve the fraud triangle<br>phrase library with this tool called<br>library workshop</div></div></div>"><a href="../mods/fraudTriangleRules" data-toggle="modal" class="fraud-triangle-phrases-button" data-target="#fraudTriangleRules" href="#" id="elm-fraud-triangle-rules"><span class="fa fa-folder-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a><span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><span class="fa fa-calendar-check-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><span class="fa fa-calendar-check-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Vertical analytics</div><div class=tooltip-row><div class=tooltip-item>See the complete table of fraud triangle<br>analytics events with power and<br>useful information</div></div></div>"><span class="fa fa-table fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Vertical analytics</div><div class=tooltip-row><div class=tooltip-item>See the complete table of fraud triangle<br>analytics events with power and<br>useful information</div></div></div>"><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical"><span class="fa fa-table fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -157,7 +157,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><span class="fa fa-film fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai"><span class="fa fa-film fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -554,6 +554,30 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#advanced-reports').on('show.bs.modal', function(e){
         $(this).find('.advanced-reports-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for switch phrase collection -->
+
+<script>
+    $('#switch-phrase-collection').on('show.bs.modal', function(e){
+        $(this).find('.switch-phrase-collection-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for build endpoint -->
+
+<script>
+    $('#build-endpoint').on('show.bs.modal', function(e){
+        $(this).find('.build-endpoint-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Fraud Triangle Rulest -->
+
+<script>
+    $('#fraudTriangleRules').on('show.bs.modal', function(e){
+        $(this).find('.fraud-triangle-phrases-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
