@@ -282,9 +282,9 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
             <div class="right-container-reports">
                    
-                <p class="title-config">Applications</p><br><br>
+                <p class="title-config">Application</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
-                <input type="text" name="applications" id="applications" autocomplete="off" placeholder="Teams, Skype, Outlook" class="input-value-text" style="text-indent:5px;">
+                <input type="text" name="applications" id="applications" autocomplete="off" placeholder="Microsoft Teams" class="input-value-text" style="text-indent:5px;">
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">

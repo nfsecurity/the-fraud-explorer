@@ -25,6 +25,7 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "dashBoard";
+$_SESSION['endpointIDh'] = base64_encode(base64_encode("all"));
 
 ?>
 

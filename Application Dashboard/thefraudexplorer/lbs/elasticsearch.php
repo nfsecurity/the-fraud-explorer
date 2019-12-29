@@ -4,7 +4,7 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
@@ -335,7 +335,7 @@ function countFraudTriangleMatchesWithDateRange($fraudTerm, $index, $from, $to)
 
 /* Search all Fraud Triangle Matches with date range */
 
-function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus, $context, $from, $to)
+function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus, $context, $from, $to, $pressure, $opportunity, $rationalization)
 {
     if ($context == "allalerts") $querySize = 10000;
     else $querySize = 50;
@@ -359,9 +359,15 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'must' => [
                                     [ 'match_all' => [ 'boost' => 1 ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'should' => [
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ]
@@ -386,9 +392,15 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'must' => [
                                     [ 'match_all' => [ 'boost' => 1 ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'should' => [
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ],
@@ -417,9 +429,13 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'should' => [
                                     [ 'match' => [ 'userDomain' => $domain ] ],
                                     [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
                                 ],
                                 'must_not' => [
@@ -445,8 +461,12 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'should' => [
                                     'match' => [ 'userDomain' => $domain ],
+                                    'match' => [ 'alertType' => $pressure ],
+                                    'match' => [ 'alertType' => $opportunity ],
+                                    'match' => [ 'alertType' => $rationalization ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
                                 ],
                                 'must_not' => [
@@ -478,9 +498,15 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'must' => [
                                     [ 'match_all' => [ 'boost' => 1 ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'should' => [
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ]
@@ -505,9 +531,15 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'must' => [
                                     [ 'match_all' => [ 'boost' => 1 ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'should' => [
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ],
@@ -536,9 +568,13 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'should' => [
                                     [ 'match' => [ 'userDomain' => $domain ] ],
                                     [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
                                 ],
                                 'must_not' => [
@@ -564,8 +600,12 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         ],
                         'query' => [
                             'bool' => [
+                                'minimum_should_match' => '1',
                                 'should' => [
                                     'match' => [ 'userDomain' => $domain ],
+                                    'match' => [ 'alertType' => $pressure ],
+                                    'match' => [ 'alertType' => $opportunity ],
+                                    'match' => [ 'alertType' => $rationalization ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
                                 ],
                                 'must_not' => [

@@ -288,10 +288,10 @@ else $totalSystemWords= "0";
                             <center><span class="fa fa-bookmark fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud T. events</center>
                         </th>
                         <th class="th-ruleset" style="padding-right: 25px;">
-                            <center><span class="fa fa-folder-open fa-lg font-icon-color-gray awfont-padding-right"></span>Business rules</center>
+                            <center><span class="fa fa-folder-open fa-lg font-icon-color-gray awfont-padding-right"></span>Rules/Units</center>
                         </th>
                         <th class="th-score" style="padding-right: 25px; border-radius: 0px 0px 3px 0px;">
-                            <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Behavior score</center>
+                            <center><span class="fa fa-address-book-o fa-lg font-icon-color-gray awfont-padding-right"></span>Fraud score</center>
                         </th>
                     </tr>
                 </tfoot>
@@ -487,7 +487,7 @@ else $totalSystemWords= "0";
                             <span class="fa fa-briefcase fa-lg font-icon-color-gray awfont-padding-right"></span>Endpoint and Business
                         </th>
                         <th class="th-phrase">
-                            <span class="fa fa-comments-o fa-lg font-icon-color-gray awfont-padding-right"></span>Is feeling / expressing
+                            <span class="fa fa-comments-o fa-lg font-icon-color-gray awfont-padding-right"></span>Is expressing or feeling
                         </th>
                         <th class="th-vertice" style="padding-right: 25px;">
                             Vertice&nbsp;&nbsp;&nbsp;

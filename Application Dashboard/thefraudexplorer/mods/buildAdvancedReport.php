@@ -43,22 +43,39 @@ $endpointDec = $_SESSION['endpointIDh'];
 /* POST Variables */
 
 $typereport = filter($_POST['typereport']);
-$typeinput = filter($_POST['typeinput']);
+if (isset($_POST['typeinput'])) $typeinput = filter($_POST['typeinput']);
 $daterangefrom = filter(str_replace("/", "-", $_POST['daterangefrom']));
 $daterangeto = filter(str_replace("/", "-", $_POST['daterangeto']));
 
 if (isset($_POST['alldaterange'])) $alldaterange = filter($_POST['alldaterange']);
 else $alldaterange = NULL;
 
-$pressure = filter($_POST['pressure']);
-$opportunity = filter($_POST['opportunity']);
-$rationalization = filter($_POST['rationalization']);
-$applications = filter($_POST['applications']);
-$allapplications = filter($_POST['allapplications']);
-$ruleset = filter($_POST['ruleset']);
-$alldepartments = filter($_POST['alldepartments']);
-$excluded = filter($_POST['excluded']);
-$allphrases = filter($_POST['allphrases']);
+if (isset($_POST['pressure'])) $pressure = filter($_POST['pressure']);
+else $pressure = "n/a";
+
+if (isset($_POST['opportunity'])) $opportunity = filter($_POST['opportunity']);
+else $opportunity = "n/a";
+
+if (isset($_POST['rationalization'])) $rationalization = filter($_POST['rationalization']);
+else $rationalization = "n/a";
+
+if (isset($_POST['applications'])) $app = filter($_POST['applications']);
+else $app = "all";
+
+if (isset($_POST['allapplications'])) $allapplications = filter($_POST['allapplications']);
+else $allapplications = "n/a";
+
+if (isset($_POST['ruleset'])) $ruleset = filter($_POST['ruleset']);
+else $ruleset = "all";
+
+if (isset($_POST['alldepartments'])) $alldepartments = filter($_POST['alldepartments']);
+else $alldepartments = "n/a";
+
+if (isset($_POST['excluded'])) $excluded = filter($_POST['excluded']);
+else $excluded = "all";
+
+if (isset($_POST['allphrases'])) $allphrases = filter($_POST['allphrases']);
+else $allphrases = "n/a";
 
 if ($alldaterange == "alldaterange")
 {
@@ -154,25 +171,19 @@ else
 {
     if ($session->domain != "all") 
     {
-        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "enabled", "allalerts", $daterangefrom, $daterangeto);
+        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "enabled", "allalerts", $daterangefrom, $daterangeto, $pressure, $opportunity, $rationalization);
         else $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "disabled", "allalerts", $daterangefrom, $daterangeto);
     }
     else 
     {
-        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, "all", "enabled", "allalerts", $daterangefrom, $daterangeto);
+        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, "all", "enabled", "allalerts", $daterangefrom, $daterangeto, $pressure, $opportunity, $rationalization);
         else 
         {
-            $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, "all", "disabled", "allalerts", $daterangefrom, $daterangeto);
-            $countEventMatchesPRESSURE = countFraudTriangleMatchesWithDateRange("pressure", $ESAlerterIndex, $daterangefrom, $daterangeto);
-            $countEventMatchesOPPORTUNITY = countFraudTriangleMatchesWithDateRange("opportunity", $ESAlerterIndex, $daterangefrom, $daterangeto);
-            $countEventMatchesRATIONALIZATION = countFraudTriangleMatchesWithDateRange("rationalization", $ESAlerterIndex, $daterangefrom, $daterangeto);
+            $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, "all", "disabled", "allalerts", $daterangefrom, $daterangeto, $pressure, $opportunity, $rationalization);
         }
     }
                 
     $eventData = json_decode(json_encode($eventMatches), true);
-    $countEventsPRESSURE = json_decode(json_encode($countEventMatchesPRESSURE), true);
-    $countEventsOPPORTUNITY = json_decode(json_encode($countEventMatchesOPPORTUNITY), true);
-    $countEventsRATIONALIZATION = json_decode(json_encode($countEventMatchesRATIONALIZATION), true);
     $allEventsSwitch = true;
 }
 
@@ -231,6 +242,9 @@ $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(10204);
 $contentStartRow = 20;
 $currentContentRow = 20;
 $endpointCounter = 1;
+$counterPressure = 0;
+$counterOpportunity = 0;
+$counterRationalization = 0;
 
 if ($typereport == "allendpoints")
 {
@@ -251,11 +265,46 @@ if ($typereport == "allendpoints")
             $endPoint = explode("_", $result['_source']['agentId']);
             $agentId = $result['_source']['agentId'];
             $endpointDECSQL = $endPoint[0];
-            $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
             $regExpression = htmlentities($result['_source']['phraseMatch']);
             $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
             $userDomain = mysqli_fetch_assoc($queryUserDomain);
             $multipleEndpoints[$endpointCounter] = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+
+            /* Application filter */
+
+            if ((strcmp($allapplications, "allapplications") != 0) && $app != "")
+            {
+                if (strpos($windowTitle, $app) === false) 
+                {
+                    continue;
+                }
+            }
+
+            /* Phrase filter */
+
+            if ((strcmp($allphrases, "allphrases") != 0) && $excluded != "")
+            {
+                if (strpos($stringHistory, $excluded) === false) 
+                {
+                    continue;
+                }
+            }
+
+            /* Ruleset filter */
+
+            if (strcmp($alldepartments, "alldepartments") != 0)
+            {
+                if (strpos($userDomain['ruleset'], $ruleset) === false) 
+                {
+                    continue;
+                }
+            }
+
+            /* Fraud vertices count */
+
+            if ($result['_source']['alertType'] == "pressure") $counterPressure++;
+            if ($result['_source']['alertType'] == "opportunity") $counterOpportunity++;
+            if ($result['_source']['alertType'] == "rationalization") $counterRationalization++;
 
             /* Excel report */
 
@@ -307,9 +356,12 @@ if ($typereport == "allendpoints")
     }
 
     $spreadsheet->getActiveSheet()->setCellValue('H15', "From ".str_replace("-", "/", $daterangefrom)." to ".str_replace("-", "/", $daterangeto));
-    $spreadsheet->getActiveSheet()->setCellValue('H6', $countEventsPRESSURE['count']);
-    $spreadsheet->getActiveSheet()->setCellValue('H9', $countEventsOPPORTUNITY['count']);
-    $spreadsheet->getActiveSheet()->setCellValue('H12', $countEventsRATIONALIZATION['count']);
+    $spreadsheet->getActiveSheet()->setCellValue('H6', $counterPressure);
+    $spreadsheet->getActiveSheet()->setCellValue('H9', $counterOpportunity);
+    $spreadsheet->getActiveSheet()->setCellValue('H12', $counterRationalization);
+
+    if (strcmp($alldepartments, "alldepartments") != 0) $spreadsheet->getActiveSheet()->setCellValue('K6', $ruleset); 
+    else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
 }
 
 /* Download XLSX file */
