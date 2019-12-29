@@ -1,6 +1,6 @@
 # Licencia The Fraud Explorer
 
-Este software está cobijado por la licencia [GNU GPL versión 3](http://www.gnu.org/licenses/gpl-3.0.html). Es un software opensource, gratuito, de libre distribución y modificación. Si usa este software para sus investigaciones debe conservar estas mismas libertades hacia sus clientes finales y nombrar a [NF Cybersecurity and Antifraud Firm](https://www.nfsec.company) como la empresa que desarrolla el software.
+Este software está cobijado por la licencia [GNU GPL versión 3](http://www.gnu.org/licenses/gpl-3.0.html). Es un software opensource, gratuito, de libre distribución y modificación. Si usa este software para sus investigaciones debe conservar estas mismas libertades hacia sus clientes finales y nombrar a [NF S.A.S](https://www.nofraud.la) como la empresa que desarrolla el software.
 
 
 ## Términos y condiciones
@@ -18,4 +18,4 @@ Lea todo el contenido de la licencia [GNU/GPLv3](http://www.gnu.org/licenses/gpl
 
 ## Copyright y derechos de autor
 
-_The Fraud Explorer_ está siendo desarrollado en [NF Cybersecurity and Antifraud Firm](https://nfsec.company). Si va a usar, distribuir o modificar el código fuente o binarios, debe siempre respetar el acuerdo de licencia y conservar la autoría original.
+_The Fraud Explorer_ está siendo desarrollado en [NF S.A.S](https://www.nofraud.la). Si va a usar, distribuir o modificar el código fuente o binarios, debe siempre respetar el acuerdo de licencia y conservar la autoría original.
