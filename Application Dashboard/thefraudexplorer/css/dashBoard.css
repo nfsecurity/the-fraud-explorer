@@ -955,7 +955,7 @@ li a:hover:not(.active)
     cursor: default;
 }
 
-.button-view-all-events 
+.button-view-all-events, .fraud-metrics-button 
 {
     cursor: pointer;
     border-radius: 5px;

@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2019-02
+ * Revision: v1.3.1-ai
  *
  * Description: Security methods
  */
@@ -43,6 +43,18 @@ function checkEvent($endPoint)
     if(mysqli_fetch_array($result) !== false) return true;
     else if ($endPoint == "all") return true;
     return false;
+}
+
+function console_log($output, $with_script_tags = true) 
+{
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . ');';
+    
+    if ($with_script_tags) 
+    {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    
+    echo $js_code;
 }
 
 ?>

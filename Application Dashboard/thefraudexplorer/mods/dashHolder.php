@@ -337,7 +337,10 @@ else $totalSystemWords= "0";
     <div class="container-bottom-left" id="elm-termstatistics">
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
-            <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
+            <p class="container-window-icon">
+                <a href="../mods/fraudMetrics" data-toggle="modal" class="fraud-metrics-button" data-target="#fraud-metrics" href="#" id="elm-fraud-metrics">&nbsp;&nbsp;View metrics history&nbsp;&nbsp;</a>&nbsp;
+                <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
+            </p>
         </h2><br>
         <div class="container-bottom-left-sub">
             <div class="container-bottom-left-sub-one">
@@ -554,6 +557,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#advanced-reports').on('show.bs.modal', function(e){
         $(this).find('.advanced-reports-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Fraud Metrics -->
+
+<script>
+    $('#fraud-metrics').on('show.bs.modal', function(e){
+        $(this).find('.fraud-metrics-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

@@ -203,14 +203,13 @@ $_SESSION['processingStatus'] = "notstarted";
             <div class="left-container-reports">              
                 
                 <p class="title-config">Report type</p><br>
-                <select class="select-option-typereport-styled wide" name="typereport" id="typereport" onChange="changeBehavior();">
+                <select class="select-option-typereport-styled wide" name="typereport" id="typereport">
                     <option value="byendpoint">By endpoint</option>
                     <option value="bydomain">By domain</option>
-                    <option value="allendpoints" selected="selected">All endpoints</option>
-                    <option value="alldomains">All domains</option>
+                    <option value="allendpoints" selected="selected">All endpoints & domains</option>
                 </select>
                 <div style="line-height:60px; border: 1px solid white;"><br></div>
-                <input type="text" name="typeinput" id="typeinput" autocomplete="off" placeholder="endpoint, domain" class="input-value-text" style="text-indent:5px;" disabled>
+                <input type="text" name="typeinput" id="typeinput" autocomplete="off" placeholder="endpoint, domain" class="input-value-text" style="text-indent:5px;">
                 
             </div>
             <div class="right-container-reports">
@@ -412,19 +411,3 @@ function getstatus()
         $('select').niceSelect();
     });
 </script>
-
-<!-- Disable or enable items -->
-
-<script type="text/javascript">
-    function changeBehavior()
-    {
-        if (document.getElementById("typereport").value == "allendpoints" || document.getElementById("typereport").value == "alldomains") 
-        {
-            document.getElementById("typeinput").disabled = true;
-        }
-        else
-        {
-            document.getElementById("typeinput").disabled = false;
-        }
-    }
-</script> 

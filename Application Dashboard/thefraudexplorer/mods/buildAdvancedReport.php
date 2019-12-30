@@ -44,6 +44,7 @@ $endpointDec = $_SESSION['endpointIDh'];
 
 $typereport = filter($_POST['typereport']);
 if (isset($_POST['typeinput'])) $typeinput = filter($_POST['typeinput']);
+
 $daterangefrom = filter(str_replace("/", "-", $_POST['daterangefrom']));
 $daterangeto = filter(str_replace("/", "-", $_POST['daterangeto']));
 
@@ -90,11 +91,13 @@ if ($session->domain == "all")
     if (samplerStatus($session->domain) == "enabled")
     {
         $urlWords="http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
-        
+        $params = '{ "query" : { "bool" : { "should" : { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, "must_not" : { "wildcard" : { "userDomain.raw" : "*" } } } } }';
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
@@ -122,7 +125,7 @@ else
     if (samplerStatus($session->domain) == "enabled")
     {
         $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
+        $params = '{ "query": { "bool": { "should" : [ { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -138,7 +141,7 @@ else
     else
     {
         $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" }, "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -246,123 +249,139 @@ $counterPressure = 0;
 $counterOpportunity = 0;
 $counterRationalization = 0;
 
-if ($typereport == "allendpoints")
-{
-    if ($endpointDECSQL == "all")
-    {    
-        foreach ($eventData['hits']['hits'] as $result)
-        {        
-            $_SESSION['processingStatus'] = "pending";
+if ($endpointDECSQL == "all")
+{    
+    foreach ($eventData['hits']['hits'] as $result)
+    {        
+        $_SESSION['processingStatus'] = "pending";
 
-            if (isset($result['_source']['tags'])) continue;
+        if (isset($result['_source']['tags'])) continue;
 
-            /* Event Details */
+        /* Event Details */
 
-            $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
-            $wordTyped = decRijndael($result['_source']['wordTyped']);
-            $stringHistory = decRijndael($result['_source']['stringHistory']);
-            $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
-            $endPoint = explode("_", $result['_source']['agentId']);
-            $agentId = $result['_source']['agentId'];
-            $endpointDECSQL = $endPoint[0];
-            $regExpression = htmlentities($result['_source']['phraseMatch']);
-            $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
-            $userDomain = mysqli_fetch_assoc($queryUserDomain);
-            $multipleEndpoints[$endpointCounter] = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+        $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
+        $wordTyped = decRijndael($result['_source']['wordTyped']);
+        $stringHistory = decRijndael($result['_source']['stringHistory']);
+        $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+        $endPoint = explode("_", $result['_source']['agentId']);
+        $agentId = $result['_source']['agentId'];
+        $endpointDECSQL = $endPoint[0];
+        $regExpression = htmlentities($result['_source']['phraseMatch']);
+        $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+        $userDomain = mysqli_fetch_assoc($queryUserDomain);
+        $multipleEndpoints[$endpointCounter] = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+        $endpointWithDomain = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
 
-            /* Application filter */
+        /* Report type filter */
 
-            if ((strcmp($allapplications, "allapplications") != 0) && $app != "")
+        if (strcmp($typereport, "byendpoint") == 0) 
+        {
+            if ($typeinput != $endpointWithDomain) 
             {
-                if (strpos($windowTitle, $app) === false) 
-                {
-                    continue;
-                }
+                continue;
             }
-
-            /* Phrase filter */
-
-            if ((strcmp($allphrases, "allphrases") != 0) && $excluded != "")
-            {
-                if (strpos($stringHistory, $excluded) === false) 
-                {
-                    continue;
-                }
-            }
-
-            /* Ruleset filter */
-
-            if (strcmp($alldepartments, "alldepartments") != 0)
-            {
-                if (strpos($userDomain['ruleset'], $ruleset) === false) 
-                {
-                    continue;
-                }
-            }
-
-            /* Fraud vertices count */
-
-            if ($result['_source']['alertType'] == "pressure") $counterPressure++;
-            if ($result['_source']['alertType'] == "opportunity") $counterOpportunity++;
-            if ($result['_source']['alertType'] == "rationalization") $counterRationalization++;
-
-            /* Excel report */
-
-            $stringHistory = "<font face=\"Century Gothic\" color=\"#4C4D4B\">". $stringHistory. "</font>";
-            $stringHistory = str_replace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
-            $html = new PhpOffice\PhpSpreadsheet\Helper\Html();
-            $richCellValue = $html->toRichTextObject($stringHistory);
-
-            $spreadsheet->getActiveSheet()->insertNewRowBefore($currentContentRow+1, 1);
-            $spreadsheet->getActiveSheet()
-            ->setCellValue('B'.$currentContentRow, $date)
-            ->setCellValue('D'.$currentContentRow, strtoupper(ucfirst($result['_source']['alertType'])))
-            ->setCellValue('F'.$currentContentRow, $userDomain['domain'])
-            ->setCellValue('H'.$currentContentRow, $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']))
-            ->setCellValue('I'.$currentContentRow, $windowTitle)
-            ->setCellValue('K'.$currentContentRow, $richCellValue);
-
-            $spreadsheet->getActiveSheet()->getStyle('I'.$currentContentRow)->getAlignment()->setWrapText(true);
-            $spreadsheet->getActiveSheet()->getStyle('K'.$currentContentRow)->getAlignment()->setWrapText(true);
-            $spreadsheet->getActiveSheet()->getRowDimension($currentContentRow)->setRowHeight(-1);
-            $spreadsheet->getActiveSheet()->getStyle('B'.$currentContentRow)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME); 
-
-            if($currentContentRow % 2 == 0) $spreadsheet->getActiveSheet()->getStyle('A'.$currentContentRow.':'.'K'.$currentContentRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('EDEDED');
-
-            $currentContentRow++;
-            $endpointCounter++;
         }
+
+        if (strcmp($typereport, "bydomain") === 0)
+        {
+            if (strcmp($typeinput, between('@', '.', "@" . $userDomain['domain'])) != 0) 
+            { 
+                continue;
+            }
+        }     
+
+        /* Application filter */
+
+        if ((strcmp($allapplications, "allapplications") != 0) && $app != "")
+        {
+            if (strpos($windowTitle, $app) === false) 
+            {
+                continue;
+            }
+        }
+
+        /* Phrase filter */
+
+        if ((strcmp($allphrases, "allphrases") != 0) && $excluded != "")
+        {
+            if (strpos($stringHistory, $excluded) === false) 
+            {
+                continue;
+            }
+        }
+
+        /* Ruleset filter */
+
+        if (strcmp($alldepartments, "alldepartments") != 0)
+        {
+            if (strpos($userDomain['ruleset'], $ruleset) === false) 
+            {
+                continue;
+            }
+        }
+
+        /* Fraud vertices count */
+
+        if ($result['_source']['alertType'] == "pressure") $counterPressure++;
+        if ($result['_source']['alertType'] == "opportunity") $counterOpportunity++;
+        if ($result['_source']['alertType'] == "rationalization") $counterRationalization++;
+
+        /* Excel report */
+
+        $stringHistory = "<font face=\"Century Gothic\" color=\"#4C4D4B\">". $stringHistory. "</font>";
+        $stringHistory = str_replace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
+        $html = new PhpOffice\PhpSpreadsheet\Helper\Html();
+        $richCellValue = $html->toRichTextObject($stringHistory);
+
+        $spreadsheet->getActiveSheet()->insertNewRowBefore($currentContentRow+1, 1);
+        $spreadsheet->getActiveSheet()
+        ->setCellValue('B'.$currentContentRow, $date)
+        ->setCellValue('D'.$currentContentRow, strtoupper(ucfirst($result['_source']['alertType'])))
+        ->setCellValue('F'.$currentContentRow, $userDomain['domain'])
+        ->setCellValue('H'.$currentContentRow, $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']))
+        ->setCellValue('I'.$currentContentRow, $windowTitle)
+        ->setCellValue('K'.$currentContentRow, $richCellValue);
+
+        $spreadsheet->getActiveSheet()->getStyle('I'.$currentContentRow)->getAlignment()->setWrapText(true);
+        $spreadsheet->getActiveSheet()->getStyle('K'.$currentContentRow)->getAlignment()->setWrapText(true);
+        $spreadsheet->getActiveSheet()->getRowDimension($currentContentRow)->setRowHeight(-1);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$currentContentRow)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME); 
+
+        if($currentContentRow % 2 == 0) $spreadsheet->getActiveSheet()->getStyle('A'.$currentContentRow.':'.'K'.$currentContentRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('EDEDED');
+
+        $currentContentRow++;
+        $endpointCounter++;
     }
-
-    // Remove last empty rows
-
-    $spreadsheet->getActiveSheet()->removeRow($currentContentRow, 2);
-
-    // Add filters
-
-    $spreadsheet->getActiveSheet()->setAutoFilter('D'.($contentStartRow-2).':H'.$currentContentRow);
-
-    // Populate report header
-
-    $spreadsheet->getActiveSheet()->setCellValue('K9', $totalQueryWords);
-    $uniqueEndpoints = array_unique($multipleEndpoints);
-    $spreadsheet->getActiveSheet()->setCellValue('K12', count($uniqueEndpoints));
-    $spreadsheet->getActiveSheet()->setCellValue('K15', count($uniqueEndpoints)." reporting from a total of ". $countTyping['total']);
-
-    if ($alldaterange == "alldaterange")
-    {
-        $daterangefrom = "the beginning of time";
-        $daterangeto = "now";
-    }
-
-    $spreadsheet->getActiveSheet()->setCellValue('H15', "From ".str_replace("-", "/", $daterangefrom)." to ".str_replace("-", "/", $daterangeto));
-    $spreadsheet->getActiveSheet()->setCellValue('H6', $counterPressure);
-    $spreadsheet->getActiveSheet()->setCellValue('H9', $counterOpportunity);
-    $spreadsheet->getActiveSheet()->setCellValue('H12', $counterRationalization);
-
-    if (strcmp($alldepartments, "alldepartments") != 0) $spreadsheet->getActiveSheet()->setCellValue('K6', $ruleset); 
-    else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
 }
+
+// Remove last empty rows
+
+$spreadsheet->getActiveSheet()->removeRow($currentContentRow, 2);
+
+// Add filters
+
+$spreadsheet->getActiveSheet()->setAutoFilter('D'.($contentStartRow-2).':H'.$currentContentRow);
+
+// Populate report header
+
+$spreadsheet->getActiveSheet()->setCellValue('K9', $totalQueryWords);
+$uniqueEndpoints = array_unique($multipleEndpoints);
+$spreadsheet->getActiveSheet()->setCellValue('K12', count($uniqueEndpoints));
+$spreadsheet->getActiveSheet()->setCellValue('K15', count($uniqueEndpoints) ." reporting from a total of ". $countTyping['total']);
+
+if ($alldaterange == "alldaterange")
+{
+    $daterangefrom = "the beginning of time";
+    $daterangeto = "now";
+}
+
+$spreadsheet->getActiveSheet()->setCellValue('H15', "From ".str_replace("-", "/", $daterangefrom)." to ".str_replace("-", "/", $daterangeto));
+$spreadsheet->getActiveSheet()->setCellValue('H6', $counterPressure);
+$spreadsheet->getActiveSheet()->setCellValue('H9', $counterOpportunity);
+$spreadsheet->getActiveSheet()->setCellValue('H12', $counterRationalization);
+
+if (strcmp($alldepartments, "alldepartments") != 0) $spreadsheet->getActiveSheet()->setCellValue('K6', $ruleset); 
+else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
 
 /* Download XLSX file */
 
