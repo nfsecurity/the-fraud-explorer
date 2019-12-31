@@ -97,7 +97,7 @@ else if (!empty($_POST['delete']))
         
         $domainTable = "t_config_".str_replace(".", "_", $row[2]);
         
-        if(mysqli_num_rows(mysqli_query($connection, "SHOW TABLES LIKE '".$domainTable."'")) == 1) mysql_query(sprintf("DROP TABLE %s", $domainTable));
+        if(mysqli_num_rows(mysqli_query($connection, "SHOW TABLES LIKE '".$domainTable."'")) == 1) mysqli_query($connection, sprintf("DROP TABLE %s", $domainTable));
     }
 }
 

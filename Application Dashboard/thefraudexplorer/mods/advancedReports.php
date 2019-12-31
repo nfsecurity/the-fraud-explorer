@@ -205,7 +205,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <p class="title-config">Report type</p><br>
                 <select class="select-option-typereport-styled wide" name="typereport" id="typereport">
                     <option value="byendpoint">By endpoint</option>
-                    <option value="bydomain">By domain</option>
+                    <?php if($session->domain == "all") echo '<option value="bydomain">By domain</option>'; ?>
                     <option value="allendpoints" selected="selected">All endpoints & domains</option>
                 </select>
                 <div style="line-height:60px; border: 1px solid white;"><br></div>
@@ -360,13 +360,10 @@ $_SESSION['processingStatus'] = "notstarted";
             
             <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-success setup disabled" value="Make report" style="outline: 0 !important;">';
-            else 
-            {
                 echo '<button type="submit" id="btn-excel" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Generating, please wait" style="outline: 0 !important;">';
                 echo 'Make report';
                 echo '</button>';
-            }
+        
             ?>
         
         </div>

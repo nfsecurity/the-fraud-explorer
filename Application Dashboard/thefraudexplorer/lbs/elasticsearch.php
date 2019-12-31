@@ -569,13 +569,22 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         'query' => [
                             'bool' => [
                                 'minimum_should_match' => '1',
-                                'should' => [
-                                    [ 'match' => [ 'userDomain' => $domain ] ],
-                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                'must' => [
+                                    'bool' => [
+                                        'minimum_should_match' => '1',
+                                        'must' => [
+                                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                        ],
+                                        'should' => [
+                                            [ 'match' => [ 'userDomain' => $domain ] ],
+                                            [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                                        ]
+                                    ]     
+                                ],
+                                'should' => [    
                                     [ 'match' => [ 'alertType' => $pressure ] ],
                                     [ 'match' => [ 'alertType' => $opportunity ] ],
-                                    [ 'match' => [ 'alertType' => $rationalization ] ],
-                                    [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ]
@@ -593,7 +602,7 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                     'body' => [
                         'size' => $querySize,
                         'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                            '@timestamp' => [ 'order' => 'desc' ]
                         ],
                         '_source' => [
                             'exclude' => [ 'message' ]
@@ -601,12 +610,15 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                         'query' => [
                             'bool' => [
                                 'minimum_should_match' => '1',
-                                'should' => [
-                                    'match' => [ 'userDomain' => $domain ],
-                                    'match' => [ 'alertType' => $pressure ],
-                                    'match' => [ 'alertType' => $opportunity ],
-                                    'match' => [ 'alertType' => $rationalization ],
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ],
+                                    [ 'match' => [ 'userDomain' => $domain ] ],
                                     [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to.'T23:59:59.999'] ] ]
+                                ],
+                                'should' => [
+                                    [ 'match' => [ 'alertType' => $pressure ] ],
+                                    [ 'match' => [ 'alertType' => $opportunity ] ],
+                                    [ 'match' => [ 'alertType' => $rationalization ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ]
@@ -614,7 +626,7 @@ function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus
                             ]
                         ]
                     ]
-                ];   
+                ];
             }
         }
     }

@@ -141,7 +141,7 @@ else
     else
     {
         $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" }, "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        $params = '{ "query" : { "bool" : { "must" : [{ "term" : { "userDomain" : "'.$session->domain.'" } }, { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }]}} }';
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -175,7 +175,7 @@ else
     if ($session->domain != "all") 
     {
         if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "enabled", "allalerts", $daterangefrom, $daterangeto, $pressure, $opportunity, $rationalization);
-        else $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "disabled", "allalerts", $daterangefrom, $daterangeto);
+        else $eventMatches = getAllFraudTriangleMatchesWithDateRange($ESAlerterIndex, $session->domain, "disabled", "allalerts", $daterangefrom, $daterangeto, $pressure, $opportunity, $rationalization);
     }
     else 
     {
