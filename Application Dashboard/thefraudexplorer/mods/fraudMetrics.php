@@ -222,7 +222,7 @@ include "../lbs/endpointMethods.php";
         type: 'line',
         defaults: defaultOptions,
         data: {
-            labels: [ "January", "February", "March", "April", "May", "July" ],
+            labels: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
             datasets: [
                 {
                     label: "Fraud Metrics",
@@ -245,7 +245,7 @@ include "../lbs/endpointMethods.php";
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ "12.4", "22.5", "14.3", "73", "22", "41.4" ],
+                    data: [ "30", "21" , "29", "22", "35", "55", "30", "22", "31", "18", "22", "47" ],
                     spanGaps: false,
                 }
             ]

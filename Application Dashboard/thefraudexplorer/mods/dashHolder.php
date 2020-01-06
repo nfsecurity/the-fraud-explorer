@@ -171,7 +171,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email alerting rules</div><div class=tooltip-row><div class=tooltip-item>Define the email alert rules based<br>on the results of the artificial intelligence<br>and the expert system</div></div></div>"><span class="fa fa-envelope-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email alerting rules</div><div class=tooltip-row><div class=tooltip-item>Define the email alert rules based<br>on the results of the artificial intelligence<br>and the expert system</div></div></div>"><a href="mods/mailAlerts" data-toggle="modal" data-target="#mail-alerts" href="#" id="elm-mail"><span class="fa fa-envelope-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -338,7 +338,7 @@ else $totalSystemWords= "0";
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
             <p class="container-window-icon">
-                <a href="../mods/fraudMetrics" data-toggle="modal" class="fraud-metrics-button" data-target="#fraud-metrics" href="#" id="elm-fraud-metrics">&nbsp;&nbsp;View metrics history&nbsp;&nbsp;</a>&nbsp;
+                <a href="../mods/fraudMetrics" data-toggle="modal" class="fraud-metrics-button" data-target="#fraud-metrics" href="#" id="elm-fraud-metrics">&nbsp;&nbsp;View fraud triangle metrics&nbsp;&nbsp;</a>&nbsp;
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
             </p>
         </h2><br>
@@ -565,6 +565,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#fraud-metrics').on('show.bs.modal', function(e){
         $(this).find('.fraud-metrics-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Mail Alerts -->
+
+<script>
+    $('#mail-alerts').on('show.bs.modal', function(e){
+        $(this).find('.mail-alerts-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

@@ -4,20 +4,20 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Mail events
 */
 
 $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
 
-$to      = $configFile['mail_to'];
+$to = $configFile['mail_address'];
 $finalDomain = substr($domain, 0, strpos($domain, "."));
 $subject = $configFile['mail_subject'].rtrim($endPoint, "*")."@".$finalDomain;
 
@@ -60,8 +60,8 @@ $message = '<html>' .
     '</table>' .
     '</body><br>You can review this alert in the main Dashboard, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
 
-$headers = $configFile['mail_from'] . "\r\n" .
-    $configFile['mail_reply_to'] . "\r\n" .
+$headers = "From: " . $configFile['mail_address'] . "\r\n" .
+    "Reply-To: " . $configFile['mail_address'] . "\r\n" .
     'MIME-Version: 1.0' . "\r\n" .
     'Content-Type: text/html; charset=ISO-8859-1' . "\r\n" .
     'X-Mailer: PHP/' . phpversion();

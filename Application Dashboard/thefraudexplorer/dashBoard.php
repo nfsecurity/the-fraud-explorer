@@ -145,6 +145,38 @@ $_SESSION['endpointIDh'] = base64_encode(base64_encode("all"));
             </div>
         </center>
 
+        <!-- Modal for Fraud Metrics -->
+
+        <center>
+            <div class="modal" id="fraud-metrics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+        <!-- Modal for Mail Alerts -->
+
+        <center>
+            <div class="modal" id="mail-alerts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
         <!-- Modal for Build Endpoint -->
 
         <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
