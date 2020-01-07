@@ -26,6 +26,7 @@ if(!$session->logged_in)
 
 $_SESSION['instance'] = "dashBoard";
 $_SESSION['endpointIDh'] = base64_encode(base64_encode("all"));
+$_SESSION['endpointFraudMetrics']['launch'] = 0;
 
 ?>
 
@@ -149,6 +150,22 @@ $_SESSION['endpointIDh'] = base64_encode(base64_encode("all"));
 
         <center>
             <div class="modal" id="fraud-metrics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+        <!-- Modal for Fraud Metrics Reloaded -->
+
+        <center>
+            <div class="modal" id="fraud-metrics-reload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">

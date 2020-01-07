@@ -333,6 +333,89 @@ function countFraudTriangleMatchesWithDateRange($fraudTerm, $index, $from, $to)
     return $eventMatches;
 }
 
+/* Count All Fraud Triangle matches by date range without fraud term */
+
+function countFraudTriangleMatchesWithDateRangeWithoutTerm($index, $from, $to)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
+/* Count All Fraud Triangle matches by date range without fraud term with Domain */
+
+function countFraudTriangleMatchesWithDateRangeWithoutTermWithDomain($index, $from, $to, $userDomain)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                        [ 'match' => [ 'userDomain' => $userDomain ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
+/* Count All Fraud Triangle matches by date range without fraud term with Agent ID */
+
+function countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($index, $from, $to, $agentID)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                        [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
 /* Search all Fraud Triangle Matches with date range */
 
 function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus, $context, $from, $to, $pressure, $opportunity, $rationalization)

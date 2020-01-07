@@ -563,6 +563,10 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <!-- Modal for Fraud Metrics -->
 
 <script>
+    $('#fraud-metrics').on('hidden.bs.modal', function () {
+    $(this).removeData('bs.modal');
+    });
+
     $('#fraud-metrics').on('show.bs.modal', function(e){
         $(this).find('.fraud-metrics-button').attr('href', $(e.relatedTarget).data('href'));
     });
