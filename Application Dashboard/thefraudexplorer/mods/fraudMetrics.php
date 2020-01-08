@@ -15,7 +15,7 @@
  * Description: Code for fraud metrics
  */
 
-sleep (2);
+sleep(1);
 
 include "../lbs/login/session.php";
 include "../lbs/security.php";
@@ -47,6 +47,7 @@ if ($_SESSION['endpointFraudMetrics']['allendpoints'] == "false" || $_SESSION['e
     }
     else if ($_SESSION['endpointFraudMetrics']['ruleset'] != "BASELINE")
     {
+        $rulesetSelected = $_SESSION['endpointFraudMetrics']['ruleset'];
         $rulesetFilter = true;
     }
 }
@@ -66,17 +67,78 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 
 if ($session->domain == "all")
 {
-    for ($i = 1; $i <= 12; $i++) 
+    if ($endpointFilter == true)
     {
-        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-        $daterangefrom = $months[$i-1] . "-01";
-        $daterangeto = $months[$i-1] . "-18||/M";
-        $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+        for ($i = 1; $i <= 12; $i++) 
+        {
+            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+            $daterangefrom = $months[$i-1] . "-01";
+            $daterangeto = $months[$i-1] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
         
-        if ($endpointFilter == true) $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
-        else $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTerm($ESAlerterIndex, $daterangefrom, $daterangeto);
+            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
+            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+        }
+    }
+    else if ($rulesetFilter == true)
+    {
+        $queryEndpointsSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$rulesetSelected."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+        $resultSQLRuleset = mysqli_query($connection, $queryEndpointsSQLRuleset);
+        $endCounter = 0;
+
+        while ($row = mysqli_fetch_array($resultSQLRuleset))
+        { 
+            $endpointID = $row['agent'] . "*";  
+
+            for ($i = 1; $i <= 12; $i++) 
+            {
+                $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+                $daterangefrom = $months[$i-1] . "-01";
+                $daterangeto = $months[$i-1] . "-18||/M";
+                $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
         
-        $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+                $resultAlerts[$endCounter][] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
+                $countAlerts[$endCounter][] = json_decode(json_encode($resultAlerts), true);
+            }
+
+            $endCounter++;
+        }     
+
+        /* Array correlation by month */
+
+        foreach($resultAlerts as $endpoint => $month) 
+        { 
+            $arrCount = 0;
+
+            foreach($month as $k) 
+            {         
+                $finalArray[$arrCount][] = $k['count'];
+                $arrCount++;
+            }            
+        } 
+
+        /* Array sumation */
+
+        foreach($finalArray as $month => $endpoint) 
+        { 
+            foreach($endpoint as $value)
+            {
+                @$sumArray[$month] += $value;
+            }
+        }
+    }
+    else 
+    {
+        for ($i = 1; $i <= 12; $i++) 
+        {
+            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+            $daterangefrom = $months[$i-1] . "-01";
+            $daterangeto = $months[$i-1] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+        
+            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTerm($ESAlerterIndex, $daterangefrom, $daterangeto);
+            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+        }
     }
 }
 else
@@ -214,7 +276,13 @@ else
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title window-title" id="myModalLabel">Fraud Triangle Metrics</h4>
-    <?php if ($endpointID != NULL) echo '<p>Metrics for ' . $endpointIdentification . '</p>'; ?>
+
+    <?php 
+    
+        if ($rulesetFilter == true) echo '<p>Metrics for ' . $rulesetSelected . '</p>'; 
+        else if ($endpointID != NULL) echo '<p>Metrics for ' . $endpointIdentification . '</p>'; 
+        
+    ?>
 </div>
 
 <div class="div-container">
@@ -223,8 +291,14 @@ else
         
         <?php
 
-            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'impar: '.$_SESSION['endpointFraudMetrics']['launch'].'<canvas id="fraud-metrics-graph"></canvas>'; 
-            else echo 'par: '.$_SESSION['endpointFraudMetrics']['launch'].'<canvas id="fraud-metrics-graph-reloaded"></canvas>';
+            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+            {
+                echo '<canvas id="fraud-metrics-graph"></canvas>'; 
+            }
+            else 
+            {
+                echo '<canvas id="fraud-metrics-graph-reloaded"></canvas>';
+            }
 
         ?>
         
@@ -235,21 +309,22 @@ else
                 
                 <p class="title-config">Filter by business unit</p><br><br>
 
-                <select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-business">
-                    
-                    <?php
+                <?php
 
-                        $configFile = parse_ini_file("../config.ini");
-                        $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
-                        $GLOBALS['listRuleset'] = null;
+                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-businesspar">';
+                    else echo '<select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-businessimpar">';
 
-                        foreach ($jsonFT['dictionary'] as $ruleset => $value)
-                        {
-                            if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected>ALL BUSINESS UNITS</option>';
-                            else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
-                        }
+                    $configFile = parse_ini_file("../config.ini");
+                    $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                    $GLOBALS['listRuleset'] = null;
 
-                    ?>
+                    foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                    {
+                        if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected>ALL BUSINESS UNITS</option>';
+                        else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                    }
+
+                ?>
 
                 </select>
 
@@ -257,7 +332,14 @@ else
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allbusiness" value="allbusiness" id="allbusiness" autocomplete="off" checked>I want all business units
+
+                    <?php
+
+                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<input type="checkbox" name="allbusinesspar" value="allbusiness" id="allbusinesspar" autocomplete="off" checked>I want all business units';
+                        else echo '<input type="checkbox" name="allbusinessimpar" value="allbusiness" id="allbusinessimpar" autocomplete="off" checked>I want all business units';
+                        
+                    ?>
+
                     </label>
                 </div>          
               
@@ -266,12 +348,26 @@ else
                    
                 <p class="title-config">Filter by endpoint</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
-                <input type="text" name="endpoint" id="endpoint" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">
+
+                <?php
+
+                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0)  echo '<input type="text" name="endpointpar" id="endpointpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
+                    else echo '<input type="text" name="endpointimpar" id="endpointimpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
+                
+                ?>
+
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
                     <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allendpoints" value="allendpoints" id="allendpoints" autocomplete="off" checked>I want all endpoints
+
+                    <?php
+
+                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<input type="checkbox" name="allendpointspar" value="allendpoints" id="allendpointspar" autocomplete="off" checked>I want all endpoints';
+                        else echo '<input type="checkbox" name="allendpointsimpar" value="allendpoints" id="allendpointsimpar" autocomplete="off" checked>I want all endpoints';
+
+                    ?>
+
                     </label>
                 </div>           
                     
@@ -285,19 +381,80 @@ else
 
         <?php
 
-            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFilters()" class="btn btn-success fraud-metrics-reload-button" data-toggle="modal" data-target="#fraud-metrics-reload" data-dismiss="modal" data-dismiss="modal" style="outline: 0 !important;">Apply filters</a>';
-            else echo '<a href="../mods/fraudMetrics" onclick="getFilters()" class="btn btn-success fraud-metrics-noreload-button" data-toggle="modal" data-target="#fraud-metrics" data-dismiss="modal" data-dismiss="modal" style="outline: 0 !important;">Apply filters</a>';
+            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFiltersPar()" class="btn btn-success fraud-metrics-reload-button" id="btn-metrics-par" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
+            else echo '<a href="../mods/fraudMetrics" onclick="getFiltersImpar()" class="btn btn-success fraud-metrics-noreload-button" id="btn-metrics-impar" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics" style="outline: 0 !important;">Apply filters</a>';
+        
         ?>
 
     </div>
 
 </div>
 
+<!-- Button loading Par -->
+
+<script>
+
+var $btn;
+
+$("#btn-metrics-par").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
+</script>
+
+<!-- Button loading Impar -->
+
+<script>
+
+var $btn;
+
+$("#btn-metrics-impar").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
+</script>
+
 <!-- Modal for Fraud Metrics -->
 
 <script>
-    $('#fraud-metrics-reload').on('hidden.bs.modal', function () {
-    $(this).removeData('bs.modal');
+    $(document).on('hidden.bs.modal', function (e) {
+    $(e.target).removeData('bs.modal');
     });
 
     $('#fraud-metrics-reload').on('show.bs.modal', function(e){
@@ -305,19 +462,42 @@ else
     });
 </script>
 
-<!-- Javascript for filters -->
+<!-- Javascript for filters Par -->
 
 <script>
-    function getFilters()
+    function getFiltersPar()
     {
-        var endpointData = document.getElementById("endpoint").value;
-        var businessData = document.getElementById("ruleset-business").value;
+        var endpointData = document.getElementById("endpointpar").value;
+        var businessData = document.getElementById("ruleset-businesspar").value;
         var allEndpoints, allBusiness;
 
-        if (document.getElementById('allbusiness').checked) allBusiness = true;
+        if (document.getElementById('allbusinesspar').checked) allBusiness = true;
         else allBusiness = false;
 
-        if (document.getElementById('allendpoints').checked) allEndpoints = true;
+        if (document.getElementById('allendpointspar').checked) allEndpoints = true;
+        else allEndpoints = false;
+        if (!endpointData) endpointData = "null";
+
+        $.get({
+            url: 'mods/fraudMetricsReload.php?endpoint=' + endpointData + '&allbusiness=' + allBusiness + '&allendpoints=' + allEndpoints + '&ruleset=' + businessData, 
+            success: function(data) { return true; }
+        });
+    }
+</script>
+
+<!-- Javascript for filters Impar-->
+
+<script>
+    function getFiltersImpar()
+    {
+        var endpointData = document.getElementById("endpointimpar").value;
+        var businessData = document.getElementById("ruleset-businessimpar").value;
+        var allEndpoints, allBusiness;
+
+        if (document.getElementById('allbusinessimpar').checked) allBusiness = true;
+        else allBusiness = false;
+
+        if (document.getElementById('allendpointsimpar').checked) allEndpoints = true;
         else allEndpoints = false;
         if (!endpointData) endpointData = "null";
 
@@ -345,6 +525,7 @@ else
                 {
                     label: "Fraud Metrics",
                     type: 'line',
+                    yAxisID: "y-axis-right-normal",
                     fill: true,
                     fillColor: "#13923D",
                     lineTension: 0.1,
@@ -363,7 +544,59 @@ else
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ <?php echo '"'. $countAlerts[11][11]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[10][10]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[9][9]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[8][8]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[7][7]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[6][6]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[5][5]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[4][4]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[3][3]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[2][2]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[1][1]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[0][0]['count']/3 . '"'; ?> ],
+
+                    <?php
+
+                        if ($rulesetFilter == true)
+                        {
+                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                        }
+                        else
+                        {
+                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+
+                        }
+
+                    ?>
+
+                    spanGaps: false,
+                },
+                {
+                    label: "Fraud Metrics",
+                    type: 'line',
+                    fill: false,
+                    fillColor: "#13923D",
+                    lineTension: 0.0,
+                    backgroundColor: "rgb(75, 144, 111, 0.25)",
+                    borderColor: "rgb(75, 144, 111, 0.75)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: "rgb(75, 144, 111, 1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 0,
+                    pointHoverBackgroundColor: "rgb(75, 144, 111, 0.5)",
+                    pointHoverBorderColor: "rgb(75, 144, 111, 0.25)",
+                    pointHoverBorderWidth: 0,
+                    pointRadius: 0,
+                    pointHitRadius: 0,
+
+                    <?php
+
+                        if ($rulesetFilter == true)
+                        {
+                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                        }
+                        else
+                        {
+                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+
+                        }
+
+                    ?>
+
                     spanGaps: false,
                 }
             ]
@@ -420,16 +653,30 @@ else
                 yAxes: [{ 
                     ticks: {
                         padding: 10,
-                    }
+                    }},
+                    {
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-right-normal',
+                        ticks: {
+                            padding: 15,
+                            beginAtZero: true,
+                            min: 0
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        }
                     }, {
                         position: 'right',
+                        id: 'y-axis-right-hidden',
                         ticks: {
                             display: false
                         },
                         gridLines: {
                             display: false,
                             drawTicks: false
-                        }
+                        },
                     }]
             }
         }
@@ -452,6 +699,7 @@ else
             datasets: [
                 {
                     label: "Fraud Metrics",
+                    yAxisID: "y-axis-right-normal",
                     type: 'line',
                     fill: true,
                     fillColor: "#13923D",
@@ -471,7 +719,59 @@ else
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ <?php echo '"'. $countAlerts[11][11]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[10][10]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[9][9]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[8][8]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[7][7]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[6][6]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[5][5]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[4][4]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[3][3]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[2][2]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[1][1]['count']/3 . '"'; ?>, <?php echo '"'. $countAlerts[0][0]['count']/3 . '"'; ?> ],
+
+                    <?php
+
+                        if ($rulesetFilter == true)
+                        {
+                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                        }
+                        else
+                        {
+                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+
+                        }
+
+                    ?>
+
+                    spanGaps: false,
+                },
+                {
+                    label: "Fraud Metrics",
+                    type: 'line',
+                    fill: false,
+                    fillColor: "#13923D",
+                    lineTension: 0.0,
+                    backgroundColor: "rgb(75, 144, 111, 0.25)",
+                    borderColor: "rgb(75, 144, 111, 0.75)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: "rgb(75, 144, 111, 1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 0,
+                    pointHoverRadius: 0,
+                    pointHoverBackgroundColor: "rgb(75, 144, 111, 0.5)",
+                    pointHoverBorderColor: "rgb(75, 144, 111, 0.25)",
+                    pointHoverBorderWidth: 0,
+                    pointRadius: 0,
+                    pointHitRadius: 0,
+
+                    <?php
+
+                        if ($rulesetFilter == true)
+                        {
+                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                        }
+                        else
+                        {
+                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+
+                        }
+
+                    ?>
+
                     spanGaps: false,
                 }
             ]
@@ -528,16 +828,30 @@ else
                 yAxes: [{ 
                     ticks: {
                         padding: 10,
-                    }
+                    }},
+                    {
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-right-normal',
+                        ticks: {
+                            padding: 15,
+                            beginAtZero: true,
+                            min: 0
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        }
                     }, {
                         position: 'right',
+                        id: 'y-axis-right-hidden',
                         ticks: {
                             display: false
                         },
                         gridLines: {
                             display: false,
                             drawTicks: false
-                        }
+                        },
                     }]
             }
         }
