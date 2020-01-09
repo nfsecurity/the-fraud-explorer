@@ -70,7 +70,6 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
         curl_close($ch);
@@ -80,7 +79,6 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
         curl_close($ch);
@@ -100,7 +98,6 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
@@ -113,7 +110,6 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts=curl_exec($ch);
@@ -136,7 +132,6 @@ else
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -149,7 +144,6 @@ else
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -171,7 +165,6 @@ else
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultWords=curl_exec($ch);
@@ -183,7 +176,6 @@ else
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -198,7 +190,6 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_ENCODING, ''); 
-curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
 curl_setopt($ch, CURLOPT_URL,$urlSize);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultSize=curl_exec($ch);

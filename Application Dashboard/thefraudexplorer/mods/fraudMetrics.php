@@ -143,14 +143,78 @@ if ($session->domain == "all")
 }
 else
 {
-    for ($i = 1; $i <= 12; $i++) 
+    if ($endpointFilter == true)
     {
-        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-        $daterangefrom = $months[$i-1] . "-01";
-        $daterangeto = $months[$i-1] . "-18||/M";
-        $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
-        $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $session->domain);
-        $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+        for ($i = 1; $i <= 12; $i++) 
+        {
+            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+            $daterangefrom = $months[$i-1] . "-01";
+            $daterangeto = $months[$i-1] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+        
+            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentIDWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID, $session->domain);
+            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+        }
+    }
+    else if ($rulesetFilter == true)
+    {
+        $queryEndpointsSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$rulesetSelected."' AND domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+        $resultSQLRuleset = mysqli_query($connection, $queryEndpointsSQLRuleset);
+        $endCounter = 0;
+
+        while ($row = mysqli_fetch_array($resultSQLRuleset))
+        { 
+            $endpointID = $row['agent'] . "*";  
+
+            for ($i = 1; $i <= 12; $i++) 
+            {
+                $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+                $daterangefrom = $months[$i-1] . "-01";
+                $daterangeto = $months[$i-1] . "-18||/M";
+                $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+        
+                $resultAlerts[$endCounter][] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentIDWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID, $session->domain);
+                $countAlerts[$endCounter][] = json_decode(json_encode($resultAlerts), true);
+            }
+
+            $endCounter++;
+        }     
+
+        /* Array correlation by month */
+
+        foreach($resultAlerts as $endpoint => $month) 
+        { 
+            $arrCount = 0;
+
+            foreach($month as $k) 
+            {         
+                $finalArray[$arrCount][] = $k['count'];
+                $arrCount++;
+            }            
+        } 
+
+        /* Array sumation */
+
+        foreach($finalArray as $month => $endpoint) 
+        { 
+            foreach($endpoint as $value)
+            {
+                @$sumArray[$month] += $value;
+            }
+        }
+    }
+    else 
+    {
+        for ($i = 1; $i <= 12; $i++) 
+        {
+            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+            $daterangefrom = $months[$i-1] . "-01";
+            $daterangeto = $months[$i-1] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+        
+            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $session->domain);
+            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+        }
     }
 }
 
