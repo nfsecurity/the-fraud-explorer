@@ -178,6 +178,22 @@ $_SESSION['endpointFraudMetrics']['launch'] = 0;
             </div>
         </center>
 
+        <!-- Modal for Business Units Segmentation -->
+
+        <center>
+            <div class="modal" id="business-units" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
         <!-- Modal for Mail Alerts -->
 
         <center>

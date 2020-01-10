@@ -44,26 +44,26 @@ else
 		{  
             $file = fopen($target_file, "r");
 
-             /* Ruleset existence */
+            /* Ruleset existence */
 
-             $rulesetLanguage = $configFile['fta_lang_selection'];
-             $jsonFT = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
-             $rulesetInventory = Array();
-             $rulesetCount = 0;
+            $rulesetLanguage = $configFile['fta_lang_selection'];
+            $jsonFT = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
+            $rulesetInventory = Array();
+            $rulesetCount = 0;
 
-             foreach ($jsonFT['dictionary'] as $ruleset => $value)
-             {
-                 $rulesetInventory[$rulesetCount] = $ruleset;
-                 $rulesetCount++;
-             }
+            foreach ($jsonFT['dictionary'] as $ruleset => $value)
+            {
+                $rulesetInventory[$rulesetCount] = $ruleset;
+                $rulesetCount++;
+            }
               
 	        while (($getData = fgetcsv($file, 100000, ",")) !== FALSE)
 	        {
-                $endpointLogin = $getData[0];
-                $endpointDomain = $getData[1];
-                $endpointName = $getData[2];
-                $endpointDepartment = $getData[3];
-                $endpointGender = $getData[4];
+                $endpointLogin = trim($getData[0]);
+                $endpointDomain = trim($getData[1]);
+                $endpointName = trim($getData[2]);
+                $endpointDepartment = trim($getData[3]);
+                $endpointGender = trim($getData[4]);
 
                 if ($endpointGender != "male" && $endpointGender != "female") $endpointGender = "male";
 

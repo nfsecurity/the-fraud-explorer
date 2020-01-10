@@ -150,7 +150,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Business Departments</div><div class=tooltip-row><div class=tooltip-item>Use this option to upload a file<br>in CSV format indicating all the relevant<br>information to clasify endpoints</div></div></div>"><span class="fa fa-building-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Business Departments</div><div class=tooltip-row><div class=tooltip-item>Use this option to upload a file<br>in CSV format indicating all the relevant<br>information to clasify endpoints</div></div></div>"><a href="mods/businessUnits" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#business-units" href="#" id="elm-business-units"><span class="fa fa-building-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -557,6 +557,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#advanced-reports').on('show.bs.modal', function(e){
         $(this).find('.advanced-reports-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Business Units -->
+
+<script>
+    $('#business-units').on('show.bs.modal', function(e){
+        $(this).find('.business-units-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

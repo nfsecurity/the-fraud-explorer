@@ -395,29 +395,27 @@ if ($row_a = mysqli_fetch_array($result_a))
                     ?>
                     
                 </form>
-
-                <form action="mods/departmentsUpload" id="departmentsUpload" method="post" enctype="multipart/form-data" accept-charset="utf-8">           
-                    <div class="departmentsUploadStyle" style="outline: 0 !important;">                                             
-                        <button type="button" class="departments-load" id="elm-departments" onclick="document.getElementById('departmentsToUpload').click();">Departmentalizing</button>            
-                        <input type="file" name="departmentsToUpload" id="departmentsToUpload" class="upload" />
-                    </div>
-                </form>
+                                     
+                <a href="mods/businessUnits" data-toggle="modal" class="departments-load" data-backdrop="static" data-keyboard="false" data-target="#business-units" href="#" id="elm-business-units">Business units</a>     
+                        
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById("departmentsToUpload").onchange = function() {
-        document.getElementById("departmentsUpload").submit();
-    }
-</script>
 
 <!-- Modal for delete dialog -->
 
 <script>
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.delete').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Business Units -->
+
+<script>
+    $('#business-units').on('show.bs.modal', function(e){
+        $(this).find('.business-units-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

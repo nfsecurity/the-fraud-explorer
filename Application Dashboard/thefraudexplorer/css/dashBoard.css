@@ -1081,3 +1081,23 @@ a.welcome
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.departmentsUploadStyle
+{
+    position: relative;
+    overflow: hidden;
+    display: inline;
+}
+
+.departmentsUploadStyle input.upload
+{
+    position: fixed;
+    bottom: 0px;
+    right: 180px;
+    margin: 0;
+    padding: 0;
+    width: 120px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}

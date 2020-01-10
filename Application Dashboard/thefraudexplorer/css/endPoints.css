@@ -990,14 +990,20 @@ a.build-endpoint-button:link, a.build-endpoint-button:visited, a.build-endpoint-
 .departments-load
 {
     cursor: pointer;
+    padding: 2px 8px 3px 8px;
     border-radius: 5px;
     height: 20px;
     position: relative;
     border: 1px solid #ccc;
     background-color: #fff;
     outline: 0 !important;
-    z-index: 1000;
     color: #808080;
+}
+
+a.departments-load:link, a.departments-load:visited, a.departments-load:hover, a.departments-load:active
+{
+    color: #808080 !important;
+    text-decoration: none;
 }
 
 .departmentsUploadStyle

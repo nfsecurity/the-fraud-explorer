@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for endPoints
  */
@@ -186,6 +186,22 @@ header("Connection: close");
 
         <center>
             <div class="modal" id="endpoint-card" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+         <!-- Modal for Business Units Segmentation -->
+
+         <center>
+            <div class="modal" id="business-units" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
