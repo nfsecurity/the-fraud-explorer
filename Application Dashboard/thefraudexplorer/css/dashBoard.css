@@ -1101,3 +1101,8 @@ a.welcome
     opacity: 0;
     filter: alpha(opacity=0);
 }
+
+.fa-file-text-o:hover, .fa-tasks:hover, .fa-folder-open-o:hover, .fa-calendar-check-o:hover, .fa-table:hover, .fa-building-o:hover, .fa-film:hover, .fa-folder-o:hover, .fa-envelope-open-o:hover, .fa-object-group:hover
+{
+    color:#808080 !important;
+}
