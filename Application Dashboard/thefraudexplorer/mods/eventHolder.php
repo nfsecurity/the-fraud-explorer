@@ -212,8 +212,10 @@ if ($endpointDECSQL != "all")
         
         /* EventType */
 
-        echo '<td class="eventtypetd">';
-        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($result['_source']['alertType']).'</center></div></center>';
+        $eventType = ($result['_source']['alertType'] == "rationalization" ? "rational" : $result['_source']['alertType']);
+        
+        echo '<td class="eventtypetd-all">';
+        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($eventType).'</center></div></center>';
         echo '</td>';
 
         /* Application title */
