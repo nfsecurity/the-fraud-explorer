@@ -54,9 +54,9 @@ header("Connection: close");
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
+        <link href="css/bootstrap-tourist.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
-        <script src="js/bootstrap-tour.min.js"></script>
+        <script src="js/bootstrap-tourist.js"></script>
 
         <!-- JS/CSS for Tooltip -->
 
@@ -249,6 +249,10 @@ header("Connection: close");
     
 var tour = new Tour({
     smartPlacement: false,
+    getProgressBarHTML: function(percent)
+    {
+        return '<div class="progress"><div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' + percent + '%; background-color: #89C1A3;"></div></div>';
+    },
     backdrop: false,
     steps: [{
         element: "#elm-endpoints-dashboard",
@@ -339,7 +343,6 @@ var tour = new Tour({
 });
 
 function startTour() {
-    tour.init();
     tour.restart();
     tour.start(true);
 }

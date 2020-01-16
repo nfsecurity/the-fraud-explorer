@@ -325,8 +325,10 @@ else
         
         /* Event type */
                     
+        $eventType = ($result['_source']['alertType'] == "rationalization" ? "rational" : $result['_source']['alertType']);
+        
         echo '<td class="eventtypetd-all">';
-        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($result['_source']['alertType']).'</center></div></center>';
+        echo '<center><div class="behavior-case"><center><div class="behavior-title">behavior</div></center><center>'.strtoupper($eventType).'</center></div></center>';
         echo '</td>';
         
         /* Endpoint */

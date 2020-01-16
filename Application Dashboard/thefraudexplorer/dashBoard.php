@@ -47,9 +47,9 @@ $_SESSION['endpointFraudMetrics']['launch'] = 0;
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-        <link href="css/bootstrap-tour.min.css" rel="stylesheet">
+        <link href="css/bootstrap-tourist.css" rel="stylesheet">
         <script src="js/bootstrap.js"></script>
-        <script src="js/bootstrap-tour.min.js"></script>
+        <script src="js/bootstrap-tourist.js"></script>
         
         <!-- JS/CSS for Tooltip -->
 
@@ -325,6 +325,10 @@ $_SESSION['endpointFraudMetrics']['launch'] = 0;
     
 var tour = new Tour({
     smartPlacement: false,
+    getProgressBarHTML: function(percent)
+    {
+        return '<div class="progress"><div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' + percent + '%; background-color: #89C1A3;"></div></div>';
+    },
     backdrop: false,
     steps: [{
         element: "#elm-topmenu",
@@ -392,6 +396,11 @@ var tour = new Tour({
         title: "Term statistics",
         content: "This graph show an average of fraud triangle term events in count. You can use this graph to quick view the amount of events triggered by pressure, opportunity and rationalization in your company."
     }, {
+        element: "#elm-fraud-metrics",
+        placement: 'bottom',
+        title: "Fraud metrics",
+        content: "With this module you can generate very interesting metrics during the 12 months of the year about the fraud triangle behaviors covering all the business units or a particular employee or department."
+    }, {
         element: "#elm-top50endpoints",
         placement: 'bottom',
         title: "Top Endpoints",
@@ -415,7 +424,6 @@ var tour = new Tour({
 });
 
 function startTour() {
-    tour.init();
     tour.restart();
     tour.start(true);
 }
