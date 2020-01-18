@@ -4,13 +4,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-05
- * Revision: v1.3.3-ai
+ * Date: 2020-01
+ * Revision: v1.4.1-ai
  *
  * Description: Code for managing cron jobs
  */
@@ -19,7 +19,6 @@ class CronManager
 {
     protected $version;
     protected $service_executor;
-
 
     public function __construct()
     {
@@ -115,6 +114,59 @@ class CronManager
         else return "false";
     }
 
+    public function cron_get_portion($cron_tag, $portion)
+    {
+        $listed_cronjob = $this->get_listed_cronjob();
+        $result = false;
+        $segment = 0;
+        $minutes = 0;
+        $hours = 0;
+        $day = 0;
+        $month = 0 ;
+        $weekday = 0;
+
+        if ($listed_cronjob) 
+        {
+            foreach ($listed_cronjob as $line => $cronjob) 
+            {
+                $cron_duplication_check = strpos($cronjob, '#CRONTAG='.$cron_tag);
+
+                if ($cron_duplication_check) 
+                {
+                    $result = true;
+                    $segment = $cronjob;
+
+                    break;
+                }
+            }
+        }
+        if ($result == true)
+        {
+            $arr = explode(' ', trim($segment));
+            $minutes = $arr[0];
+            $hours = $arr[1];
+            $day = $arr[2];
+            $month = $arr[3];
+            $weekday = $arr[4];
+
+            switch($portion)
+            {
+                case "minutes" : return $minutes;
+                    break;
+                case "hours" : return $hours;
+                    break;
+                case "day" : return $day;
+                    break;
+                case "month" : return $month;
+                    break;
+                case "weekday" : return $weekday;
+                    break;
+                default: return "false";
+            }
+        }
+        else return "false";
+    }
+
     public function add_cronjob($command, $cron_tag): array
     {
         $result = array(
@@ -163,6 +215,7 @@ class CronManager
                 $result['msg'] = 'error occurred in progress to register new cron job';
             }
         }
+
         return $result;
     }
 
@@ -180,6 +233,7 @@ class CronManager
                 $result = true;
             }
         }
+        
         return $result;
     }
 }

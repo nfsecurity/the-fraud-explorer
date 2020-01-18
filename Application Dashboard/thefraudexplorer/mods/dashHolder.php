@@ -164,7 +164,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Backup and restore</div><div class=tooltip-row><div class=tooltip-item>Generate and download a copy of the<br>entire system for backup and restore<br>purposes. This procedure can take time</div></div></div>"><span class="fa fa-folder-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Backup and restore</div><div class=tooltip-row><div class=tooltip-item>Generate and download a copy of the<br>entire system for backup and restore<br>purposes. This procedure can take time</div></div></div>"><a href="mods/backupData" data-toggle="modal" data-target="#backupData" href="#" id="elm-backup"><span class="fa fa-folder-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -565,6 +565,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#business-units').on('show.bs.modal', function(e){
         $(this).find('.business-units-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Data Backup -->
+
+<script>
+    $('#backupData').on('show.bs.modal', function(e){
+        $(this).find('.backup-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
