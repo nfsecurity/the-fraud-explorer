@@ -178,7 +178,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>The fraud tree</div><div class=tooltip-row><div class=tooltip-item>According to ACFE, the corporate fraud tree<br>is composed by corruption, financial fraud<br>and misappropriation</div></div></div>"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>The fraud tree</div><div class=tooltip-row><div class=tooltip-item>According to ACFE, the corporate fraud tree<br>is composed by corruption, financial fraud<br>and misappropriation</div></div></div>"><a href="mods/fraudTree" data-toggle="modal" data-target="#fraudTree" href="#" id="elm-fraud-tree"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -573,6 +573,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <script>
     $('#backupData').on('show.bs.modal', function(e){
         $(this).find('.backup-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for Fraud Tree -->
+
+<script>
+    $('#fraudTree').on('show.bs.modal', function(e){
+        $(this).find('.fraud-tree-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
