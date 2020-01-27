@@ -338,6 +338,7 @@ $_SESSION['endpointFraudMetrics']['launch'] = 0;
                         </div>
 
                         <div class="modal-footer">
+     			    <button type="button" onclick="startTour()" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Take the tour</button>
                             <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Let's begin</button>
                         </div>
                     </div>
