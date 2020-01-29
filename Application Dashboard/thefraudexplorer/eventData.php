@@ -62,6 +62,10 @@ if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh'])))))
 
         <link rel="stylesheet" type="text/css" href="css/eventData.css" media="screen" />
 
+        <!-- ChartJS -->
+
+        <script type="text/javascript" src="js/Chart.js"></script>
+
         <!-- Font Awesome -->
 
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
@@ -165,6 +169,38 @@ if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh'])))))
                 </div>
             </div>
         </center>
+
+        <!-- Modal for Endpoint Metrics -->
+
+        <center>
+            <div class="modal" id="endpoint-metrics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+        <!-- Modal for Endpoint Metrics Reloaded -->
+
+        <center>
+            <div class="modal" id="endpoint-metrics-reload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
     </body>
 </html>
 
@@ -199,6 +235,11 @@ var tour = new Tour({
         placement: 'bottom',
         title: "Window title",
         content: "This software maps the endpoint writing with windows titles. For every event, you will see the phrase matched and the window or application context that was used for type the phrase."
+    }, {
+        element: "#elm-endpoint-metrics",
+        placement: 'bottom',
+        title: "History metrics",
+        content: "Here you can see in a graph the events count from fraud triangle vertices in the past 12 months. You can filter by one, two or three vertices to see only specific behavior for the employee."
     }, {
         element: "#elm-phrasetyped-event",
         placement: 'bottom',

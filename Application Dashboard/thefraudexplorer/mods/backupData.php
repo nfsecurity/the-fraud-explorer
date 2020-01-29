@@ -176,8 +176,12 @@ $latestBackup = shell_exec("sudo find /backup/*.zip -printf '%T++%s+%p\n' | sort
 $latestBackup = explode('+', trim($latestBackup));
 
 $datetime = DateTime::createFromFormat('Y-m-d', $latestBackup[0]);
+$noBackup = false;
+
 $backupHour = explode(':', trim($latestBackup[1]));
 $size = $latestBackup[2]/1024/1024;
+
+if (!isset($latestBackup[1])) $noBackup = true;
 
 ?>
 
@@ -223,9 +227,18 @@ $size = $latestBackup[2]/1024/1024;
     </div>
 
     <br>
-    <a class="downloadfile" href="mods/downloadBackup?backupFile=<?php echo base64_encode($latestBackup[3]); ?>">
+    <a class="downloadfile" href="mods/downloadBackup?backupFile=<?php if ($noBackup == true) echo "nobackupfile"; else echo base64_encode($latestBackup[3]); ?>">
     <button type="button" class="btn btn-default" style="width: 100%; outline: 0 !important;">
-        Download latest backup to my computer<br><p class="latest-backup"><?php echo $datetime->format('F d, Y') . ", at " . $backupHour[0] . ":" . $backupHour[1] . " with " . number_format(round($size)) . " Mb of size"; ?></p>
+        Download latest backup to my computer<br>
+        <p class="latest-backup">
+
+            <?php 
+
+                if ($noBackup == true) echo "No backup files found at the moment, please try again later";
+                else echo $datetime->format('F d, Y') . ", at " . $backupHour[0] . ":" . $backupHour[1] . " with " . number_format(round($size)) . " Mb of size"; 
+            ?>
+
+        </p>
     </button>
     </a>
     <br>

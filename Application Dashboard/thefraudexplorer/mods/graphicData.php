@@ -263,11 +263,11 @@ include "../lbs/endpointMethods.php";
     {
         echo '<div class="div-container">';
         echo '<p class="not-ruleset">There is no data at this time regarding this ruleset, maybe you did not have categorized/organized your endpoints according to the organization chart. Please spend some time clasifying your users and get back later to see their representation.</p>';
-        echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the graph</div>';
+        echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the analytics graph</div>';
         echo '<div class="modal-footer window-footer-config">';
         echo '<br>';
         echo '<a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>';
-        echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>';
+        echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>';
         echo '</div>';
         echo '</div>';
 
@@ -332,7 +332,7 @@ include "../lbs/endpointMethods.php";
     
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the graph</div>';
+    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the analytics graph</div>';
     
     ?>
     

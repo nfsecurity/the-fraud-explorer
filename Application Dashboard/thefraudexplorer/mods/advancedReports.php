@@ -221,8 +221,8 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="alldaterange" value="alldaterange" autocomplete="off" checked>I want all date range
+                    <label class="btn btn-default btn-sm active" id="button-all-date-range" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" onchange="checkboxAllDateRange()" id="checkbox-all-date-range" name="alldaterange" value="alldaterange" autocomplete="off" checked>I want all date range
                     </label>
                 </div>
 
@@ -257,24 +257,24 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:10px; border: 1px solid white;"><br></div>
                             
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="pressure" value="pressure" autocomplete="off" checked>Pressure
+                    <label class="btn btn-default btn-sm active" id="button-pressure" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" onchange="checkboxPressureButton()" id="checkbox-pressure" name="pressure" value="pressure" autocomplete="off" checked>Pressure
                     </label>
                 </div>
 
                 <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="opportunity" value="opportunity" autocomplete="off" checked>Opportunity
+                    <label class="btn btn-default btn-sm active" id="button-opportunity" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" onchange="checkboxOpportunityButton()" id="checkbox-opportunity" name="opportunity" value="opportunity" autocomplete="off" checked>Opportunity
                     </label>
                 </div>
 
                 <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="rationalization" value="rationalization" autocomplete="off" checked>Rationalization
+                    <label class="btn btn-default btn-sm active" id="button-rationalization" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" onchange="checkboxRationalizationButton()" id="checkbox-rationalization" name="rationalization" value="rationalization" autocomplete="off" checked>Rationalization
                     </label>
                 </div>
               
@@ -287,8 +287,8 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allapplications" value="allapplications" autocomplete="off" checked>I want all applications
+                    <label class="btn btn-default btn-sm active" id="button-all-applications" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" onchange="checkboxAllApplicationsButton()" id="checkbox-all-applications" name="allapplications" value="allapplications" autocomplete="off" checked>I want all applications
                     </label>
                 </div>           
                     
@@ -334,8 +334,8 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:60px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="alldepartments" value="alldepartments" autocomplete="off" checked>I want all departments
+                    <label class="btn btn-default btn-sm active" id="button-all-departments" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" name="alldepartments" onchange="checkboxAllDepartmentsButton()" id="checkbox-all-departments" value="alldepartments" autocomplete="off" checked>I want all departments
                     </label>
                 </div> 
                 
@@ -347,8 +347,8 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                        <input type="checkbox" name="allphrases" value="allphrases" autocomplete="off" checked>I want all phrases
+                    <label class="btn btn-default btn-sm active" id="button-all-phrases" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" name="allphrases" onchange="checkboxAllPhrasesButton()" id="checkbox-all-phrases" value="allphrases" autocomplete="off" checked>I want all phrases
                     </label>
                 </div>
 
@@ -407,4 +407,115 @@ function getstatus()
     $(document).ready(function() {
         $('select').niceSelect();
     });
+</script>
+
+<!-- Checkbox background changer -->
+
+<script>
+
+    function checkboxAllDateRange()
+    {
+        var checkbox = document.getElementById('checkbox-all-date-range');
+        var checkboxGeneral = document.getElementById('button-all-date-range');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxPressureButton()
+    {
+        var checkbox = document.getElementById('checkbox-pressure');
+        var checkboxGeneral = document.getElementById('button-pressure');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxOpportunityButton()
+    {
+        var checkbox = document.getElementById('checkbox-opportunity');
+        var checkboxGeneral = document.getElementById('button-opportunity');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxRationalizationButton()
+    {
+        var checkbox = document.getElementById('checkbox-rationalization');
+        var checkboxGeneral = document.getElementById('button-rationalization');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxAllApplicationsButton()
+    {
+        var checkbox = document.getElementById('checkbox-all-applications');
+        var checkboxGeneral = document.getElementById('button-all-applications');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxAllDepartmentsButton()
+    {
+        var checkbox = document.getElementById('checkbox-all-departments');
+        var checkboxGeneral = document.getElementById('button-all-departments');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxAllPhrasesButton()
+    {
+        var checkbox = document.getElementById('checkbox-all-phrases');
+        var checkboxGeneral = document.getElementById('button-all-phrases');
+
+        if(checkbox.checked === true)
+        {
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
 </script>

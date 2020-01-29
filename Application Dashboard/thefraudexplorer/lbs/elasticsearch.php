@@ -416,6 +416,224 @@ function countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($index, $f
     return $eventMatches;
 }
 
+/* Count All Fraud Triangle matches by date range with fraud term with Agent ID */
+
+function countFraudTriangleMatchesWithDateRangeWithTermWithAgentID($fraudTerms, $index, $from, $to, $agentID)
+{
+    $terms = explode(" ", $fraudTerms);
+    $pressureValue = $terms[0];
+    $opportunityValue = $terms[1];
+    $rationalizationValue = $terms[2];
+
+    if ($pressureValue == "1" && $opportunityValue == "1" && $rationalizationValue == "1")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'pressure' ] ],
+                            [ 'term' => [ 'alertType' => 'opportunity' ] ],
+                            [ 'term' => [ 'alertType' => 'rationalization' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "1" && $opportunityValue == "1" && $rationalizationValue == "0")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'pressure' ] ],
+                            [ 'term' => [ 'alertType' => 'opportunity' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "1" && $opportunityValue == "0" && $rationalizationValue == "0")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'pressure' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "0" && $opportunityValue == "1" && $rationalizationValue == "1")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'opportunity' ] ],
+                            [ 'term' => [ 'alertType' => 'rationalization' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "0" && $opportunityValue == "1" && $rationalizationValue == "0")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'opportunity' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "0" && $opportunityValue == "0" && $rationalizationValue == "1")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'rationalization' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+    else if ($pressureValue == "1" && $opportunityValue == "0" && $rationalizationValue == "1")
+    {
+        $matchesParams = [
+            'index' => $index, 
+            'type' => 'AlertEvent', 
+            'body' => [ 
+                'query' => [
+                    'bool' => [
+                        'minimum_should_match' => '1',
+                        'must' => [
+                            [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                            [ 'wildcard' => [ 'agentId' => $agentID ] ]
+                        ],
+                        'should' => [
+                            [ 'term' => [ 'alertType' => 'pressure' ] ],
+                            [ 'term' => [ 'alertType' => 'rationalization' ] ]
+                        ],
+                        'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
+/* Count All Fraud Triangle matches by date range without fraud term with Agent ID with Domain */
+
+function countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentIDWithDomain($index, $from, $to, $agentID, $userDomain)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                        [ 'wildcard' => [ 'agentId' => $agentID ] ],
+                        [ 'match' => [ 'userDomain' => $userDomain ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $eventMatches = $client->count($matchesParams);
+
+    return $eventMatches;
+}
+
 /* Search all Fraud Triangle Matches with date range */
 
 function getAllFraudTriangleMatchesWithDateRange($index, $domain, $samplerStatus, $context, $from, $to, $pressure, $opportunity, $rationalization)

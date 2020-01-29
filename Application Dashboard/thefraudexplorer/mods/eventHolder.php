@@ -173,6 +173,7 @@ if ($endpointDECSQL != "all")
     echo '<th class="timestampth" id="elm-date-event"><span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE</th>';
     echo '<th class="eventtypeth" id="elm-type-event">BEHAVIOR</th>';
     echo '<th class="windowtitleth" id="elm-windowtitle-event"><span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE</th>';
+    echo '<th class="metricsth" id="elm-endpoint-metrics">&nbsp;METRS</th>';
     echo '<th class="phrasetypedth" id="elm-phrasetyped-event"><span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>';
     echo '<th style="display: none;">EXPRESSION HISTORY</th>';
     echo '<th class="falseth" id="elm-mark-event">MARK</th>';
@@ -224,6 +225,12 @@ if ($endpointDECSQL != "all")
         echo '<div class="title-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle, 0, 80)).'</div>';
         echo '</td>';
 
+        /* Endpoint metrics */
+
+        echo '<td class="metricstd">';
+        echo '<a href="../mods/endpointMetrics?id='. base64_encode($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
+        echo '</td>';
+
         /* Phrase typed */
 
         $alertDate =  date_format($date, 'Y-m-d H:i');
@@ -238,7 +245,6 @@ if ($endpointDECSQL != "all")
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TCP_FASTOPEN, true);
         curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_ENCODING, '');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -282,6 +288,9 @@ else
     echo '</th>';
     echo '<th class="windowtitleth-all" id="elm-windowtitle-event">';
     echo '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
+    echo '</th>';
+    echo '<th class="metricsth-all" id="elm-endpoint-metrics">';
+    echo '&nbsp;METRS';
     echo '</th>';
     echo '<th class="phrasetypedth-all" id="elm-phrasetyped-event">';
     echo '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
@@ -368,6 +377,12 @@ else
         
         echo '<td class="windowtitletd-all">';
         echo '<div class="title-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right"></span>'.strip_tags(substr($windowTitle, 0, 80)).'</div>';
+        echo '</td>';
+
+        /* Endpoint metrics */
+
+        echo '<td class="metricstd-all">';
+        echo '<a href="../mods/endpointMetrics?id='. base64_encode($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
         echo '</td>';
         
         /* Phrase typed */
@@ -535,6 +550,18 @@ else
     });
 </script>
 
+<!-- Modal for Fraud Metrics -->
+
+<script>
+    $(document).on('hidden.bs.modal', function (e) {
+    $(e.target).removeData('bs.modal');
+    });
+
+    $('#endpoint-metrics').on('show.bs.modal', function(e){
+        $(this).find('.endpoint-metrics-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
 <!-- Modal for Advanced Reports -->
 
 <script>
@@ -565,7 +592,11 @@ else
                 {
                     sorter: "shortDate", dateFormat: "yyymmdd"
                 },
-                6:
+                4:
+                {
+                    sorter: false
+                },
+                7:
                 {
                     sorter: false
                 },
@@ -597,7 +628,11 @@ else
                 {
                     sorter: "shortDate", dateFormat: "yyymmdd"
                 },
-                7:
+                5:
+                {
+                    sorter: false
+                },
+                8:
                 {
                     sorter: false
                 },
