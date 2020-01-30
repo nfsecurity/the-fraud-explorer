@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-01
- * Revision: v1.4.1-ai
+ * Date: 2020-02
+ * Revision: v1.4.2-aim
  *
  * Description: Code for set backup schedule
  */

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-02
- * Revision: v1.3.1-ai
+ * Date: 2020-02
+ * Revision: v1.4.2-aim
  *
  * Description: Endpoint specific functions
  */ 

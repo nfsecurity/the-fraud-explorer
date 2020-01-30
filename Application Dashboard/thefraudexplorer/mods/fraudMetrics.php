@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-01
- * Revision: v1.4.1-ai
+ * Date: 2020-02
+ * Revision: v1.4.2-aim
  *
  * Description: Code for fraud metrics
  */
@@ -395,12 +395,18 @@ else
                 <div style="line-height:47px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxAllBusinessPar'; else echo 'checkboxAllBusinessImpar'; ?>" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
-                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<input type="checkbox" name="allbusinesspar" value="allbusiness" id="allbusinesspar" autocomplete="off" checked>I want all business units';
-                        else echo '<input type="checkbox" name="allbusinessimpar" value="allbusiness" id="allbusinessimpar" autocomplete="off" checked>I want all business units';
+                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        {
+                            echo '<input type="checkbox" onchange="checkboxAllBusinessPar()" id="allbusinesspar" name="allbusinesspar" value="allbusiness" id="allbusinesspar" autocomplete="off" checked>I want all business units';
+                        }
+                        else 
+                        {
+                            echo '<input type="checkbox" onchange="checkboxAllBusinessImpar()" id="allbusinessimpar" name="allbusinessimpar" value="allbusiness" id="allbusinessimpar" autocomplete="off" checked>I want all business units';
+                        }
                         
                     ?>
 
@@ -415,20 +421,32 @@ else
 
                 <?php
 
-                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0)  echo '<input type="text" name="endpointpar" id="endpointpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
-                    else echo '<input type="text" name="endpointimpar" id="endpointimpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
+                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                    {
+                        echo '<input type="text" name="endpointpar" id="endpointpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
+                    }
+                    else 
+                    {
+                        echo '<input type="text" name="endpointimpar" id="endpointimpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
+                    }
                 
                 ?>
 
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxAllEndpointsPar'; else echo 'checkboxAllEndpointsImpar'; ?>" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
-                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<input type="checkbox" name="allendpointspar" value="allendpoints" id="allendpointspar" autocomplete="off" checked>I want all endpoints';
-                        else echo '<input type="checkbox" name="allendpointsimpar" value="allendpoints" id="allendpointsimpar" autocomplete="off" checked>I want all endpoints';
+                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        {
+                            echo '<input type="checkbox" onchange="checkboxAllEndpointsPar()" id="allendpointspar" name="allendpointspar" value="allendpoints" id="allendpointspar" autocomplete="off" checked>I want all endpoints';
+                        }
+                        else 
+                        {
+                            echo '<input type="checkbox" onchange="checkboxAllEndpointsImpar()" id="allendpointsimpar" name="allendpointsimpar" value="allendpoints" id="allendpointsimpar" autocomplete="off" checked>I want all endpoints';
+                        }
 
                     ?>
 
@@ -928,4 +946,70 @@ function getstatus()
     $(document).ready(function() {
         $('select').niceSelect();
     });
+</script>
+
+<!-- Checkbox background changer -->
+
+<script>
+
+    function checkboxAllBusinessPar()
+    {
+        var checkbox = document.getElementById('allbusinesspar');
+        var checkboxAllBusiness = document.getElementById('checkboxAllBusinessPar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxAllBusiness.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxAllBusiness.style.background = "white";
+        }
+    }
+
+    function checkboxAllBusinessImpar()
+    {
+        var checkbox = document.getElementById('allbusinessimpar');
+        var checkboxAllBusiness = document.getElementById('checkboxAllBusinessImpar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxAllBusiness.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxAllBusiness.style.background = "white";
+        }
+    }
+
+    function checkboxAllEndpointsPar()
+    {
+        var checkbox = document.getElementById('allendpointspar');
+        var checkboxAllEndpoints = document.getElementById('checkboxAllEndpointsPar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxAllEndpoints.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxAllEndpoints.style.background = "white";
+        }
+    }
+
+    function checkboxAllEndpointsImpar()
+    {
+        var checkbox = document.getElementById('allendpointsimpar');
+        var checkboxAllEndpoints = document.getElementById('checkboxAllEndpointsImpar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxAllEndpoints.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxAllEndpoints.style.background = "white";
+        }
+    }
+
 </script>

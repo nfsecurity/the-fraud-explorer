@@ -153,7 +153,7 @@
 
     const-string v2, ":id/back"
 
-    if-eqz v0, :cond_8
+    if-eqz v0, :cond_9
 
     const/4 v0, 0x0
 
@@ -209,7 +209,7 @@
 
     move-result-object v5
 
-    if-eqz v5, :cond_9
+    if-eqz v5, :cond_a
 
     .line 84
     invoke-virtual {p1}, Landroid/view/accessibility/AccessibilityEvent;->getPackageName()Ljava/lang/CharSequence;
@@ -224,7 +224,7 @@
 
     move-result v5
 
-    if-eqz v5, :cond_9
+    if-eqz v5, :cond_a
 
     .line 90
     invoke-virtual {v3}, Landroid/view/accessibility/AccessibilityNodeInfo;->getViewIdResourceName()Ljava/lang/String;
@@ -254,18 +254,35 @@
 
     move-result-object v2
 
-    const-string v3, ":id/date"
+    const-string v5, ":id/date"
+
+    invoke-virtual {v2, v5}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+
+    move-result v2
+
+    if-nez v2, :cond_7
+
+    invoke-virtual {v3}, Landroid/view/accessibility/AccessibilityNodeInfo;->getViewIdResourceName()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/String;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    const-string v3, ":id/quoted_title"
 
     invoke-virtual {v2, v3}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
 
     move-result v2
 
-    if-eqz v2, :cond_9
+    if-eqz v2, :cond_a
 
     .line 99
+    :cond_7
     sget-object v2, Lcom/nf/thefraudexplorer/Utilities;->finalChatMessage:Ljava/lang/String;
 
-    if-eqz v2, :cond_9
+    if-eqz v2, :cond_a
 
     sget-object v2, Lcom/nf/thefraudexplorer/Utilities;->finalChatMessage:Ljava/lang/String;
 
@@ -275,7 +292,7 @@
 
     const/4 v3, 0x3
 
-    if-le v2, v3, :cond_9
+    if-le v2, v3, :cond_a
 
     .line 103
     invoke-virtual {p0}, Lcom/nf/thefraudexplorer/AccessibilityHelper;->getApplicationContext()Landroid/content/Context;
@@ -311,7 +328,7 @@
     move-object p1, v6
 
     :goto_1
-    if-eqz p1, :cond_7
+    if-eqz p1, :cond_8
 
     .line 117
     :try_start_5
@@ -321,7 +338,7 @@
 
     goto :goto_2
 
-    :cond_7
+    :cond_8
     const-string p1, "(unknown)"
 
     :goto_2
@@ -423,12 +440,12 @@
     goto :goto_3
 
     .line 142
-    :cond_8
+    :cond_9
     invoke-virtual {v3}, Landroid/view/accessibility/AccessibilityNodeInfo;->getViewIdResourceName()Ljava/lang/String;
 
     move-result-object v0
 
-    if-eqz v0, :cond_9
+    if-eqz v0, :cond_a
 
     .line 144
     invoke-virtual {p1}, Landroid/view/accessibility/AccessibilityEvent;->getPackageName()Ljava/lang/CharSequence;
@@ -443,7 +460,7 @@
 
     move-result p1
 
-    if-eqz p1, :cond_9
+    if-eqz p1, :cond_a
 
     .line 148
     invoke-virtual {v3}, Landroid/view/accessibility/AccessibilityNodeInfo;->getViewIdResourceName()Ljava/lang/String;
@@ -458,7 +475,7 @@
 
     move-result p1
 
-    if-eqz p1, :cond_9
+    if-eqz p1, :cond_a
 
     .line 150
     invoke-static {}, Lcom/nf/thefraudexplorer/Utilities;->getRemoteAnalyticsStatus()V
@@ -500,7 +517,7 @@
 
     invoke-static {v0, p1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    :cond_9
+    :cond_a
     :goto_3
     return-void
 .end method

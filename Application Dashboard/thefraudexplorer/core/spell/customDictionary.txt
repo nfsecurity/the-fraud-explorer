@@ -38,6 +38,7 @@ aleja
 alejo
 aletosa
 aletoso
+alguito
 alicorada
 alicorado
 alkosto
@@ -281,6 +282,7 @@ chicanera
 chicaneras
 chicanero
 chicaneros
+chicharron
 chichigua
 chichiguas
 chichipata
@@ -343,12 +345,14 @@ comfama
 comfandi
 compa
 compadre
+compania
 concha
 conchuda
 conchudas
 conchudo
 conchudos
 conconcreto
+contrasena
 copacabana
 corchada
 corcho
@@ -417,6 +421,7 @@ distracom
 dosquebradas
 drummond
 duitama
+ebitda
 ecopetrol
 eeppm
 embalada
@@ -533,14 +538,10 @@ gomela
 gomelo
 gonorrea
 grandesita
-grandesita
 grandesitas
-grandesito
 grandesito
 grandesitos
 grandota
-grandota
-grandote
 grandote
 gritadera
 guachada
@@ -574,7 +575,6 @@ habelo
 haberlo
 hablate
 hagale
-hagale
 hagalen
 hembra
 hembras
@@ -590,6 +590,7 @@ huevonear
 huevoniar
 ibague
 incauca
+indudablemente
 ing
 ipiales
 isa
@@ -695,6 +696,8 @@ melito
 melo
 melona
 mercar
+metas
+metete
 mija
 mijita
 mijito
@@ -768,6 +771,8 @@ parcero
 parchada
 parchado
 parche
+parqueada
+parqueadas
 parqueadero
 parrilera
 parrilleras
@@ -826,6 +831,10 @@ pringa
 pringarse
 pringo
 promigas
+puta
+putas
+puto
+putos
 quibdo
 rabon
 rajando
@@ -884,6 +893,8 @@ rumbiaron
 rumbio
 sabaneta
 salidita
+salita
+salitas
 saludito
 santander
 sap
@@ -892,7 +903,10 @@ sardino
 senita
 senor
 senora
+senoras
+senores
 senorita
+senoritas
 sicario
 sicotecnicas
 sincelejo
@@ -967,6 +981,7 @@ visaje
 volate
 voleito
 voleo
+volvas
 wasap
 whatsapp
 yeyo
