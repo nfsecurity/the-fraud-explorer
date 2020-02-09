@@ -115,6 +115,13 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
                     <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Report</div><div class=tooltip-row><div class=tooltip-item>Make and download a fraud triangle<br>report for your organization with<br>various filters</div></div></div>"><a href="../mods/advancedReports" data-toggle="modal" class="advanced-reports-button" data-target="#advanced-reports" href="#" id="elm-advanced-reports"><span class="fa fa-file-text-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>                    
                     </center>
                 </td>
@@ -171,14 +178,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email alerting rules</div><div class=tooltip-row><div class=tooltip-item>Define the email alert rules based<br>on the results of the artificial intelligence<br>and the expert system</div></div></div>"><a href="mods/mailAlerts" data-toggle="modal" data-target="#mail-alerts" href="#" id="elm-mail"><span class="fa fa-envelope-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
-                    </center>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>The fraud tree</div><div class=tooltip-row><div class=tooltip-item>According to ACFE, the corporate fraud tree<br>is composed by corruption, financial fraud<br>and misappropriation</div></div></div>"><a href="mods/fraudTree" data-toggle="modal" data-target="#fraudTree" href="#" id="elm-fraud-tree"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email setup</div><div class=tooltip-row><div class=tooltip-item>Define the email configuration for<br>general alerting, system messages and<br>some important announces</div></div></div>"><a href="mods/mailConfig" data-toggle="modal" data-target="#mail-config" href="#" id="elm-mail"><span class="fa fa-envelope-open-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
             </tr>
@@ -302,7 +302,10 @@ else $totalSystemWords= "0";
     <div class="container-upper-right" id="elm-generalstatistics">
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Endpoints general statistics</p>
-            <p class="container-window-icon"><span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span></p>
+            <p class="container-window-icon">
+            <a href="mods/fraudTree" class="fraud-tree-button" data-toggle="modal" data-target="#fraudTree" href="#" id="elm-fraud-tree">&nbsp;&nbsp;View Fraud Tree&nbsp;&nbsp;</a>
+                <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
+            </p>
         </h2><br>
         <div class="container-upper-right-sub">
             <canvas id="upper-right"></canvas>
@@ -338,7 +341,7 @@ else $totalSystemWords= "0";
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
             <p class="container-window-icon">
-                <a href="../mods/fraudMetrics" data-toggle="modal" class="fraud-metrics-button" data-target="#fraud-metrics" href="#" id="elm-fraud-metrics">&nbsp;&nbsp;View fraud triangle metrics&nbsp;&nbsp;</a>&nbsp;
+                <a href="../mods/fraudMetrics" data-toggle="modal" class="fraud-metrics-button" data-target="#fraud-metrics" href="#" id="elm-fraud-metrics">&nbsp;&nbsp;Triangle metrics&nbsp;&nbsp;</a>&nbsp;
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
             </p>
         </h2><br>
@@ -560,6 +563,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
     });
 </script>
 
+<!-- Modal for Fraud Triangle Workflows -->
+
+<script>
+    $('#fraudFlows').on('show.bs.modal', function(e){
+        $(this).find('.fraud-flows-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
 <!-- Modal for Business Units -->
 
 <script>
@@ -596,11 +607,11 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
     });
 </script>
 
-<!-- Modal for Mail Alerts -->
+<!-- Modal for Mail Config -->
 
 <script>
-    $('#mail-alerts').on('show.bs.modal', function(e){
-        $(this).find('.mail-alerts-button').attr('href', $(e.relatedTarget).data('href'));
+    $('#mail-config').on('show.bs.modal', function(e){
+        $(this).find('.mail-config-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

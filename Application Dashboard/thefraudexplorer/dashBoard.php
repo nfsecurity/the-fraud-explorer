@@ -195,12 +195,28 @@ $_SESSION['rulesetScope'] = "ALL";
             </div>
         </center>
 
-        <!-- Modal for Mail Alerts -->
+        <!-- Modal for Mail Config -->
 
         <center>
-            <div class="modal" id="mail-alerts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal" id="mail-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
+        <!-- Modal for Fraud Triangle Flows -->
+
+        <center>
+            <div class="modal" id="fraudFlows" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center" style="width: 980px;">
                         <div class="modal-content">
                             <div class="modal-body">
                                 <p class="debug-url window-debug"></p>
