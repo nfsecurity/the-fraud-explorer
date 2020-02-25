@@ -569,6 +569,7 @@ function checkPhrases($string, $language)
 
 function processBackspaces($strInput)
 {
+    $strInput = str_replace("oemquotes", "", $strInput);
     $strInput = ltrim($strInput, "# ");
 
     if (strpos($strInput, '_') !== false)
