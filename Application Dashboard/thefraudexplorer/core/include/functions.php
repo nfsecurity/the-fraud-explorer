@@ -863,4 +863,674 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
     }
 }
 
+/* Workflows engine */
+
+function startWorkflows($ESAlerterIndex)
+{
+    global $connection;
+    $superFinalQuery = array();
+
+    /* SQL queries */
+
+    include "../lbs/openDBconn.php";
+
+    echo "[INFO] Starting Workflow Engine, analyzing flows ...\n";
+
+    /* Database */
+
+    mysqli_query($connection, "DROP TABLE t_wevents"); 
+    mysqli_query($connection, "CREATE TABLE t_wevents (alertId varchar(512) PRIMARY KEY, indexId varchar(256) not null, department varchar(256) not null, agentId varchar(256) not null, alertType varchar(256) not null, eventTime datetime DEFAULT NULL, falsePositive int DEFAULT 0, domain varchar(256) not null, application varchar(1024) not null, phrase varchar(512) not null)");
+
+    /* Start */
+
+    $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
+    $eventData = json_decode(json_encode($eventMatches), true);
+
+    foreach ($eventData['hits']['hits'] as $result)
+    {
+        if (isset($result['_source']['tags'])) continue;
+
+        $departmentQuery = mysqli_query($connection, sprintf("SELECT ruleset from t_agents WHERE agent='%s'", $result["_source"]["agentId"])); 
+        $departmentResult = mysqli_fetch_assoc($departmentQuery);
+
+        mysqli_query($connection, sprintf("INSERT INTO t_wevents values('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s')", $result["_id"], $result["_index"], $departmentResult["ruleset"], $result["_source"]["agentId"], $result["_source"]["alertType"], $result["_source"]["eventTime"], $result["_source"]["falsePositive"], $result["_source"]["userDomain"], decRijndael($result['_source']['windowTitle']), decRijndael($result['_source']['wordTyped'])));    
+    }
+
+    $queryWorkflows = mysqli_query($connection, "SELECT * FROM t_workflows");
+
+    /* Traverse Workflows */
+
+    while ($row = mysqli_fetch_array($queryWorkflows))
+    {
+        $flow = explode(",", $row["workflow"]);
+
+        $elements = array("department", "alertType", "domain", "agentId", "application", "phrase", "operator");
+        $counter = 0;
+        $queryCounter = 1;
+
+        $sqlQuery[$row["name"]][$queryCounter] = "SELECT * FROM t_wevents WHERE";
+
+        foreach ($flow as $field)
+        {   
+            $clearField = explode("=", $field);   
+            $workflowQuery[$row["name"]][$queryCounter][$elements[$counter]] = $field;
+            $sqlQuery[$row["name"]][$queryCounter] = $sqlQuery[$row["name"]][$queryCounter] . " ".$elements[$counter]."='".$clearField[1]."' AND";
+            $counter++;
+            
+            if ($counter == 7)
+            {
+                $queryCounter++;
+                $sqlQuery[$row["name"]][$queryCounter] = "SELECT * FROM t_wevents WHERE";
+                $counter = 0;
+            }
+        }
+
+        /* Organize final SQL Queries */
+        
+        array_pop($sqlQuery[$row["name"]]);
+
+        $sqlQuery[$row["name"]] = str_replace("AND operator='END' AND", "--", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND operator='AND' AND", "--", $sqlQuery[$row["name"]]);
+
+        $sqlQuery[$row["name"]] = str_replace("PRESSURE", "pressure", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("OPPORTUNITY", "opportunity", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("RATIONALIZATION", "rationalization", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND alertType='ALL VERTICES'", "", $sqlQuery[$row["name"]]);
+
+        $sqlQuery[$row["name"]] = str_replace("AND agentId='ALLE'", "", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND application='ALLA'", "", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND phrase='ALLP'", "", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND alertType='ALLV'", "", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace("AND domain='ALLD'", "", $sqlQuery[$row["name"]]);
+
+        $regApp = '/application=\'(\w*)(( \w*){1,})?(\w*)?\'/';
+        $subApp = 'application LIKE \'%${1}${2}%\'';
+        $sqlQuery[$row["name"]] = preg_replace($regApp, $subApp, $sqlQuery[$row["name"]]);
+
+        $regPhrase = '/phrase=\'(\w*)(( \w*){1,})?(\w*)?\'/';
+        $subPhrase = 'phrase LIKE \'%${1}${2}%\'';
+        $sqlQuery[$row["name"]] = preg_replace($regPhrase, $subPhrase, $sqlQuery[$row["name"]]);
+
+        $regAgent = '/agentId=\'(\w*)\'/';
+        $subAgent = 'agentId LIKE \'${1}_%\'';
+        $sqlQuery[$row["name"]] = preg_replace($regAgent, $subAgent, $sqlQuery[$row["name"]]);
+
+        $sqlQuery[$row["name"]] = preg_replace('/\s+/', ' ', $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace(" --", " AND falsePositive='0'", $sqlQuery[$row["name"]]);
+    }
+
+    /* Traverse generated queries */
+
+    foreach ($sqlQuery as $name => $query)
+    {
+        $counter = 1;
+
+        /* Verify if query works or not */ 
+
+        foreach ($query as $key => $value)
+        {
+            $superQuery = mysqli_query($connection, $value);
+
+            if (mysqli_num_rows($superQuery) != 0) 
+            { 
+                $validation[$name][$counter] = true;
+            }
+            else $validation[$name][$counter] = false;
+
+            $counter++;
+        }
+    }
+
+    /* Trigger workflow or not depending if query works */
+
+    foreach ($validation as $name => $query)
+    {
+        $checkPoint = true;
+
+        foreach ($query as $key => $value)
+        {
+            if ($value == false) 
+            {
+                $checkPoint = false;
+                break;
+            }
+        }
+        if ($checkPoint == true) 
+        {
+            /* Only triggered true has the following loop searching for interval match */
+
+            foreach ($sqlQuery as $nameID => $query)
+            {
+                /* Only do that for TRUE Workflows */
+
+                if ($name == $nameID)
+                {
+                    /* if it's only one query, trigger it */
+
+                    if (count($query) == 1)
+                    {
+                        $queryTrueWorkflow[$name][] = $query[1];
+                        $superFinalQuery[$name] = $query[1];
+
+                        /* Finally execute the query and populate triggered table */
+
+                        $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                        $rowCount = mysqli_num_rows($resultQuery);
+
+                        if ($rowCount > 0)
+                        {
+                            while ($row = mysqli_fetch_array($resultQuery))
+                            {
+                                $idS = $row["alertId"];
+
+                                /* Verify if the trigger already exist */
+
+                                $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                                $existCount = mysqli_num_rows($existQuery);
+
+                                /* If not exist, insert trigger */
+
+                                if ($existCount == 0)
+                                {
+                                    mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+                                }
+                            }
+
+                            /* Trigger for table t_workflows */
+
+                            mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+                        }
+                    }
+                    else
+                    {
+                        /* If there is more than one query */
+
+                        foreach ($query as $i => $j)
+                        {
+                            /* Store true workflow queries, so then we can loop over it  */
+
+                            $queryTrueWorkflow[$name][] = $j;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* Build the final queries for workflow matching with interval (compound workflows) */
+
+    foreach ($queryTrueWorkflow as $name => $query)
+    {
+        /* How many queries has the workflow */
+
+        if(count($query) == 2)
+        {
+            /* Search the workflow interval */
+
+            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+
+            /* Join the final query */
+
+            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifference FROM (";
+            $right = " WHERE timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.";";
+            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B" . $right;
+
+            /* Finally execute the query and populate triggered table */
+
+            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+            $rowCount = mysqli_num_rows($resultQuery);
+
+            if ($rowCount > 0)
+            {
+                while ($row = mysqli_fetch_array($resultQuery))
+                {
+                    $idS = $row["alertIdA"] . " " . $row["alertIdB"];
+
+                    /* Verify if the trigger already exist */
+
+                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                    $existCount = mysqli_num_rows($existQuery);
+
+                    /* If not exist, insert trigger */
+
+                    if ($existCount == 0)
+                    {
+                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+                    }
+                }
+
+                /* Trigger for table t_workflows */
+
+                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+            }
+        }
+        else if(count($query) == 3)
+        {
+            /* Search the workflow interval */
+
+            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+
+            /* Join the final query */
+
+            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC FROM (";
+            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C" . $right;
+
+            /* Finally execute the query and populate triggered table */
+
+            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+            $rowCount = mysqli_num_rows($resultQuery);
+
+            if ($rowCount > 0)
+            {
+                while ($row = mysqli_fetch_array($resultQuery))
+                {
+                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"];
+
+                    /* Verify if the trigger already exist */
+
+                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                    $existCount = mysqli_num_rows($existQuery);
+
+                    /* If not exist, insert trigger */
+
+                    if ($existCount == 0)
+                    {
+                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+                    }
+                }
+
+                /* Trigger for table t_workflows */
+
+                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+            }
+        }
+        else if(count($query) == 4)
+        {
+            /* Search the workflow interval */
+
+            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+
+            /* Join the final query */
+
+            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD FROM (";
+            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D" . $right;
+
+            /* Finally execute the query and populate triggered table */
+
+            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+            $rowCount = mysqli_num_rows($resultQuery);
+
+            if ($rowCount > 0)
+            {
+                while ($row = mysqli_fetch_array($resultQuery))
+                {
+                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"];
+
+                    /* Verify if the trigger already exist */
+
+                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                    $existCount = mysqli_num_rows($existQuery);
+
+                    /* If not exist, insert trigger */
+
+                    if ($existCount == 0)
+                    {
+                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+                    }
+                }
+
+                /* Trigger for table t_workflows */
+
+                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+            }
+        }
+        else if(count($query) == 5)
+        {
+            /* Search the workflow interval */
+
+            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+
+            /* Join the final query */
+
+            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE FROM (";
+            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E" . $right;
+
+            /* Finally execute the query and populate triggered table */
+
+            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+            $rowCount = mysqli_num_rows($resultQuery);
+
+            if ($rowCount > 0)
+            {
+                while ($row = mysqli_fetch_array($resultQuery))
+                {
+                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"];
+
+                    /* Verify if the trigger already exist */
+
+                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                    $existCount = mysqli_num_rows($existQuery);
+
+                    /* If not exist, insert trigger */
+
+                    if ($existCount == 0)
+                    {
+                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+                    }
+                }
+
+                /* Trigger for table t_workflows */
+
+                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+            }
+        }
+        else if(count($query) == 6)
+        {
+            /* Search the workflow interval */
+
+            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+
+            /* Join the final query */
+
+            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, F.alertId as alertIdF, F.indexid as indexIdF, F.department as departmentF, F.agentId as agentIdF, F.alertType as alertTypeF, F.domain as domainF, F.phrase as phraseF, F.eventTime as eventTimeF timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE, timestampdiff(day, A.eventTime, F.eventTime) AS timeDifferenceF FROM (";
+            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, F.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E, (" . $queryTrueWorkflow[$name][5] . ") AS F" . $right;
+
+            /* Finally execute the query and populate triggered table */
+
+            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+            $rowCount = mysqli_num_rows($resultQuery);
+
+            if ($rowCount > 0)
+            {
+                while ($row = mysqli_fetch_array($resultQuery))
+                {
+                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"];
+
+                    /* Verify if the trigger already exist */
+
+                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                    $existCount = mysqli_num_rows($existQuery);
+
+                    /* If not exist, insert trigger */
+
+                    if ($existCount == 0)
+                    {
+                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+                    }
+                }
+
+                /* Trigger for table t_workflows */
+
+                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+            }
+        }
+    }
+
+     /* Drop temporary tables */
+
+     mysqli_query($connection, "DROP TABLE t_wevents");
+
+    /* Troubleshooting for validation queries */
+
+    //var_dump($validation); var_dump($sqlQuery); var_dump($queryTrueWorkflow); var_dump($superFinalQuery);
+}
+
+/* Search all Fraud Triangle Matches */
+
+function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
+{
+    if ($context == "allalerts") $querySize = 10000;
+    else $querySize = 50;
+
+    if ($context != "allalerts")
+    {
+        if ($domain == "all")
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]; 
+            }
+        }
+        else
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'userDomain' => $domain ] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    'match' => [ 'userDomain' => $domain ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '1'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];   
+            }
+        }
+    }
+    else
+    {
+        if ($domain == "all")
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'must' => [
+                                    [ 'match_all' => [ 'boost' => 1 ] ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]; 
+            }
+        }
+        else
+        {
+            if ($samplerStatus == "enabled")
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'userDomain' => $domain ] ],
+                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            else
+            {
+                $matchesParams = [
+                    'index' => $index,
+                    'type' => 'AlertEvent',
+                    'body' => [
+                        'size' => $querySize,
+                        'sort' => [
+                            [ '@timestamp' => [ 'order' => 'desc' ] ]
+                        ],
+                        '_source' => [
+                            'exclude' => [ 'stringHistory', 'message' ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    'match' => [ 'userDomain' => $domain ]
+                                ],
+                                'must_not' => [
+                                    [ 'match' => [ 'falsePositive' => '2'] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];   
+            }
+        }
+    }
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $getAlerts = $client->search($matchesParams);
+
+    return $getAlerts;
+}
+
 ?>

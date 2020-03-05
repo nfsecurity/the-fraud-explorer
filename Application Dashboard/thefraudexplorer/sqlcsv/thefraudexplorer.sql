@@ -106,7 +106,13 @@ CREATE TABLE IF NOT EXISTS `t_workflows` (
     `name` varchar(128) DEFAULT NULL,
     `workflow` varchar(2048) DEFAULT NULL,
     `interval` int DEFAULT 0,
-    `custodian` varchar(128) DEFAULT NULL
+    `custodian` varchar(128) DEFAULT NULL,
+    `triggers` int DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `t_workflows` (`name`, `workflow`, `interval`, `custodian`) VALUES ('Executives external businesses', '[D]=CLEVEL, [V]=ALLV, [E]=ALLE, [A]=ALLA, [P]=cuenta de cobro, [O]=END', '0', 'events@thefraudexplorer.com'), ('Credit alternatives', '[D]=CREDIT, [V]=ALLV, [E]=ALLE, [A]=WhatsApp, [P]=cuenta de cobro, [O]=END', '0', 'events@thefraudexplorer.com'), ('Purchases pressures and opportunities', '[D]=PURCHASES, [V]=PRESSURE, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=AND, [D]=PURCHASES, [V]=OPPORTUNITY, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=END', '8', 'events@thefraudexplorer.com');
+INSERT INTO `t_workflows` (`name`, `workflow`, `interval`, `custodian`, `triggers`) VALUES ('Executives external businesses', '[D]=CLEVEL, [V]=ALLV, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=cuenta de cobro, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Credit alternatives', '[D]=CREDIT, [V]=ALLV, [D]=thefraudexplorer.com, [E]=ALLE, [A]=WhatsApp, [P]=cuenta de cobro, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Purchases pressures and opportunities', '[D]=PURCHASES, [V]=PRESSURE, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=AND, [D]=PURCHASES, [V]=OPPORTUNITY, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=END', '8', 'events@thefraudexplorer.com', '0');
+
+CREATE TABLE IF NOT EXISTS `t_wtriggers` (
+    `name` varchar(128) DEFAULT NULL,
+    `ids` varchar(65535) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

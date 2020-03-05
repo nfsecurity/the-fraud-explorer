@@ -115,7 +115,14 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
+
+                    <?php
+
+                    if ($session->username != "admin") echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="#" id="elm-fraud-flows"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>';
+                    else echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><span class="fa fa-object-group fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>';
+                    
+                    ?>
+
                     </center>
                 </td>
             </tr>

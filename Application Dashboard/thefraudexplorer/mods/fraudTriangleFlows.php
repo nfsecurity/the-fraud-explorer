@@ -304,8 +304,8 @@ include "../lbs/openDBconn.php";
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background-color: white;
-        min-width: 235px;
-        width: 235px;
+        min-width: 215px;
+        width: 215px;
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
@@ -355,8 +355,25 @@ include "../lbs/openDBconn.php";
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background-color: white;
-        min-width: 225px;
-        width: 225px;
+        min-width: 200px;
+        width: 200px;
+        text-align: center;
+        padding: 0px 0px 0px 5px;
+        height: 30px;
+        border-collapse: separate !important;
+        border-radius: 5px 5px 0px 0px;
+    }
+
+    .table-th-flows-trigers
+    {
+        font-family: 'FFont-Bold', sans-serif; font-size:12px;
+        border-bottom: 0px solid gray;
+        border-top: 0px solid gray;
+        border-left: 0px solid gray;
+        border-right: 0px solid gray;
+        background-color: white;
+        max-width: 45px;
+        width: 45px;
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
@@ -399,8 +416,8 @@ include "../lbs/openDBconn.php";
         border-top: 0px solid white;
         border-left: 0px solid white;
         border-bottom: 0px solid white;
-        width: 235px;
-        min-width: 235px;
+        width: 215px;
+        min-width: 215px;
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
@@ -457,8 +474,25 @@ include "../lbs/openDBconn.php";
         border-top: 0px solid white;
         border-left: 0px solid white;
         border-bottom: 0px solid white;
-        width: 225px;
-        min-width: 225px;
+        width: 200px;
+        min-width: 200px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 5px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table-td-flows-triggers
+    {
+        border-right: 2px solid white;
+        border-top: 0px solid white;
+        border-left: 0px solid white;
+        border-bottom: 0px solid white;
+        width: 45px;
+        max-width: 45px;
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
@@ -534,51 +568,50 @@ include "../lbs/openDBconn.php";
 
                             <div class="flow-table">
 
-                            <div class="flow-cell">
-                                <select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="ruleset-flow">
+                                <div class="flow-cell">
+                                    <select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="ruleset-flow">
 
-                                    <?php
+                                        <?php
 
-                                        $configFile = parse_ini_file("../config.ini");
-                                        $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                                            $configFile = parse_ini_file("../config.ini");
+                                            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
 
-                                        foreach ($jsonFT['dictionary'] as $ruleset => $value)
-                                        {
-                                            if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>';
-                                            else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
-                                        }
+                                            foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                                            {
+                                                if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>';
+                                                else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                                            }
 
-                                    ?>
+                                        ?>
 
-                                </select>
-                            </div>
+                                    </select>
+                                </div>
 
-                            <div class="flow-cell">
-                                <select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudvertice-flow">
-                                    <option selected="selected">ALL VERTICES</option>
-                                    <option>PRESSURE</option>
-                                    <option>OPPORTUNITY</option>
-                                    <option>RATIONALIZATION</option>
-                                </select>
-                            </div>
+                                <div class="flow-cell">
+                                    <select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudvertice-flow">
+                                        <option selected="selected">ALL VERTICES</option>
+                                        <option>PRESSURE</option>
+                                        <option>OPPORTUNITY</option>
+                                        <option>RATIONALIZATION</option>
+                                    </select>
+                                </div>
 
-                            <div class="flow-cell">
-                                <input type="text" class="code input-value-text-endpoint" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" />
-                                <input type="text" class="code input-value-text-application" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" />
-                                <input type="text" class="code input-value-text-phrase" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" />
-                            </div>
+                                <div class="flow-cell">
+                                    <input type="text" class="code input-value-text-endpoint" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" />
+                                    <input type="text" class="code input-value-text-application" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" />
+                                    <input type="text" class="code input-value-text-phrase" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" />
+                                </div>
 
-                            <div class="flow-cell">
-                                <select class="select-option-styled-operator" name="fraudverticeFlow" id="fraudverticeFlow">
-                                    <option selected="selected">AND</option>
-                                    <option>OR</option>
-                                    <option selected="selected">END</option>
-                                </select>
-                            </div>
+                                <div class="flow-cell">
+                                    <select class="select-option-styled-operator" name="fraudOperator[]" id="fraudOperator-flow">
+                                        <option>AND</option>
+                                        <option selected="selected">END</option>
+                                    </select>
+                                </div>
 
-                            <div class="flow-cell">
-                                <a href="javascript:void(0);" class="addCF">&nbsp;&nbsp;<i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
-                            </div>
+                                <div class="flow-cell">
+                                    <a href="javascript:void(0);" class="addCF">&nbsp;&nbsp;<i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                                </div>
 
                             </div>
 		                </td>
@@ -598,16 +631,27 @@ include "../lbs/openDBconn.php";
             </div>
 
             <div class="middle-container-flow">              
-                    
-                <p class="title-config">Workflow interval</p><br>
-                <select class="select-option-styled-interval wide" name="workflowInterval" id="workflowInterval">
-                    <option value="1day">1 day</option>
-                    <option value="8days">8 days</option>
-                    <option value="15days">15 days</option>
-                    <option value="1month">1 month</option>
-                    <option value="alldays" selected="selected">Without interval</option>
-                 </select>            
-                    
+
+                <div style="width: 49%; display: inline-block; vertical-align: top;">
+
+                    <p class="title-config">Workflow interval</p><br>
+                    <select class="select-option-styled-interval wide" name="workflowInterval" id="workflowInterval">
+                        <option value="1">1 day</option>
+                        <option value="8">8 days</option>
+                        <option value="15">15 days</option>
+                        <option value="30">1 month</option>
+                        <option value="0" selected="selected">Without interval</option>
+                    </select>  
+
+                </div>
+
+                <div style="width: 49%; display: inline-block; vertical-align: top;">
+
+                    <p class="title-config">Workflow domain</p><br>
+                    <input type="text" class="code input-value-text" id="workflowDomain" name="workflowDomain" value="" placeholder="Company domain" />
+
+                </div>
+
             </div>
 
             <div class="right-container-flow">
@@ -627,7 +671,7 @@ include "../lbs/openDBconn.php";
 
             <div class="status-align-middle-flow">
                     
-                Compound workflows must have an interval
+                Define time interval and company domain
                         
             </div>
 
@@ -638,61 +682,72 @@ include "../lbs/openDBconn.php";
             </div>
         </div>
 
+        <p class="title-config">List of current defined & working workflows</p><br>
+
+        <table class="table-flows">
+            <thead class="table-thead-flows">                       
+                <th class="table-th-flows-name" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Workflow name</th>
+                <th class="table-th-flows-workflow" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Fraud Triangle Flow</th>
+                <th class="table-th-flows-interval" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Interval</th>
+                <th class="table-th-flows-custodian" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Custodian</th>
+                <th class="table-th-flows-triggers" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Hits</th>
+            </thead>
+            <tbody class="table-tbody-flows ruleset-scroll">
+
+                <?php
+
+                $workflowQuery = mysqli_query($connection, "SELECT * FROM t_workflows"); 
+
+                while($workflowEntry = mysqli_fetch_assoc($workflowQuery))
+                {
+                    $permitted_chars = 'abcdefghijklmnopqrstuvwxyz';
+                    $labelCheckbox = substr(str_shuffle($permitted_chars), 0, 10);
+
+                    echo '<tr class="table-tr-flows">';
+                    echo '<td class="table-td-flows-name"><div class="workflowCheck"><input type="checkbox" id="'.$labelCheckbox.'" name="workflowSelection[]" value="'.$workflowEntry['name'].'"><label for="'.$labelCheckbox.'"><span></span>'.$workflowEntry['name'].'</label></div></td>';
+                    echo '<td class="table-td-flows-workflow"><p class="mightOverflow"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['workflow'].'</p></td>';
+                    echo '<td class="table-td-flows-interval"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['interval'].'</td>';
+                    echo '<td class="table-td-flows-custodian"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['custodian'].'</td>';
+
+                    if ($workflowEntry['triggers'] != 0)
+                    {
+                        echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span><a href="../mods/viewWorkflow?triggered='.base64_encode($workflowEntry['name']).'" data-toggle="modal" data-dismiss="modal" class="viewworkflow-button" data-target="#viewWorkflow" href="#" id="elm-view-workflow">'.$workflowEntry['triggers'].'</a></td>';
+                    }
+                    else
+                    {
+                        echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['triggers'].'</td>';
+                    }
+                    
+                    echo '</tr>';
+                }
+
+                ?>
+
+            </tbody>
+        </table>
+        <br>
+
+        <div class="modal-footer window-footer-config">
+            <br>
+                
+                <?php    
+                
+                if ($session->username != "admin") 
+                {
+                    echo '<input type="submit" class="btn btn-danger setup disabled" value="Delete workflow" name="delete" style="outline: 0 !important;">';
+                    echo '<input type="submit" class="btn btn-success setup disabled" value="Add workflow" name="add" style="outline: 0 !important;">';
+                }
+                else 
+                {
+                    echo '<input type="submit" class="btn btn-danger setup" value="Delete workflow" name="delete" style="outline: 0 !important;">';
+                    echo '<input type="submit" class="btn btn-success setup" value="Add workflow" name="add" style="outline: 0 !important;">';
+                }
+
+                ?>
+            
+        </div>
+
     </form>
-
-    <p class="title-config">List of current defined & working workflows</p><br>
-
-    <table class="table-flows">
-        <thead class="table-thead-flows">                       
-            <th class="table-th-flows-name" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Workflow name</th>
-            <th class="table-th-flows-workflow" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Fraud Triangle Flow</th>
-            <th class="table-th-flows-interval" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Interval</th>
-            <th class="table-th-flows-custodian" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Custodian</th>
-        </thead>
-        <tbody class="table-tbody-flows ruleset-scroll">
-
-            <?php
-
-            $workflowQuery = mysqli_query($connection, "SELECT * FROM t_workflows"); 
-
-            while($workflowEntry = mysqli_fetch_assoc($workflowQuery))
-            {
-                $permitted_chars = 'abcdefghijklmnopqrstuvwxyz';
-                $labelCheckbox = substr(str_shuffle($permitted_chars), 0, 10);
-
-                echo '<tr class="table-tr-flows">';
-                echo '<td class="table-td-flows-name"><div class="workflowCheck"><input type="checkbox" id="'.$labelCheckbox.'" name="workflowSelection[]"><label for="'.$labelCheckbox.'"><span></span>'.$workflowEntry['name'].'</label></div></td>';
-                echo '<td class="table-td-flows-workflow"><p class="mightOverflow"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['workflow'].'</p></td>';
-                echo '<td class="table-td-flows-interval"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['interval'].'</td>';
-                echo '<td class="table-td-flows-custodian"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['custodian'].'</td>';
-                echo '</tr>';
-            }
-
-            ?>
-
-        </tbody>
-    </table>
-    <br>
-
-    <div class="modal-footer window-footer-config">
-        <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Triggered workflows</button>
-            
-            <?php    
-            
-            if ($session->username != "admin") 
-            {
-                echo '<input type="submit" class="btn btn-danger setup disabled" value="Delete workflow" style="outline: 0 !important;">';
-                echo '<input type="submit" class="btn btn-success setup disabled" value="Add workflow" style="outline: 0 !important;">';
-            }
-            else 
-            {
-                echo '<input type="submit" class="btn btn-danger setup" value="Delete workflow" style="outline: 0 !important;">';
-                echo '<input type="submit" class="btn btn-success setup" value="Add workflow" style="outline: 0 !important;">';
-            }
-
-            ?>
-        
-    </div>
 
 </div>
 
@@ -702,18 +757,33 @@ include "../lbs/openDBconn.php";
 
 $(document).ready(function()
 {
+    var x;
+
 	$(".addCF").click(function()
     {
-        $("#customFields").append('<tr valign="top"><th scope="row"><label for="customFieldName"></label></th><td><div class="flow-table"><div class="flow-cell"><select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="rulesetFlow"><?php $configFile = parse_ini_file("../config.ini"); $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true); foreach ($jsonFT['dictionary'] as $ruleset => $value) { if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>'; else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>'; } ?> </select></div><div class="flow-cell"><select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudverticeFlow"><option selected="selected">ALL VERTICES</option><option>PRESSURE</option><option>OPPORTUNITY</option><option>RATIONALIZATION</option></select></div><div class="flow-cell"><input type="text" class="code input-value-text-endpoint" style="margin-right: 3px;" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" /><input type="text" class="code input-value-text-application" style="margin-right: 3px;" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" /><input type="text" class="code input-value-text-phrase" style="margin-right: 7px;" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" /></div><div class="flow-cell"><select class="select-option-styled-operator" name="fraudverticeFlow[]" id="fraudverticeFlow"><option>AND</option><option>OR</option><option selected="selected">END</option></select></div><div class="flow-cell"><a href="javascript:void(0);" class="remCF">&nbsp;&nbsp;<i class="fa fa-minus fa-lg" aria-hidden="true"></i></a></div></div></td></tr>');
+        x = document.getElementById("customFields").rows.length;
+    
+        if(x > 5) return;
+
+        $("#customFields").append('<tr valign="top"><th scope="row"><label for="customFieldName"></label></th><td><div class="flow-table"><div class="flow-cell"><select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="rulesetFlow"><?php $configFile = parse_ini_file("../config.ini"); $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true); foreach ($jsonFT['dictionary'] as $ruleset => $value) { if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>'; else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>'; } ?> </select></div><div class="flow-cell"><select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudverticeFlow"><option selected="selected">ALL VERTICES</option><option>PRESSURE</option><option>OPPORTUNITY</option><option>RATIONALIZATION</option></select></div><div class="flow-cell"><input type="text" class="code input-value-text-endpoint" style="margin-right: 3px;" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" /><input type="text" class="code input-value-text-application" style="margin-right: 3px;" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" /><input type="text" class="code input-value-text-phrase" style="margin-right: 7px;" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" /></div><div class="flow-cell"><select class="select-option-styled-operator" name="fraudOperator[]" id="fraudOperator-flow"><option>AND</option><option selected="selected">END</option></select></div><div class="flow-cell"><a href="javascript:void(0);" onclick="deleteRow(this)">&nbsp;&nbsp;<i class="fa fa-minus fa-lg" aria-hidden="true"></i></a></div></div></td></tr>');
         $(document).ready(function() {
             $('select').niceSelect();
         });
     });
-    $("#customFields").on('click','.remCF',function()
-    {
-        $(this).parent().parent().remove();
-    });
 });
+
+function deleteRow(el) 
+{
+    while (el.parentNode && el.tagName.toLowerCase() != 'tr') 
+    {
+        el = el.parentNode;
+    }
+
+    if (el.parentNode && el.parentNode.rows.length > 1) 
+    {
+        el.parentNode.removeChild(el);
+    }
+}
 
 </script>
 
@@ -747,4 +817,16 @@ $.fn.tooltipOnOverflow = function(options) {
 
 $('.mightOverflow').tooltipOnOverflow();
 
+</script>
+
+<!-- Modal for Workflow View -->
+
+<script>
+    $(document).on('hidden.bs.modal', function (e) {
+    $(e.target).removeData('bs.modal');
+    });
+
+    $('#viewWorkflow').on('show.bs.modal', function(e){
+        $(this).find('.viewworkflow-button').attr('href', $(e.relatedTarget).data('href'));
+    });
 </script>

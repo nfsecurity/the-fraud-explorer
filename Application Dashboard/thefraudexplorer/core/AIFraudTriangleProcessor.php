@@ -297,6 +297,10 @@ else
     populateTriangleByAgent($ESindex, $configFile['es_alerter_index']);
 }
 
+/* Start workflow engine */
+
+startWorkflows($ESAlerterIndex);
+
 /* Artificial Intelligence deductions */
 
 startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile);
