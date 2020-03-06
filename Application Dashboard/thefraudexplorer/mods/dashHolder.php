@@ -241,7 +241,7 @@ else $totalSystemWords= "0";
                     {
                         do
                         {
-                            $endpointName = $endpointsFraud['agent']."@".between('@', '.', "@".$endpointsFraud['domain']);
+                            $endpointName = $endpointsFraud['agent']."@".$endpointsFraud['domain'];
                             $endpointEnc = base64_encode(base64_encode($endpointsFraud['agent']));
                             $totalWordHits = $endpointsFraud['totalwords'];
                             $countPressure = $endpointsFraud['pressure'];
@@ -261,7 +261,7 @@ else $totalSystemWords= "0";
                             }
                             else 
                             {
-                                $endpointName = $endpointsFraud['name']."@".between('@', '.', "@".$endpointsFraud['domain']);
+                                $endpointName = $endpointsFraud['name']."@".$endpointsFraud['domain'];
                                 endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
                             }
 
@@ -449,7 +449,7 @@ else $totalSystemWords= "0";
                         $regExpression = htmlentities($result['_source']['phraseMatch']);
                         $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));                    
                         $userDomain = mysqli_fetch_assoc($queryUserDomain);
-                        $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+                        $endpointName = $userDomain['agent']."@".$userDomain['domain'];
                         $endpointEnc = base64_encode(base64_encode($userDomain['agent']));
                         $totalWordHits = $userDomain['totalwords'];
                         $countPressure = $userDomain['pressure'];
@@ -466,7 +466,7 @@ else $totalSystemWords= "0";
                         }
                         else 
                         {
-                            $endpointName = $userDomain['name']."@".between('@', '.', "@".$userDomain['domain']);
+                            $endpointName = $userDomain['name']."@".$userDomain['domain'];
                             endpointInsights("dashBoard", "na", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
                         }
 

@@ -199,7 +199,7 @@ if ($endpointDECSQL != "all")
         $agentId = $result['_source']['agentId'];
         $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
         $userDomain = mysqli_fetch_assoc($queryUserDomain);
-        $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+        $endpointName = $userDomain['agent']."@".$userDomain['domain'];
     
         echo '<td class="detailstd">';
         echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;"></span></a>&ensp;';
@@ -346,7 +346,7 @@ else
         
         echo '<td class="endpointtd-all">';
          
-        $endpointName = $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']);
+        $endpointName = $userDomain['agent']."@".$userDomain['domain'];
         $endpointDec = base64_encode(base64_encode($userDomain['agent']));
         $totalWordHits = $userDomain['totalwords'];
         $countPressure = $userDomain['pressure'];
@@ -365,7 +365,7 @@ else
         }
         else
         {
-            $endpointName = $userDomain['name']."@".between('@', '.', "@".$userDomain['domain']);
+            $endpointName = $userDomain['name']."@".$userDomain['domain'];
             if ($userDomain["gender"] == "male") endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
             else if ($userDomain["gender"] == "female") endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
             else echo endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
@@ -437,7 +437,7 @@ if ($allEventsSwitch != true)
     echo '<div class="pager-inside">';
     echo '<div class="pager-inside-endpoint">';
     
-    $endpointName = $endpointDECSQL."@".between('@', '.', "@".$domain[0]);
+    $endpointName = $endpointDECSQL."@".$domain[0];
     
     echo 'There are '.$wordCounter.' regular expressions matched by <span class="fa fa-user">&nbsp;&nbsp;</span>'.$endpointName.' stored in database';
     echo '</div>';
