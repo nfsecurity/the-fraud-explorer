@@ -883,7 +883,7 @@ function startWorkflows($ESAlerterIndex)
 
     /* Start */
 
-    $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
+    $eventMatches = getAllFraudTriangleAlerts($ESAlerterIndex);
     $eventData = json_decode(json_encode($eventMatches), true);
 
     foreach ($eventData['hits']['hits'] as $result)
@@ -1012,6 +1012,16 @@ function startWorkflows($ESAlerterIndex)
                         $queryTrueWorkflow[$name][] = $query[1];
                         $superFinalQuery[$name] = $query[1];
 
+                        /* Search the workflow interval */
+
+                        $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+
+                        while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                        {
+                            $interval = $row["interval"];
+                            $custodian = $row["custodian"];
+                        }      
+
                         /* Finally execute the query and populate triggered table */
 
                         $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
@@ -1039,6 +1049,12 @@ function startWorkflows($ESAlerterIndex)
                             /* Trigger for table t_workflows */
 
                             mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
                         }
                     }
                     else
@@ -1065,11 +1081,15 @@ function startWorkflows($ESAlerterIndex)
 
         if(count($query) == 2)
         {
-            /* Search the workflow interval */
+            /* Search the workflow interval & custodian */
 
-            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            {
+                $interval = $row["interval"];
+                $custodian = $row["custodian"];
+            }
 
             /* Join the final query */
 
@@ -1104,15 +1124,25 @@ function startWorkflows($ESAlerterIndex)
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                /* Send message alert */
+
+                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                include $mailEventWFPath;
+                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 3)
         {
             /* Search the workflow interval */
 
-            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            {
+                $interval = $row["interval"];
+                $custodian = $row["custodian"];
+            }    
 
             /* Join the final query */
 
@@ -1147,15 +1177,25 @@ function startWorkflows($ESAlerterIndex)
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                /* Send message alert */
+
+                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                include $mailEventWFPath;
+                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 4)
         {
             /* Search the workflow interval */
 
-            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            {
+                $interval = $row["interval"];
+                $custodian = $row["custodian"];
+            }      
 
             /* Join the final query */
 
@@ -1190,15 +1230,25 @@ function startWorkflows($ESAlerterIndex)
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                /* Send message alert */
+
+                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                include $mailEventWFPath;
+                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 5)
         {
             /* Search the workflow interval */
 
-            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            {
+                $interval = $row["interval"];
+                $custodian = $row["custodian"];
+            } 
 
             /* Join the final query */
 
@@ -1233,15 +1283,25 @@ function startWorkflows($ESAlerterIndex)
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                /* Send message alert */
+
+                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                include $mailEventWFPath;
+                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 6)
         {
             /* Search the workflow interval */
 
-            $intervalQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            while ($row = mysqli_fetch_array($intervalQuery)) $interval = $row["interval"];      
+            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            {
+                $interval = $row["interval"];
+                $custodian = $row["custodian"];
+            }  
 
             /* Join the final query */
 
@@ -1276,6 +1336,12 @@ function startWorkflows($ESAlerterIndex)
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+
+                /* Send message alert */
+
+                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                include $mailEventWFPath;
+                mail($to, $subject, $message, $headers);
             }
         }
     }
@@ -1291,241 +1357,33 @@ function startWorkflows($ESAlerterIndex)
 
 /* Search all Fraud Triangle Matches */
 
-function getAllFraudTriangleMatches($index, $domain, $samplerStatus, $context)
+function getAllFraudTriangleAlerts($index)
 {
-    if ($context == "allalerts") $querySize = 10000;
-    else $querySize = 50;
+    $querySize = 10000;
 
-    if ($context != "allalerts")
-    {
-        if ($domain == "all")
-        {
-            if ($samplerStatus == "enabled")
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'must' => [
-                                    [ 'match_all' => [ 'boost' => 1 ] ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '1'] ]
-                                ]
-                            ]
-                        ]
+    $matchesParams = [
+        'index' => $index,
+        'type' => 'AlertEvent',
+        'body' => [
+            'size' => $querySize,
+            'sort' => [
+                [ '@timestamp' => [ 'order' => 'desc' ] ]
+            ],
+            '_source' => [
+                'exclude' => [ 'stringHistory', 'message' ]
+            ],
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'match_all' => [ 'boost' => 1 ] ]
+                    ],
+                    'must_not' => [
+                        [ 'match' => [ 'falsePositive' => '2'] ]
                     ]
-                ];
-            }
-            else
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'must' => [
-                                    [ 'match_all' => [ 'boost' => 1 ] ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '1'] ],
-                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]; 
-            }
-        }
-        else
-        {
-            if ($samplerStatus == "enabled")
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'should' => [
-                                    [ 'match' => [ 'userDomain' => $domain ] ],
-                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '1'] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];
-            }
-            else
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'should' => [
-                                    'match' => [ 'userDomain' => $domain ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '1'] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];   
-            }
-        }
-    }
-    else
-    {
-        if ($domain == "all")
-        {
-            if ($samplerStatus == "enabled")
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'must' => [
-                                    [ 'match_all' => [ 'boost' => 1 ] ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '2'] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];
-            }
-            else
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'must' => [
-                                    [ 'match_all' => [ 'boost' => 1 ] ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '2'] ],
-                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]; 
-            }
-        }
-        else
-        {
-            if ($samplerStatus == "enabled")
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'should' => [
-                                    [ 'match' => [ 'userDomain' => $domain ] ],
-                                    [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '2'] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];
-            }
-            else
-            {
-                $matchesParams = [
-                    'index' => $index,
-                    'type' => 'AlertEvent',
-                    'body' => [
-                        'size' => $querySize,
-                        'sort' => [
-                            [ '@timestamp' => [ 'order' => 'desc' ] ]
-                        ],
-                        '_source' => [
-                            'exclude' => [ 'stringHistory', 'message' ]
-                        ],
-                        'query' => [
-                            'bool' => [
-                                'should' => [
-                                    'match' => [ 'userDomain' => $domain ]
-                                ],
-                                'must_not' => [
-                                    [ 'match' => [ 'falsePositive' => '2'] ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];   
-            }
-        }
-    }
+                ]
+            ]
+        ]
+    ];
 
     $client = Elasticsearch\ClientBuilder::create()->build();
     $getAlerts = $client->search($matchesParams);

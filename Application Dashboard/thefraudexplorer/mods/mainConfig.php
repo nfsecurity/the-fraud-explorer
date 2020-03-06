@@ -251,10 +251,10 @@ include "../lbs/cronManager.php";
                         
                     </option>
                     <?php if ($minutes != "false") echo '<option value="disabled">disabled</option>'; ?>
-                    <?php if ($minutes != "10") echo '<option value="10">10 minutes</option>'; ?>
                     <?php if ($minutes != "30") echo '<option value="30">30 minutes</option>'; ?>
                     <?php if ($minutes != "60") echo '<option value="60">60 minutes</option>'; ?>
                     <?php if ($minutes != "90") echo '<option value="90">90 minutes</option>'; ?>
+                    <?php if ($minutes != "120") echo '<option value="120">120 minutes</option>'; ?>
                 </select>               
             </div>
         </div>
