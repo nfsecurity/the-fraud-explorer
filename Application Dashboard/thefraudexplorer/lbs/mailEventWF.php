@@ -21,7 +21,7 @@ $to = $custodian;
 $subject = "[The Fraud Explorer] Workflow Alert: " . $name;
 
 $message = '<html>' .
-    '<body>Greetings from The Fraud Explorer,<br><br>The workflow engine has triggered and alert related to the flow: '.$name.'<br><br>' .
+    '<body>Greetings from The Fraud Explorer,<br><br>The workflow engine has triggered and alert related to the flow: '.$name.'<br>' .
     '</body><br>You can review this alert contacting the person in charge, you can\'t view it directly due to confidential and posible sensitive data, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
 
 $headers = "From: " . $configFile['mail_address'] . "\r\n" .
