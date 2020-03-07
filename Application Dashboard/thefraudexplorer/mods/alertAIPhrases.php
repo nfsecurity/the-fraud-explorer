@@ -60,18 +60,38 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
         overflow-y: scroll;
     }
 
+    .matchedStyle
+    {
+        color: black;
+        font-family: 'FFont-Bold', sans-serif;
+        font-style: italic;
+    }
+
 </style>
     
 <?php
     
     $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
     $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
+    $phraseTyped = decRijndael($alertPhrase['hits']['hits'][0]['_source']['wordTyped']);
     
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
 
     echo '<br>';
     echo '<div class="phrase-viewer" contenteditable=false>';
-    echo $sanitizedPhrases;
+    echo '<p>'.$sanitizedPhrases.'</p>';
     echo '</div>'
         
 ?>
+
+<script>
+
+var matchedPhrase="<?php echo $phraseTyped; ?>";
+
+$('p:contains('+matchedPhrase+')', document.body).each(function(){
+      $(this).html($(this).html().replace(
+            new RegExp(matchedPhrase, 'g'), '<span class="matchedStyle">'+matchedPhrase+'</span>'
+      ));
+});
+
+</script>

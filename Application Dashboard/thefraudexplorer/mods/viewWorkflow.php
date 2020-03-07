@@ -227,6 +227,7 @@ $workflowName = filter(base64_decode($_GET['triggered']));
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
         margin: 0px 0px 15px 0px;
+        text-align: center;
     }
     
     .font-icon-gray 
@@ -311,7 +312,7 @@ $workflowName = filter(base64_decode($_GET['triggered']));
         </tbody>
     </table>
 
-    <div id="alertPanel"></div>
+    <div id="alertPanelWF"></div>
 
     <?php
     
@@ -333,7 +334,7 @@ function showAlert(clicked_id, alertid)
 {
     if (clicked_id == "viewAlert")
     {
-        $("#alertPanel").load("mods/alertAIPhrases.php?alertID=" + alertid);
+        $("#alertPanelWF").load("mods/alertAIPhrases.php?alertID=" + alertid);
     }
  }
 
