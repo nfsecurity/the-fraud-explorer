@@ -1038,23 +1038,23 @@ function startWorkflows($ESAlerterIndex)
                                 $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                                 $existCount = mysqli_num_rows($existQuery);
 
-                                /* If not exist, insert trigger */
+                                /* If not exist, insert trigger & send alert */
 
                                 if ($existCount == 0)
                                 {
                                     mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+
+                                    /* Send message alert */
+
+                                    $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                    include $mailEventWFPath;
+                                    mail($to, $subject, $message, $headers);
                                 }
                             }
 
                             /* Trigger for table t_workflows */
 
                             mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                            /* Send message alert */
-
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
                         }
                     }
                     else
@@ -1113,23 +1113,23 @@ function startWorkflows($ESAlerterIndex)
                     $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                     $existCount = mysqli_num_rows($existQuery);
 
-                    /* If not exist, insert trigger */
+                    /* If not exist, insert trigger & send alert */
 
                     if ($existCount == 0)
                     {
                         mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+
+                        /* Send message alert */
+
+                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                        include $mailEventWFPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                /* Send message alert */
-
-                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                include $mailEventWFPath;
-                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 3)
@@ -1166,23 +1166,23 @@ function startWorkflows($ESAlerterIndex)
                     $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                     $existCount = mysqli_num_rows($existQuery);
 
-                    /* If not exist, insert trigger */
+                    /* If not exist, insert trigger & send alert */
 
                     if ($existCount == 0)
                     {
                         mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+
+                        /* Send message alert */
+
+                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                        include $mailEventWFPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                /* Send message alert */
-
-                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                include $mailEventWFPath;
-                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 4)
@@ -1219,23 +1219,23 @@ function startWorkflows($ESAlerterIndex)
                     $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                     $existCount = mysqli_num_rows($existQuery);
 
-                    /* If not exist, insert trigger */
+                    /* If not exist, insert trigger & send alert */
 
                     if ($existCount == 0)
                     {
                         mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+
+                        /* Send message alert */
+
+                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                        include $mailEventWFPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                /* Send message alert */
-
-                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                include $mailEventWFPath;
-                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 5)
@@ -1272,23 +1272,23 @@ function startWorkflows($ESAlerterIndex)
                     $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                     $existCount = mysqli_num_rows($existQuery);
 
-                    /* If not exist, insert trigger */
+                    /* If not exist, insert trigger & send alert */
 
                     if ($existCount == 0)
                     {
                         mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+
+                        /* Send message alert */
+
+                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                        include $mailEventWFPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                /* Send message alert */
-
-                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                include $mailEventWFPath;
-                mail($to, $subject, $message, $headers);
             }
         }
         else if(count($query) == 6)
@@ -1325,23 +1325,23 @@ function startWorkflows($ESAlerterIndex)
                     $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
                     $existCount = mysqli_num_rows($existQuery);
 
-                    /* If not exist, insert trigger */
+                    /* If not exist, insert trigger & send alert */
 
                     if ($existCount == 0)
                     {
                         mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+
+                        /* Send message alert */
+
+                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                        include $mailEventWFPath;
+                        mail($to, $subject, $message, $headers);
                     }
                 }
 
                 /* Trigger for table t_workflows */
 
                 mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-
-                /* Send message alert */
-
-                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                include $mailEventWFPath;
-                mail($to, $subject, $message, $headers);
             }
         }
     }
