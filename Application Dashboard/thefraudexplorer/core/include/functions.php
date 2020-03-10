@@ -1075,273 +1075,276 @@ function startWorkflows($ESAlerterIndex)
 
     /* Build the final queries for workflow matching with interval (compound workflows) */
 
-    foreach ($queryTrueWorkflow as $name => $query)
+    if (isset($queryTrueWorkflow))
     {
-        /* How many queries has the workflow */
-
-        if(count($query) == 2)
+        foreach ($queryTrueWorkflow as $name => $query)
         {
-            /* Search the workflow interval & custodian */
+            /* How many queries has the workflow */
 
-            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
-
-            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            if(count($query) == 2)
             {
-                $interval = $row["interval"];
-                $custodian = $row["custodian"];
-            }
+                /* Search the workflow interval & custodian */
 
-            /* Join the final query */
+                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifference FROM (";
-            $right = " WHERE timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.";";
-            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B" . $right;
-
-            /* Finally execute the query and populate triggered table */
-
-            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
-            $rowCount = mysqli_num_rows($resultQuery);
-
-            if ($rowCount > 0)
-            {
-                while ($row = mysqli_fetch_array($resultQuery))
+                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
                 {
-                    $idS = $row["alertIdA"] . " " . $row["alertIdB"];
-
-                    /* Verify if the trigger already exist */
-
-                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
-                    $existCount = mysqli_num_rows($existQuery);
-
-                    /* If not exist, insert trigger & send alert */
-
-                    if ($existCount == 0)
-                    {
-                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
-
-                        /* Send message alert */
-
-                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                        include $mailEventWFPath;
-                        mail($to, $subject, $message, $headers);
-                    }
+                    $interval = $row["interval"];
+                    $custodian = $row["custodian"];
                 }
 
-                /* Trigger for table t_workflows */
+                /* Join the final query */
 
-                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
-            }
-        }
-        else if(count($query) == 3)
-        {
-            /* Search the workflow interval */
+                $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifference FROM (";
+                $right = " WHERE timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.";";
+                $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B" . $right;
 
-            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                /* Finally execute the query and populate triggered table */
 
-            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
-            {
-                $interval = $row["interval"];
-                $custodian = $row["custodian"];
-            }    
+                $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                $rowCount = mysqli_num_rows($resultQuery);
 
-            /* Join the final query */
-
-            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC FROM (";
-            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.");";
-            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C" . $right;
-
-            /* Finally execute the query and populate triggered table */
-
-            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
-            $rowCount = mysqli_num_rows($resultQuery);
-
-            if ($rowCount > 0)
-            {
-                while ($row = mysqli_fetch_array($resultQuery))
+                if ($rowCount > 0)
                 {
-                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"];
-
-                    /* Verify if the trigger already exist */
-
-                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
-                    $existCount = mysqli_num_rows($existQuery);
-
-                    /* If not exist, insert trigger & send alert */
-
-                    if ($existCount == 0)
+                    while ($row = mysqli_fetch_array($resultQuery))
                     {
-                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+                        $idS = $row["alertIdA"] . " " . $row["alertIdB"];
 
-                        /* Send message alert */
+                        /* Verify if the trigger already exist */
 
-                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                        include $mailEventWFPath;
-                        mail($to, $subject, $message, $headers);
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existCount = mysqli_num_rows($existQuery);
+
+                        /* If not exist, insert trigger & send alert */
+
+                        if ($existCount == 0)
+                        {
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
+                        }
                     }
+
+                    /* Trigger for table t_workflows */
+
+                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
-
-                /* Trigger for table t_workflows */
-
-                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
             }
-        }
-        else if(count($query) == 4)
-        {
-            /* Search the workflow interval */
-
-            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
-
-            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            else if(count($query) == 3)
             {
-                $interval = $row["interval"];
-                $custodian = $row["custodian"];
-            }      
+                /* Search the workflow interval */
 
-            /* Join the final query */
+                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD FROM (";
-            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.");";
-            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D" . $right;
-
-            /* Finally execute the query and populate triggered table */
-
-            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
-            $rowCount = mysqli_num_rows($resultQuery);
-
-            if ($rowCount > 0)
-            {
-                while ($row = mysqli_fetch_array($resultQuery))
+                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
                 {
-                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"];
+                    $interval = $row["interval"];
+                    $custodian = $row["custodian"];
+                }    
 
-                    /* Verify if the trigger already exist */
+                /* Join the final query */
 
-                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
-                    $existCount = mysqli_num_rows($existQuery);
+                $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC FROM (";
+                $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+                $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C" . $right;
 
-                    /* If not exist, insert trigger & send alert */
+                /* Finally execute the query and populate triggered table */
 
-                    if ($existCount == 0)
+                $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                $rowCount = mysqli_num_rows($resultQuery);
+
+                if ($rowCount > 0)
+                {
+                    while ($row = mysqli_fetch_array($resultQuery))
                     {
-                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+                        $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"];
 
-                        /* Send message alert */
+                        /* Verify if the trigger already exist */
 
-                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                        include $mailEventWFPath;
-                        mail($to, $subject, $message, $headers);
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existCount = mysqli_num_rows($existQuery);
+
+                        /* If not exist, insert trigger & send alert */
+
+                        if ($existCount == 0)
+                        {
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
+                        }
                     }
+
+                    /* Trigger for table t_workflows */
+
+                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
-
-                /* Trigger for table t_workflows */
-
-                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
             }
-        }
-        else if(count($query) == 5)
-        {
-            /* Search the workflow interval */
-
-            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
-
-            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            else if(count($query) == 4)
             {
-                $interval = $row["interval"];
-                $custodian = $row["custodian"];
-            } 
+                /* Search the workflow interval */
 
-            /* Join the final query */
+                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE FROM (";
-            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.");";
-            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E" . $right;
-
-            /* Finally execute the query and populate triggered table */
-
-            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
-            $rowCount = mysqli_num_rows($resultQuery);
-
-            if ($rowCount > 0)
-            {
-                while ($row = mysqli_fetch_array($resultQuery))
+                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
                 {
-                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"];
+                    $interval = $row["interval"];
+                    $custodian = $row["custodian"];
+                }      
 
-                    /* Verify if the trigger already exist */
+                /* Join the final query */
 
-                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
-                    $existCount = mysqli_num_rows($existQuery);
+                $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD FROM (";
+                $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+                $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D" . $right;
 
-                    /* If not exist, insert trigger & send alert */
+                /* Finally execute the query and populate triggered table */
 
-                    if ($existCount == 0)
+                $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                $rowCount = mysqli_num_rows($resultQuery);
+
+                if ($rowCount > 0)
+                {
+                    while ($row = mysqli_fetch_array($resultQuery))
                     {
-                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+                        $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"];
 
-                        /* Send message alert */
+                        /* Verify if the trigger already exist */
 
-                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                        include $mailEventWFPath;
-                        mail($to, $subject, $message, $headers);
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existCount = mysqli_num_rows($existQuery);
+
+                        /* If not exist, insert trigger & send alert */
+
+                        if ($existCount == 0)
+                        {
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
+                        }
                     }
+
+                    /* Trigger for table t_workflows */
+
+                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
-
-                /* Trigger for table t_workflows */
-
-                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
             }
-        }
-        else if(count($query) == 6)
-        {
-            /* Search the workflow interval */
-
-            $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
-
-            while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+            else if(count($query) == 5)
             {
-                $interval = $row["interval"];
-                $custodian = $row["custodian"];
-            }  
+                /* Search the workflow interval */
 
-            /* Join the final query */
+                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-            $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, F.alertId as alertIdF, F.indexid as indexIdF, F.department as departmentF, F.agentId as agentIdF, F.alertType as alertTypeF, F.domain as domainF, F.phrase as phraseF, F.eventTime as eventTimeF timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE, timestampdiff(day, A.eventTime, F.eventTime) AS timeDifferenceF FROM (";
-            $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, F.eventTime) BETWEEN -".$interval." AND ".$interval.");";
-            $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E, (" . $queryTrueWorkflow[$name][5] . ") AS F" . $right;
-
-            /* Finally execute the query and populate triggered table */
-
-            $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
-            $rowCount = mysqli_num_rows($resultQuery);
-
-            if ($rowCount > 0)
-            {
-                while ($row = mysqli_fetch_array($resultQuery))
+                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
                 {
-                    $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"];
+                    $interval = $row["interval"];
+                    $custodian = $row["custodian"];
+                } 
 
-                    /* Verify if the trigger already exist */
+                /* Join the final query */
 
-                    $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
-                    $existCount = mysqli_num_rows($existQuery);
+                $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE FROM (";
+                $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+                $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E" . $right;
 
-                    /* If not exist, insert trigger & send alert */
+                /* Finally execute the query and populate triggered table */
 
-                    if ($existCount == 0)
+                $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                $rowCount = mysqli_num_rows($resultQuery);
+
+                if ($rowCount > 0)
+                {
+                    while ($row = mysqli_fetch_array($resultQuery))
                     {
-                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+                        $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"];
 
-                        /* Send message alert */
+                        /* Verify if the trigger already exist */
 
-                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                        include $mailEventWFPath;
-                        mail($to, $subject, $message, $headers);
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existCount = mysqli_num_rows($existQuery);
+
+                        /* If not exist, insert trigger & send alert */
+
+                        if ($existCount == 0)
+                        {
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
+                        }
                     }
+
+                    /* Trigger for table t_workflows */
+
+                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
+            }
+            else if(count($query) == 6)
+            {
+                /* Search the workflow interval */
 
-                /* Trigger for table t_workflows */
+                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                {
+                    $interval = $row["interval"];
+                    $custodian = $row["custodian"];
+                }  
+
+                /* Join the final query */
+
+                $left = "SELECT A.alertId as alertIdA, A.indexid as indexIdA, A.department as departmentA, A.agentId as agentIdA, A.alertType as alertTypeA, A.domain as domainA, A.phrase as phraseA, A.eventTime as eventTimeA, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, C.alertId as alertIdC, C.indexid as indexIdC, C.department as departmentC, C.agentId as agentIdC, C.alertType as alertTypeC, C.domain as domainC, C.phrase as phraseC, C.eventTime as eventTimeC, B.alertId as alertIdB, B.indexid as indexIdB, B.department as departmentB, B.agentId as agentIdB, B.alertType as alertTypeB, B.domain as domainB, B.phrase as phraseB, B.eventTime as eventTimeB, D.alertId as alertIdD, D.indexid as indexIdD, D.department as departmentD, D.agentId as agentIdD, D.alertType as alertTypeD, D.domain as domainD, D.phrase as phraseD, D.eventTime as eventTimeD, E.alertId as alertIdE, E.indexid as indexIdE, E.department as departmentE, E.agentId as agentIdE, E.alertType as alertTypeE, E.domain as domainE, E.phrase as phraseE, E.eventTime as eventTimeE, F.alertId as alertIdF, F.indexid as indexIdF, F.department as departmentF, F.agentId as agentIdF, F.alertType as alertTypeF, F.domain as domainF, F.phrase as phraseF, F.eventTime as eventTimeF timestampdiff(day, A.eventTime, B.eventTime) AS timeDifferenceB, timestampdiff(day, A.eventTime, C.eventTime) AS timeDifferenceC, timestampdiff(day, A.eventTime, D.eventTime) AS timeDifferenceD, timestampdiff(day, A.eventTime, E.eventTime) AS timeDifferenceE, timestampdiff(day, A.eventTime, F.eventTime) AS timeDifferenceF FROM (";
+                $right = " WHERE (timestampdiff(day, A.eventTime, B.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, C.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, D.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, E.eventTime) BETWEEN -".$interval." AND ".$interval.") AND (timestampdiff(day, A.eventTime, F.eventTime) BETWEEN -".$interval." AND ".$interval.");";
+                $superFinalQuery[$name] = $left . $queryTrueWorkflow[$name][0] . ") AS A, (" . $queryTrueWorkflow[$name][1] . ") AS B, (" . $queryTrueWorkflow[$name][2] . ") AS C, (" . $queryTrueWorkflow[$name][3] . ") AS D, (" . $queryTrueWorkflow[$name][4] . ") AS E, (" . $queryTrueWorkflow[$name][5] . ") AS F" . $right;
+
+                /* Finally execute the query and populate triggered table */
+
+                $resultQuery = mysqli_query($connection, $superFinalQuery[$name]);
+                $rowCount = mysqli_num_rows($resultQuery);
+
+                if ($rowCount > 0)
+                {
+                    while ($row = mysqli_fetch_array($resultQuery))
+                    {
+                        $idS = $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"];
+
+                        /* Verify if the trigger already exist */
+
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existCount = mysqli_num_rows($existQuery);
+
+                        /* If not exist, insert trigger & send alert */
+
+                        if ($existCount == 0)
+                        {
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+
+                            /* Send message alert */
+
+                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                            include $mailEventWFPath;
+                            mail($to, $subject, $message, $headers);
+                        }
+                    }
+
+                    /* Trigger for table t_workflows */
+
+                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+                }
             }
         }
     }
