@@ -389,7 +389,36 @@ include "../lbs/openDBconn.php";
         <br>
 
         <div class="container-status-library">
-            <p class="warning"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !</p>
+
+            <?php
+
+                /* Online phrase library upgrade process */
+
+                $rulesetLanguage = $configFile['fta_lang_selection'];
+                $localLibrary = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
+                $phraseName = explode("/", $configFile[$rulesetLanguage]);
+                $phraseNameSelection = $phraseName[7];
+                $remotePhraseLibraryURL = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelection;
+                $onlineLibrary = json_decode(file_get_contents($remotePhraseLibraryURL), true);
+                preg_match('/version: (.*),/', $localLibrary["_comment"], $localPhraseLibraryVersion);
+                preg_match('/version: (.*),/', $onlineLibrary["_comment"], $remotePhraseLibraryVersion);
+
+                echo '<p class="warning"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;';
+
+                if (isset($localPhraseLibraryVersion) && isset($remotePhraseLibraryVersion))
+                {
+                    if ($localPhraseLibraryVersion[1] != $remotePhraseLibraryVersion[1])
+                    {
+                        echo 'There is a new phrase library version at the official site (v'.$remotePhraseLibraryVersion[1].'). Your current local version is (v'.$localPhraseLibraryVersion[1].'). Consider upgrading. ';
+                    }
+                    else echo 'Your phrase library database is current to date, you don\'t need to upgrade your library now but pay future attention !';
+                }
+                else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
+
+                echo '</p>';
+
+            ?>
+
         </div>
 
         <div class="modal-footer window-footer-config">
@@ -397,8 +426,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            echo '<button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>';
-            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download rules</a>';
+            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Update library online</a>';
+            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">View local library</a>';
 
             ?>
         
@@ -413,6 +442,22 @@ include "../lbs/openDBconn.php";
     $('#download-rules').click(function(){
     $.ajax({
         url: '../lbs/downloadRules.php',
+        type: 'post',
+        success: function(response){
+            window.location = response;
+        }
+    });
+    });
+    });
+</script>
+
+<!-- Upgrade phrase library -->
+
+<script>
+    $(document).ready(function(){
+    $('#upgrade-library').click(function(){
+    $.ajax({
+        url: '../lbs/upgradeLibrary.php',
         type: 'post',
         success: function(response){
             window.location = response;
