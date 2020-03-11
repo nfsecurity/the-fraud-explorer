@@ -51,20 +51,8 @@ if (isset($_POST['smtpserver']) && isset($_POST['smtpuserpass']) && isset($_POST
      $to = $mailAddress;
      $subject = "[The Fraud Explorer] Test email";
      $message = '<html>' .
-    '<body>Greetings from The Fraud Explorer,<br><br>This is an email test message to verify your address for sending alerts like this:<br><br>' .
-    '<table border="1" style="background-color:#FFFFFF;border-collapse:collapse;border:1px solid #33CC00;color:#000000;width:100%" ' .
-    'cellpadding="8" cellspacing="3"> ' .
-    '<tr>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Date</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Endpoint</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Deduction Reason</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Ruleset</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Probability</b></td>' .
-    '</tr>' .
-    '<tr>' .
-    '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">2020-10-12 14:35:01</td><td style="background-color:#FFFFFF; border:1px solid #4B906F;">employee&#64;mycompanydomain.com</td><td style="background-color:#FFFFFF; border:1px solid #4B906F;">PO</td><td style="background-color:#FFFFFF; border:1px solid #4B906F;">CREDIT</td><td style="background-color:#FFFFFF; border:1px solid #4B906F;">80%</td></tr>' .
-    '</table>' .
-    '</body><br>You can review this alert in the main Dashboard, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
+    '<body>Greetings from The Fraud Explorer,<br><br>This is an email test message to verify the server configuration. It is workig so good!<br>' .
+    '</body><br>You could receive general messages and Artificial Intelligence alerts, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
     $headers = "From: " . $configFile['mail_address'] . "\r\n" .
     "Reply-To: " . $configFile['mail_address'] . "\r\n" .
     'MIME-Version: 1.0' . "\r\n" .
