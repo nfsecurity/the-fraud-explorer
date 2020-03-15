@@ -409,9 +409,9 @@ include "../lbs/openDBconn.php";
                 {
                     if ($localPhraseLibraryVersion[1] != $remotePhraseLibraryVersion[1])
                     {
-                        echo 'There is a new phrase library version at the official site (v'.$remotePhraseLibraryVersion[1].'). Your current local version is (v'.$localPhraseLibraryVersion[1].'). Consider upgrading. ';
+                        echo 'There is a different library version at the official site (v'.$remotePhraseLibraryVersion[1].'). Your current local version is (v'.$localPhraseLibraryVersion[1].'). Consider zynchronizing. ';
                     }
-                    else echo 'Your phrase library database is current to date, you don\'t need to upgrade your library now but pay future attention !';
+                    else echo 'Your phrase library database is up to date, you don\'t need to upgrade your library now but pay future attention !';
                 }
                 else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
 
@@ -426,8 +426,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Update library online</a>';
-            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">View local library</a>';
+            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize with online library</a>';
+            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">View & Download local library</a>';
 
             ?>
         
