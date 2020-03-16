@@ -87,7 +87,6 @@ if (isset($_POST['alertstatus']))
         $params = '{ "query": { "range": { "@timestamp": { "lte": "now-1M" } } } }';
               
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);

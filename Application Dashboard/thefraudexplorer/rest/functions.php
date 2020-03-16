@@ -226,7 +226,6 @@ function endPointsDELETEQuery($username, $endpoint)
         $params = '{ "query": { "wildcard" : { "agentId" : "'.$endpointID.'*" } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlDelete);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -266,7 +265,6 @@ function endPointsDELETEQuery($username, $endpoint)
         $params = '{ "query": { "wildcard" : { "agentId" : "'.$endpointID.'*" } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlDelete);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);

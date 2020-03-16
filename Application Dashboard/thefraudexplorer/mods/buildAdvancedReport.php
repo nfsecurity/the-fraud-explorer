@@ -94,7 +94,6 @@ if ($session->domain == "all")
         $params = '{ "query" : { "bool" : { "should" : { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, "must_not" : { "wildcard" : { "userDomain.raw" : "*" } } } } }';
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -109,7 +108,6 @@ if ($session->domain == "all")
         $params = '{ "query" : { "bool" : { "should" : { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, "must_not" : { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -128,7 +126,6 @@ else
         $params = '{ "query": { "bool": { "should" : [ { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -144,7 +141,6 @@ else
         $params = '{ "query" : { "bool" : { "must" : [{ "term" : { "userDomain" : "'.$session->domain.'" } }, { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }]}} }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);

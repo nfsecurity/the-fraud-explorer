@@ -45,10 +45,10 @@ if(!$session->logged_in)
             &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Opensource Fraud Triangle Analytics
         </div>
         <div class="helpers-container">
-            <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" rel="noopener noreferrer">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank" rel="noopener noreferrer">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://www.thefraudexplorer.com/#contact" target="_blank" rel="noopener noreferrer">Support</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-bank fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Business [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-codepen fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Version v1.4.2-aim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>

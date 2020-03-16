@@ -39,7 +39,6 @@ if (!empty($_POST['toggle-event']))
     $urlEventValue="http://localhost:9200/".$index."/".$type."/".$regid;
     
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $urlEventValue);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -59,7 +58,6 @@ if (!empty($_POST['toggle-event']))
     $params = '{ "doc" : { "falsePositive" : "'.$mark.'" } } }';
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL,$urlEvents);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);

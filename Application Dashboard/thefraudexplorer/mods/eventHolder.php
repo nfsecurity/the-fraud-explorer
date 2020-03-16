@@ -49,7 +49,6 @@ if ($session->domain == "all")
         $urlWords="http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
@@ -63,7 +62,6 @@ if ($session->domain == "all")
         $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -82,7 +80,6 @@ else
         $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -98,7 +95,6 @@ else
         $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL,$urlWords);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
@@ -243,7 +239,6 @@ if ($endpointDECSQL != "all")
     
         $urlEventValue="http://127.0.0.1:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_ENCODING, '');
@@ -400,7 +395,6 @@ else
     
         $urlEventValue="http://127.0.0.1:9200/".$index."/".$type."/".$regid;
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlEventValue);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 

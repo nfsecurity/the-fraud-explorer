@@ -223,7 +223,6 @@ function deleteAlertIndex()
     $urlAlertStatus="http://localhost:9200/tfe-alerter-status";
     
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_URL, $urlAlertData);
@@ -232,7 +231,6 @@ function deleteAlertIndex()
     curl_close($ch);
     
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_URL, $urlAlertStatus);

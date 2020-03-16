@@ -173,7 +173,6 @@ include "../lbs/openDBconn.php";
                 
                 $urlSize="http://localhost:9200/logstash-thefraudexplorer-text-*/_stats";
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -203,7 +202,6 @@ include "../lbs/openDBconn.php";
                 
                 $urlSize="http://localhost:9200/logstash-alerter-*/_stats";
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -269,7 +267,6 @@ include "../lbs/openDBconn.php";
                 
                 $urlSize="http://localhost:9200/tfe-alerter-status/_stats";
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_URL, $urlSize);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
