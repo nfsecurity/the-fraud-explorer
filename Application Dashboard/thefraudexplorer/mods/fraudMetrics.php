@@ -47,7 +47,7 @@ if ($_SESSION['endpointFraudMetrics']['allendpoints'] == "false" || $_SESSION['e
     }
     else if ($_SESSION['endpointFraudMetrics']['ruleset'] != "BASELINE")
     {
-        $rulesetSelected = $_SESSION['endpointFraudMetrics']['ruleset'];
+        $rulesetSelected = filter($_SESSION['endpointFraudMetrics']['ruleset']);
         $rulesetFilter = true;
     }
 }

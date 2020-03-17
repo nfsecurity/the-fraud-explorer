@@ -34,6 +34,8 @@ function getUserContext($username)
 {
     global $dbConnection;
 
+    if (!get_magic_quotes_gpc()) $username = addslashes($username);
+
     $q = "SELECT domain FROM ".TBL_USERS." WHERE user = '$username'";
     $result = mysqli_query($dbConnection, $q);
     $dbarray = mysqli_fetch_array($result);
@@ -47,7 +49,7 @@ function confirmUserPass($username, $password)
 {
     global $dbConnection;
 
-    if(!get_magic_quotes_gpc()) $username = addslashes($username);
+    if (!get_magic_quotes_gpc()) $username = addslashes($username);
         
     $q = "SELECT password FROM ".TBL_USERS." WHERE user = '$username'";
     $result = mysqli_query($dbConnection, $q);

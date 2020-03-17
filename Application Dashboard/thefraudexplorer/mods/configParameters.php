@@ -42,7 +42,7 @@ if (isset($_POST['key']))
 
 if (isset($_POST['samplecalculation']))
 {
-    $setCalculation=filter($_POST['samplecalculation']);
+    $setCalculation = filter($_POST['samplecalculation']);
 
     if (!empty($setCalculation)) 
     {
@@ -64,14 +64,14 @@ if (isset($_POST['password']))
 
     if (!empty($originPasword)) 
     {
-        $password=sha1(filter($_POST['password']));
+        $password = sha1(filter($_POST['password']));
         mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
     }
 }
 
 if (isset($_POST['encryption']))
 {
-    $encryption=filter($_POST['encryption']);
+    $encryption = filter($_POST['encryption']);
     
     if (!empty($encryption)) mysqli_query($connection, sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
 }

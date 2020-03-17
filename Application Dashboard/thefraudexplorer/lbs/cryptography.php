@@ -21,7 +21,7 @@ function encRijndael($unencrypted)
 {
     global $connection;
 
-    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $result_key = mysqli_query($connection, "SELECT * FROM t_crypt");
     $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];
@@ -35,7 +35,7 @@ function decRijndael($encrypted)
 {
     global $connection;
 
-    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $result_key = mysqli_query($connection, "SELECT * FROM t_crypt");
     $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];
@@ -49,7 +49,7 @@ function decRijndaelWOSC($encrypted)
 {
     global $connection;
 
-    $result_key=mysqli_query($connection, "SELECT * FROM t_crypt");
+    $result_key = mysqli_query($connection, "SELECT * FROM t_crypt");
     $row_key = mysqli_fetch_array($result_key);
     $key = $row_key[0];
     $iv = $row_key[1];

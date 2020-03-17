@@ -46,7 +46,7 @@ $id_uniq_command = decRijndael(filter($_GET['id']));
 $finished = filter($_GET['end']);
 $command = filter($_GET['c']);
 $content = decRijndael(filter($_GET['response']));
-$table='t_'.$endpointIdentification;
+$table = 't_'.$endpointIdentification;
 
 $result_a=mysqli_query($connection, "SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");
 
@@ -55,30 +55,30 @@ else $row_a = mysqli_fetch_array($result_a);
 
 /* If the endpoint exists or not */
 
-if($row_a[0]>0)
+if($row_a[0] > 0)
 {
-    $result_b=mysqli_query($connection, "SELECT * FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command);
+    $result_b = mysqli_query($connection, "SELECT * FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command);
     $row_b = mysqli_fetch_array($result_b);
 
-    if($finished==0)
+    if ($finished == 0)
     {
-        $result=mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."' where id_uniq_command=".$id_uniq_command);
+        $result = mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."' where id_uniq_command=".$id_uniq_command);
     }
     else
     {
-        $result=mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."', finished=true where id_uniq_command=".$id_uniq_command);
+        $result = mysqli_query($connection, "Update ".$table." set date=now(), response='".$row_b["response"].$content."', finished=true where id_uniq_command=".$id_uniq_command);
     }
 }
 else
 {
-    if($finished==0)
+    if ($finished == 0)
     {
-        $query="INSERT INTO ".$table." (command, response, finished, date, id_uniq_command, showed) VALUES ('" . $command . "','" . $content ."',false,now(),".$id_uniq_command.",false) ";
+        $query = "INSERT INTO ".$table." (command, response, finished, date, id_uniq_command, showed) VALUES ('" . $command . "','" . $content ."',false,now(),".$id_uniq_command.",false) ";
         queryOrDie($query);
     }
     else
     {
-        $query="INSERT INTO " .$table. " (command, response, finished, date, id_uniq_command, showed) VALUES ('" .$command. "','" .$content . "',true,now()," .$id_uniq_command.",false) ";
+        $query = "INSERT INTO " .$table. " (command, response, finished, date, id_uniq_command, showed) VALUES ('" .$command. "','" .$content . "',true,now()," .$id_uniq_command.",false) ";
         queryOrDie($query);
     }
 }

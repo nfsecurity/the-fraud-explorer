@@ -285,7 +285,7 @@ include "../lbs/endpointMethods.php";
                 $total = @$dictionaryCount[$ruleset]['pressure'] + @$dictionaryCount[$ruleset]['opportunity'] + @$dictionaryCount[$ruleset]['rationalization'];	
                 echo '<td class="table-td-ruleset-total">'.$total.'</td>';
 
-                $rulesetQuery = mysqli_query($connection, sprintf($countQuery,$ruleset));
+                $rulesetQuery = mysqli_query($connection, sprintf($countQuery, $ruleset));
                 $rule = mysqli_fetch_array($rulesetQuery);
                 echo '<td class="table-td-ruleset-endpoint">'.$rule[0].'</td>';
                 echo '</tr>';

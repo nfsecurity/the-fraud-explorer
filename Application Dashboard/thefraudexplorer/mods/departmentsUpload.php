@@ -59,11 +59,11 @@ else
               
 	        while (($getData = fgetcsv($file, 100000, ",")) !== FALSE)
 	        {
-                $endpointLogin = trim($getData[0]);
-                $endpointDomain = trim($getData[1]);
-                $endpointName = trim($getData[2]);
-                $endpointDepartment = trim($getData[3]);
-                $endpointGender = trim($getData[4]);
+                $endpointLogin = filter(trim($getData[0]));
+                $endpointDomain = filter(trim($getData[1]));
+                $endpointName = filter(trim($getData[2]));
+                $endpointDepartment = filter(trim($getData[3]));
+                $endpointGender = filter(trim($getData[4]));
 
                 if ($endpointGender != "male" && $endpointGender != "female") $endpointGender = "male";
 

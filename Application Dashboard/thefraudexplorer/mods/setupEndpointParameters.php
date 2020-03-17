@@ -27,24 +27,24 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-$endpointEnc=filter($_GET['endpoint']);
-$endpointDec=base64_decode(base64_decode($endpointEnc));
+$endpointEnc = filter($_GET['endpoint']);
+$endpointDec = base64_decode(base64_decode($endpointEnc));
 
 if (isset($_POST['alias']) && $_POST['alias'] != "") 
 {
-    $alias=filter($_POST['alias']);
+    $alias = filter($_POST['alias']);
     if (!empty($alias)) mysqli_query($connection, sprintf("UPDATE t_agents SET name='%s' WHERE agent LIKE '%s%%'", $alias, $endpointDec));
 }
 
 if (isset($_POST['ruleset']) && strpos($_POST['ruleset'], 'Choose the ruleset') === false) 
 {
-    $ruleset=filter($_POST['ruleset']);
+    $ruleset = filter($_POST['ruleset']);
     if (!empty($ruleset)) mysqli_query($connection, sprintf("UPDATE t_agents SET ruleset='%s' WHERE agent LIKE '%s%%'", $ruleset, $endpointDec));
 }
 
 if (isset($_POST['gender']) && strpos($_POST['gender'], 'Choose the gender') === false)
 {
-    $gender=filter($_POST['gender']);
+    $gender = filter($_POST['gender']);
     if (!empty($gender)) mysqli_query($connection, sprintf("UPDATE t_agents SET gender='%s' WHERE agent LIKE '%s%%'", $gender, $endpointDec));
 }
 

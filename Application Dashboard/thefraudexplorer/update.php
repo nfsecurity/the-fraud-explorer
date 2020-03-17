@@ -64,24 +64,24 @@ if ($key == $keypass[0])
     if ($row_a = mysqli_fetch_array($result)) { $count = $row_a[0]; }
     $date = date('Y-M-d H:i:s');
 
-    if($count[0]>0)
+    if ($count[0] > 0)
     {
         date_default_timezone_set($configFile['php_timezone']);
-        $datecalendar=date('Y-m-d');
-        $result=mysqli_query($connection, "Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
+        $datecalendar = date('Y-m-d');
+        $result = mysqli_query($connection, "Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
     }
     else
     {
-        if(strlen($endpointIdentification)<60)
+        if (strlen($endpointIdentification) < 60)
         {
             /* Heartbeat data */
 
-            $query="INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $endpoint . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
+            $query = "INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $endpoint . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
             queryOrDie($query);
 
             /* Primary endpoint table */
 
-            $query="CREATE TABLE t_".$endpointIdentification."(command varchar(50), response varchar(65000), finished boolean, date DATETIME, id_uniq_command int, showed boolean, PRIMARY KEY (date)) ENGINE = MyISAM";
+            $query = "CREATE TABLE t_".$endpointIdentification."(command varchar(50), response varchar(65000), finished boolean, date DATETIME, id_uniq_command int, showed boolean, PRIMARY KEY (date)) ENGINE = MyISAM";
             queryOrDie($query);
         }
     }

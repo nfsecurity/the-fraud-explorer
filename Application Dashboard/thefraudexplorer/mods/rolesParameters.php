@@ -30,9 +30,9 @@ if (!empty($_POST['createmodify']))
 {
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['domain']))
     {
-        $userName=filter($_POST['username']);
-        $userPassword=sha1(filter($_POST['password']));
-        $userDomain=filter($_POST['domain']);
+        $userName = filter($_POST['username']);
+        $userPassword = sha1(filter($_POST['password']));
+        $userDomain = filter($_POST['domain']);
 
         $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
 
@@ -64,9 +64,9 @@ if (!empty($_POST['createmodify']))
     }
     else if (!empty($_POST['username']) && !empty($_POST['password']))
     {
-        $userName=filter($_POST['username']);
-        $userPassword=sha1(filter($_POST['password']));
-        $userDomain="all";
+        $userName = filter($_POST['username']);
+        $userPassword = sha1(filter($_POST['password']));
+        $userDomain = "all";
 
         $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
 
@@ -77,8 +77,8 @@ if (!empty($_POST['createmodify']))
     }
     else if (!empty($_POST['username']) && !empty($_POST['domain']))
     {
-        $userName=filter($_POST['username']);
-        $userDomain=filter($_POST['domain']);
+        $userName = filter($_POST['username']);
+        $userDomain = filter($_POST['domain']);
         $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
 
         if ($row = mysqli_fetch_array($userExists)) $count = $row[0];
@@ -89,7 +89,7 @@ else if (!empty($_POST['delete']))
 {
     if (!empty($_POST['username']))
     {
-        $userName=filter($_POST['username']);
+        $userName = filter($_POST['username']);
         $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
 
         if ($row = mysqli_fetch_array($userExists)) $count = $row[0];

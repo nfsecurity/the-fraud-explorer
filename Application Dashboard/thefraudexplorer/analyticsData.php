@@ -104,7 +104,7 @@ include "lbs/elasticsearch.php";
 
             <?php
 
-            if (isset($_POST["ruleset"])) $_SESSION['rulesetScope'] = $_POST["ruleset"];
+            if (isset($_POST["ruleset"])) $_SESSION['rulesetScope'] = filter($_POST["ruleset"]);
             else $_SESSION['rulesetScope'] = "ALL";
 
             ?>

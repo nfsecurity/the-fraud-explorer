@@ -43,6 +43,9 @@ function endPointsGETQuery($query, $username)
     $counterRows = 0;
     $resultArray[] = array();
 
+    if (!get_magic_quotes_gpc()) $query = addslashes($query);
+    if (!get_magic_quotes_gpc()) $username = addslashes($username);
+
     if ($query == "all")
     {
         if (getUserContext($username) == "all")
@@ -283,6 +286,7 @@ function endPointsPOSTQuery($endpoint, $rawJSON)
 {
     global $dbConnection;
 
+    if (!get_magic_quotes_gpc()) $endpoint = addslashes($endpoint);
     $receivedJSON = json_decode($rawJSON, true);
     $keyquery = mysqli_query($dbConnection, "SELECT password FROM t_crypt");
     $keypass = mysqli_fetch_array($keyquery);
@@ -531,7 +535,6 @@ function aiAlertsGETQuery($username)
         }
         else echo json_encode("No deductions at this time"); 
     }
-        
 }
 
 ?>

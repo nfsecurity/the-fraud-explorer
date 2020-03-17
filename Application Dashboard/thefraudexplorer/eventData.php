@@ -25,7 +25,7 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "eventData";
-$_SESSION['endpointIDh']=filter($_GET['endpoint']);
+$_SESSION['endpointIDh'] = filter($_GET['endpoint']);
 
 if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh']))))) header ("location: endPoints");
 

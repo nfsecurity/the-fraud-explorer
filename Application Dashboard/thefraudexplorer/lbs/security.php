@@ -25,6 +25,9 @@ function checkEndpoint($endPoint, $domain)
 {
     include "lbs/openDBconn.php";
     
+    if (!get_magic_quotes_gpc()) $endPoint = addslashes($endPoint);
+    if (!get_magic_quotes_gpc()) $domain = addslashes($domain);
+
     if ($domain == "all" && $endPoint == "all") return true;
     
     $result = mysqli_query($connection, sprintf("SELECT * FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s' AND domain='%s'", $endPoint, $domain));
@@ -37,6 +40,9 @@ function checkEndpoint($endPoint, $domain)
 function checkEvent($endPoint)
 {
     include "lbs/openDBconn.php";    
+
+    if (!get_magic_quotes_gpc()) $endPoint = addslashes($endPoint);
+
     $result = mysqli_query($connection, sprintf("SELECT * FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s'", $endPoint));
     include "lbs/closeDBconn.php";
     
