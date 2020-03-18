@@ -40,7 +40,6 @@ function queryOrDie($query)
 function endPointsGETQuery($query, $username)
 {
     global $dbConnection;
-    $counterRows = 0;
     $resultArray[] = array();
 
     if (!get_magic_quotes_gpc()) $query = addslashes($query);
@@ -160,13 +159,11 @@ function endPointsPUTQuery($username, $token, $operatingSystem, $version, $domai
     {
         $result = mysqli_query($dbConnection, "SELECT * FROM t_agents WHERE agent='".$endpoint."'");
         $countRows = mysqli_num_rows($result);
-        $date = date('Y-M-d H:i:s');
 
         if($countRows > 0)
         {
             $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
             date_default_timezone_set($configFile['php_timezone']);
-            $datecalendar = date('Y-m-d');
             $result = mysqli_query($dbConnection, "UPDATE t_agents SET heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' WHERE agent='".$endpoint."'");
 
             $sucessEndpoint = true;
@@ -288,8 +285,6 @@ function endPointsPOSTQuery($endpoint, $rawJSON)
 
     if (!get_magic_quotes_gpc()) $endpoint = addslashes($endpoint);
     $receivedJSON = json_decode($rawJSON, true);
-    $keyquery = mysqli_query($dbConnection, "SELECT password FROM t_crypt");
-    $keypass = mysqli_fetch_array($keyquery);
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $timeZone = $configFile['php_timezone'];
     $sockLT = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
@@ -355,7 +350,7 @@ function ftaEventsGETQuery($username, $endpoint)
         {
             $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, "all", "disabled", "allalerts");
             $eventData = json_decode(json_encode($eventMatches), true);
-            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
+
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
@@ -381,7 +376,7 @@ function ftaEventsGETQuery($username, $endpoint)
         {
             $eventMatches = getAllFraudTriangleMatches($ESAlerterIndex, getUserContext($username), "disabled", "allalerts");
             $eventData = json_decode(json_encode($eventMatches), true);
-            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']));
+
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;

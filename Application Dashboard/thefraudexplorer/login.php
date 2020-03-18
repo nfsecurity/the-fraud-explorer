@@ -17,9 +17,11 @@
 
 include "lbs/login/session.php";
 
+define("LOCATION_INDEX", "Location: index");
+
 class Process
 {
-    function Process()
+    function __construct()
     {
         global $session;
 
@@ -33,7 +35,7 @@ class Process
         }
         else
         {
-            header("Location: index");
+            header(LOCATION_INDEX);
         }
     }
 
@@ -50,7 +52,7 @@ class Process
         {
             $_SESSION['value_array'] = $_POST;
             $_SESSION['error_array'] = $form->getErrorArray();
-            header("Location: index");
+            header(LOCATION_INDEX);
         }
     }
 
@@ -58,9 +60,9 @@ class Process
     {
         global $session;
         $retval = $session->logout();
-        header("Location: index");
+        header(LOCATION_INDEX);
     }
-};
+}
 
 $process = new Process;
 

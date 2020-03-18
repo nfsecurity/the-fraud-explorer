@@ -49,7 +49,7 @@
                         <td class="login-container">
                             <form id="formLogin" name="formLogin" method="post" action="login">
                                 <input type="hidden" name="csrf" value="<?php echo $key; ?>" />
-                                <center><br>
+                                <br>
                                     <table class="sub-container">
                                         <tr>
                                             <td>
@@ -74,7 +74,6 @@
                                             <input type="hidden" name="sublogin" value="1">
                                         </tr>
                                     </table>
-                                </center>
                             </form>
                         </td>
                     </tr>

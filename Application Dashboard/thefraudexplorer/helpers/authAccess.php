@@ -25,36 +25,29 @@ if(!$session->logged_in)
     exit;
 }
 
-$file=filter($_GET['file']);
+$file = filter($_GET['file']);
 $ext = substr($file, strrpos($file, '.')+1);
 
-if(isset($_GET['ctype'])) $contentType=filter($_GET['ctype']); 
+if (isset($_GET['ctype'])) $contentType=filter($_GET['ctype']); 
 else $contentType="aplication/octet-stream"; 
 
 /* Grant access to this type of file depending of the session status */
 
-if($ext=="txt")
+if ($ext == "txt" || $ext == "html" || $ext == "htm" )
 {
     header('Content-Type: text/'.$contentType);
     flush();
     readfile($_REQUEST['file']);
     exit();
 }
-else if($ext=="html" || $ext=="htm")
-{
-    header('Content-Type: text/'.$contentType);
-    flush();
-    readfile($_REQUEST['file']);
-    exit();
-}
-else if($ext=="png")
+else if ($ext == "png")
 {
     header('Content-Type: image/'.$contentType);
     flush();
     readfile($_REQUEST['file']);
     exit();
 }
-else if($ext=="zip")
+else if ($ext == "zip")
 {
     if (file_exists($file))
     {
