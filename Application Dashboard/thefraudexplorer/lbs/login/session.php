@@ -32,7 +32,7 @@ class Session
     var $referrer;           
     var $ip;                   
 
-    function Session()
+    function __construct()
     {
         $this->ip = $_SERVER["REMOTE_ADDR"];
         $this->time = time();
@@ -138,7 +138,7 @@ class Session
         unset($_SESSION['username']);
         $this->logged_in = false;
     }
-};
+}
 
 $session = new Session;
 $form = new Form;

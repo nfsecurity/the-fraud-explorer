@@ -21,7 +21,7 @@ class Form
     var $errors = array();  
     var $num_errors;
 
-    function Form()
+    function __construct()
     {
         if(isset($_SESSION['value_array']) && isset($_SESSION['error_array']))
         {
@@ -72,6 +72,6 @@ class Form
     {
         return $this->errors;
     }
-};
+}
 
 ?>
