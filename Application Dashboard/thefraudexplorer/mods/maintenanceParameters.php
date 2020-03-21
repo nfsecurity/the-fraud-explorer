@@ -25,12 +25,17 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+require '../vendor/autoload.php';
+include "../lbs/elasticsearch.php";
+
+$configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+$ESAlerterIndex = $configFile['es_alerter_index'];
 
 /* Delete dead endpoint sessions */
 
 if (isset($_POST['deadsessions']))
 {
-    $setDeadSessions=filter($_POST['deadsessions']);
+    $setDeadSessions = filter($_POST['deadsessions']);
      
     if (!empty($setDeadSessions) && $setDeadSessions == "1month") mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
 }
@@ -42,7 +47,7 @@ if (isset($_POST['deletephrases']))
     $curate30days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases30d.yml';
     $curate60days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases60d.yml';
     $curate90days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases90d.yml';
-    $setDeletePhrases=filter($_POST['deletephrases']);
+    $setDeletePhrases = filter($_POST['deletephrases']);
      
     if (!empty($setDeletePhrases) && $setDeletePhrases == "1month") $commandCurator = shell_exec($curate30days);
     else if (!empty($setDeletePhrases) && $setDeletePhrases == "2month") $commandCurator = shell_exec($curate60days);
@@ -53,25 +58,79 @@ if (isset($_POST['deletephrases']))
 
 if (isset($_POST['deletealerts']))
 {
+    /* Search for alerter index */
+
     $curate30days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts30d.yml';
-    $curate60days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts60d.yml';
     $curate90days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts90d.yml';
-    $setDeleteAlerts=filter($_POST['deletealerts']);
-     
+    $curate180days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts180d.yml';
+    $curate365days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgeAlerts365d.yml';
+
+    /* Search alerts in workflows */
+
+    $alerts30days = getAllFraudTriangleMatchesMonthsBack($ESAlerterIndex, "1M");
+    $alerts90days = getAllFraudTriangleMatchesMonthsBack($ESAlerterIndex, "3M");
+    $alerts180days = getAllFraudTriangleMatchesMonthsBack($ESAlerterIndex, "6M");
+    $alerts365days = getAllFraudTriangleMatchesMonthsBack($ESAlerterIndex, "12M");
+
+    /* Proceed to the purge */
+
+    $setDeleteAlerts = filter($_POST['deletealerts']);
+
     if (!empty($setDeleteAlerts) && $setDeletePhrases == "1month") 
     {
         $commandCurator = shell_exec($curate30days);
         mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
-    }
-    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "2month") 
-    {
-        $commandCurator = shell_exec($curate60days);
-        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 60 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+
+        /* Workflows triggers */
+
+        foreach ($alerts30days['hits']['hits'] as $result)
+        {
+            $regid = $result['_id'];
+            $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
+            $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+        }
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "3month") 
     {
         $commandCurator = shell_exec($curate90days);
         mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 90 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+
+        /* Workflows triggers */
+
+        foreach ($alerts90days['hits']['hits'] as $result)
+        {
+            $regid = $result['_id'];
+            $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
+            $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+        }
+    }
+    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "6month") 
+    {
+        $commandCurator = shell_exec($curate180days);
+        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 180 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+
+        /* Workflows triggers */
+
+        foreach ($alerts180days['hits']['hits'] as $result)
+        {
+            $regid = $result['_id'];
+            $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
+            $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+        }
+    }
+    else if (!empty($setDeleteAlerts) && $setDeletePhrases == "12month") 
+    {
+        $commandCurator = shell_exec($curate365days);
+        mysqli_query($connection, "DELETE FROM t_inferences WHERE date < (CURRENT_DATE - INTERVAL 365 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+
+        /* Workflows triggers */
+
+        foreach ($alerts365days['hits']['hits'] as $result)
+        {
+            $regid = $result['_id'];
+            $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
+            $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+        }
     }
 }
 
@@ -79,11 +138,11 @@ if (isset($_POST['deletealerts']))
 
 if (isset($_POST['alertstatus']))
 {
-    $setDeleteAlertStatus=filter($_POST['alertstatus']);
+    $setDeleteAlertStatus = filter($_POST['alertstatus']);
     
     if (!empty($setDeleteAlertStatus) && $setDeleteAlertStatus == "1month")
     {
-        $urlAlerts="http://localhost:9200/tfe-alerter-status/_delete_by_query";
+        $urlAlerts = "http://localhost:9200/tfe-alerter-status/_delete_by_query";
         $params = '{ "query": { "range": { "@timestamp": { "lte": "now-1M" } } } }';
               
         $ch = curl_init();
@@ -92,7 +151,7 @@ if (isset($_POST['alertstatus']))
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultAlerts=curl_exec($ch);
+        $resultAlerts = curl_exec($ch);
         curl_close($ch);
     }
 }

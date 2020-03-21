@@ -25,12 +25,13 @@ if(!$session->logged_in)
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/openDBconn.php";
 
-$regid=filter($_GET['regid']);
-$endpoint=filter($_GET['endpoint']);
-$index=filter($_GET['index']);
-$type=filter($_GET['type']);
-$urlrefer=filter($_GET['urlrefer']);
+$regid = filter($_GET['regid']);
+$endpoint = filter($_GET['endpoint']);
+$index = filter($_GET['index']);
+$type = filter($_GET['type']);
+$urlrefer = filter($_GET['urlrefer']);
 
 if (!empty($_POST['toggle-event']))
 {
@@ -43,7 +44,7 @@ if (!empty($_POST['toggle-event']))
     curl_setopt($ch, CURLOPT_URL, $urlEventValue);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $resultValues=curl_exec($ch);
+    $resultValues = curl_exec($ch);
     curl_close($ch);
 
     $jsonResultValue = json_decode($resultValues);
@@ -63,11 +64,21 @@ if (!empty($_POST['toggle-event']))
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $resultEvents=curl_exec($ch);
+    $resultEvents = curl_exec($ch);
     curl_close($ch);
 }
 else if (!empty($_POST['delete-event']))
 {
+    /* Delete alert from t_inferences table */
+
+    $queryDeleteAIAlert = "DELETE FROM t_inferences WHERE alertid='".$regid."'";        
+    $resultQuery = mysqli_query($connection, $queryDeleteAIAlert);
+
+    /* Delete alert from t_wtriggers table */
+
+    $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
+    $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+
     /* Delete endpoint elasticsearch documents */
 
     $ch = curl_init();

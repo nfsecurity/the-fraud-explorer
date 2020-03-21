@@ -158,8 +158,9 @@ include "../lbs/openDBconn.php";
                 <p class="title-config">Purge old endpoint events</p><br>
                 <select class="select-option-styled wide" name="deletealerts" id="deletealerts">
                     <option value="1month">Preserve last month</option>
-                    <option value="2month">Preserve last 2 months</option>
                     <option value="3month">Preserve last 3 months</option>
+                    <option value="6month">Preserve last 6 months</option>
+                    <option value="12month">Preserve last year</option>
                     <option value="preserveall" selected="selected">Preserve all</option>
                 </select>            
                     

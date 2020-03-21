@@ -963,6 +963,43 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
     return $agentIdMatches;
 }
 
+/* Search all Fraud Triangle Matches for maintenance purge */
+
+function getAllFraudTriangleMatchesMonthsBack($index, $monthsBack)
+{
+    $querySize = 10000;
+
+    $matchesParams = [
+        'index' => $index,
+        'type' => 'AlertEvent',
+        'body' => [
+            'size' => $querySize,
+            'sort' => [
+                [ '@timestamp' => [ 'order' => 'desc' ] ]
+            ],
+            '_source' => [
+                'exclude' => [ 'message' ]
+            ],
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'match_all' => [ 'boost' => 1 ] ],
+                        [ 'range' => [ '@timestamp' => [ 'gte' => 'now-'.$monthsBack.'' ] ] ]
+                    ],
+                    'must_not' => [
+                        [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                    ]
+                ]
+            ]
+        ]
+    ]; 
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $getAlerts = $client->search($matchesParams);
+
+    return $getAlerts;
+}
+
 /* Check if Elasticsearch alerter index exists */
 
 function indexExist($indexName, $configFile)
