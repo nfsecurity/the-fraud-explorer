@@ -532,4 +532,85 @@ function aiAlertsGETQuery($username)
     }
 }
 
+/* Workflows List */
+
+function workflowsList($username)
+{
+    global $dbConnection;
+
+    if (getUserContext($username) == "all")
+    {
+        $queryWorkflows = "SELECT * from t_workflows";
+        $resultQuery = mysqli_query($dbConnection, $queryWorkflows);
+
+        if ($row = mysqli_fetch_array($resultQuery))
+        {
+            do
+            {
+                $name = $row['name'];
+                $workflow = $row['workflow'];
+                $interval = $row['interval'];
+                $custodian = $row['custodian'];
+                $triggers = $row['triggers'];
+                    
+                $workflowsMatrix[] = ["Name"=>$name, "Workflow"=>$workflow, "Interval"=>$interval, "Custodian"=>$custodian, "Triggers"=>$triggers];
+            }
+            while ($row = mysqli_fetch_array($resultQuery));
+
+            echo json_encode($workflowsMatrix);
+        }
+        else echo json_encode("No workflows at this time"); 
+    }
+    else echo json_encode("You don't have the permission to do that"); 
+}
+
+/* Workflows GET from Name */
+
+function workflowsGet($username, $workflowName)
+{
+    global $dbConnection;
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $ESalerterIndex = $configFile['es_alerter_index'];
+
+    if (getUserContext($username) == "all")
+    {
+        $queryWorkflows = "SELECT * from t_wtriggers WHERE name='".$workflowName."'";
+        $resultQuery = mysqli_query($dbConnection, $queryWorkflows);
+
+        if (mysqli_num_rows($resultQuery) == 0)
+        {
+            echo json_encode("The specified workflow doesn't exist"); 
+            exit(1);
+        }
+
+        if ($row = mysqli_fetch_array($resultQuery))
+        {
+            do
+            {
+                $name = $row['name'];
+                $ids = $row['ids'];
+                $idsArray = explode(' ', $ids);
+
+                foreach ($idsArray as $alert)
+                {
+                    $alertDocument = getAlertIdData($alert, $ESalerterIndex, "AlertEvent");
+                    $datetime = $alertDocument['hits']['hits'][0]['_source']['eventTime'];
+                    preg_match('/(.*) (.*),/', $datetime, $eventTime);
+                    $agent = $alertDocument['hits']['hits'][0]['_source']['agentId'];
+                    preg_match('/([a-z0-9]*)_/', $agent, $endpoint);
+                    $application = decRijndael($alertDocument['hits']['hits'][0]['_source']['windowTitle']);
+                    $phrase = decRijndael($alertDocument['hits']['hits'][0]['_source']['stringHistory']);
+
+                    $workflowsMatrix[$name][] = ["Event time"=>$eventTime[1] . " " .$eventTime[2], "Endpoint"=>$endpoint[1], "Application"=>$application, "Phrase"=>$phrase];
+                }
+            }
+            while ($row = mysqli_fetch_array($resultQuery));
+
+            echo json_encode($workflowsMatrix);
+        }
+        else echo json_encode("No workflows at this time"); 
+    }
+    else echo json_encode("You don't have the permission to do that"); 
+}
+
 ?>
