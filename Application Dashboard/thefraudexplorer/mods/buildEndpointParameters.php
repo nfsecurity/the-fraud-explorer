@@ -61,10 +61,6 @@ if (isset($_POST['pcenabled']))
     else $finalPCEnabled = "0";
 }
 
-/* IP ADDRESS */
-
-if (isset($_POST['ip'])) $finalIPAddress = filter($_POST['ip']);
-
 /*  CRYPT KEY RIJNDAEL */
 
 $cryptKeyQuery = mysqli_query($connection, sprintf("SELECT iv FROM t_crypt"));
@@ -100,7 +96,7 @@ if ($finalPlatformForBuild == "windows")
 {
     /* Replace data in the MSI XML template */
 
-    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/10.1.1.253/'.$finalIPAddress.'/g;s/NoExcludedApps/'.$finalExcludedApps.'/g" '.$documentRoot.'endpoints/msi/endpointInstaller.xml > '.$documentRoot.'endpoints/msi/endpointInstallerForDownload.xml';
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/NoExcludedApps/'.$finalExcludedApps.'/g" '.$documentRoot.'endpoints/msi/endpointInstaller.xml > '.$documentRoot.'endpoints/msi/endpointInstallerForDownload.xml';
     $commandReplacements = shell_exec($replaceParams);
 
     /* Generate the final MSI for Download */

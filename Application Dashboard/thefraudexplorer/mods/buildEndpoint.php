@@ -216,8 +216,8 @@ include "../lbs/openDBconn.php";
             </div>
             <div class="right-container">
                    
-                <p class="title-config">IP Address</p><br>
-                <input type="text" name="ip" id="ip" autocomplete="off" placeholder="10.1.1.253" class="input-value-text">             
+                <p class="title-config">Endpoint to Server password</p><br>
+                <input type="text" name="srvpwd" id="srvpwd" autocomplete="off" disabled placeholder="<?php $srvpwdQuery = mysqli_query($connection, sprintf("SELECT password FROM t_crypt")); if ($row = mysqli_fetch_array($srvpwdQuery)) echo $row[0]; ?>" class="input-value-text">             
                     
             </div>
         </div>
