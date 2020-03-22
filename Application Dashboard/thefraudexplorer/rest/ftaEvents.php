@@ -12,7 +12,7 @@
  * Date: 2020-02
  * Revision: v1.4.2-aim
  *
- * Description: REST Webservice for FTa Events
+ * Description: REST Webservice for FTA Events
  */
 
 include "authValidation.php";
