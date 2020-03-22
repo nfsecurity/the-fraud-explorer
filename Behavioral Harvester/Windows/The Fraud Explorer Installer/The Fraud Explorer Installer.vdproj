@@ -160,7 +160,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_05BF24B4_970A_40CD_8C47_A3705EA90C30"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/address=[ADDRESS] /ip=[IP] /pcenabled=[PCENABLED]  /cryptkey=[CRYPTKEY] /srvpwd=[SRVPWD] /apps=[APPS]"
+            "CustomActionData" = "8:/address=[ADDRESS] /pcenabled=[PCENABLED]  /cryptkey=[CRYPTKEY] /srvpwd=[SRVPWD] /apps=[APPS]"
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B06B9EE38FF34EA7B0893E3D2297AC57"
             {
@@ -362,15 +362,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Fraud Explorer"
-        "ProductCode" = "8:{08D132BD-7FC9-432C-8EEE-012A910CCE00}"
-        "PackageCode" = "8:{6E93D1A9-20D9-4B43-AB21-69FA752C41A7}"
+        "ProductCode" = "8:{2E2E3381-22E7-40CF-973D-1F3425D944C2}"
+        "PackageCode" = "8:{18BA4BDA-4BC6-4BAF-8BDB-E233387B9B52}"
         "UpgradeCode" = "8:{C0DC7C39-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.1"
+        "ProductVersion" = "8:2.0.2"
         "Manufacturer" = "8:NF S.A.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

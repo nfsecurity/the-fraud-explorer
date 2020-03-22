@@ -1,14 +1,14 @@
-﻿/*Copyright (c) 2014-2019 The Fraud Explorer
+﻿/*Copyright (c) 2014-2020 The Fraud Explorer
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-11
- * Revision: v2.0.1-ai
+ * Date: 2020-04
+ * Revision: v2.0.2-aim
  *
  * Description: Internal configuration
  */
@@ -64,7 +64,7 @@ namespace TFE_core.Config
         public static string userDomain = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
         public static string OnlineCheck = Domain + "/online.html";
         public static string XML = SQLStorage.RetrievePar("mainServer");
-        public static string AnalyticsServerIP = SQLStorage.RetrievePar("analyticsServer");
+        public static string AnalyticsServerIP = Network.nameToIP(Network.ExtractDomainFromURL(SQLStorage.RetrievePar("mainServer")));
         public static string usrSession = Environment.UserName.ToLower().Replace(" ", string.Empty);
         public static string AgentID = usrSession + SQLStorage.RetrievePar("uniqueguid");
         public static bool use_proxy = false;
@@ -179,7 +179,6 @@ namespace TFE_core.Config
         #region Global configuration variables
 
         public static String serverAddress = "https://cloud.thefraudexplorer.com/update.xml";
-        public static String serverIP = "10.1.1.253";
         public static String textAnalytics = "0";
         public static String excludedApps = "NoExcludedApps";
         public static String heartbeat = "3500000";

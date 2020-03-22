@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-11
- * Revision: v2.0.1-ai
+ * Date: 2020-04
+ * Revision: v2.0.2-aim
  *
  * Description: SQL Storage
  */
@@ -79,9 +79,6 @@ namespace TFE_core.Database
                 insertSQL.ExecuteNonQuery();
 
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('mainServer', '" + globalConfigParams.serverAddress + "')", connection);
-                insertSQL.ExecuteNonQuery();
-
-                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('analyticsServer', '" + globalConfigParams.serverIP + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('aesKey', '" + globalConfigParams.aesKey + "')", connection);
@@ -196,7 +193,6 @@ namespace TFE_core.Database
                     XPathNavigator navConfigMSI = configMSI.CreateNavigator();
 
                     globalConfigParams.serverAddress = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/address").ToString()).Replace("\0", String.Empty);
-                    globalConfigParams.serverIP = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/ip").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.textAnalytics = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/pcenabled").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.aesKey = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.aesIV = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);

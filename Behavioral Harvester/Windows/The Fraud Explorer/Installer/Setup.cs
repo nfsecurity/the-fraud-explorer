@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2019 The Fraud Explorer
+ * Copyright (c) 2014-2020 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2019-11
- * Revision: v2.0.1-ai
+ * Date: 2020-04
+ * Revision: v2.0.2-aim
  *
  * Description: Setup override procedures
  */
@@ -39,10 +39,10 @@ namespace TFE_core.Installer
         public override void Commit(IDictionary savedState)
         {
             base.Commit(savedState);
+
             try
             {
                 string serverAddress = base.Context.Parameters["address"].ToString();
-                string serverIP = base.Context.Parameters["ip"].ToString();
                 string phraseCollectionEnabled = base.Context.Parameters["pcenabled"].ToString();
                 string cryptKey = base.Context.Parameters["cryptkey"].ToString();
                 string serverPassword = base.Context.Parameters["srvpwd"].ToString();
@@ -61,7 +61,6 @@ namespace TFE_core.Installer
                 configWriter.WriteComment("MSI Generated Config File");
                 configWriter.WriteStartElement("ConfigParameters");
                 configWriter.WriteElementString("address", EncRijndaelMSI(serverAddress));
-                configWriter.WriteElementString("ip", EncRijndaelMSI(serverIP));
                 configWriter.WriteElementString("pcenabled", EncRijndaelMSI(phraseCollectionEnabled));
                 configWriter.WriteElementString("cryptkey", EncRijndaelMSI(cryptKey));
                 configWriter.WriteElementString("srvpwd", EncRijndaelMSI(serverPassword));
