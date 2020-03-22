@@ -61,16 +61,16 @@ if ($session->domain == "all")
 {
     if (samplerStatus($session->domain) == "enabled")
     {
-        $urlWords="http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
-        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
-        $urlSize="http://127.0.0.1:9200/_all/_stats";
+        $urlWords = "http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
+        $urlAlerts = "http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize = "http://127.0.0.1:9200/_all/_stats";
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
+        $resultWords = curl_exec($ch);
         curl_close($ch);
         
         $ch = curl_init();
@@ -78,18 +78,18 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultAlerts=curl_exec($ch);
+        $resultAlerts = curl_exec($ch);
         curl_close($ch);
         
         $result_a = mysqli_query($connection, $queryEndpointsSQL);
     }
     else
     {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
-        $urlSize="http://127.0.0.1:9200/_all/_stats";
+        $urlWords = 'http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts = "http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize = "http://127.0.0.1:9200/_all/_stats";
         
-        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
+        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlWords);
@@ -97,10 +97,10 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
+        $resultWords = curl_exec($ch);
         curl_close($ch);
         
-        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } }, { "match" : { "falsePositive" : "1" } } ] } } }';
+        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain" : "thefraudexplorer.com" } }, { "match" : { "falsePositive" : "1" } } ] } } }';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $urlAlerts);
@@ -108,7 +108,7 @@ if ($session->domain == "all")
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultAlerts=curl_exec($ch);
+        $resultAlerts = curl_exec($ch);
         curl_close($ch);
         
         $result_a = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
@@ -118,9 +118,9 @@ else
 {
     if (samplerStatus($session->domain) == "enabled")
     {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
-        $urlSize="http://127.0.0.1:9200/_all/_stats";
+        $urlWords = 'http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts = "http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize = "http://127.0.0.1:9200/_all/_stats";
         
         $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
@@ -130,7 +130,7 @@ else
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
+        $resultWords = curl_exec($ch);
         curl_close($ch);
         
         $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
@@ -141,16 +141,16 @@ else
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultAlerts=curl_exec($ch);
+        $resultAlerts = curl_exec($ch);
         curl_close($ch);
         
         $result_a = mysqli_query($connection, $queryEndpointsSQLDomain);
     }
     else
     {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $urlAlerts="http://127.0.0.1:9200/logstash-alerter-*/_count";
-        $urlSize="http://127.0.0.1:9200/_all/_stats";
+        $urlWords = 'http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
+        $urlAlerts = "http://127.0.0.1:9200/logstash-alerter-*/_count";
+        $urlSize = "http://127.0.0.1:9200/_all/_stats";
         
         $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
         $ch = curl_init();
@@ -160,7 +160,7 @@ else
         curl_setopt($ch, CURLOPT_ENCODING, ''); 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
+        $resultWords = curl_exec($ch);
         curl_close($ch);
         
         $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } }, { "match" : { "falsePositive" : "1" } } ] } } }';
@@ -171,7 +171,7 @@ else
         curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultAlerts=curl_exec($ch);
+        $resultAlerts = curl_exec($ch);
         curl_close($ch);
         
         $result_a = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
@@ -183,7 +183,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_ENCODING, ''); 
 curl_setopt($ch, CURLOPT_URL,$urlSize);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-$resultSize=curl_exec($ch);
+$resultSize = curl_exec($ch);
 curl_close($ch);
 
 $resultWords = json_decode($resultWords, true);
@@ -292,6 +292,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         /* Last connection to the server */
 
         echo '<td class="lasttd">';
+        echo '<span class="hidden-date">'.date('Y/m/d H:i',strtotime($row_a["heartbeat"])).'</span>';
         echo '<center><div class="date-container">'.date('H:i',strtotime($row_a["heartbeat"])).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($row_a["heartbeat"])).'</div></div></center>';
         echo '</td>';
         
@@ -465,6 +466,9 @@ if ($row_a = mysqli_fetch_array($result_a))
         
         $("#tblData").tablesorter({
             widgets: [ 'filter', 'output' ],
+            textExtraction: {
+                6: function(node, table, cellIndex) { return $(node).find("span").text(); },
+            },
             widgetOptions : 
             {
                 filter_external: '.search_text',

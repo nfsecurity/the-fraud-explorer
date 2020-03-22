@@ -1104,3 +1104,8 @@ form
 { 
     color: #B4BCC2; 
 }
+
+.hidden-date
+{
+    display: none;
+}
