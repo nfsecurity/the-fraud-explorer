@@ -475,7 +475,7 @@ else $totalSystemWords= "0";
 
                         echo '</td>';
                         echo '<td class="td-phrase">';
-                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 6px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
+                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 2px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
                         echo '</td>';
                     
                         echo '<td class="td-vertice td-with-bg">';

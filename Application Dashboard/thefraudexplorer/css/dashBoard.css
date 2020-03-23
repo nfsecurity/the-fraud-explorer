@@ -910,7 +910,7 @@ li a:hover:not(.active)
 
 .awfont-padding-right
 {
-    padding-right: 0px;
+    padding-right: 5px;
 }
 
 .download-csv-top50events, .download-csv-top50endpoints
