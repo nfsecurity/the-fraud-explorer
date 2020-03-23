@@ -131,6 +131,22 @@ $_SESSION['rulesetScope'] = "ALL";
             ?>
         </div>
 
+        <!-- Modal for Phrase Viewer -->
+
+        <center>
+            <div class="modal" id="event-phrases" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p class="debug-url window-debug"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </center>
+
         <!-- Modal for Advanced Reports -->
 
         <center>

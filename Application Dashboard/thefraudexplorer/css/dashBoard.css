@@ -910,7 +910,7 @@ li a:hover:not(.active)
 
 .awfont-padding-right
 {
-    padding-right: 5px;
+    padding-right: 0px;
 }
 
 .download-csv-top50events, .download-csv-top50endpoints
@@ -1071,9 +1071,63 @@ a.welcome
     width: calc(100% - 10%);
     text-align: left;
     vertical-align: middle;
-    font-family: Verdana, sans-serif; 
+    font-family: Verdana, sans-serif;
     padding: 0px 10px 0px 10px;
-    font-size: 11px;
+    font-size: 11.3px;
+    color: #555;
+    border-radius: 5px;
+    background: #EBEBEB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.phrase-without-app a
+{
+    height: 30px;
+    line-height: 30px;
+    width: calc(100% - 10%);
+    text-align: left;
+    vertical-align: middle;
+    font-family: Verdana, sans-serif;
+    padding: 0px 10px 0px 10px;
+    font-size: 11.3px;
+    color: #555;
+    border-radius: 5px;
+    background: #EBEBEB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.phrase-without-app a:hover
+{
+    height: 30px;
+    line-height: 30px;
+    width: calc(100% - 10%);
+    text-align: left;
+    vertical-align: middle;
+    font-family: Verdana, sans-serif;
+    padding: 0px 10px 0px 10px;
+    font-size: 11.3px;
+    color: #4B906F;
+    border-radius: 5px;
+    background: #EBEBEB;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.phrase-without-app a:visited
+{
+    height: 30px;
+    line-height: 30px;
+    width: calc(100% - 10%);
+    text-align: left;
+    vertical-align: middle;
+    font-family: Verdana, sans-serif;
+    padding: 0px 10px 0px 10px;
+    font-size: 11.3px;
     color: #555;
     border-radius: 5px;
     background: #EBEBEB;
@@ -1105,4 +1159,9 @@ a.welcome
 .fa-file-text-o:hover, .fa-tasks:hover, .fa-folder-open-o:hover, .fa-calendar-check-o:hover, .fa-table:hover, .fa-building-o:hover, .fa-film:hover, .fa-folder-o:hover, .fa-envelope-open-o:hover, .fa-object-group:hover
 {
     color:#808080 !important;
+}
+
+.event-phrase-viewer
+{
+    outline: 0 !important;
 }
