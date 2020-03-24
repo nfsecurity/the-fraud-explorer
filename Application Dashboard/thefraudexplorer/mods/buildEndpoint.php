@@ -351,7 +351,6 @@ include "../lbs/openDBconn.php";
             document.getElementById("restcredentials").disabled=true;
             document.getElementById("pcenabled").disabled=false;
             document.getElementById("excluded").disabled=false;
-            document.getElementById("ip").disabled=false;
         } 
         else if (document.getElementById("platform").value == "android") 
         {
@@ -359,7 +358,6 @@ include "../lbs/openDBconn.php";
             document.getElementById("restcredentials").disabled=false;
             document.getElementById("pcenabled").disabled=false;
             document.getElementById("excluded").disabled=true;
-            document.getElementById("ip").disabled=true;
         }
     }
 </script> 
