@@ -19,7 +19,7 @@
 
 <html>
     <head>
-        <title>Login &raquo; Analytics 2</title>
+        <title>Login &raquo; Analytics</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
         <link rel="stylesheet" type="text/css" href="css/index.css" media="screen" />
