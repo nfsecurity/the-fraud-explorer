@@ -15,7 +15,7 @@
 
 URL=$1
 REPODIR="/var/www/html/thefraudexplorer/update/repodata/"
-REPODATA="$REPODIR/the-fraud-explorer-master/Application\ Dashboard/thefraudexplorer/"
+REPODATA="$REPODIR/the-fraud-explorer-master/Application Dashboard/thefraudexplorer/"
 TFEDIRECTORY="/var/www/html/thefraudexplorer/"
 
 # Download and unzip master file
@@ -29,7 +29,7 @@ if [ $? -eq 0 ]; then
 
     # Sync remote files with local files
 
-    /usr/bin/rsync -aq --exclude config.ini --exclude 'core/include/*.php' $REPODATA $TFEDIRECTORY  
+    /usr/bin/rsync -aq --exclude config.ini --exclude 'core/include/*.php' "$REPODATA" "$TFEDIRECTORY" 
     chown -R apache:apache /var/www/html/thefraudexplorer
 
     # Remove temporary directory and files
