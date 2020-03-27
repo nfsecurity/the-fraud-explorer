@@ -44,7 +44,7 @@ if (isset($_POST['urlrepo']))
         $configFile = parse_ini_file("../config.ini");
         $swVersion_configFile = $configFile['sw_version'];
 
-        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$swVersion_configFile.'/'.$repoVersion.'/g" --in-place '.$documentRoot.'config.ini';
+        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$swVersion_configFile.'/'.$repoVersion[1].'/g" --in-place '.$documentRoot.'config.ini';
         $commandReplacements = shell_exec($replaceParams);
     }
 }
