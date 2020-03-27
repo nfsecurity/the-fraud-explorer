@@ -26,7 +26,7 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 
 $_SESSION['processingStatus'] = "pending";
-$repository = $_POST['urlrepo'];
+$repository = filter($_POST['urlrepo']);
 
 if (isset($_POST['urlrepo']))
 {
