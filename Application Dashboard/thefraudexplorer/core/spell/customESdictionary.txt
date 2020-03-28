@@ -823,7 +823,6 @@ politiqueria
 polla
 popayan
 poposeo
-porfa
 postobon
 prendido
 prepaga
@@ -991,3 +990,5 @@ zarzo
 zipaquira
 zumbambica
 zumbambico
+porfa
+porfis

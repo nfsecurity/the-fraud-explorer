@@ -28,7 +28,7 @@ include "../lbs/openDBconn.php";
 
 $fta_lang = $configFile['fta_lang_selection'];
 $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
-$actionTODO = $_POST['action'];
+$actionTODO = filter($_POST['action']);
 
 $rulesetSelectedADD = null;
 $fraudVerticeSelectedADD = null;

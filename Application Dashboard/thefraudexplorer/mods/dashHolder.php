@@ -146,6 +146,13 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Regionalism words</div><div class=tooltip-row><div class=tooltip-item>Add or delete a set of words related to<br>specific country, city or ethnic groups<br>to improve fraud detection</div></div></div>"><a href="../mods/regionalismWords" data-toggle="modal" class="regionalism-words-button" data-target="#regionalismWords" href="#" id="elm-regionalism-words"><span class="fa fa-language fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a><span>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
                     <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><span class="fa fa-calendar-check-o fa-2x font-icon-color-gray vertical-menu-icon-padding"></span></a></span>
                     </center>
                 </td>
@@ -578,6 +585,14 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
     });
 </script>
 
+<!-- Modal for Regionalism Words -->
+
+<script>
+    $('#regionalism-words').on('show.bs.modal', function(e){
+        $(this).find('.regionalism-words-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
 <!-- Modal for Fraud Triangle Workflows -->
 
 <script>
@@ -861,6 +876,8 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
         }
     });
 </script>
+
+<!-- Dotdotdot script -->
 
 <script>
 $(document).ready(function() {

@@ -285,6 +285,20 @@ $_SESSION['rulesetScope'] = "ALL";
             </div>
         </div>
 
+        <!-- Modal for Regionalism words -->
+
+        <div class="modal" id="regionalismWords" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal for GraphicData -->
 
         <div class="modal" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
