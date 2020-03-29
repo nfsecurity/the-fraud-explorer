@@ -1165,3 +1165,9 @@ a.welcome
 {
     outline: 0 !important;
 }
+
+.switch-phrase-collection-button
+{
+    color: white !important;
+    text-decoration: none; 
+}

@@ -233,7 +233,19 @@ header("Connection: close");
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">I'm not sure</button>
-                                <a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">I'm sure, proceed</a>
+
+                                <?php
+    
+                                    include "lbs/cryptography.php";
+
+                                    $xml = simplexml_load_file('update.xml');
+                                    $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
+        
+                                    if ($phraseCollectionStatus == "textAnalytics 1") echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Disable collection</a>';
+                                    else echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Enable collection</a>';
+                                
+                                ?>
+
                             </div>
                         </div>
                     </div>
