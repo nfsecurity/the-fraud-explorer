@@ -35,7 +35,7 @@ if (isset($_POST['urlrepo']))
 
     if ($return == 0) 
     {
-        /* Change the updated version inf config.ini file */
+        /* Change the updated version in config.ini file */
 
         $URLConfigFile = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/config.ini";
         $repoConfigFile = file_get_contents($URLConfigFile);

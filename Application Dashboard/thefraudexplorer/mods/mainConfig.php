@@ -13,19 +13,24 @@
  *
  * Description: Code for main config
  */
+
 include "../lbs/login/session.php";
 include "../lbs/security.php";
+
 if(!$session->logged_in)
 {
     header ("Location: index");
     exit;
 }
+
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cronManager.php";
+
 ?>
 
 <style>
+
     .title-config
     {
         font-family: 'FFont', sans-serif; font-size:12px;
@@ -33,6 +38,7 @@ include "../lbs/cronManager.php";
         padding-bottom: 10px;
         padding-top: 10px;
     }
+
     .input-value-text-config
     {
         width: 100%;
@@ -43,10 +49,12 @@ include "../lbs/cronManager.php";
         font-family: 'FFont', sans-serif; font-size:12px;
         border-radius: 5px;
     }
+
     .score-text
     {
         font-family: 'FFont', sans-serif; font-size:11.5px;
     }
+
     .title-score
     {
         font-family: 'FFont', sans-serif; font-size:12px;
@@ -55,15 +63,18 @@ include "../lbs/cronManager.php";
         padding-top: 10px;
         display: block;
     }
+
     .window-footer-config
     {
         padding: 0px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
     }
+
     .div-container
     {
         margin: 20px;
     }
+
     input[type="number"] 
     {
         position: relative;
@@ -75,6 +86,7 @@ include "../lbs/cronManager.php";
         outline: 0 !important;
         border-radius: 5px
     }
+
     input[type="number"].mod::-webkit-outer-spin-button, input[type="number"].mod::-webkit-inner-spin-button 
     {
         -webkit-appearance: none;
@@ -88,21 +100,25 @@ include "../lbs/cronManager.php";
         right: 0;
         bottom: 0;
     }
+
     input[type="number"].mod::-webkit-inner-spin-button:hover, input[type="number"].mod::-webkit-inner-spin-button:active
     {
         box-shadow: 0 0 2px #0CF;
         opacity: .8;
     }
+
     .container-score-config
     {
         display: block;
     }
+
     .container-score-config::after 
     {
         display:block;
         content:"";
         clear:both;
     }
+
     .score-align-left
     {
         display: inline;
@@ -114,6 +130,7 @@ include "../lbs/cronManager.php";
         float:left;
         margin: 10px 0px 0px 0px;
     }
+
     .score-align-right
     {
         display: inline;
@@ -138,6 +155,7 @@ include "../lbs/cronManager.php";
         padding: 8px 0px 0px 10px !important;
         position: relative;
     }
+
     .select-ruleset-styled .list
     {
         margin-left: 5px;
@@ -146,6 +164,7 @@ include "../lbs/cronManager.php";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
         background: #f9f9f9 !important;
     }
+
     .select-ftacron-styled
     {
         max-height: 30px !important;
@@ -157,6 +176,7 @@ include "../lbs/cronManager.php";
         padding: 8px 0px 0px 10px !important;
         position: relative;
     }
+
     .select-ftacron-styled .list
     {
         margin-left: 5px;
@@ -166,13 +186,36 @@ include "../lbs/cronManager.php";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
         background: #f9f9f9 !important;
     }
+
+    .select-librarylanguage-styled
+    {
+        max-height: 30px !important;
+        min-height: 30px !important;
+        border: 1px solid #ccc !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        color: #757575 !important;
+        line-height: 11.6px !important;
+        padding: 8px 0px 0px 10px !important;
+        position: relative;
+    }
+    
+    .select-librarylanguage-styled .list
+    {
+        margin-left: 5px;
+        max-height: 120px;
+        overflow-y: scroll !important;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        background: #f9f9f9 !important;
+    }
+
     .master-container
     {
         width: 100%; 
         height: 70px;
     }
     
-    .key-container, .encryption-container
+    .key-container, .encryption-container, .adminpassword-container
     {
         width: calc(50% - 5px); 
         height: 100%; 
@@ -180,13 +223,14 @@ include "../lbs/cronManager.php";
         float: left;
     }
     
-    .sample-calculation-container, .cron-container
+    .sample-calculation-container, .cron-container, .librarylanguage-container
     {
         width: calc(50% - 5px); 
         height: 100%; 
         display: inline; 
         float: right;
     }
+
 </style>
 
 <div class="modal-header">
@@ -239,7 +283,7 @@ include "../lbs/cronManager.php";
             </div>
             <div class="cron-container">
                 <p class="title-config">Run FTA AI-Processor every</p><br>
-                    <select class="select-ftacron-styled wide" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+                <select class="select-ftacron-styled wide" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
                      <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); if ($minutes != "false") echo $minutes; else echo "disabled"; ?>" selected="selected"> 
                         
                         <?php
@@ -259,8 +303,35 @@ include "../lbs/cronManager.php";
             </div>
         </div>
 
-        <p class="title-config">Admin password modification</p><br>
-        <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="new-password" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+        <div class="master-container">
+            <div class="adminpassword-container">
+                <p class="title-config">Admin password modification</p><br>
+                <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="new-password" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+            </div>
+            <div class="librarylanguage-container">
+                <p class="title-config">Phrase Library language</p><br>
+                <select class="select-librarylanguage-styled wide" name="librarylanguage" id="librarylanguage" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+
+                    <?php
+
+                        $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+
+                        if ($configFile["wc_language"] == "es")
+                        {
+                            echo '<option value="es" selected="selected">Spanish</option>';
+                            echo '<option value="en">English</option>';
+                        }
+                        else
+                        {
+                            echo '<option value="es">Spanish</option>';
+                            echo '<option value="en" selected="selected">English</option>';
+                        }
+
+                    ?>
+                  
+                </select>    
+            </div>
+        </div>
 
         <?php
         

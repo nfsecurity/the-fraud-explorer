@@ -104,6 +104,28 @@ if (isset($_POST['ftacron']))
     }
 }
 
+if (isset($_POST['librarylanguage']))
+{
+    if (!empty($_POST['librarylanguage']))
+    {
+        $languageSelected = filter($_POST['librarylanguage']);
+        $ftaLanguagetoSet = "fta_lang_selection = \\\"fta_text_rule";
+
+        if ($languageSelected == "es") $ftaLanguagetoSet = $ftaLanguagetoSet . "_spanish\\\"";
+        else if ($languageSelected == "en") $ftaLanguagetoSet = $ftaLanguagetoSet . "_english\\\"";
+        $wordCorrectiontoSet = "wc_language = \\\"" . $languageSelected . "\\\"";
+     
+        /* Change language in config.ini file */
+ 
+        $configFile = parse_ini_file("../config.ini");
+        $ftaLang = "fta_lang_selection = \\\"" . $configFile['fta_lang_selection'] . "\\\"";
+        $wcLang = "wc_language = \\\"" . $configFile['wc_language'] . "\\\"";
+
+        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcLang.'/'.$wordCorrectiontoSet.'/g; s/'.$ftaLang.'/'.$ftaLanguagetoSet.'/g" --in-place '.$documentRoot.'config.ini';
+        $commandReplacements = shell_exec($replaceParams);
+    }
+}
+
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 include "../lbs/closeDBconn.php";
 
