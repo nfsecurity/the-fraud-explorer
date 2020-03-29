@@ -20,6 +20,10 @@ TFEDIRECTORY="/var/www/html/thefraudexplorer/"
 
 # Download and unzip master file
 
+if [ ! -d $REPODIR ]; then
+  mkdir $REPODIR
+fi
+
 cd $REPODIR
 /usr/bin/wget $URL
 
@@ -29,7 +33,7 @@ if [ $? -eq 0 ]; then
 
     # Sync remote files with local files
 
-    /usr/bin/rsync -aq --exclude config.ini --exclude update.xml "$REPODATA" "$TFEDIRECTORY" 
+    /usr/bin/rsync -aq --exclude config.ini --exclude 'core/include/*.php' "$REPODATA" "$TFEDIRECTORY" 
     chown -R apache:apache /var/www/html/thefraudexplorer
 
     # Remove temporary directory and files
