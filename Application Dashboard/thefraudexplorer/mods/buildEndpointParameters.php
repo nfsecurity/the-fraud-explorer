@@ -32,7 +32,6 @@ $finalPlatformForBuild = null;
 $finalServerHTTPSAddress = null;
 $finalExcludedApps = null;
 $finalPCEnabled = null;
-$finalIPAddress = null;
 $finalCryptKey = null;
 $finalSrvPwd = null;
 $finalRESTcredentials = null;
@@ -47,7 +46,7 @@ if (isset($_POST['platform'])) $finalPlatformForBuild = filter($_POST['platform'
 /* HTTPS Address */
 
 if (isset($_POST['address'])) $finalServerHTTPSAddress = filter($_POST['address']);
-if ($finalPlatformForBuild == "windows") $finalServerHTTPSAddress = $finalServerHTTPSAddress + "/update.xml";
+if ($finalPlatformForBuild == "windows") $finalServerHTTPSAddress = $finalServerHTTPSAddress . "/update.xml";
 
 $finalServerHTTPSAddress = str_replace('/', '\/', $finalServerHTTPSAddress);
 

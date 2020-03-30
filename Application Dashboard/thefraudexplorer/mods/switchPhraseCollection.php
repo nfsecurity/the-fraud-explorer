@@ -66,8 +66,8 @@ fclose($fp);
 
 echo $com;
 
-/* Return to refering url */
+/* Page return to origin */
 
-header ("location: ../endPoints");
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 ?>
