@@ -15,37 +15,38 @@
  * Description: Download multiple files
  */
 
-include "globalVars.php";
+include "../lbs/login/session.php";
+include "../lbs/security.php";
 
-$zip = new ZipArchive();
-$filename = $documentRoot."/core/ziprules/thefraudexplorer-rules.zip";
-
-if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) 
+if(!$session->logged_in)
 {
-    exit("cannot open <$filename>\n");
+    header ("Location: index");
+    exit;
 }
 
-$dir = '../core/rules/';
+include "../lbs/globalVars.php";
 
-if (is_dir($dir))
-{
-    if ($dh = opendir($dir))
-    {
-        while (($file = readdir($dh)) !== false)
-        {
-            if (is_file($dir.$file)) 
-            {
-                if($file != '' && $file != '.' && $file != '..')
-                {
-                    $zip->addFile($dir.$file);
-                }
-            }
- 
-        }
-        closedir($dh);
-    }
+$pathdir = $documentRoot."/core/rules/";  
+$zipcreated = $documentRoot."/core/ziprules/thefraudexplorer-rules.zip";
+
+$zip = new ZipArchive; 
+   
+if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) 
+{ 
+    $dir = opendir($pathdir); 
+       
+    while($file = readdir($dir)) 
+    { 
+        if(is_file($pathdir.$file)) 
+        { 
+            $zip -> addFile($pathdir.$file, $file); 
+        } 
+    } 
+
+    closedir($pathdir);
+    $zip -> close(); 
 }
 
-$zip->close();
+echo "helpers/authAccess?file=".$zipcreated;
 
-echo "helpers/authAccess?file=".$filename;
+?> 
