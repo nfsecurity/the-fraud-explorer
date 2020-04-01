@@ -1186,12 +1186,17 @@ a.welcome
     text-align: center;
     display: inline-block;
     vertical-align: middle;
+    position: relative;
 }
 
 .menu-title
 {
-    width: 16px;
-    margin-top: -12px;
+    width: 20px;
+    height: 15px;
+    margin-top: -14px;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-bottom: 2px;
     margin-bottom: 2px;
     margin-left: 0px;
     background: #F2F2F2;
@@ -1199,4 +1204,6 @@ a.welcome
     font-family: 'FFont', sans-serif; 
     font-size: 8px;
     border-radius: 2px;
+    border: 1.4px solid #d3d3d3;
+    position: relative;
 }
