@@ -1156,9 +1156,9 @@ a.welcome
     filter: alpha(opacity=0);
 }
 
-.fa-file-text-o:hover, .fa-tasks:hover, .fa-folder-open-o:hover, .fa-calendar-check-o:hover, .fa-table:hover, .fa-building-o:hover, .fa-film:hover, .fa-folder-o:hover, .fa-envelope-open-o:hover, .fa-language:hover, .fa-object-group:hover 
+.fa-list-ol:hover, .fa-file-text-o:hover, .fa-user-plus:hover, .fa-book:hover, .fa-language:hover, .fa-toggle-on:hover, .fa-table:hover, .fa-sitemap:hover, .fa-drupal:hover, .fa-database:hover, .fa-wpforms:hover
 {
-    color:#808080 !important;
+    color:#999999 !important;
 }
 
 .event-phrase-viewer
@@ -1174,36 +1174,37 @@ a.welcome
 
 .left-menu-button
 {
-    border: 1.4px solid #d3d3d3;
+    border: 1px solid #d9d9d9;
     background-color: #F2F2F2; 
     color: #888888;
-    width: 30px;
-    border-radius: 5px; 
-    padding: 5px 2px 2px 3px !important;
+    width: 35px;
+    border-radius: 0px 0px 5px 5px; 
+    padding: 0px 0px 0px 0px !important;
     height: 28px;
     font-family: 'FFont-Bold', sans-serif; 
     font-size: 16px;
     text-align: center;
     display: inline-block;
     vertical-align: middle;
-    position: relative;
 }
 
 .menu-title
 {
-    width: 20px;
-    height: 15px;
-    margin-top: -14px;
+    width: 35px;
+    height: 12px;
+    margin-top: -10px;
+    padding-top: 0px;
     padding-left: 1px;
     padding-right: 1px;
-    padding-bottom: 2px;
-    margin-bottom: 2px;
-    margin-left: 0px;
-    background: #F2F2F2;
+    margin-bottom: 3px;
+    margin-right: 5px;
+    margin-left: -1px;
+    background: #d9d9d9;
     text-align: center;
-    font-family: 'FFont', sans-serif; 
+    font-family: 'FFont-Bold', sans-serif; 
     font-size: 8px;
-    border-radius: 2px;
-    border: 1.4px solid #d3d3d3;
-    position: relative;
+    line-height: 10px;
+    float: left;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid #d9d9d9;
 }
