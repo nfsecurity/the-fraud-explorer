@@ -198,7 +198,7 @@ if ($endpointDECSQL != "all")
         $endpointName = $userDomain['agent']."@".$userDomain['domain'];
     
         echo '<td class="detailstd">';
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;"></span></a>&ensp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
         echo '</td>';
 
         /* Timestamp */
@@ -320,7 +320,7 @@ else
                     
         /* Details */
         
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><span class="fa fa-id-card-o fa-2x font-icon-color-gray-low" style="font-size: 20px;"></span></a>&ensp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
         echo '</td>';
         
         /* Date */

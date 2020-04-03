@@ -224,7 +224,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         /* Enpoint Details */
 
         echo '<td class="detailstd">';
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$row_a["agent"].'&domain='.$row_a["domain"].'" data-toggle="modal" data-target="#endpoint-card" href="#"><span class="fa fa-id-card-o fa-2x font-icon-color" style="font-size: 20px;"></span></a>&nbsp;&nbsp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$row_a["agent"].'&domain='.$row_a["domain"].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&nbsp;&nbsp;';
         echo '</td>';
 
         /* Endpoint data retrieval */

@@ -26,18 +26,18 @@ function queryOrDie($query)
 
 function isConnected($t1, $t2)
 {
-    $dateUpper=strtotime($t2);
-    $dateLower=strtotime($t1);
+    $dateUpper = strtotime($t2);
+    $dateLower = strtotime($t1);
     $differenceMns = (int)(($dateUpper - $dateLower)/60);
-    return $differenceMns<120;
+    return $differenceMns < 120;
 }
 
 function getTextSist($system)
 { 
-    if($system=='5.1') return ' Windows XP';
-    if($system=='6.1') return ' Windows 7'; 
-    if($system=='6.2' || $system=='6.3') return ' Windows 8';
-    if($system=='10.0') return ' Windows 10';
+    if ($system == '5.1') return ' Windows XP';
+    if ($system == '6.1') return ' Windows 7'; 
+    if ($system == '6.2' || $system == '6.3') return ' Windows 8';
+    if ($system == '10.0') return ' Windows 10';
     else return ' Windows Vista'; 
 }
 
@@ -69,7 +69,7 @@ function endpointInsights($location, $gender, $endpointEnc, $totalWordHits, $cou
 
     if (strpos($endpointData[0], ' ') !== false) $spaces = true;
 
-    if ($location == "endPoints" || $location == "eventData" ) echo '<div class="gender-container"><img src="images/'.$gender.'-agent.gif" class="gender-image"></div>';
+    if ($location == "endPoints" || $location == "eventData") echo '<div class="gender-container"><img src="images/'.$gender.'-user.svg" class="gender-image"></div>';
     
     if ($score == 0)
     {

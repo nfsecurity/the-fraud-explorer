@@ -1074,6 +1074,17 @@ li a:hover:not(.active)
     height: 35px;
 }
 
+.card-settings
+{
+    vertical-align: middle; 
+    width: 28px; 
+}
+
+.card-settings:hover
+{
+    color: blue;
+}
+
 .btn-metrics
 {
     height: 30px;

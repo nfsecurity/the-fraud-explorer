@@ -675,8 +675,14 @@ input[type=checkbox]
 .gender-image
 {
     vertical-align: middle; 
-    width: 35px; 
+    width: 35px;
     height: 35px;
+}
+
+.card-settings
+{
+    vertical-align: middle; 
+    width: 28px; 
 }
 
 .image-padding
