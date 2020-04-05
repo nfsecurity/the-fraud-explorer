@@ -60,7 +60,7 @@ if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh'])))))
 
         <!-- CSS -->
 
-        <link rel="stylesheet" type="text/css" href="css/eventData.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/eventData.css?<?php echo filemtime('css/eventData.css') ?>" media="screen" />
 
         <!-- ChartJS -->
 
@@ -79,7 +79,7 @@ if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh'])))))
 
         <!-- Footer CSS -->
 
-        <link rel="stylesheet" type="text/css" href="css/footer.css">
+        <link rel="stylesheet" type="text/css" href="css/footer.css?<?php echo filemtime('css/footer.css') ?>">
 
         <!-- JQuery nice select -->
 

@@ -31,7 +31,7 @@ $currentversion = $configFile['sw_version'];
 
 <!-- Styles -->
 
-<link rel="stylesheet" type="text/css" href="../css/footer.css">
+<link rel="stylesheet" type="text/css" href="../css/footer.css?<?php echo filemtime('../css/footer.css') ?>">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
 
 <style>

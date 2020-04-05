@@ -64,7 +64,7 @@ $_SESSION['rulesetScope'] = "ALL";
 
         <!-- CSS -->
 
-        <link rel="stylesheet" type="text/css" href="css/dashBoard.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/dashBoard.css?<?php echo filemtime('css/dashBoard.css') ?>" media="screen" />
 
         <!-- Font Awesome -->
 
@@ -83,7 +83,7 @@ $_SESSION['rulesetScope'] = "ALL";
 
         <!-- Footer -->
 
-        <link rel="stylesheet" type="text/css" href="css/footer.css" />
+        <link rel="stylesheet" type="text/css" href="css/footer.css?<?php echo filemtime('css/footer.css') ?>" />
 
         <!-- JQuery nice select -->
 

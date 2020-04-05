@@ -74,7 +74,7 @@ include "../lbs/closeDBconn.php";
 
 <!-- Styles -->
 
-<link rel="stylesheet" type="text/css" href="../css/topMenu.css">
+<link rel="stylesheet" type="text/css" href="../css/topMenu.css?<?php echo filemtime('../css/topMenu.css') ?>">
 
 <ul class="ul" id="elm-topmenu">
     <li class="li">
