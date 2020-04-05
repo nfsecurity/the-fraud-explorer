@@ -57,7 +57,7 @@ include "lbs/elasticsearch.php";
         <!-- Charts CSS -->
 
         <link rel="stylesheet" type="text/css" href="css/analyticsData.css?<?php echo filemtime('css/analyticsData.css') ?>"/>
-        <link rel="stylesheet" type="text/css" href="css/chartAnalytics.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="css/chartAnalytics.css?<?php echo filemtime('css/chartAnalytics.css') ?>" media="screen" />
 
         <!-- Load Chart.js -->
 
