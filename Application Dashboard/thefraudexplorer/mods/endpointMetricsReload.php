@@ -26,10 +26,10 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 
-$_SESSION['endpointMetrics']['endpoint'] = filter($_GET['endpoint']);
-$_SESSION['endpointMetrics']['pressure'] = filter($_GET['pressure']);
-$_SESSION['endpointMetrics']['opportunity'] = filter($_GET['opportunity']);
-$_SESSION['endpointMetrics']['rationalization'] = filter($_GET['rationalization']);
+$_SESSION['endpointMetrics']['endpoint'] = filter($_GET['nt']);
+$_SESSION['endpointMetrics']['pressure'] = filter($_GET['re']);
+$_SESSION['endpointMetrics']['opportunity'] = filter($_GET['ty']);
+$_SESSION['endpointMetrics']['rationalization'] = filter($_GET['on']);
 @$_SESSION['endpointMetrics']['launch'] = $_SESSION['endpointMetrics']['launch'] + 1;
 
 ?>

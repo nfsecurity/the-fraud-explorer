@@ -28,8 +28,8 @@ include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
-$endpointEnc = filter($_GET['endpoint']);
-$endpointDec = decRijndael($endpointEnc));
+$endpointEnc = filter($_GET['nt']);
+$endpointDec = decRijndael($endpointEnc);
 
 ?>
 
@@ -100,7 +100,7 @@ $queryGender = "SELECT gender FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS age
 ?>
 
 <div class="div-container">
-    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'mods/setupEndpointParameters?endpoint='.$endpointEnc; ?>">
+    <form id="formSetup" name="formSetup" method="post" action="<?php echo 'mods/setupEndpointParameters?nt='.$endpointEnc; ?>">
         <p class="title">Endpoint alias</p><br>
         <input type="text" name="alias" id="alias" autocomplete="off" placeholder=":alias here <?php $aliasquery = mysqli_query($connection, sprintf($queryName, $endpointDec)); $alias = mysqli_fetch_array($aliasquery); if ($alias[0] == NULL) echo '(current value: Not alias yet)'; else echo '(current value: '.$alias[0].')'; ?>" class="input-value-text">
         <br><br><p class="title">Ruleset or Dictionary</p><br>

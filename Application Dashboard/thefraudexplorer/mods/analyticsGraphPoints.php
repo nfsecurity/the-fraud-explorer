@@ -29,7 +29,7 @@ include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
 include "../lbs/cryptography.php";
 
-$coordinates = filter($_GET['coordinates']);
+$coordinates = filter($_GET['oo']);
 $coordinates = str_replace('\\', '', $coordinates);
 $graphPoints = json_decode($coordinates, true);
 
@@ -255,7 +255,7 @@ $graphPoints = json_decode($coordinates, true);
                     {
                         echo '<tr class="table-tr-graphdata">';
                         echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>';
-                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?endpoint='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
+                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?nt='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
                     }
                     else continue;
                         

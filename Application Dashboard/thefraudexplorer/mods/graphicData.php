@@ -267,7 +267,7 @@ include "../lbs/cryptography.php";
         echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the analytics graph</div>';
         echo '<div class="modal-footer window-footer-config">';
         echo '<br>';
-        echo '<a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>';
+        echo '<a class="btn btn-default" style="outline: 0 !important;" href="eventData?nt'.encRijndael("all").'">Access all events</a>';
         echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>';
         echo '</div>';
         echo '</div>';
@@ -310,7 +310,7 @@ include "../lbs/cryptography.php";
                         echo '<tr class="table-tr-graphdata">';
                         
                         echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
-                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?endpoint='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
+                        echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?nt='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
                     }
                     else continue;
                         
@@ -339,7 +339,7 @@ include "../lbs/cryptography.php";
     
     <div class="modal-footer window-footer-config">
         <br>
-        <a class="btn btn-default" style="outline: 0 !important;" href="eventData?endpoint=WVd4cw==">Access all events</a>
+        <a class="btn btn-default" style="outline: 0 !important;" href="eventData?nt=<?php echo encRijndael("all"); ?>">Access all events</a>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
     </div>
 

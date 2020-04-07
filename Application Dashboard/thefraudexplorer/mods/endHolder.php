@@ -224,7 +224,7 @@ if ($row_a = mysqli_fetch_array($result_a))
         /* Enpoint Details */
 
         echo '<td class="detailstd">';
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$row_a["agent"].'&domain='.$row_a["domain"].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&nbsp;&nbsp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.encRijndael($row_a["agent"]).'&in='.encRijndael($row_a["domain"]).'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&nbsp;&nbsp;';
         echo '</td>';
 
         /* Endpoint data retrieval */
@@ -313,15 +313,15 @@ if ($row_a = mysqli_fetch_array($result_a))
         echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
         echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
         echo '<td class="countctd"><center><div class="score-container-underline">'.$level.'</div></center></td>';
-        echo '<td class="scoretd"><a href=eventData?endpoint='.$endpointEnc.'>'.round($score, 1).'</a></td>';
+        echo '<td class="scoretd"><a href=eventData?nt='.$endpointEnc.'>'.round($score, 1).'</a></td>';
 
         /* Option for delete the endpoint */
 
-        echo '<td class="specialtd"><a class="delete-endpoint" data-href="mods/deleteEndpoint?endpoint='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
+        echo '<td class="specialtd"><a class="delete-endpoint" data-href="mods/deleteEndpoint?nt='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
 
         /* Endpoint setup */
 
-        echo '<td class="specialtd"><a class="setup-endpoint" href="mods/setupEndpoint?endpoint='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
+        echo '<td class="specialtd"><a class="setup-endpoint" href="mods/setupEndpoint?nt='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
         echo '</tr>';
     }
     while ($row_a = mysqli_fetch_array($result_a));

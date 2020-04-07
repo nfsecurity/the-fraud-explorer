@@ -27,7 +27,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 
-$name = filter($_GET['regionalismFile']);
+$name = filter($_GET['le']);
 $name = decRijndael($name);
 
 header('Content-Description: File Transfer');

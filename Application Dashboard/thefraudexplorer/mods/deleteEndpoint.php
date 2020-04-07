@@ -28,7 +28,7 @@ include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
-$endpointEnc = filter($_GET['endpoint']);
+$endpointEnc = filter($_GET['nt']);
 $endpointDec = decRijndael($endpointEnc);
 $endpointID = str_replace(array("."), array("_"), $endpointDec);
 

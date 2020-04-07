@@ -201,7 +201,7 @@ else $totalSystemWords= "0";
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Top fraud triangle endpoints</p>
             <p class="container-window-icon">
-                <?php echo '<a href="eventData?endpoint='.encRijndael("all").'" class="button-view-all-events">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
+                <?php echo '<a href="eventData?nt='.encRijndael("all").'" class="button-view-all-events">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
             </p>
         </h2>
@@ -396,7 +396,7 @@ else $totalSystemWords= "0";
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle theory latest events</p>
             <p class="container-window-icon">
-                <?php echo '<a href="eventData?endpoint='.encRijndael("all").'" class="button-view-all-events" id="elm-viewallevents">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
+                <?php echo '<a href="eventData?nt='.encRijndael("all").'" class="button-view-all-events" id="elm-viewallevents">&nbsp;&nbsp;View all events&nbsp;&nbsp;</a>&nbsp;'; ?>
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
             </p>
         </h2>
@@ -482,7 +482,7 @@ else $totalSystemWords= "0";
 
                         echo '</td>';
                         echo '<td class="td-phrase">';
-                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 2px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.encRijndael($regExpression).'&phrase='.encRijndael($wordTyped).'&date='.encRijndael($date).'&endpoint='.encRijndael($endpointName).'&alertType='.encRijndael(strtoupper($result['_source']['alertType'])).'&windowTitle='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
+                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 2px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
                         echo '</td>';
                     
                         echo '<td class="td-vertice td-with-bg">';

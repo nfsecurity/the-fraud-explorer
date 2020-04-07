@@ -32,7 +32,7 @@ if (isset($_POST['reviewPhrasesTextArea']))
     $textArea = encRijndael(filter_var($_POST['reviewPhrasesTextArea'], FILTER_SANITIZE_STRING));
 
     if (isset($_GET['id'])) $documentId = filter($_GET['id']);
-    if (isset($_GET['idx'])) $indexId = filter($_GET['idx']);
+    if (isset($_GET['ex'])) $indexId = filter(decRijndael($_GET['ex']));
 
     $urlReview = "http://localhost:9200/".$indexId."/AlertEvent/".$documentId."/_update?pretty&pretty";
     $params = '{ "doc" : { "stringHistory" : "'.$textArea.'" } }';

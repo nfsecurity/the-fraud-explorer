@@ -85,7 +85,7 @@ include "../lbs/closeDBconn.php";
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
-        <a href="../eventData?endpoint=<?php include "../lbs/cryptography.php"; echo encRijndael("all"); ?>" id="elm-eventmodule">Fraud Triangle Events</a>
+        <a href="../eventData?nt=<?php include "../lbs/cryptography.php"; echo encRijndael("all"); ?>" id="elm-eventmodule">Fraud Triangle Events</a>
     </li>
     <li class="li">
         <a href="analyticsData" id="elm-analytics">Analytics</a>
@@ -99,7 +99,7 @@ include "../lbs/closeDBconn.php";
 
     <?php
     
-    if (isset($_GET['origin'])) $resourceOrigin=filter($_GET['origin']);
+    if (isset($_GET['or'])) $resourceOrigin=filter($_GET['or']);
     else $resourceOrigin = "other";
     
     if ($session->domain == "all")

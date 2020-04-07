@@ -62,11 +62,11 @@ include "../lbs/globalVars.php";
 
 <?php
 
-$regid=filter($_GET['regid']);
-$endpoint=filter($_GET['endpoint']);
-$index=filter($_GET['index']);
-$type=filter($_GET['type']);
-$urlrefer=filter($_GET['urlrefer']);
+$regid = filter($_GET['id']);
+$endpoint = filter($_GET['nt']);
+$index = filter($_GET['ex']);
+$type = filter($_GET['pe']);
+$urlrefer = filter($_GET['er']);
 
 ?>
 
@@ -76,7 +76,7 @@ $urlrefer=filter($_GET['urlrefer']);
 </div>
 
 <div class="div-container">
-    <form id="formConfig" name="formConfig" method="post" action=<?php echo '"mods/toggleEventMark?regid='.$regid.'&endpoint='.$endpoint.'&index='.$index.'&type='.$type.'&urlrefer='.$urlrefer.'"'; ?>>
+    <form id="formConfig" name="formConfig" method="post" action=<?php echo '"mods/toggleEventMark?id='.rawurlencode($regid).'&nt='.rawurlencode($endpoint).'&ex='.rawurlencode($index).'&pe='.rawurlencode($type).'&er='.$urlrefer.'"'; ?>>
         
         <div class="modal-body window-body" style="margin: 0px 10px 15px 10px;">
             <p style="text-align:justify; font-size: 12px;">You are about to mark this fraud triangle event as inactive, active, false positive or viceversa, this procedure disable or enable this event in the overall fraud triangle calculation process for this endpoint only. You can revert this decision at any time later. Do you want to proceed ?</p>

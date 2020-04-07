@@ -32,7 +32,7 @@ include "../lbs/elasticsearch.php";
 $configFile = parse_ini_file("../config.ini");
 $ESalerterIndex = $configFile['es_alerter_index'];
 
-$alertid = filter($_GET['alertID']);
+$alertid = filter($_GET['id']);
 $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
 
 ?>

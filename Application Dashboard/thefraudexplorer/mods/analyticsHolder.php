@@ -308,7 +308,7 @@ include "../lbs/cryptography.php";
             
             echo '<div class="data-table-icon"><br>';
             echo '<span class="fa fa-th-large fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai">Artificial intelligence expert deductions</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-th-list fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="eventData?endpoint='.encRijndael("all").'" id="elm-analyticsaccess">All fraud triangle events</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-th-list fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="eventData?nt='.encRijndael("all").'" id="elm-analyticsaccess">All fraud triangle events</a>&nbsp;&nbsp;&nbsp;';
             echo '<span class="fa fa-table fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
             echo '</div>';
                     
@@ -1500,7 +1500,7 @@ include "../lbs/cryptography.php";
 
             if (element.length > 0) {
                 var data = JSON.stringify(this.config.data.datasets[element[0]._datasetIndex].data[element[0]._index]);
-                var url = "mods/analyticsGraphPoints.php?coordinates=" + data;
+                var url = "mods/analyticsGraphPoints.php?oo=" + data;
                 
                 $('.modal-body').load(url);
                 $('#bubble-clicking').modal('show');

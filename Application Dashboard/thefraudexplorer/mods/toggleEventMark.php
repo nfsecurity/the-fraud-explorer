@@ -28,11 +28,11 @@ include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
-$regid = filter($_GET['regid']);
-$endpoint = filter($_GET['endpoint']);
-$index = filter($_GET['index']);
-$type = filter($_GET['type']);
-$urlrefer = filter($_GET['urlrefer']);
+$regid = filter(decRijndael($_GET['id']));
+$endpoint = filter(decRijndael($_GET['nt']));
+$index = filter(decRijndael($_GET['ex']));
+$type = filter(decRijndael($_GET['pe']));
+$urlrefer = filter($_GET['er']);
 
 if (!empty($_POST['toggle-event']))
 {
@@ -93,8 +93,8 @@ else if (!empty($_POST['delete-event']))
 
 /* Return to refering url */
 
-if ($urlrefer == "allevents") header ("location: ../eventData?endpoint=".encRijndael("all"));
-else header ("location: ../eventData?endpoint=".encRijndael($endpoint));
+if ($urlrefer == "allevents") header ("location: ../eventData?nt=".encRijndael("all"));
+else header ("location: ../eventData?nt=".encRijndael($endpoint));
 
 ?>
 

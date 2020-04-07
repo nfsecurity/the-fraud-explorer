@@ -417,7 +417,7 @@ function getstatus()
         else rationalization = false;
 
         $.get({
-            url: 'mods/endpointMetricsReload.php?endpoint=' + endpointData + '&pressure=' + pressure + '&opportunity=' + opportunity + '&rationalization=' + rationalization, 
+            url: 'mods/endpointMetricsReload.php?nt=' + endpointData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
             success: function(data) { return true; }
         });
     }
@@ -440,7 +440,7 @@ function getstatus()
         else rationalization = false;
 
         $.get({
-            url: 'mods/endpointMetricsReload.php?endpoint=' + endpointData + '&pressure=' + pressure + '&opportunity=' + opportunity + '&rationalization=' + rationalization, 
+            url: 'mods/endpointMetricsReload.php?nt=' + endpointData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
             success: function(data) { return true; }
         });
     }

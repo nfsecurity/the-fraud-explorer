@@ -31,7 +31,7 @@ include "../lbs/endpointMethods.php";
 require '../vendor/autoload.php';
 include "../lbs/elasticsearch.php";
 
-$workflowName = filter(decRijndael($_GET['triggered']));
+$workflowName = filter(decRijndael($_GET['ed']));
 
 ?>
 
@@ -334,7 +334,7 @@ function showAlert(clicked_id, alertid)
 {
     if (clicked_id == "viewAlert")
     {
-        $("#alertPanelWF").load("mods/alertAIPhrases.php?alertID=" + alertid);
+        $("#alertPanelWF").load("mods/alertAIPhrases.php?id=" + alertid);
     }
  }
 

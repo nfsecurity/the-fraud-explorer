@@ -26,7 +26,7 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "eventData";
-$_SESSION['endpointIDh'] = filter($_GET['endpoint']);
+$_SESSION['endpointIDh'] = filter($_GET['nt']);
 
 if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("location: endPoints");
 

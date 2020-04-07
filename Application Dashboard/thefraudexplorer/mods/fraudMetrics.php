@@ -564,7 +564,7 @@ function getstatus()
         if (!endpointData) endpointData = "null";
 
         $.get({
-            url: 'mods/fraudMetricsReload.php?endpoint=' + endpointData + '&allbusiness=' + allBusiness + '&allendpoints=' + allEndpoints + '&ruleset=' + businessData, 
+            url: 'mods/fraudMetricsReload.php?nt=' + endpointData + '&ss=' + allBusiness + '&ts=' + allEndpoints + '&et=' + businessData, 
             success: function(data) { return true; }
         });
     }
@@ -587,7 +587,7 @@ function getstatus()
         if (!endpointData) endpointData = "null";
 
         $.get({
-            url: 'mods/fraudMetricsReload.php?endpoint=' + endpointData + '&allbusiness=' + allBusiness + '&allendpoints=' + allEndpoints + '&ruleset=' + businessData, 
+            url: 'mods/fraudMetricsReload.php?nt=' + endpointData + '&ss=' + allBusiness + '&ts=' + allEndpoints + '&et=' + businessData, 
             success: function(data) { return true; }
         });
     }

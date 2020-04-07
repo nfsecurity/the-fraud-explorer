@@ -150,7 +150,7 @@ $size = $regionalismFile[2]/1024;
     </div>
 
     <br>
-    <a class="downloadfile" href="mods/downloadRegionalism?regionalismFile=<?php echo encRijndael($regionalismFile[3]); ?>">
+    <a class="downloadfile" href="mods/downloadRegionalism?le=<?php echo encRijndael($regionalismFile[3]); ?>">
     <button type="button" class="btn btn-default" style="width: 100%; outline: 0 !important;">
         Download entire regionalism dictionary file<br>
         <p class="latest-regionalism">

@@ -28,7 +28,7 @@ include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
-$name = filter($_GET['backupFile']);
+$name = filter($_GET['le']);
 $name = decRijndael($name);
 
 header('Content-Description: File Transfer');

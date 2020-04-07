@@ -386,7 +386,7 @@ function showAlert(clicked_id, alertid)
 {
     if (clicked_id == "viewAlert")
     {
-        $("#alertPanel").load("mods/alertAIPhrases.php?alertID=" + alertid);
+        $("#alertPanel").load("mods/alertAIPhrases.php?id=" + alertid);
     }
  }
 

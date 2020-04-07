@@ -28,5 +28,5 @@ $(function(){
 /* Code for html top menu include */
 
 $(function(){
-    $("#includedTopMenu").load("helpers/topMenu.php?origin=endpoints");
+    $("#includedTopMenu").load("helpers/topMenu.php?or=endpoints");
 });

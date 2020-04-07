@@ -197,7 +197,7 @@ if ($endpointDECSQL != "all")
         $endpointName = $userDomain['agent']."@".$userDomain['domain'];
     
         echo '<td class="detailstd">';
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.encRijndael($agentId).'&in='.encRijndael($userDomain['domain']).'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
         echo '</td>';
 
         /* Timestamp */
@@ -229,7 +229,7 @@ if ($endpointDECSQL != "all")
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.encRijndael($regExpression).'&phrase='.encRijndael($wordTyped).'&date='.encRijndael($date).'&endpoint='.encRijndael($endpointName).'&alertType='.encRijndael(strtoupper($result['_source']['alertType'])).'&windowTitle='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Mark false positive */
@@ -249,7 +249,7 @@ if ($endpointDECSQL != "all")
     
         echo '<td class="falsetd">';
         
-        echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
+        echo '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
     
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
@@ -317,7 +317,7 @@ else
                     
         /* Details */
         
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.$agentId.'&domain='.$userDomain['domain'].'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
+        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.encRijndael($agentId).'&in='.encRijndael($userDomain['domain']).'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
         echo '</td>';
         
         /* Date */
@@ -380,7 +380,7 @@ else
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.encRijndael($regExpression).'&phrase='.encRijndael($wordTyped).'&date='.encRijndael($date).'&endpoint='.encRijndael($endpointName).'&alertType='.encRijndael(strtoupper($result['_source']['alertType'])).'&windowTitle='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */
@@ -404,7 +404,7 @@ else
         @$falsePositiveValue = $jsonResultValue->_source->falsePositive;
 
         echo '<td class="falsetd-all">';
-        echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
+        echo '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
         
         if ($falsePositiveValue == "0") echo '<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
         else echo '<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';

@@ -26,9 +26,10 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cryptography.php";
 
-$agentId = filter($_GET['id']);
-$domain = filter($_GET['domain']);
+$agentId = filter(decRijndael($_GET['id']));
+$domain = filter(decRijndael($_GET['in']));
 $agentId = explode("_", $agentId);
 $agentId = $agentId[0];
 $queryEndpoint = "SELECT agent, domain, ipaddress, heartbeat, system, version, name, ruleset FROM t_agents WHERE agent LIKE '%s_%%' AND domain='%s' ORDER BY heartbeat LIMIT 1";

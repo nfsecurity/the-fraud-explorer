@@ -33,14 +33,14 @@ $configFile = parse_ini_file("../config.ini");
 $ESalerterIndex = $configFile['es_alerter_index'];
 
 $documentId = filter($_GET['id']);
-$indexId = filter($_GET['idx']);
+$indexId = filter($_GET['ex']);
 $eventPhrase = getAlertIdData($documentId, $ESalerterIndex, "AlertEvent");
-$regExp = filter($_GET['regexp']);
-$phraseTyped = filter($_GET['phrase']);
-$alertDate = filter($_GET['date']);
-$alertType = filter($_GET['alertType']);
-$endPoint = filter($_GET['endpoint']);
-$windowTitle = filter($_GET['windowTitle']);
+$regExp = filter($_GET['xp']);
+$phraseTyped = filter($_GET['se']);
+$alertDate = filter($_GET['te']);
+$alertType = filter($_GET['pe']);
+$endPoint = filter($_GET['nt']);
+$windowTitle = filter($_GET['le']);
 
 ?>
 
@@ -173,7 +173,7 @@ $windowTitle = filter($_GET['windowTitle']);
     
     <div class="modal-footer window-footer-config">
         
-        <?php echo '<form id="formReview" name="formReview" method="post" action="mods/reviewPhrases?id='.$documentId.'&idx='.$indexId.'" onsubmit="return getContent()">'; ?>
+        <?php echo '<form id="formReview" name="formReview" method="post" action="mods/reviewPhrases?id='.$documentId.'&ex='.rawurlencode($indexId).'" onsubmit="return getContent()">'; ?>
     
             <br>
             <textarea id="reviewPhrasesTextArea" name="reviewPhrasesTextArea" style="display:none"></textarea>
