@@ -26,6 +26,7 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cryptography.php";
 
 ?>
 
@@ -711,7 +712,7 @@ include "../lbs/openDBconn.php";
 
                     if ($workflowEntry['triggers'] != 0)
                     {
-                        echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span><a href="../mods/viewWorkflow?triggered='.base64_encode($workflowEntry['name']).'" data-toggle="modal" data-dismiss="modal" class="viewworkflow-button" data-target="#viewWorkflow" href="#" id="elm-view-workflow">'.$workflowEntry['triggers'].'</a></td>';
+                        echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span><a href="../mods/viewWorkflow?triggered='.encRijndael($workflowEntry['name']).'" data-toggle="modal" data-dismiss="modal" class="viewworkflow-button" data-target="#viewWorkflow" href="#" id="elm-view-workflow">'.$workflowEntry['triggers'].'</a></td>';
                     }
                     else
                     {

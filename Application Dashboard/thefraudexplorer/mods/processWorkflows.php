@@ -28,13 +28,13 @@ include "../lbs/openDBconn.php";
 
 /* Flows */
 
-if (isset($_POST['rulesetFlow'])) $rulesetFlow = filter($_POST['rulesetFlow']);
-if (isset($_POST['fraudverticeFlow'])) $fraudverticeFlow = filter($_POST['fraudverticeFlow']);
-if (isset($_POST['endpointsFlow'])) $endpointsFlow = filter($_POST['endpointsFlow']);
-if (isset($_POST['applicationsFlow'])) $applicationsFlow = filter($_POST['applicationsFlow']);
-if (isset($_POST['phrasesFlow'])) $phrasesFlow = filter($_POST['phrasesFlow']);
-if (isset($_POST['fraudOperator'])) $fraudOperator = filter($_POST['fraudOperator']);
-if (isset($_POST['workflowSelection'])) $workflowSelection = filter($_POST['workflowSelection']);
+if (isset($_POST['rulesetFlow'])) $rulesetFlow = $_POST['rulesetFlow'];
+if (isset($_POST['fraudverticeFlow'])) $fraudverticeFlow = $_POST['fraudverticeFlow'];
+if (isset($_POST['endpointsFlow'])) $endpointsFlow = $_POST['endpointsFlow'];
+if (isset($_POST['applicationsFlow'])) $applicationsFlow = $_POST['applicationsFlow'];
+if (isset($_POST['phrasesFlow'])) $phrasesFlow = $_POST['phrasesFlow'];
+if (isset($_POST['fraudOperator'])) $fraudOperator = $_POST['fraudOperator'];
+if (isset($_POST['workflowSelection'])) $workflowSelection = $_POST['workflowSelection'];
 
 /* Workflow deletion */
 

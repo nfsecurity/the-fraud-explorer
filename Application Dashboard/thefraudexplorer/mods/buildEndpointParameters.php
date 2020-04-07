@@ -83,11 +83,13 @@ if (isset($_POST['companydomain'])) $finalCompanyDomain = filter($_POST['company
 
 /* REST CREDENTIALS */
 
-if (isset($_POST['restcredentials'])) $finalRESTcredentials = filter($_POST['restcredentials']);
-
-$credentialsArray = explode(':', $finalRESTcredentials);
-$finalRESTusername =  $credentialsArray[0];
-$finalRESTpassword =  $credentialsArray[1];
+if (isset($_POST['restcredentials'])) 
+{
+    $finalRESTcredentials = filter($_POST['restcredentials']);
+    $credentialsArray = explode(':', $finalRESTcredentials);
+    $finalRESTusername = $credentialsArray[0];
+    $finalRESTpassword = $credentialsArray[1];
+}
 
 /* Start build logic */
 

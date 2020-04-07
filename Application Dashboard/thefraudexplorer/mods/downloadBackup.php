@@ -26,9 +26,10 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cryptography.php";
 
 $name = filter($_GET['backupFile']);
-$name = base64_decode($name);
+$name = decRijndael($name);
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/force-download');

@@ -33,7 +33,7 @@ $disableCommand = "module textAnalytics 0";
 $endpointScope = "all";
 $domainScope = "all";
 $enabledPhraseCollection = false;
-$phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
+$phraseCollectionStatus = decRijndaelRemote($xml->token[0]['arg']);
 
 if ($phraseCollectionStatus == "textAnalytics 1") 
 {
@@ -51,13 +51,13 @@ $com = str_replace(array('"'),array('\''), $com);
 foreach ($xml->version as $version) $numVersion = (int) $version['num'];
 
 $numVersion++;
-$xmlContent="<?xml version=\"1.0\"?>\r\n<update>\r\n<version num=\"" . $numVersion . "\" />\r\n";
+$xmlContent = "<?xml version=\"1.0\"?>\r\n<update>\r\n<version num=\"" . $numVersion . "\" />\r\n";
 $id = mt_rand(1,32000);	
-$endpoint = encRijndael($endpointScope);
-$domain = encRijndael($domainScope);
+$endpoint = encRijndaelRemote($endpointScope);
+$domain = encRijndaelRemote($domainScope);
 
-if (stristr($com, ' ') === FALSE) $xmlContent=$xmlContent . "<token type=\"" . encRijndael($com) . "\" arg=\"\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
-else $xmlContent=$xmlContent . "<token type=\"" . encRijndael(substr($com, 0, strpos($com, " "))) . "\" arg=\"" . encRijndael(substr(strstr($com, ' '),1)) . "\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
+if (stristr($com, ' ') === FALSE) $xmlContent=$xmlContent . "<token type=\"" . encRijndaelRemote($com) . "\" arg=\"\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
+else $xmlContent=$xmlContent . "<token type=\"" . encRijndaelRemote(substr($com, 0, strpos($com, " "))) . "\" arg=\"" . encRijndaelRemote(substr(strstr($com, ' '),1)) . "\" id=\"".$id."\" agt=\"".$endpoint."\" domain=\"".$domain."\"/>\r\n";
 
 $xmlContent = $xmlContent . "</update>";
 $fp = fopen('../update.xml',"w+");

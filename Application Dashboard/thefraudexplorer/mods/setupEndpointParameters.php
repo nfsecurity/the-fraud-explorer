@@ -26,9 +26,10 @@ if(!$session->logged_in)
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cryptography.php";
 
 $endpointEnc = filter($_GET['endpoint']);
-$endpointDec = base64_decode(base64_decode($endpointEnc));
+$endpointDec = decRijndael($endpointEnc);
 
 if (isset($_POST['alias']) && $_POST['alias'] != "") 
 {

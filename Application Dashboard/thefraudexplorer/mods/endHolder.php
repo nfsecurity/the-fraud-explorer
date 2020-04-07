@@ -218,8 +218,8 @@ if ($row_a = mysqli_fetch_array($result_a))
     {
         echo '<tr>';
 
-        $endpointEnc = base64_encode(base64_encode($row_a["agent"]));
-        $domain_enc = base64_encode(base64_encode($row_a["domain"]));
+        $endpointEnc = encRijndael($row_a["agent"]);
+        $domain_enc = encRijndael($row_a["domain"]);
 
         /* Enpoint Details */
 

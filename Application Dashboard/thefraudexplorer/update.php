@@ -43,11 +43,11 @@ function getEndpointIP()
     return $ipaddress;
 }
 
-$endpointIdentification = strtolower(decRijndael(filter($_GET['token'])));
-$os = decRijndael(filter($_GET['s']));
-$version = "v" . decRijndael(filter($_GET['v']));
-$key = decRijndael(filter($_GET['k']));
-$domain = strtolower(decRijndael(filter($_GET['d'])));
+$endpointIdentification = strtolower(decRijndaelRemote(filter($_GET['token'])));
+$os = decRijndaelRemote(filter($_GET['s']));
+$version = "v" . decRijndaelRemote(filter($_GET['v']));
+$key = decRijndaelRemote(filter($_GET['k']));
+$domain = strtolower(decRijndaelRemote(filter($_GET['d'])));
 $endpoint=$endpointIdentification;
 $configFile = parse_ini_file("config.ini");
 $ipAddress = getEndpointIP();

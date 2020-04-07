@@ -36,26 +36,29 @@ $endpointFilter = false;
 $rulesetFilter = false;
 $endpointID = NULL;
 
-if ($_SESSION['endpointFraudMetrics']['allendpoints'] == "false" || $_SESSION['endpointFraudMetrics']['allbusiness'] == "false") 
-{ 
-    if ($_SESSION['endpointFraudMetrics']['endpoint'] != "null")
-    {
-        $endpointLogin = explode("@", $_SESSION['endpointFraudMetrics']['endpoint']);
-        $endpointID = $endpointLogin[0] . "*";
-        $endpointIdentification = $_SESSION['endpointFraudMetrics']['endpoint'];
-        $endpointFilter = true;
-    }
-    else if ($_SESSION['endpointFraudMetrics']['ruleset'] != "BASELINE")
-    {
-        $rulesetSelected = filter($_SESSION['endpointFraudMetrics']['ruleset']);
-        $rulesetFilter = true;
+if (isset($_SESSION['endpointFraudMetrics']['allendpoints']) || isset($_SESSION['endpointFraudMetrics']['allbusiness']))
+{
+    if ($_SESSION['endpointFraudMetrics']['allendpoints'] == "false" || $_SESSION['endpointFraudMetrics']['allbusiness'] == "false") 
+    { 
+        if ($_SESSION['endpointFraudMetrics']['endpoint'] != "null")
+        {
+            $endpointLogin = explode("@", $_SESSION['endpointFraudMetrics']['endpoint']);
+            $endpointID = $endpointLogin[0] . "*";
+            $endpointIdentification = $_SESSION['endpointFraudMetrics']['endpoint'];
+            $endpointFilter = true;
+        }
+        else if ($_SESSION['endpointFraudMetrics']['ruleset'] != "BASELINE")
+        {
+            $rulesetSelected = filter($_SESSION['endpointFraudMetrics']['ruleset']);
+            $rulesetFilter = true;
+        }
     }
 }
 
-unset($_SESSION['endpointFraudMetrics']['allendpoints']);
-unset($_SESSION['endpointFraudMetrics']['allbusiness']);
-unset($_SESSION['endpointFraudMetrics']['endpoint']);
-unset($_SESSION['endpointFraudMetrics']['ruleset']);
+if (isset($_SESSION['endpointFraudMetrics']['allendpoints'])) unset($_SESSION['endpointFraudMetrics']['allendpoints']);
+if (isset($_SESSION['endpointFraudMetrics']['allbusiness'])) unset($_SESSION['endpointFraudMetrics']['allbusiness']);
+if (isset($_SESSION['endpointFraudMetrics']['endpoint'])) unset($_SESSION['endpointFraudMetrics']['endpoint']);
+if (isset($_SESSION['endpointFraudMetrics']['ruleset'])) unset($_SESSION['endpointFraudMetrics']['ruleset']);
 
 /* Elasticsearch querys for fraud triangle counts and score */
 

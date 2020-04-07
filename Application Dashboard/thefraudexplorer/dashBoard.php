@@ -17,6 +17,7 @@
 
 include "lbs/login/session.php";
 include "lbs/security.php";
+include "lbs/cryptography.php";
 
 if(!$session->logged_in)
 {
@@ -25,7 +26,7 @@ if(!$session->logged_in)
 }
 
 $_SESSION['instance'] = "dashBoard";
-$_SESSION['endpointIDh'] = base64_encode(base64_encode("all"));
+$_SESSION['endpointIDh'] = encRijndael("all");
 $_SESSION['endpointFraudMetrics']['launch'] = 0;
 $_SESSION['rulesetScope'] = "ALL";
 
@@ -378,7 +379,7 @@ $_SESSION['rulesetScope'] = "ALL";
 
                                 <?php
 
-                                    include "lbs/cryptography.php";
+                                    include "lbs/openDBconn.php";
     
                                     $xml = simplexml_load_file('update.xml');
                                     $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);

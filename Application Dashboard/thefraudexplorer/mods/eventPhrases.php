@@ -144,7 +144,7 @@ $windowTitle = filter($_GET['windowTitle']);
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
 
     echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
-    echo 'At <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.base64_decode($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(base64_decode($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.base64_decode($alertType).'</span> behavior as shown below:<br><br>';
+    echo 'At <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
     echo '</div>';
 
     if($session->username == "admin")
@@ -165,7 +165,7 @@ $windowTitle = filter($_GET['windowTitle']);
 
     <?php
 
-    $regularExpression = (strlen(base64_decode($regExp)) > 40) ? substr(base64_decode($regExp), 0, 40) . ' ...' : base64_decode($regExp);
+    $regularExpression = (strlen(decRijndael($regExp)) > 40) ? substr(decRijndael($regExp), 0, 40) . ' ...' : decRijndael($regExp);
 
     echo '<div class="footer-statistics"><span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
 
@@ -195,7 +195,7 @@ $windowTitle = filter($_GET['windowTitle']);
 
 <script>
 
-var matchedPhrase="<?php echo base64_decode($phraseTyped); ?>";
+var matchedPhrase="<?php echo decRijndael($phraseTyped); ?>";
 
 $('p:contains('+matchedPhrase+')', document.body).each(function(){
       $(this).html($(this).html().replace(

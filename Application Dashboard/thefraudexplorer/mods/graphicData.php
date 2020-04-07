@@ -27,6 +27,7 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
+include "../lbs/cryptography.php";
 
 ?>
 
@@ -297,7 +298,7 @@ include "../lbs/endpointMethods.php";
                 do
                 {
                     $endpointName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
-                    $endpointEncoded = base64_encode(base64_encode($endpointsFraud['agent']));
+                    $endpointEncoded = encRijndael($endpointsFraud['agent']);
                     $totalWordHits = $endpointsFraud['totalwords'];
                     $countPressure = $endpointsFraud['pressure'];
                     $countOpportunity = $endpointsFraud['opportunity'];

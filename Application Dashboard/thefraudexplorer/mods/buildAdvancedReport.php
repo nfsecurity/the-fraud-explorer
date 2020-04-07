@@ -36,8 +36,8 @@ include "../lbs/cryptography.php";
 $client = Elasticsearch\ClientBuilder::create()->build();
 $configFile = parse_ini_file("../config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
-$endpointDECES = base64_decode(base64_decode($_SESSION['endpointIDh']))."*";
-$endpointDECSQL = base64_decode(base64_decode($_SESSION['endpointIDh']));
+$endpointDECES = decRijndael($_SESSION['endpointIDh'])."*";
+$endpointDECSQL = decRijndael($_SESSION['endpointIDh']);
 $endpointDec = $_SESSION['endpointIDh'];
 
 /* POST Variables */

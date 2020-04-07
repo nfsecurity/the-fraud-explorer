@@ -31,6 +31,7 @@ include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
 require "../vendor/autoload.php";
 include "../lbs/elasticsearch.php";
+include "../lbs/cryptography.php";
 
 $firstTime = false;
 
@@ -38,7 +39,7 @@ if (isset($_SESSION['endpointMetrics']['endpoint'])) $metricForEndpoint = $_SESS
 else 
 {
     $metricForEndpoint = filter($_GET['id']);
-    $metricForEndpoint = base64_decode($metricForEndpoint);
+    $metricForEndpoint = decRijndael($metricForEndpoint);
     $firstTime = true;
 }
 
@@ -207,7 +208,7 @@ for ($i = 1; $i <= 12; $i++)
         
         <?php
 
-            if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) 
+            if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
             {
                 echo '<canvas id="endpoint-metrics-graph"></canvas>'; 
             }
@@ -228,11 +229,11 @@ for ($i = 1; $i <= 12; $i++)
                 <div style="line-height:35px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
-                        if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) 
+                        if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
                             echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
                         }
@@ -247,11 +248,11 @@ for ($i = 1; $i <= 12; $i++)
                 </div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
-                        if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) 
+                        if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
                             echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
                         }
@@ -266,11 +267,11 @@ for ($i = 1; $i <= 12; $i++)
                 </div>          
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
-                        if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) 
+                        if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
                             echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
                         }
@@ -292,7 +293,7 @@ for ($i = 1; $i <= 12; $i++)
 
                 <?php
 
-                    if ($_SESSION['endpointMetrics']['launch'] % 2 != 0)  
+                    if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0)  
                     {
                         echo '<input type="text" disabled name="endpointpar" id="endpointpar" autocomplete="off" placeholder="'.$metricForEndpoint.'" value="'.$metricForEndpoint.'" class="input-value-text" style="text-indent:5px;">';
                     }
@@ -312,7 +313,7 @@ for ($i = 1; $i <= 12; $i++)
 
         <?php
 
-            if ($_SESSION['endpointMetrics']['launch'] % 2 != 0) 
+            if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
             {
                 echo '<a href="../mods/endpointMetrics" onclick="getFiltersPar()" class="btn btn-success endpoint-metrics-reload-button" id="btn-metrics-par" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#endpoint-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
             }

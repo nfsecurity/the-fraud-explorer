@@ -31,7 +31,7 @@ include "../lbs/endpointMethods.php";
 require '../vendor/autoload.php';
 include "../lbs/elasticsearch.php";
 
-$workflowName = filter(base64_decode($_GET['triggered']));
+$workflowName = filter(decRijndael($_GET['triggered']));
 
 ?>
 

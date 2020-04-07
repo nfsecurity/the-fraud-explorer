@@ -24,6 +24,6 @@ if(!$session->logged_in)
     exit;
 }
 
-echo json_encode($_SESSION['processingStatus']);
+if (isset($_SESSION['processingStatus'])) echo json_encode($_SESSION['processingStatus']);
 
 ?>

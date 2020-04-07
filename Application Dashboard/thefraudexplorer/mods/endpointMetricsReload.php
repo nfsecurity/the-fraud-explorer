@@ -30,6 +30,6 @@ $_SESSION['endpointMetrics']['endpoint'] = filter($_GET['endpoint']);
 $_SESSION['endpointMetrics']['pressure'] = filter($_GET['pressure']);
 $_SESSION['endpointMetrics']['opportunity'] = filter($_GET['opportunity']);
 $_SESSION['endpointMetrics']['rationalization'] = filter($_GET['rationalization']);
-$_SESSION['endpointMetrics']['launch'] = $_SESSION['endpointMetrics']['launch'] + 1;
+@$_SESSION['endpointMetrics']['launch'] = $_SESSION['endpointMetrics']['launch'] + 1;
 
 ?>

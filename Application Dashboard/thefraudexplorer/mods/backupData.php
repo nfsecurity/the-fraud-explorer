@@ -28,6 +28,7 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
+include "../lbs/cryptography.php";
 
 ?>
 
@@ -227,7 +228,7 @@ if (!isset($latestBackup[1])) $noBackup = true;
     </div>
 
     <br>
-    <a class="downloadfile" href="mods/downloadBackup?backupFile=<?php if ($noBackup == true) echo "nobackupfile"; else echo base64_encode($latestBackup[3]); ?>">
+    <a class="downloadfile" href="mods/downloadBackup?backupFile=<?php if ($noBackup == true) echo "nobackupfile"; else echo encRijndael($latestBackup[3]); ?>">
     <button type="button" class="btn btn-default" style="width: 100%; outline: 0 !important;">
         Download latest backup to my computer<br>
         <p class="latest-backup">

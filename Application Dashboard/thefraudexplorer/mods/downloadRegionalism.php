@@ -17,6 +17,7 @@
 
 include "../lbs/login/session.php";
 include "../lbs/security.php";
+include "../lbs/cryptography.php"
 
 if(!$session->logged_in)
 {
@@ -27,7 +28,7 @@ if(!$session->logged_in)
 include "../lbs/globalVars.php";
 
 $name = filter($_GET['regionalismFile']);
-$name = base64_decode($name);
+$name = decRijndael($name);
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/force-download');

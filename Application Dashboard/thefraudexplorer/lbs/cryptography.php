@@ -28,12 +28,14 @@ function encRijndael($unencrypted)
     $iv_utf = mb_convert_encoding($iv, 'UTF-8');
     $toreturn = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $unencrypted, MCRYPT_MODE_CBC, $iv_utf);
     $toreturn = base64_encode($toreturn);
-    return $toreturn;
+
+    return rawurlencode($toreturn);
 }
 
 function decRijndael($encrypted)
 {
     global $connection;
+    $encrypted = rawurldecode($encrypted);
 
     $result_key = mysqli_query($connection, "SELECT * FROM t_crypt");
     $row_key = mysqli_fetch_array($result_key);
@@ -45,7 +47,7 @@ function decRijndael($encrypted)
     return $toreturn;
 }
 
-function decRijndaelWOSC($encrypted)
+function encRijndaelRemote($unencrypted)
 {
     global $connection;
 
@@ -54,7 +56,22 @@ function decRijndaelWOSC($encrypted)
     $key = $row_key[0];
     $iv = $row_key[1];
     $iv_utf = mb_convert_encoding($iv, 'UTF-8');
-    $toreturn = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode($encrypted), MCRYPT_MODE_CBC, $iv_utf);
+    $toreturn = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $unencrypted, MCRYPT_MODE_CBC, $iv_utf);
+    $toreturn = base64_encode($toreturn);
+
+    return $toreturn;
+}
+
+function decRijndaelRemote($encrypted)
+{
+    global $connection;
+
+    $result_key = mysqli_query($connection, "SELECT * FROM t_crypt");
+    $row_key = mysqli_fetch_array($result_key);
+    $key = $row_key[0];
+    $iv = $row_key[1];
+    $iv_utf = mb_convert_encoding($iv, 'UTF-8');
+    $toreturn = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode(str_replace("_","/",str_replace("-","+",$encrypted))), MCRYPT_MODE_CBC, $iv_utf);
     $toreturn = filter_var($toreturn, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     return $toreturn;
 }

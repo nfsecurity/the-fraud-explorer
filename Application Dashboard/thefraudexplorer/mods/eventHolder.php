@@ -36,8 +36,8 @@ include "../lbs/cryptography.php";
 $client = Elasticsearch\ClientBuilder::create()->build();
 $configFile = parse_ini_file("../config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
-$endpointDECES = base64_decode(base64_decode($_SESSION['endpointIDh']))."*";
-$endpointDECSQL = base64_decode(base64_decode($_SESSION['endpointIDh']));
+$endpointDECES = decRijndael($_SESSION['endpointIDh'])."*";
+$endpointDECSQL = decRijndael($_SESSION['endpointIDh']);
 $endpointDec = $_SESSION['endpointIDh'];
 
 /* Global data variables */
@@ -181,8 +181,7 @@ if ($endpointDECSQL != "all")
 
         /* Event Details */
 
-        $date = $result['_source']['eventTime'];
-        $date = substr($date, 0, strpos($date, ","));
+        $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));   
         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
         $wordTyped = decRijndael($result['_source']['wordTyped']);
         $searchValue = "/".$result['_source']['phraseMatch']."/";
@@ -224,15 +223,13 @@ if ($endpointDECSQL != "all")
         /* Endpoint metrics */
 
         echo '<td class="metricstd">';
-        echo '<a href="../mods/endpointMetrics?id='. base64_encode($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
+        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
         echo '</td>';
 
         /* Phrase typed */
 
-        $alertDate =  date_format($date, 'Y-m-d H:i');
-
         echo '<td class="phrasetypedtd">';
-        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($alertDate).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.encRijndael($regExpression).'&phrase='.encRijndael($wordTyped).'&date='.encRijndael($date).'&endpoint='.encRijndael($endpointName).'&alertType='.encRijndael(strtoupper($result['_source']['alertType'])).'&windowTitle='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Mark false positive */
@@ -342,7 +339,7 @@ else
         echo '<td class="endpointtd-all">';
          
         $endpointName = $userDomain['agent']."@".$userDomain['domain'];
-        $endpointDec = base64_encode(base64_encode($userDomain['agent']));
+        $endpointDec = encRijndael($userDomain['agent']);
         $totalWordHits = $userDomain['totalwords'];
         $countPressure = $userDomain['pressure'];
         $countOpportunity = $userDomain['opportunity'];
@@ -377,13 +374,13 @@ else
         /* Endpoint metrics */
 
         echo '<td class="metricstd-all">';
-        echo '<a href="../mods/endpointMetrics?id='. base64_encode($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
+        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
         echo '</td>';
         
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.base64_encode($regExpression).'&phrase='.base64_encode($wordTyped).'&date='.base64_encode($date).'&endpoint='.base64_encode($endpointName).'&alertType='.base64_encode(strtoupper($result['_source']['alertType'])).'&windowTitle='.base64_encode($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
+        echo '<span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span><a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&idx='.$result['_index'].'&regexp='.encRijndael($regExpression).'&phrase='.encRijndael($wordTyped).'&date='.encRijndael($date).'&endpoint='.encRijndael($endpointName).'&alertType='.encRijndael(strtoupper($result['_source']['alertType'])).'&windowTitle='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */
@@ -404,7 +401,7 @@ else
         curl_close($ch);
     
         $jsonResultValue = json_decode($resultValues);
-        $falsePositiveValue = $jsonResultValue->_source->falsePositive;
+        @$falsePositiveValue = $jsonResultValue->_source->falsePositive;
 
         echo '<td class="falsetd-all">';
         echo '<a class="false-positive" href="mods/eventMarking?regid='.$result['_id'].'&endpoint='.$agentId.'&index='.$result['_index'].'&type='.$result['_type'].'&urlrefer=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';

@@ -41,11 +41,11 @@ function minute_difference($update_date)
     return $minutes;
 } 
 
-$endpointIdentification = decRijndael(filter($_GET['m']));
-$id_uniq_command = decRijndael(filter($_GET['id']));
+$endpointIdentification = decRijndaelRemote(filter($_GET['m']));
+$id_uniq_command = decRijndaelRemote(filter($_GET['id']));
 $finished = filter($_GET['end']);
 $command = filter($_GET['c']);
-$content = decRijndael(filter($_GET['response']));
+$content = decRijndaelRemote(filter($_GET['response']));
 $table = 't_'.$endpointIdentification;
 
 $result_a=mysqli_query($connection, "SELECT count(*) FROM ".$table." WHERE id_uniq_command=" .$id_uniq_command." AND finished=false order by date desc limit 1");

@@ -17,6 +17,7 @@
 
 include "lbs/login/session.php";
 include "lbs/security.php";
+include "lbs/cryptography.php";
 
 if(!$session->logged_in)
 {
@@ -27,7 +28,7 @@ if(!$session->logged_in)
 $_SESSION['instance'] = "eventData";
 $_SESSION['endpointIDh'] = filter($_GET['endpoint']);
 
-if (!checkEvent(base64_decode(base64_decode(filter($_SESSION['endpointIDh']))))) header ("location: endPoints");
+if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("location: endPoints");
 
 ?>
 
