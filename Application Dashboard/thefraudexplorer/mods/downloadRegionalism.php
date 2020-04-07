@@ -17,7 +17,7 @@
 
 include "../lbs/login/session.php";
 include "../lbs/security.php";
-include "../lbs/cryptography.php"
+include "../lbs/cryptography.php";
 
 if(!$session->logged_in)
 {

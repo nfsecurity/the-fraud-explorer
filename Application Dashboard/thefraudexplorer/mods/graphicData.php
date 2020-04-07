@@ -53,7 +53,7 @@ include "../lbs/cryptography.php";
 
     .table-graphdata
     {
-        font-family: 'FFont', sans-serif; font-size:10px;
+        font-family: 'FFont', sans-serif; font-size: 11px;
         border: 0px solid gray;
         width: 100%;
         border-spacing: 0px;
@@ -90,7 +90,7 @@ include "../lbs/cryptography.php";
     
     .table-th-graphdata-endpoint
     {
-        font-family: 'FFont-Bold', sans-serif; font-size:12px;
+        font-family: 'FFont-Bold', sans-serif; font-size: 12px;
         border-bottom: 0px solid gray;
         border-top: 0px solid gray;
         border-left: 0px solid gray;
@@ -112,6 +112,7 @@ include "../lbs/cryptography.php";
         max-height: 302px !important;
         overflow-y: scroll;
         border-radius: 5px;
+        font-size: 11px;
     }
 
     .table-tr-graphdata
@@ -120,6 +121,7 @@ include "../lbs/cryptography.php";
         height: 30px;
         min-height: 30px;
         background: white;
+        font-size: 11px;
     }
 
     .table-tbody-graphdata tr:nth-child(odd)
@@ -137,6 +139,7 @@ include "../lbs/cryptography.php";
         padding: 0px 0px 0px 0px;
         text-align: center;
         border-right: 2px solid white;
+        font-size: 11px;
     }
     
      .table-td-graphdata-score
@@ -149,6 +152,7 @@ include "../lbs/cryptography.php";
         padding: 0px 0px 0px 0px;
         text-align: center;
         border-right: 0px solid white;
+        font-size: 11px;
     }
     
     .table-td-graphdata-body-opportunity
@@ -164,6 +168,7 @@ include "../lbs/cryptography.php";
         border: 0px solid white;
         border-right: 2px solid white; 
         border-radius: 0px 0px 0px 0px;
+        font-size: 11px;
     }
     
     .table-td-graphdata-endpoint
@@ -180,12 +185,13 @@ include "../lbs/cryptography.php";
         border-radius: 0px 0px 0px 0px; 
         text-align: left; 
         border-right: 2px solid white;
+        font-size: 11px;
     }
 
     .not-ruleset
     {
         text-align: justify;
-        font-family: 'FFont', sans-serif; font-size: 12px;
+        font-family: 'FFont', sans-serif; font-size: 11px;
     }
 
     .font-icon-color-green
@@ -199,6 +205,8 @@ include "../lbs/cryptography.php";
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
         margin: 0px 0px 15px 0px;
+        text-align: center;
+        font-size: 11px;
     }
     
     .font-icon-gray 
@@ -221,6 +229,18 @@ include "../lbs/cryptography.php";
     {
         background-color: #57a881 !important;
         border: 1px solid #57a881 !important;
+    }
+
+    .pseudolink 
+    {
+        outline: none;
+        cursor: pointer;
+        font-size: 11px;
+    }
+
+    .font-aw-color
+    {
+        color: #B4BCC2;
     }
 
 </style>
@@ -307,8 +327,7 @@ include "../lbs/cryptography.php";
                                     
                     if ($totalEvents != 0) 
                     {
-                        echo '<tr class="table-tr-graphdata">';
-                        
+                        echo '<tr class="table-tr-graphdata">';                        
                         echo '<td class="table-td-graphdata-endpoint"><span class="fa fa-user-circle font-icon-color-green">&nbsp;&nbsp;</span>';
                         echo '<span class="pseudolink" onclick="javascript:location.href=\'eventData?nt='.$endpointEncoded.'\'">'.$endpointName.'</span></td>';
                     }

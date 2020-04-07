@@ -35,10 +35,12 @@ include "../lbs/cryptography.php";
 <!-- Styles -->
 
 <style>
+
     .font-aw-color
     {
         color: #B4BCC2;
     }
+    
 </style>
 
 <!-- Chart -->

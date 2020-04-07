@@ -43,7 +43,7 @@ if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE)
         } 
     } 
 
-    closedir($pathdir);
+    closedir($dir);
     $zip -> close(); 
 }
 

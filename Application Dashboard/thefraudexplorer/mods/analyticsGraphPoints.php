@@ -66,7 +66,7 @@ $graphPoints = json_decode($coordinates, true);
     .table-thead-graphdata
     {
         display: block;
-        font-family: 'FFont-Bold', sans-serif; font-size:12px;
+        font-family: 'FFont-Bold', sans-serif; font-size: 12px;
         border-bottom: 0px solid gray;
         border-top: 0px solid gray;
         border-left: 0px solid gray;
@@ -114,6 +114,7 @@ $graphPoints = json_decode($coordinates, true);
         max-height: 302px !important;
         overflow-y: scroll;
         border-radius: 5px;
+        font-size: 11px;
     }
 
     .table-tr-graphdata
@@ -122,6 +123,7 @@ $graphPoints = json_decode($coordinates, true);
         height: 30px;
         min-height: 30px;
         background: white;
+        font-size: 11px;
     }
 
     .table-tbody-graphdata tr:nth-child(odd)
@@ -139,6 +141,7 @@ $graphPoints = json_decode($coordinates, true);
         padding: 0px 0px 0px 0px;
         text-align: center;
         border-right: 2px solid white;
+        font-size: 11px;
     }
     
     .table-td-graphdata-score
@@ -151,6 +154,7 @@ $graphPoints = json_decode($coordinates, true);
         padding: 0px 0px 0px 0px;
         text-align: center;
         border-right: 0px solid white;
+        font-size: 11px;
     }
     
     .table-td-graphdata-body-opportunity
@@ -166,6 +170,7 @@ $graphPoints = json_decode($coordinates, true);
         border: 0px solid white;
         border-right: 2px solid white;
         border-radius: 0px 0px 0px 0px;
+        font-size: 11px;
     }
     
     .table-td-graphdata-endpoint
@@ -180,6 +185,7 @@ $graphPoints = json_decode($coordinates, true);
         border-radius: 0px 0px 0px 0px; 
         text-align: left; 
         border-right: 2px solid white;
+        font-size: 11px;
     }
 
     .font-icon-color-green
@@ -193,6 +199,7 @@ $graphPoints = json_decode($coordinates, true);
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
         margin: 0px 0px 15px 0px;
+        font-size: 11px;
     }
     
     .font-icon-gray 
@@ -203,6 +210,18 @@ $graphPoints = json_decode($coordinates, true);
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+
+    .font-aw-color
+    {
+        color: #B4BCC2;
+    }
+
+    .pseudolink 
+    {
+        outline: none;
+        cursor: pointer;
+        font-size: 11px;
     }
 
 </style>
