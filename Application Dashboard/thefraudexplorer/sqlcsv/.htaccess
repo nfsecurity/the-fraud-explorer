@@ -1,3 +1,2 @@
-Options +FollowSymLinks  
-RewriteEngine on  
-RewriteRule ^(.*)$ ../lbs/authAccess.php?file=$1 [NC]
+deny from all
+ErrorDocument 403 " "
