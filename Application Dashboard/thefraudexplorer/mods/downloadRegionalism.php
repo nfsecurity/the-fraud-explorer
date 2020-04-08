@@ -25,6 +25,14 @@ if(!$session->logged_in)
     exit;
 }
 
+/* Prevent direct access to this URL */ 
+
+if(!isset($_SERVER['HTTP_REFERER']))
+{
+    header( 'HTTP/1.0 403 Forbidden', TRUE, 403);
+    exit;
+}
+
 include "../lbs/globalVars.php";
 
 $name = filter($_GET['le']);

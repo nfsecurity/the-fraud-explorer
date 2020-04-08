@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -22,6 +21,14 @@ include "../lbs/security.php";
 if(!$session->logged_in)
 {
     header ("Location: index");
+    exit;
+}
+
+/* Prevent direct access to this URL */ 
+
+if(!isset($_SERVER['HTTP_REFERER']))
+{
+    header( 'HTTP/1.0 403 Forbidden', TRUE, 403);
     exit;
 }
 

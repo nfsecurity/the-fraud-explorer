@@ -24,6 +24,14 @@ if(!$session->logged_in)
     exit;
 }
 
+/* Prevent direct access to this URL */ 
+
+if(!isset($_SERVER['HTTP_REFERER']))
+{
+    header( 'HTTP/1.0 403 Forbidden', TRUE, 403);
+    exit;
+}
+
 $configFile = parse_ini_file("../config.ini");
 $currentversion = $configFile['sw_version'];
 
