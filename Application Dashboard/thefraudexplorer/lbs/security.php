@@ -46,7 +46,7 @@ function checkEvent($endPoint)
     $result = mysqli_query($connection, sprintf("SELECT * FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl group by agent) as agt WHERE agent='%s'", $endPoint));
     include "lbs/closeDBconn.php";
     
-    if(mysqli_fetch_array($result) !== false) return true;
+    if (mysqli_num_rows($result) != 0) return true;
     else if ($endPoint == "all") return true;
     return false;
 }
