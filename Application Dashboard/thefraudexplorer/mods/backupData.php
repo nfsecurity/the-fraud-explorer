@@ -72,7 +72,7 @@ include "../lbs/cryptography.php";
         border-radius: 5px;
     }
 
-    .window-footer-config
+    .window-footer-config-backup
     {
         padding: 0px 0px 0px 0px;
     }
@@ -253,7 +253,7 @@ if (!isset($latestBackup[1])) $noBackup = true;
     <br>
 
     <br>
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-config-backup">
         <br>
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
         

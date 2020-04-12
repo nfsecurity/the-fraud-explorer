@@ -63,7 +63,7 @@ $mailSmtp = $configFile['mail_smtp'];
         border-radius: 5px;
     }
 
-    .window-footer-config
+    .window-footer-config-business
     {
         padding: 0px 0px 0px 0px;
     }
@@ -112,10 +112,9 @@ $mailSmtp = $configFile['mail_smtp'];
         border: 0px solid gray;
         border-radius: 3px;
         background: #F7F7F7;
-        margin-bottom: 13px;
         font-family: Courier; font-size: 12px;
         display: inline-table;
-        margin-bottom: 20px;
+        margin-bottom: 13px;
     }
 
     .csv-button-upload
@@ -206,7 +205,8 @@ $mailSmtp = $configFile['mail_smtp'];
     </div>
 
     <br>
-    <div class="modal-footer window-footer-config">
+
+    <div class="modal-footer window-footer-config-business">
         <br>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
     </div>

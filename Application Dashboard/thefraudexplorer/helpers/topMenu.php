@@ -93,7 +93,7 @@ include "../lbs/closeDBconn.php";
         <a href="dashBoard" id="elm-dashboard">Dashboard</a>
     </li>
     <li class="li">
-        <a href="../eventData?nt=<?php include "../lbs/cryptography.php"; echo encRijndael("all"); ?>" id="elm-eventmodule">Fraud Triangle Events</a>
+        <a href="../eventData?nt=<?php include "../lbs/cryptography.php"; echo encRijndael("all"); ?>" id="elm-eventmodule">Events</a>
     </li>
     <li class="li">
         <a href="analyticsData" id="elm-analytics">Analytics</a>

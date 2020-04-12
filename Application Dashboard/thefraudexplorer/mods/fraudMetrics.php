@@ -252,7 +252,7 @@ else
         border-radius: 5px;
     }
 
-    .window-footer-config
+    .window-footer-config-fraudmetrics
     {
         padding: 0px 0px 0px 0px;
     }
@@ -468,7 +468,7 @@ else
     </div>
 
     <br>
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-config-fraudmetrics">
         <br>
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
 

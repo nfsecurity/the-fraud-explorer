@@ -63,7 +63,7 @@ $mailSmtp = $configFile['mail_smtp'];
         border-radius: 5px;
     }
 
-    .window-footer-config
+    .window-footer-config-mail
     {
         padding: 0px 0px 0px 0px;
     }
@@ -225,7 +225,7 @@ $mailSmtp = $configFile['mail_smtp'];
     </div>
 
     <br>
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-config-mail">
         <br>
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
         

@@ -217,7 +217,5 @@ include "../lbs/globalVars.php";
         </tr>
     </tbody>
     </table>
-
-    <br>
     
 </div>

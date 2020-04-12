@@ -47,7 +47,7 @@ include "../lbs/cryptography.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-config-regionalism
     {
         padding: 0px 0px 0px 0px;
     }
@@ -175,7 +175,7 @@ $size = $regionalismFile[2]/1024;
     <br>
 
     <br>
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-config-regionalism">
         <br>
         
         <?php    

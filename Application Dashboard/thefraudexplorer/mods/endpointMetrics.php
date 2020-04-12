@@ -124,7 +124,7 @@ for ($i = 1; $i <= 12; $i++)
         border-radius: 5px;
     }
 
-    .window-footer-config
+    .window-footer-config-endpointmetrics
     {
         padding: 0px 0px 0px 0px;
     }
@@ -315,7 +315,7 @@ for ($i = 1; $i <= 12; $i++)
             </div>
     </div>
 
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-config-endpointmetrics">
         <br>
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
 
