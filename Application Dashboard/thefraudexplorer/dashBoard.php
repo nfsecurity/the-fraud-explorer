@@ -438,7 +438,7 @@ var tour = new Tour({
         element: "#elm-topmenu",
         placement: 'bottom',
         title: "Main menu",
-        content: "This is the main menu you can use for navigating the entire solution. Dashboard, Events, Analytics and Endpoints are the principal software modules that will help you in the task of fraud detection."
+        content: "This is the main menu you can use to browse the entire solution. Dashboard, Events, Analytics and Endpoints are the principal software modules that will help you in the task of fraud detection."
     }, {
         element: "#elm-left-menu",
         placement: 'right',
