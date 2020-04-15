@@ -113,9 +113,9 @@ include "../lbs/openDBconn.php";
         border-radius: 0px 0px 0px 0px;
     }
 
-    .window-footer-config
+    .window-footer-library
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
     }
 
@@ -177,6 +177,7 @@ include "../lbs/openDBconn.php";
         border-radius: 5px;
         background: #f2f2f2;
         padding: 0px 10px 15px 10px;
+        margin-bottom: 15px;
     }
 
     .container-status-library
@@ -186,6 +187,8 @@ include "../lbs/openDBconn.php";
         background: #f2f2f2;
         padding: 0px 10px 15px 10px;
         height: 30px;
+        margin-top: 15px;
+        text-align: center;
     }
     
     .left-container-library
@@ -215,6 +218,7 @@ include "../lbs/openDBconn.php";
         outline: 0 !important;
         background: white;
         border: 1px solid #BFC0BF;
+        font-family: Verdana, sans-serif; font-size: 11px !important;
     }
 
     .rule-button-delmodify
@@ -226,6 +230,7 @@ include "../lbs/openDBconn.php";
         border: 1px solid #BFC0BF;
         border-radius: 5px;
         outline: 0 !important;
+        font-family: Verdana, sans-serif; font-size: 11px !important;
     }
 
     .regexp-container
@@ -264,6 +269,11 @@ include "../lbs/openDBconn.php";
     {
         font-family: 'FFont', sans-serif; font-size: 12px;
         line-height: 30px;
+    }
+
+    .btn-success, .btn-success:active, .btn-success:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
     .btn-success, .btn-success:active, .btn-success:visited 
@@ -339,8 +349,6 @@ include "../lbs/openDBconn.php";
 
         </div>
 
-        <br>
-
         <div class="master-container-library">
             <div class="left-container-library">              
                 
@@ -394,8 +402,6 @@ include "../lbs/openDBconn.php";
 
         </div>
 
-        <br>
-
         <div class="container-status-library">
 
             <?php
@@ -429,8 +435,7 @@ include "../lbs/openDBconn.php";
 
         </div>
 
-        <div class="modal-footer window-footer-config">
-            <br>
+        <div class="modal-footer window-footer-library">
             
             <?php    
             

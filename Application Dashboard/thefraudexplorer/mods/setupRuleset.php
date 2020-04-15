@@ -48,9 +48,9 @@ include "../lbs/endpointMethods.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-ruleset
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
     }
 
@@ -199,26 +199,39 @@ include "../lbs/endpointMethods.php";
         color: #4B906F;
     }
     
-    .footer-statistics
+    .footer-statistics-ruleset
     {
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
-        padding: 8px 8px 8px 8px;
+        font-family: Verdana, sans-serif; font-size: 11px;
+        line-height: 30px;
+        margin-top: 15px;
+        text-align: center;
     }
     
     .font-icon-gray 
     { 
-        color: #B4BCC2;; 
+        color: #B4BCC2;
     }
     
     .fa-padding 
     { 
         padding-right: 5px; 
     }
+
+    .font-aw-color
+    {
+        color: #B4BCC2;
+    }
     
     .btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited 
     {
         background-color: #4B906F !important;
+    }
+
+    .btn-default, .btn-default:active, .btn-default:visited, .btn-success, .btn-success:active, .btn-success:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
 </style>
@@ -308,12 +321,12 @@ include "../lbs/endpointMethods.php";
     
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$phrasesCount.' fraud triangle rules defined under '.$departmentsCount.' departments </div>';
+    echo '<div class="footer-statistics-ruleset"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$phrasesCount.' fraud triangle rules defined under '.$departmentsCount.' departments </div>';
     
     ?>
 
-    <div class="modal-footer window-footer-config">
-        <br>
+    <div class="modal-footer window-footer-ruleset">
+
         <a id="download-rules" class="btn btn-default" style="outline: 0 !important;">Download rules</a>
         
         <form action="mods/rulesetUpload" id="rulesetUpload" method="post" enctype="multipart/form-data">

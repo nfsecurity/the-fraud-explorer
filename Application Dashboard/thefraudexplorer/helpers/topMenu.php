@@ -214,3 +214,151 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
 }
 
 ?>
+
+<!-- Tables sorter -->
+
+<script>
+    $(document).ready(function(){
+
+        // Endpoints module
+                
+        $("#endpointDataTable").tablesorter({
+            widgets: [ 'filter' ],
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false
+            },
+            headers:
+            {
+                0:
+                {
+                    sorter: false
+                },
+                1:
+                {
+                    sorter: "shortDate", dateFormat: "yyymmdd"
+                },
+                4:
+                {
+                    sorter: false
+                },
+                7:
+                {
+                    sorter: false
+                },
+            },
+        })
+            .tablesorterPager({
+            container: $("#pager"),
+            size: 50,
+            widgetOptions:
+            {
+                pager_removeRows: true
+            }
+        });
+        
+        $("#allevents").tablesorter({
+            widgets: [ 'filter' ],
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false
+            },
+            headers:
+            {
+                0:
+                {
+                    sorter: false
+                },
+                1:
+                {
+                    sorter: "shortDate", dateFormat: "yyymmdd"
+                },
+                5:
+                {
+                    sorter: false
+                },
+                8:
+                {
+                    sorter: false
+                },
+            },
+        })
+            .tablesorterPager({
+            container: $("#pagerAll"),
+            size: 50,
+            widgetOptions:
+            {
+                pager_removeRows: true
+            }
+        });
+
+        // Events module
+
+        $('.download-csv').click(function(){
+            $("#tblData").trigger('outputTable');
+        });
+        
+        $("#tblData").tablesorter({
+            widgets: [ 'filter', 'output' ],
+            textExtraction: {
+                6: function(node, table, cellIndex) { return $(node).find("span").text(); },
+            },
+            widgetOptions : 
+            {
+                filter_external: '.search_text',
+                filter_columnFilters : false,
+                output_separator: ',',
+                output_ignoreColumns : [ 0, 5, 12, 13, 14 ],
+                output_dataAttrib: 'data-name',
+                output_headerRows: false,
+                output_delivery: 'download',
+                output_saveRows: 'all',
+                output_replaceQuote: '\u201c;',
+                output_includeHTML: false,
+                output_trimSpaces: true,
+                output_wrapQuotes: false,
+                output_saveFileName: 'endpointsList.csv',
+                output_callback: function (data) {
+                    return true;
+                },
+                output_callbackJSON: function ($cell, txt, cellIndex) {
+                    return txt + '(' + (cellIndex + col) + ')';
+                }
+            },
+            headers:
+            {
+                0:
+                {
+                    sorter: false
+                },
+                4:
+                {
+                    sorter: false
+                },
+                5:
+                {
+                    sorter: false
+                },
+                12:
+                {
+                    sorter: false
+                },
+                13:
+                {
+                    sorter: false
+                },
+                14:
+                {
+                    sorter: false
+                }
+            },
+            sortList: [[11,1], [2,1]]
+        })
+            .tablesorterPager({
+            container: $("#pager"),
+            size: 20
+        });
+    });
+</script>

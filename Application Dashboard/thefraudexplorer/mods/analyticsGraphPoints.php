@@ -53,14 +53,14 @@ $graphPoints = json_decode($coordinates, true);
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-point
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
     }
 
     .div-container-points
     {
-        margin: 0px;
+        margin-bottom: 5px;
     }
 
     .table-graphdata
@@ -201,13 +201,14 @@ $graphPoints = json_decode($coordinates, true);
         color: #4B906F;
     }
     
-    .footer-statistics
+    .footer-statistics-point
     {
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
-        margin: 0px 0px 15px 0px;
-        font-size: 11px;
+        margin: 15px 0px 15px 0px;
+        text-align: center;
+        font-family: Verdana, sans-serif; font-size: 11px !important;
     }
     
     .font-icon-gray 
@@ -230,6 +231,11 @@ $graphPoints = json_decode($coordinates, true);
         outline: none;
         cursor: pointer;
         font-size: 11px;
+    }
+
+    .btn-success, .btn-success:active, .btn-success:visited, .btn-default, .btn-default:active, .btn-default:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
 </style>
@@ -305,12 +311,11 @@ $graphPoints = json_decode($coordinates, true);
     
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$counter.' endpoints matching this coordinate in the graph</div>';
+    echo '<div class="footer-statistics-point"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$counter.' endpoints matching this coordinate in the graph</div>';
     
     ?>
     
-     <div class="modal-footer window-footer-config">
-        <br>
+    <div class="modal-footer window-footer-point">
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to graph</button>
     </div>

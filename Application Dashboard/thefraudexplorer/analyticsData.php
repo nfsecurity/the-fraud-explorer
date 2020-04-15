@@ -134,7 +134,7 @@ var tour = new Tour({
         element: "#elm-vertical",
         placement: 'bottom',
         title: "Vertical analytics",
-        content: "This is the module where you can do vertical analytics, examining data flow and viewing source tables. With vertical analytics you see all events and data hints usefull for deep behavior analysis."
+        content: "This is the module where you can do vertical and diagonal analytics, examining data flows and view their source tables, all based on fraud triangle theory."
     }, {
         element: "#elm-analyticsaccess",
         placement: 'bottom',
@@ -144,32 +144,32 @@ var tour = new Tour({
         element: "#elm-ai",
         placement: 'bottom',
         title: "Analytics data access",
-        content: "this is the Artificial Intelligence module where you can see the deductions and inferences that the expert system produces based on the knowledge and facts database."
+        content: "This is the Artificial Intelligence module where you can see the deductions and inferences that the expert system produces based on the knowledge and facts database."
     }, {
         element: "#elm-scope",
         placement: 'right',
         title: "Analytics scope",
-        content: "You can limit the data on graph based on departments in your company. All the software methodology is based on fraud triangle expressions associated with depertments with one global scope."
+        content: "You can limit the data on the graph based on departments in your company. All the software methodology is based on fraud triangle expressions associated with depertments with one global scope."
     }, {
         element: "#elm-legend",
         placement: 'right',
         title: "Graph leyend",
-        content: "Depends of the data, the event can be represented in various forms. A dark star indicates that the endpoint has a high score and a light star indicates that endpoint has a lower score."
+        content: "Depends of the data, the events can be represented in various forms. A dark star indicates that the endpoint has a high score and a light star indicates that endpoint has a lower score."
     }, {
         element: "#elm-phrasecounts",
         placement: 'right',
         title: "Phrase counts",
-        content: "This is the amount of phrases matched by the phrase library database. This represents the total phrases in pressure, opportunity and rationalization that the company has."
+        content: "This is the amount of phrases matched by the phrase library database. This represents the total phrases in pressure, opportunity and rationalization that the company has at this moment."
     }, {
         element: "#elm-dictionarysize",
         placement: 'right',
         title: "Dictionary size",
-        content: "This data represents the size of the expression or phrase library size. Each phrase under pressure, opportunity and rationalization can has many expansions due to the use of regular expressions."
+        content: "This data represents the size of the expressions or phrase library size. Each phrase under pressure, opportunity and rationalization can has many expansions due to the use of regular expressions."
     }, {
         element: "#elm-fraud-triangle-rules",
         placement: 'right',
         title: "Library workshop",
-        content: "You can use this option to add, modify or delete rules in the phrase library database based on JSON representation. Please note that is neccesary that you have knowledge in regular expressions."
+        content: "You can use this option to add, modify or delete rules in the phrase library database based on JSON representation. Please note that is neccesary that you have knowledge in PCRE regular expressions."
     }]
 });
 

@@ -50,12 +50,12 @@ include "../lbs/elasticsearch.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-ai
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
     }
 
-    .div-container
+    .div-container-ai
     {
         margin: 20px;
     }
@@ -211,13 +211,14 @@ include "../lbs/elasticsearch.php";
         color: #4B906F;
     }
     
-    .footer-statistics
+    .footer-statistics-ai
     {
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
-        margin: 0px 0px 15px 0px;
+        margin: 15px 0px 15px 0px;
         text-align: center;
+        font-family: Verdana, sans-serif; font-size: 11px !important;
     }
     
     .font-icon-gray 
@@ -228,6 +229,11 @@ include "../lbs/elasticsearch.php";
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+
+    .btn-success, .btn-success:active, .btn-success:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
 </style>
@@ -317,11 +323,10 @@ include "../lbs/elasticsearch.php";
     
     if(mysqli_num_rows($result_a) == 0)
     {
-        echo '<div class="div-container">';
+        echo '<div class="div-container-ai">';
         echo '<p class="not-inferences">There is no deductions or inferences at the moment. When we have one we will show it here, please come back later and please note that the artificial intelligence engine (through the expert system) runs every hour or every time your administrator scheduled it.</p><br>';
-        echo '<div class="footer-statistics"><span class="fa fa-cogs font-aw-color fa-padding"></span>There are '.$phrasesCount.' acts in the knowledge base and '.count($fraudProbability).' rules in the Inference Engine</div>';
-        echo '<div class="modal-footer window-footer-config">';
-        echo '<br>';
+        echo '<div class="footer-statistics-ai"><span class="fa fa-cogs font-aw-color fa-padding"></span>There are '.$phrasesCount.' acts in the knowledge base and '.count($fraudProbability).' rules in the Inference Engine</div>';
+        echo '<div class="modal-footer window-footer-ai">';
         echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">I will return later</button>';
         echo '<a href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" class="btn btn-danger" style="outline: 0 !important;">I think AI is failing</a>';
         echo '</div>';
@@ -332,7 +337,7 @@ include "../lbs/elasticsearch.php";
 
 ?>
 
-<div class="div-container">
+<div class="div-container-ai">
     <table class="table-expert">
         <thead class="table-thead-expert">
             <th class="table-th-expert" style="text-align: left;">&ensp;ENDPOINT</th>
@@ -375,12 +380,11 @@ include "../lbs/elasticsearch.php";
 
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-cogs font-aw-color fa-padding"></span>There are '.$phrasesCount.' acts in the knowledge base and '.count($fraudProbability).' rules in the Inference Engine</div>';
+    echo '<div class="footer-statistics-ai"><span class="fa fa-cogs font-aw-color fa-padding"></span>There are '.$phrasesCount.' acts in the knowledge base and '.count($fraudProbability).' rules in the Inference Engine</div>';
     
     ?>
 
-    <div class="modal-footer window-footer-config">
-        <br>
+    <div class="modal-footer window-footer-ai">
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Good inferences</button>
         <a href="https://github.com/nfsecurity/the-fraud-explorer/issues" rel="noopener noreferrer" target="_blank" class="btn btn-danger" style="outline: 0 !important; color: white;">I think AI is failing</a>
     </div>

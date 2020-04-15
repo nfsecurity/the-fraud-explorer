@@ -49,9 +49,9 @@ include "../lbs/cryptography.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-graphic
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
     }
 
     .div-container
@@ -207,14 +207,14 @@ include "../lbs/cryptography.php";
         color: #4B906F;
     }
     
-    .footer-statistics
+    .footer-statistics-graphic
     {
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
-        margin: 0px 0px 15px 0px;
+        margin: 15px 0px 15px 0px;
         text-align: center;
-        font-size: 11px;
+        font-family: Verdana, sans-serif; font-size: 11px !important;
     }
     
     .font-icon-gray 
@@ -231,12 +231,18 @@ include "../lbs/cryptography.php";
     {
         background-color: #4B906F !important;
         border: 1px solid #4B906F !important;
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
     .btn-success:hover
     {
         background-color: #57a881 !important;
         border: 1px solid #57a881 !important;
+    }
+
+    .btn-default, .btn-default:active, .btn-default:visited 
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
     .pseudolink 
@@ -292,9 +298,8 @@ include "../lbs/cryptography.php";
     {
         echo '<div class="div-container">';
         echo '<p class="not-ruleset">There is no data at this time regarding this ruleset, maybe you did not have categorized/organized your endpoints according to the organization chart. Please spend some time clasifying your users and get back later to see their representation.</p>';
-        echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the analytics graph</div>';
-        echo '<div class="modal-footer window-footer-config">';
-        echo '<br>';
+        echo '<div class="footer-statistics-graphic"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are 0 endpoints with a point in the analytics graph</div>';
+        echo '<div class="modal-footer window-footer-graphic">';
         echo '<a class="btn btn-default" style="outline: 0 !important;" href="eventData?nt'.encRijndael("all").'">Access all events</a>';
         echo '<button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>';
         echo '</div>';
@@ -360,12 +365,11 @@ include "../lbs/cryptography.php";
     
     <?php
     
-    echo '<br><div class="footer-statistics"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the analytics graph</div>';
+    echo '<div class="footer-statistics-graphic"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the analytics graph</div>';
     
     ?>
     
-    <div class="modal-footer window-footer-config">
-        <br>
+    <div class="modal-footer window-footer-graphic">
         <a class="btn btn-default" style="outline: 0 !important;" href="eventData?nt=<?php echo encRijndael("all"); ?>">Access all events</a>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
     </div>

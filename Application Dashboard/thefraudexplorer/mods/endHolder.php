@@ -321,7 +321,9 @@ if ($row_a = mysqli_fetch_array($result_a))
         echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
         echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
         echo '<td class="countctd"><center><div class="score-container-underline">'.$level.'</div></center></td>';
-        echo '<td class="scoretd"><a href=eventData?nt='.$endpointEnc.'>'.round($score, 1).'</a></td>';
+
+        if ($score != 0) echo '<td class="scoretd"><a href=eventData?nt='.$endpointEnc.'>'.round($score, 1).'</a></td>';
+        else echo '<td class="scoretd">'.round($score, 1).'</td>';
 
         /* Option for delete the endpoint */
 
@@ -461,78 +463,6 @@ if ($row_a = mysqli_fetch_array($result_a))
     $('#build-endpoint').on('show.bs.modal', function(e){
         $(this).find('.build-endpoint-button').attr('href', $(e.relatedTarget).data('href'));
     });
-</script>
-
-<!-- Table sorting -->
-
-<script>
-    $(document).ready(function(){
-        
-        $('.download-csv').click(function(){
-            $("#tblData").trigger('outputTable');
-        });
-        
-        $("#tblData").tablesorter({
-            widgets: [ 'filter', 'output' ],
-            textExtraction: {
-                6: function(node, table, cellIndex) { return $(node).find("span").text(); },
-            },
-            widgetOptions : 
-            {
-                filter_external: '.search_text',
-                filter_columnFilters : false,
-                output_separator: ',',
-                output_ignoreColumns : [ 0, 5, 12, 13, 14 ],
-                output_dataAttrib: 'data-name',
-                output_headerRows: false,
-                output_delivery: 'download',
-                output_saveRows: 'all',
-                output_replaceQuote: '\u201c;',
-                output_includeHTML: false,
-                output_trimSpaces: true,
-                output_wrapQuotes: false,
-                output_saveFileName: 'endpointsList.csv',
-                output_callback: function (data) {
-                    return true;
-                },
-                output_callbackJSON: function ($cell, txt, cellIndex) {
-                    return txt + '(' + (cellIndex + col) + ')';
-                }
-            },
-            headers:
-            {
-                0:
-                {
-                    sorter: false
-                },
-                4:
-                {
-                    sorter: false
-                },
-                5:
-                {
-                    sorter: false
-                },
-                12:
-                {
-                    sorter: false
-                },
-                13:
-                {
-                    sorter: false
-                },
-                14:
-                {
-                    sorter: false
-                }
-            },
-            sortList: [[11,1], [2,1]]
-        })
-            .tablesorterPager({
-            container: $("#pager"),
-            size: 20
-        });
-    }); 
 </script>
 
 <!-- Tooltipster -->

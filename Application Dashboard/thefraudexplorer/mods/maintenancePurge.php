@@ -47,13 +47,13 @@ include "../lbs/openDBconn.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-maintenance
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
     }
 
-    .div-container
+    .div-container-maintenance
     {
         margin: 20px;
     }
@@ -81,6 +81,7 @@ include "../lbs/openDBconn.php";
         height: 33px;
         float:left;
         margin: 10px 0px 0px 0px;
+        font-family: Verdana, sans-serif; font-size: 11px;
     }
 
     .status-align-right
@@ -94,6 +95,7 @@ include "../lbs/openDBconn.php";
         height: 33px;
         float:right;
         margin: 10px 0px 0px 0px;
+        font-family: Verdana, sans-serif; font-size: 11px;
     }
     
     .select-option-styled
@@ -139,6 +141,11 @@ include "../lbs/openDBconn.php";
         float: right;
     }
 
+    .btn-default, .btn-default:active, .btn-default:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -146,7 +153,7 @@ include "../lbs/openDBconn.php";
     <h4 class="modal-title window-title" id="myModalLabel">Maintenance</h4>
 </div>
 
-<div class="div-container">
+<div class="div-container-maintenance">
     <form id="formPurge" name="formPurge" method="post" action="mods/maintenanceParameters">
 
         <div class="master-container">
@@ -161,6 +168,7 @@ include "../lbs/openDBconn.php";
                 </select>            
                 
             </div>
+
             <div class="right-container">
                    
                 <p class="title-config">Purge old endpoint events</p><br>
@@ -205,6 +213,7 @@ include "../lbs/openDBconn.php";
                 ?>
                 
             </div>
+
             <div class="status-align-right">
                
                 <?php
@@ -246,6 +255,7 @@ include "../lbs/openDBconn.php";
                 </select>            
                 
             </div>
+
             <div class="right-container">
                    
                 <p class="title-config">Delete old events status records</p><br>
@@ -270,6 +280,7 @@ include "../lbs/openDBconn.php";
                 ?>
                 
             </div>
+
             <div class="status-align-right">
                
                 <?php
@@ -301,8 +312,8 @@ include "../lbs/openDBconn.php";
             </div>
         </div>
 
-        <div class="modal-footer window-footer-config">
-            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+        <div class="modal-footer window-footer-maintenance">
+            <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
             
             <?php    
             

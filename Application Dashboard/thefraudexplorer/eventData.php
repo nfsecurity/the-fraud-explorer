@@ -87,6 +87,7 @@ if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("locatio
 
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
+
     </head>
     <body>
         <div align="center" style="height:100%;">
@@ -221,22 +222,22 @@ var tour = new Tour({
         element: "#elm-date-event",
         placement: 'bottom',
         title: "Event date",
-        content: "This column show the date when the event was triggered from the specified endpoint. This ocurr when the endpoint types some phrases that match with the fraud triangle phrase database."
+        content: "This column show the date when the event was triggered from the specified endpoint. This ocurr when the endpoint types a phrase that match with one of the fraud triangle vertices."
     }, {
         element: "#elm-type-event",
         placement: 'bottom',
         title: "Event type",
-        content: "The sofware classify the events under the three vertices of the fraud triangle. Pressure, opportunity and rationalitazion are the three types of events you can see in this module."
+        content: "The sofware classify the events under the three vertices of the fraud triangle. Pressure, opportunity and rationalization are the three types of events you can see in this column."
     }, {
         element: "#elm-endpoint-event",
         placement: 'bottom',
         title: "Endpoint",
-        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization, score and data representation."
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization and score."
     }, {
         element: "#elm-windowtitle-event",
         placement: 'bottom',
         title: "Window title",
-        content: "This software maps the endpoint writing with windows titles. For every event, you will see the phrase matched and the window or application context that was used for type the phrase."
+        content: "We map the endpoint phrases with Application contexts. For every event, you will see the phrase matched and the Window or Application context that was used by the employee while typing."
     }, {
         element: "#elm-endpoint-metrics",
         placement: 'bottom',
@@ -246,7 +247,7 @@ var tour = new Tour({
         element: "#elm-phrasetyped-event",
         placement: 'bottom',
         title: "Phrase typed",
-        content: "You can clic over the phrase typed and you will see a new window showing the entire text history. If you are the admin user, you also can review and correct the phrases fixing typos."
+        content: "You can click over the phrase typed and you will see a new window showing the entire conversation history. If you are the admin, you also can review it and correct the phrases to fix typos."
     }, {
         element: "#elm-mark-event",
         placement: 'left',
@@ -261,12 +262,12 @@ var tour = new Tour({
         element: "#elm-pager-events",
         placement: 'top',
         title: "Statistics and pager",
-        content: "You can see here some statistics like the total number of events and your classification. In the right side, you can use the pager option to navigate in the entire events using paging."
+        content: "You can see here some statistics like the total number of events and their classification. In the right side, you can use the pager option to navigate the entire events using paging."
     }, {
         element: "#elm-search",
         placement: 'bottom',
         title: "Search",
-        content: "You can use this search box to find one or more events in the entire list. This is useful when you have a lot of events under the methodology and needs to focus in one of them."
+        content: "You can use this search box to find one or more fraud triangle events in the entire list. This is useful when you have a lot of events under the methodology and needs to focus in one of them."
     }]
 });
 

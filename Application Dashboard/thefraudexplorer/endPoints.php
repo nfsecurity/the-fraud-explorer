@@ -261,22 +261,22 @@ var tour = new Tour({
         element: "#elm-endpoints-dashboard",
         placement: 'bottom',
         title: "Endpoints",
-        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization, score and data representation."
+        content: "You can hover the mouse under the endpoint name and you will see some fraud triangle insights, like records stored, events by pressure, oportunity, rationalization and score."
     }, {
         element: "#elm-ruleset-dashboard",
         placement: 'bottom',
         title: "Ruleset",
-        content: "Each endpoint can has a category assigned. This category provides the ability to specify a portion of phrase dictionary to get matched using departments like human resources, purchases, etc. "
+        content: "The sofware classify the events under the three vertices of the fraud triangle. Pressure, opportunity and rationalization are the three types of events you can see in this column."
     }, {
         element: "#elm-version-dashboard",
         placement: 'bottom',
         title: "Endpoint version",
-        content: "You can see here the endpoint version of the software. This is useful when you are doing updates and you can see how many endpoints are going to work with the new software versions."
+        content: "You can see here the endpoint version of the software. This is useful when you are doing updates and you can see how many endpoints are going to work with the new agent versions."
     }, {
         element: "#elm-status-dashboard",
         placement: 'bottom',
         title: "Status",
-        content: "You will see here the endpoint status, connected or disconnected. If the endpoint is disconnected means that the PC is offline or is working without an internet connection to send data."
+        content: "You will see here the endpoint status, connected or disconnected. If the endpoint is disconnected means that the PC or mobile is offline or is working without an internet connection to send data."
     }, {
         element: "#elm-last-dashboard",
         placement: 'bottom',
@@ -286,17 +286,17 @@ var tour = new Tour({
         element: "#elm-triangle-dashboard",
         placement: 'bottom',
         title: "Fraud Triangle data",
-        content: "You can see here a consolidation of events for each endpoint in relation to the fraud triangle vertices, pressure, opportunity and rationalization. It's for rapid view of fraud triangle data."
+        content: "You can see here the events consolidation for each endpoint in relation to the fraud triangle vertices, pressure, opportunity and rationalization. Useful for quick view of fraud triangle data."
     }, {
         element: "#elm-level-dashboard",
         placement: 'bottom',
         title: "Criticality level",
-        content: "This field show the level of criticity for each endpoint based in the three fraud triangle vertices, pressure, opportunity and rationalization. This level can be adjusted in configuration."
+        content: "This field shows the level of criticity for each endpoint based in the three fraud triangle vertices, pressure, opportunity and rationalization. This level can be adjusted in the setup module."
     }, {
         element: "#elm-score-dashboard",
         placement: 'bottom',
         title: "Score",
-        content: "The score is the average value from the amount of events in the fraud triangle vertices, pressure, opportunity and rationalization. You can clic the number to enter directly in events data."
+        content: "The score is the average value from the amount of events in the fraud triangle vertices, pressure, opportunity and rationalization. You can click the number to enter directly in events data."
     }, {
         element: "#elm-command-dashboard",
         placement: 'bottom',
@@ -306,17 +306,17 @@ var tour = new Tour({
         element: "#elm-delete-dashboard",
         placement: 'bottom',
         title: "Endpoint deletion",
-        content: "You can delete endpoints if you don't need them anymore. This process is irreversible and delete all data from databases. It's recommended to do a backup first before endpoint deletions."
+        content: "You can delete endpoints if you don't need them anymore. This process is irreversible and will delete all the data from databases. It's recommended to do a backup first."
     }, {
         element: "#elm-set-dashboard",
         placement: 'left',
         title: "Endpoint setup",
-        content: "You can clic on this icon to adjust the endpoint alias, the gender and the ruleset. Remember that assign ruleset is similar to set the department of the endpoint in the company."
+        content: "You can click on this icon to adjust the endpoint alias, the gender and their ruleset. Remember that assign a ruleset is similar to set the business unit of the employee."
     }, {
         element: "#elm-pager",
         placement: 'top',
         title: "Data statistics and pager",
-        content: "You can see some data statistics about the amount of data collected. Also, you can do paging between endpoints with the ability of download the entire endpoint list in a XLS format."
+        content: "You can see here some statistics about the amount of data collected. Also, you can do paging between endpoints with the ability to download the entire endpoint list in a CSV format."
     }, {
         element: "#elm-csv",
         placement: 'top',
@@ -325,13 +325,13 @@ var tour = new Tour({
     }, {
         element: "#elm-build-endpoint",
         placement: 'top',
-        title: "Download MSI Endpoint",
-        content: "You can build your own personalized endpoint in MSI (Microsoft Installer) format. You must specify the server Address, IP, Platform and the option to disable or enable phrase collection."
+        title: "Download endpoint",
+        content: "You can build your own personalized endpoint in MSI or APK format. You must specify the FQDN server address, the platform and the option to disable or enable phrase collection."
     }, {
-        element: "#elm-departments",
+        element: "#elm-business-units",
         placement: 'top',
         title: "Departments",
-        content: "You can clic this button to upload a CSV file with the content of departments for each user you can specify in the format login, domain, full name, department or ruleset, gender."
+        content: "You can click this button to configure the business units of your organization and map them to the endpoints. This will apply the specific rules for your endpoints for better results."
     }, {
         element: "#elm-switch-phrase-collection",
         placement: 'top',

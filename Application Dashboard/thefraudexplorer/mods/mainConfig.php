@@ -74,7 +74,7 @@ include "../lbs/cronManager.php";
 
     .window-footer-config
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
     }
 
@@ -239,6 +239,11 @@ include "../lbs/cronManager.php";
         float: right;
     }
 
+    .btn-default, .btn-default:active, .btn-default:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -254,6 +259,7 @@ include "../lbs/cronManager.php";
                 <p class="title-config">Endpoint to Server password</p><br>
                 <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="new-password" placeholder=":password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
+
             <div class="sample-calculation-container">
                 <p class="title-config">Sample data calculation</p><br>
                 <select class="select-ruleset-styled wide" name="samplecalculation" id="samplecalculation">
@@ -289,6 +295,7 @@ include "../lbs/cronManager.php";
                 <p class="title-config">Change 16Bit Encryption key & vector</p><br>
                 <input class="input-value-text-config" type="text" name="encryption" id="encryption" autocomplete="new-password" placeholder=":encryption key/vector here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
+
             <div class="cron-container">
                 <p class="title-config">Run FTA AI-Processor every</p><br>
                 <select class="select-ftacron-styled wide" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
@@ -316,6 +323,7 @@ include "../lbs/cronManager.php";
                 <p class="title-config">Admin password modification</p><br>
                 <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="new-password" placeholder=":new password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
+
             <div class="librarylanguage-container">
                 <p class="title-config">Phrase Library language</p><br>
                 <select class="select-librarylanguage-styled wide" name="librarylanguage" id="librarylanguage" <?php if ($session->domain != "all") echo 'disabled'; ?>>
@@ -348,7 +356,7 @@ include "../lbs/cronManager.php";
         
         ?>
 
-        <br><p class="title-score">Fraud score criticality configuration&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p>
+        <p class="title-score">Fraud score criticality configuration&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p>
         <div class="container-score-config">
             <div class="score-align-left">
                 <p class="score-text">Low score threshold<br><br></p>
@@ -358,6 +366,7 @@ include "../lbs/cronManager.php";
                 <input class="mod score-text" type="number" name="mediumfrom" min="0" max="500" value="<?php echo $scoreResult[2]; ?>" required>
                 <input class="mod score-text" type="number" name="mediumto" min="0" max="500" value="<?php echo $scoreResult[3]; ?>" required>
             </div>
+
             <div class="score-align-right">
                 <p class="score-text">High score threshold<br><br></p>
                 <input class="mod score-text" type="number" name="highfrom" min="0" max="500" value="<?php echo $scoreResult[4]; ?>" required>
@@ -369,7 +378,7 @@ include "../lbs/cronManager.php";
         </div>
 
         <div class="modal-footer window-footer-config">
-            <br><button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Exit without saving</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Exit without saving</button>
             <input type="submit" class="btn btn-danger setup" value="Apply configuration" style="outline: 0 !important;">
         </div>
     </form>

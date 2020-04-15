@@ -71,7 +71,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .window-footer-config-update
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
     }
     
     .font-icon-color-green
@@ -108,7 +108,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .div-container-update
     {
-        margin: 25px;
+        margin: 20px;
     }
 
     .container-status-update
@@ -116,6 +116,7 @@ $_SESSION['processingStatus'] = "notstarted";
         width: 100%; 
         border-radius: 5px;
         background: #f2f2f2;
+        margin: 15px 0px 15px 0px;
         padding: 0px 10px 15px 10px;
         height: 30px;
     }
@@ -124,6 +125,11 @@ $_SESSION['processingStatus'] = "notstarted";
     {
         font-family: 'FFont', sans-serif; font-size: 12px;
         line-height: 30px;
+    }
+
+    .btn-default, .btn-default:active, .btn-default:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
 </style>
@@ -146,8 +152,6 @@ $_SESSION['processingStatus'] = "notstarted";
             <input type="text" name="urlrepo" id="urlrepo" autocomplete="off" placeholder="https://github.com/nfsecurity/the-fraud-explorer/archive/master.zip" value="https://github.com/nfsecurity/the-fraud-explorer/archive/master.zip" class="input-value-text" style="text-indent:5px;">
 
         </div>
-
-        <br>
 
         <div class="container-status-update">
 
@@ -179,10 +183,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
         </div>
 
-        <br>
-
         <div class="modal-footer window-footer-config-update">
-            <br>
             <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
 
             <?php
