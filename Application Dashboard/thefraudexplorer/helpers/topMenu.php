@@ -85,8 +85,7 @@ include "../lbs/closeDBconn.php";
 <link rel="stylesheet" type="text/css" href="../css/topMenu.css?<?php echo filemtime('../css/topMenu.css') ?>">
 
 <ul class="ul" id="elm-topmenu">
-    <li class="li">
-        <p class="fixed-space">&emsp;&emsp;&emsp;&emsp;</p>
+    <li class="li" style="padding-right: 44px;">
         <img src=../images/nftop.svg class="main-logo" alt="nftop">
     </li>
     <li class="li">
@@ -126,7 +125,7 @@ include "../lbs/closeDBconn.php";
     <li class="li">
         <a href="../mods/maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
     </li>
-        
+
     <li style="float:right">
         <a class="active logout-button" href="logout">Logout</a>
     </li>

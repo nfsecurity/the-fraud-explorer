@@ -85,7 +85,7 @@ include "../lbs/openDBconn.php";
 
     .input-value-text-regexp-add
     {
-        width: calc(100% - 184px);
+        width: 513px;
         height: 30px; 
         padding: 5px;
         margin-right: -6px !important;
@@ -100,7 +100,7 @@ include "../lbs/openDBconn.php";
 
     .input-value-text-regexp-delmodify
     {
-        width: calc(100% - 184px); 
+        width: 513px;
         height: 30px; 
         padding: 5px;
         margin-right: -6px !important;
@@ -439,8 +439,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize with online library</a>';
-            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">View & Download local library</a>';
+            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize library</a>';
+            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download library</a>';
 
             ?>
         
