@@ -78,12 +78,48 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
 </style>
     
 <?php
-    
+   
     $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
     $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
     $phraseTyped = decRijndael($alertPhrase['hits']['hits'][0]['_source']['wordTyped']);
-    
+    $agentId = $alertPhrase['hits']['hits'][0]['_source']['agentId'];
+
     foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+    
+    /* Traverse phrase library searching for matched phrases */
+
+    $rulesetQuery = sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'", $agentId);
+    $rulesetExecution = mysqli_query($connection, $rulesetQuery);
+    $rowRuleset = mysqli_fetch_assoc($rulesetExecution);
+    $ruleset = $rowRuleset['ruleset'];
+
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $fta_lang = $configFile['fta_lang_selection'];
+    $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
+
+    $fraudTriangleTerms = array('rationalization', 'opportunity', 'pressure');
+
+    $rule = "BASELINE";
+
+    if ($ruleset != "BASELINE") $steps = 2;
+    else $steps = 1;
+
+    for($i=1; $i<=$steps; $i++)
+    {
+        foreach ($fraudTriangleTerms as $term)
+        {
+            foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+            {
+                if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                {
+                    $phrasesMatched[] = $matches;
+                }
+            }
+        }
+        $rule = $ruleset;
+    }
+
+    /* Print sanitized phrase history */
 
     echo '<br>';
     echo '<div class="phrase-viewer" contenteditable=false>';
@@ -94,12 +130,14 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
 
 <script>
 
-var matchedPhrase="<?php echo $phraseTyped; ?>";
+    <?php
 
-$('p:contains('+matchedPhrase+')', document.body).each(function(){
-      $(this).html($(this).html().replace(
-            new RegExp(matchedPhrase, 'g'), '<span class="matchedStyle">'+matchedPhrase+'</span>'
-      ));
-});
+    foreach ($phrasesMatched as $key => $value)
+    {
+        echo "var matchedPhrase = '" .$value[0][0]. "';";
+        echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle\">'+matchedPhrase+'</span>'));});";
+    }
+
+    ?>
 
 </script>
