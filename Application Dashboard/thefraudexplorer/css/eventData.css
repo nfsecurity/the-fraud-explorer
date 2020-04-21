@@ -301,6 +301,7 @@ th
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     text-align: center;
     vertical-align: middle;
+    height: 66px;
     width: 40px;
     min-width: 40px;
     padding-left: 5px;
@@ -312,6 +313,7 @@ th
     overflow: hidden;
     display: table-cell;
     white-space: nowrap;
+    height: 66px;
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     border-right:1px solid #F8F8F8;
     text-align: center;
@@ -324,6 +326,7 @@ th
 { 
     width: 150px;
     min-width: 150px;
+    height: 66px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -341,6 +344,7 @@ th
 { 
     overflow: hidden; 
     display: table-cell; 
+    height: 66px;
     white-space: nowrap; 
     text-overflow: ellipsis;
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747; 
@@ -357,6 +361,7 @@ th
     overflow: hidden;
     display: table-cell;
     border-right: 1px solid #f7f7f7;
+    height: 66px;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     text-align: left;
@@ -378,11 +383,24 @@ th
     text-align: left;
     vertical-align: middle;
     min-width: 200px;
+    height: 66px;
     max-width: 200px;
     width: 200px;
     background:#f2f2f2;
     text-overflow: ellipsis;
+    padding-right: 20px;
+}
+
+.phrasetypedtd a
+{
     padding: 0px 20px 0px 20px;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+}
+
+.phrasetypedtd a:hover
+{
+    color: #4B906F;
+    text-decoration: none;
 }
 
 .falsetd
@@ -392,6 +410,7 @@ th
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     white-space: nowrap;
     background:#f7f7f7;
+    height: 66px;
     text-align: center;
     vertical-align: middle;
     width: 100px;
@@ -598,14 +617,26 @@ th
     border-right: 1px solid #f7f7f7;
     white-space: nowrap;
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
-    text-align: left;
+    text-align: left !important;
     vertical-align: middle;
     min-width: 200px;
     max-width: 200px;
     width: 200px;
     background:#f2f2f2;
     text-overflow: ellipsis;
+    padding-right: 20px;
+}
+
+.phrasetypedtd-all a
+{
     padding: 0px 20px 0px 20px;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+}
+
+.phrasetypedtd-all a:hover
+{
+    color: #4B906F;
+    text-decoration: none;
 }
 
 .falsetd-all

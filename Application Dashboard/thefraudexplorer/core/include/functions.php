@@ -483,7 +483,7 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
             {
                 include "../lbs/openDBconn.php";
                                
-                $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure','c'=>'custom');
+                $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure');
                 $totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);
                 $matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
                 $matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);

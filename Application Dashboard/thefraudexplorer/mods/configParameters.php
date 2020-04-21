@@ -33,6 +33,9 @@ if(!isset($_SERVER['HTTP_REFERER']))
     exit;
 }
 
+require '../vendor/autoload.php';
+include "../lbs/elasticsearch.php";
+include "../lbs/cryptography.php";
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
@@ -114,23 +117,43 @@ if (isset($_POST['ftacron']))
 
 if (isset($_POST['librarylanguage']))
 {
-    if (!empty($_POST['librarylanguage']))
+    $languageSelected = filter($_POST['librarylanguage']);
+    $configFile = parse_ini_file("../config.ini");
+    $currentLanguage = $configFile['wc_language'];
+
+    if (!empty($_POST['librarylanguage']) && ($currentLanguage != $languageSelected))
     {
-        $languageSelected = filter($_POST['librarylanguage']);
         $ftaLanguagetoSet = "fta_lang_selection = \\\"fta_text_rule";
 
         if ($languageSelected == "es") $ftaLanguagetoSet = $ftaLanguagetoSet . "_spanish\\\"";
         else if ($languageSelected == "en") $ftaLanguagetoSet = $ftaLanguagetoSet . "_english\\\"";
+
         $wordCorrectiontoSet = "wc_language = \\\"" . $languageSelected . "\\\"";
      
         /* Change language in config.ini file */
  
-        $configFile = parse_ini_file("../config.ini");
         $ftaLang = "fta_lang_selection = \\\"" . $configFile['fta_lang_selection'] . "\\\"";
         $wcLang = "wc_language = \\\"" . $configFile['wc_language'] . "\\\"";
 
-        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcLang.'/'.$wordCorrectiontoSet.'/g; s/'.$ftaLang.'/'.$ftaLanguagetoSet.'/g" --in-place '.$documentRoot.'config.ini';
-        $commandReplacements = shell_exec($replaceParams);
+        $samplerLangSrc = explode("/", $configFile['es_sample_csv']);
+        $samplerLang = $samplerLangSrc[6];
+        $samplerLangToSet = "sampledata_".$languageSelected.".csv";
+
+        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcLang.'/'.$wordCorrectiontoSet.'/g; s/'.$ftaLang.'/'.$ftaLanguagetoSet.'/g; s/'.$samplerLang.'/'.$samplerLangToSet.'/g" --in-place '.$documentRoot.'config.ini';
+        $commandReplacements = exec($replaceParams);
+
+        /* Change sampler language */
+        
+        $configFile = parse_ini_file("../config.ini");
+        
+        /* Delete Index and related data */
+        
+        deleteIndex($configFile['es_sample_alerter_index'], $configFile);
+        mysqli_query($connection, sprintf("DELETE FROM t_inferences WHERE domain='thefraudexplorer.com'"));
+
+        /* Insert sample data */
+
+        insertSampleData($configFile);
     }
 }
 

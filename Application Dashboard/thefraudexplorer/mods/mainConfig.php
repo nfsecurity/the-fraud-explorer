@@ -35,6 +35,8 @@ include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cronManager.php";
 
+$_SESSION['processingStatus'] = "notstarted";
+
 ?>
 
 <style>
@@ -379,7 +381,7 @@ include "../lbs/cronManager.php";
 
         <div class="modal-footer window-footer-config">
             <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Exit without saving</button>
-            <input type="submit" class="btn btn-danger setup" value="Apply configuration" style="outline: 0 !important;">
+            <button type="submit" id="btn-apply-configuration" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Applying, please wait" class="btn btn-danger setup" style="outline: 0 !important;">Apply configuration</button>
         </div>
     </form>
 </div>
@@ -390,4 +392,34 @@ include "../lbs/cronManager.php";
     $(document).ready(function() {
         $('select').niceSelect();
     });
+</script>
+
+<!-- Button applying -->
+
+<script>
+
+var $btn;
+
+$("#btn-apply-configuration").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
 </script>

@@ -39,11 +39,6 @@ include "../lbs/endpointMethods.php";
 include "../lbs/elasticsearch.php";
 include "../lbs/openDBconn.php";
 
-/* Load sample data if it does not exist */
-
-$configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
-insertSampleData($configFile);
-
 /* Global data variables */
 
 if ($session->domain == "all")

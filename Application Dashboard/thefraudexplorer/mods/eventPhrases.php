@@ -66,17 +66,17 @@ $windowTitle = filter($_GET['le']);
         src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
     }
 
-    .window-footer-config
+    .window-footer-event
     {
         padding: 0px 0px 0px 0px;
     }
 
-    .div-container
+    .div-container-event
     {
         margin: 20px;
     }
     
-    .phrase-viewer
+    .phrase-viewer-event
     {
         border: 1px solid #e2e2e2;
         line-height: 20px;
@@ -88,7 +88,6 @@ $windowTitle = filter($_GET['le']);
         font-size:12px;
         padding: 7px 7px 7px 7px;
         background: #f7f7f7;
-        margin-bottom: 20px;
         overflow-y: scroll;
     }
 
@@ -107,14 +106,15 @@ $windowTitle = filter($_GET['le']);
         overflow-y: none;
     }
 
-    .footer-statistics
+    .footer-statistics-event
     {
         background-color: #e8e9e8;
         border-radius: 5px 5px 5px 5px;
         padding: 8px 8px 8px 8px;
+        margin: 15px 0px 15px 0px;
     }
 
-    .matchedStyle
+    .matchedStyle-event
     {
         color: black;
         font-family: 'FFont-Bold', sans-serif;
@@ -140,46 +140,76 @@ $windowTitle = filter($_GET['le']);
     <h4 class="modal-title window-title" id="myModalLabel">Expression analysis</h4>
 </div>
 
-<div class="div-container">
+<div class="div-container-event">
     
     <!-- Editable content if admin -->
     
     <?php
     
-    $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
-    $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
-    
-    foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
-
-    echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
-    echo 'At <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
-    echo '</div>';
-
-    if($session->username == "admin")
-    {
+        $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+        $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
+        $agentId = $eventPhrase['hits']['hits'][0]['_source']['agentId'];
         
-        echo '<div id="reviewPhrasesDivArea" class="phrase-viewer" contenteditable=true>';
-        echo '<p>'.$sanitizedPhrases.'</p>';
-    }
-    else
-    {
-        echo '<div class="phrase-viewer" contenteditable=false>';
-        echo '<p>'.$sanitizedPhrases.'</p>';
-    }
-        
+        foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+
+        echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
+        echo 'At <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
+        echo '</div>';
+
+        if($session->username == "admin")
+        {
+            
+            echo '<div id="reviewPhrasesDivArea" class="phrase-viewer-event" contenteditable=true>';
+            echo '<p>'.$sanitizedPhrases.'</p>';
+            echo '</div>';
+        }
+        else
+        {
+            echo '<div class="phrase-viewer-event" contenteditable=false>';
+            echo '<p>'.$sanitizedPhrases.'</p>';
+            echo '</div>';
+        }
+
+        $regularExpression = (strlen(decRijndael($regExp)) > 40) ? substr(decRijndael($regExp), 0, 40) . ' ...' : decRijndael($regExp);
+
+        echo '<div class="footer-statistics-event"><span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
+
+        /* Traverse phrase library searching for matched phrases */
+
+        $rulesetQuery = sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'", $agentId);
+        $rulesetExecution = mysqli_query($connection, $rulesetQuery);
+        $rowRuleset = mysqli_fetch_assoc($rulesetExecution);
+        $ruleset = $rowRuleset['ruleset'];
+
+        $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+        $fta_lang = $configFile['fta_lang_selection'];
+        $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
+
+        $fraudTriangleTerms = array('rationalization', 'opportunity', 'pressure');
+
+        $rule = "BASELINE";
+
+        if ($ruleset != "BASELINE") $steps = 2;
+        else $steps = 1;
+
+        for($i=1; $i<=$steps; $i++)
+        {
+            foreach ($fraudTriangleTerms as $term)
+            {
+                foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+                {
+                    if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                    {
+                        $phrasesMatched[] = $matches;
+                    }
+                }
+            }
+            $rule = $ruleset;
+        }
+
     ?>
-        
-    </div>
-
-    <?php
-
-    $regularExpression = (strlen(decRijndael($regExp)) > 40) ? substr(decRijndael($regExp), 0, 40) . ' ...' : decRijndael($regExp);
-
-    echo '<div class="footer-statistics"><span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
-
-    ?>
     
-    <div class="modal-footer window-footer-config">
+    <div class="modal-footer window-footer-event">
         
         <?php echo '<form id="formReview" name="formReview" method="post" action="mods/reviewPhrases?id='.$documentId.'&ex='.rawurlencode($indexId).'" onsubmit="return getContent()">'; ?>
     
@@ -203,12 +233,14 @@ $windowTitle = filter($_GET['le']);
 
 <script>
 
-var matchedPhrase="<?php echo decRijndael($phraseTyped); ?>";
+<?php
 
-$('p:contains('+matchedPhrase+')', document.body).each(function(){
-      $(this).html($(this).html().replace(
-            new RegExp(matchedPhrase, 'g'), '<span class="matchedStyle">'+matchedPhrase+'</span>'
-      ));
-});
+foreach ($phrasesMatched as $key => $value)
+{
+    echo "var matchedPhrase = '" .$value[0][0]. "';";
+    echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event\">'+matchedPhrase+'</span>'));});";
+}
+
+?>
 
 </script>

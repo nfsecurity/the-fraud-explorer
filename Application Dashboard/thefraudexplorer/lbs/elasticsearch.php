@@ -1133,4 +1133,14 @@ function insertSampleData($configFile)
     }
 }
 
+function deleteIndex($index, $configFile)
+{
+    if (indexExist($configFile['es_sample_alerter_index'], $configFile))
+    {
+        $params = ['index' => $index];
+        $client = Elasticsearch\ClientBuilder::create()->build();
+        $response = $client->indices()->delete($params);
+    }
+}
+
 ?>
