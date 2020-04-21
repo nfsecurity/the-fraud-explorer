@@ -848,7 +848,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                     
                         /* Send message alert */
 
-                        $mailEventPath = $configFile['php_document_root']."/lbs/mailEvent.php";
+                        $mailEventPath = $configFile['php_document_root']."lbs/mailEventAI.php";
                         include $mailEventPath;
                         mail($to, $subject, $message, $headers);
                     }
