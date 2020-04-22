@@ -12,7 +12,7 @@ actions:
     filters:
     - filtertype: pattern
       kind: prefix
-      value: logstash-thefraudexplorer-text
+      value: logstash-thefraudexplorer-text-
       exclude:
     - filtertype: age
       source: name

@@ -1025,3 +1025,8 @@ th
     -webkit-box-shadow: none;
     border: 1px solid #C1C1C1;
 }
+
+.hidden-date
+{
+    display: none;
+}

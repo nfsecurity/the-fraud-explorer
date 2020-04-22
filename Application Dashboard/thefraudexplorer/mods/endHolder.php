@@ -204,7 +204,7 @@ else $totalSystemWords= "0";
 
 /* Main data */
 
-echo '<table id="tblData" class="tablesorter">';
+echo '<table id="endpointsTable" class="tablesorter">';
 echo '<thead><tr>';
 echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
 echo '<th class="totalwordsth"></th>';

@@ -219,10 +219,13 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
 <script>
     $(document).ready(function(){
 
-        // Endpoints module
+        // Events module
                 
-        $("#endpointDataTable").tablesorter({
+        $("#eventsTableSingle").tablesorter({
             widgets: [ 'filter' ],
+            textExtraction: {
+                1: function(node, table, cellIndex) { return $(node).find("span").text(); },
+            },
             widgetOptions : 
             {
                 filter_external: '.search_text',
@@ -257,8 +260,11 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
             }
         });
         
-        $("#allevents").tablesorter({
+        $("#eventsTableAll").tablesorter({
             widgets: [ 'filter' ],
+            textExtraction: {
+                1: function(node, table, cellIndex) { return $(node).find("span").text(); },
+            },
             widgetOptions : 
             {
                 filter_external: '.search_text',
@@ -293,13 +299,13 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
             }
         });
 
-        // Events module
+        // Endpoints module
 
         $('.download-csv').click(function(){
-            $("#tblData").trigger('outputTable');
+            $("#endpointsTable").trigger('outputTable');
         });
         
-        $("#tblData").tablesorter({
+        $("#endpointsTable").tablesorter({
             widgets: [ 'filter', 'output' ],
             textExtraction: {
                 6: function(node, table, cellIndex) { return $(node).find("span").text(); },

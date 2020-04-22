@@ -171,7 +171,7 @@ $domain = mysqli_fetch_array($domainQuery);
 
 if ($endpointDECSQL != "all")
 {
-    echo '<table id="endpointDataTable" class="tablesorter">';
+    echo '<table id="eventsTableSingle" class="tablesorter">';
     echo '<thead><tr>';
     echo '<th class="detailsth" id="elm-details-event"><span class="fa fa-list fa-lg awfont-padding-right"></span></th>';
     echo '<th class="timestampth" id="elm-date-event"><span class="fa fa-calendar-o fa-lg font-icon-color-gray-low awfont-padding-right"></span>DATE</th>';
@@ -211,6 +211,7 @@ if ($endpointDECSQL != "all")
         /* Timestamp */
 
         echo '<td class="timestamptd">';
+        echo '<span class="hidden-date">'.date('Y/m/d H:i',strtotime($date)).'</span>';
         echo '<center><div class="date-container">'.date('H:i',strtotime($date)).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($date)).'</div></div></center>';
         echo '</td>';
         
@@ -271,7 +272,7 @@ if ($endpointDECSQL != "all")
 }
 else
 {
-    echo '<table id="allevents" class="tablesorter">';
+    echo '<table id="eventsTableAll" class="tablesorter">';
     echo '<thead>';
     echo '<tr>';
     echo '<th class="detailsth-all" id="elm-details-event">';
@@ -330,7 +331,8 @@ else
         
         /* Date */
         
-        echo '<td class="timestamptd-all">';       
+        echo '<td class="timestamptd-all">';
+        echo '<span class="hidden-date">'.date('Y/m/d H:i',strtotime($date)).'</span>'; 
         echo '<center><div class="date-container">'.date('H:i',strtotime($date)).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($date)).'</div></div></center>';                
         echo '</td>';
         

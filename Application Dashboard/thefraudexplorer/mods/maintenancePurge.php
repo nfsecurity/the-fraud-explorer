@@ -35,6 +35,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
+$_SESSION['processingStatus'] = "notstarted";
+
 ?>
 
 <style>
@@ -317,8 +319,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-danger setup disabled" value="Purge now" style="outline: 0 !important;">';
-            else echo '<input type="submit" class="btn btn-danger setup" value="Purge now" style="outline: 0 !important;">';
+            if ($session->username != "admin") echo '<input type="submit" class="btn btn-danger setup disabled" value="Purge data now" style="outline: 0 !important;">';
+            else echo '<button type="submit" id="btn-purge" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Purging, please wait" style="outline: 0 !important;">Purge data now</button>';
 
             ?>
         
@@ -332,4 +334,34 @@ include "../lbs/openDBconn.php";
     $(document).ready(function() {
         $('select').niceSelect();
     });
+</script>
+
+<!-- Button Purge -->
+
+<script>
+
+var $btn;
+
+$("#btn-purge").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
 </script>

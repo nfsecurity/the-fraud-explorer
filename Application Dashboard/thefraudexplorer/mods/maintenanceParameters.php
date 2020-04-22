@@ -41,7 +41,7 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 
 /* Delete dead endpoint sessions */
 
-if (isset($_POST['deadsessions']))
+if ((isset($_POST['deadsessions'])) && ($_POST['deadsessions'] != "preserveall"))
 {
     $setDeadSessions = filter($_POST['deadsessions']);
      
@@ -50,7 +50,7 @@ if (isset($_POST['deadsessions']))
 
 /* Delete old phrase indexes (logstash-theraudepxlorer-text-*) */
 
-if (isset($_POST['deletephrases']))
+if ((isset($_POST['deletephrases'])) && ($_POST['deletephrases'] != "preserveall"))
 {
     $curate30days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases30d.yml';
     $curate60days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases60d.yml';
@@ -64,7 +64,7 @@ if (isset($_POST['deletephrases']))
 
 /* Delete old alert indexes (logstash-alerter-*) */
 
-if (isset($_POST['deletealerts']))
+if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall"))
 {
     /* Search for alerter index */
 
@@ -144,7 +144,7 @@ if (isset($_POST['deletealerts']))
 
 /* Delete old alert status indexes (logstash-alerter-*) */
 
-if (isset($_POST['alertstatus']))
+if ((isset($_POST['alertstatus'])) && ($_POST['alertstatus'] != "preserveall"))
 {
     $setDeleteAlertStatus = filter($_POST['alertstatus']);
     
