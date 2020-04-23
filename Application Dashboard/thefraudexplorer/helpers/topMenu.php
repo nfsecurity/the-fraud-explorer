@@ -218,6 +218,7 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
 
 <script>
     $(document).ready(function(){
+        setTimeout(function(){
 
         // Events module
                 
@@ -365,5 +366,5 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
             container: $("#pager"),
             size: 20
         });
-    });
+    }, 1500);});
 </script>
