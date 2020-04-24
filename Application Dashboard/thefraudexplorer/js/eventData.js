@@ -13,10 +13,10 @@
  * Description: Code for AJAX
  */
 
-/* Code for refresh main Table using AJAX */
+/* Code for html top menu include */
 
 $(function(){
-    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("mods/eventHolder.php"); 
+    $("#includedTopMenu").load("helpers/topMenu.php");
 });
 
 /* Code for html footer include */
@@ -25,9 +25,8 @@ $(function(){
     $("#includedFooterContent").load("helpers/mainFooter.php"); 
 });
 
-/* Code for html top menu include */
+/* Code for event module holder */
 
 $(function(){
-    $("#includedTopMenu").load("helpers/topMenu.php");
+    $("#tableHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("mods/eventHolder.php"); 
 });
-

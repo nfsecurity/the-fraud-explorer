@@ -217,8 +217,7 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
 <!-- Tables sorter -->
 
 <script>
-    $(document).ready(function(){
-        setTimeout(function(){
+    function applyTablesorter() {
 
         // Events module
                 
@@ -358,13 +357,12 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
                 14:
                 {
                     sorter: false
-                }
+                },
             },
-            sortList: [[11,1], [2,1]]
         })
             .tablesorterPager({
             container: $("#pager"),
             size: 20
         });
-    }, 1500);});
+    }
 </script>

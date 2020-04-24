@@ -592,3 +592,11 @@ else
         $('select').niceSelect();
     });
 </script>
+
+<!-- Call tablesorter when page is loaded -->
+
+<script>
+    $(document).ready(function() {
+        applyTablesorter();
+    });
+</script>
