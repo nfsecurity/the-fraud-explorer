@@ -223,7 +223,7 @@ include "../lbs/elasticsearch.php";
     
     .font-icon-gray 
     { 
-        color: #B4BCC2;; 
+        color: #B4BCC2;
     }
     
     .fa-padding 
@@ -234,6 +234,7 @@ include "../lbs/elasticsearch.php";
     .btn-success, .btn-success:active, .btn-success:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
     {
         font-family: Verdana, sans-serif; font-size: 14px !important;
+        color: white !important;
     }
 
 </style>
