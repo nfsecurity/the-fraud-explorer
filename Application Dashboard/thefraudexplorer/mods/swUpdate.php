@@ -146,7 +146,7 @@ $_SESSION['processingStatus'] = "notstarted";
         <div class="master-container-update">
             
             <p class="update-text">
-            Please specify the software repository to load the last software version. Please note that is recommended doing a backup copy first of all data, in order to do that, you can use the Backup module. Once you have the latest backup, you can use the official URL repository at GITHUB below as a source for syncronization:<br><br>
+            Please specify the software repository to load the lastest software version. Please note that is recommended doing a backup copy first of all data, in order to do that, you can use the Backup module. Once you have the latest backup, you can use the official URL repository at GITHUB below as a source for syncronization:<br><br>
             </p>
 
             <input type="text" name="urlrepo" id="urlrepo" autocomplete="off" placeholder="https://github.com/nfsecurity/the-fraud-explorer/archive/master.zip" value="https://github.com/nfsecurity/the-fraud-explorer/archive/master.zip" class="input-value-text" style="text-indent:5px;">
