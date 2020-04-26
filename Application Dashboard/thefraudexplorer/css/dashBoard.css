@@ -126,6 +126,11 @@ a:active
     background: #e8eaeb;
 }
 
+.dashboard-left-menu td
+{
+    vertical-align: middle; padding-top: 12px;
+}
+
 .vertical-menu-icon-padding
 {
     padding-bottom: 0px;
