@@ -34,10 +34,10 @@ if(!isset($_SERVER['HTTP_REFERER']))
 
 include "../lbs/globalVars.php";
 
-$_SESSION['endpointFraudMetrics']['endpoint'] = filter($_GET['nt']);
 $_SESSION['endpointFraudMetrics']['ruleset'] = filter($_GET['et']);
-$_SESSION['endpointFraudMetrics']['allbusiness'] = filter($_GET['ss']);
-$_SESSION['endpointFraudMetrics']['allendpoints'] = filter($_GET['ts']);
+$_SESSION['endpointFraudMetrics']['pressure'] = filter($_GET['re']);
+$_SESSION['endpointFraudMetrics']['opportunity'] = filter($_GET['ty']);
+$_SESSION['endpointFraudMetrics']['rationalization'] = filter($_GET['on']);
 $_SESSION['endpointFraudMetrics']['launch'] = $_SESSION['endpointFraudMetrics']['launch'] + 1;
 
 ?>

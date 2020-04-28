@@ -65,12 +65,12 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 
 /* Global data variables */
 
-for ($i = 1; $i <= 12; $i++) 
+for ($i = 0; $i <= 11; $i++) 
 {
     $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-    $daterangefrom = $months[$i-1] . "-01";
-    $daterangeto = $months[$i-1] . "-18||/M";
-    $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+    $daterangefrom = $months[$i] . "-01";
+    $daterangeto = $months[$i] . "-18||/M";
+    $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
         
     if ($firstTime == true)
     {
@@ -237,17 +237,28 @@ for ($i = 1; $i <= 12; $i++)
                 <div style="line-height:35px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
                         if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
-                            echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($pressureCheck == "true") echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
+                                else echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off">Pressure</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
                         }
                         else 
                         {
-                            echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off" checked>Pressure</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($pressureCheck == "true") echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off" checked>Pressure</input>';
+                                else echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off">Pressure</input>';
+
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off" checked>Pressure</input>';
                         }
                         
                     ?>
@@ -256,17 +267,27 @@ for ($i = 1; $i <= 12; $i++)
                 </div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
                         if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
-                            echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($opportunityCheck == "true") echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
+                                else echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off">Opportunity</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
                         }
                         else 
                         {
-                            echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off" checked>Opportunity</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($opportunityCheck == "true") echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off" checked>Opportunity</input>';
+                                else echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off">Opportunity</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off" checked>Opportunity</input>';
                         }
                         
                     ?>
@@ -275,17 +296,27 @@ for ($i = 1; $i <= 12; $i++)
                 </div>          
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
 
                     <?php
 
                         if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
                         {
-                            echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($rationalizationCheck == "true") echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
+                                else echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off">Rational</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
                         }
                         else 
                         {
-                            echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off" checked>Rational</input>';
+                            if ($firstTime == false)
+                            {
+                                if ($rationalizationCheck == "true") echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off" checked>Rational</input>';
+                                else echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off">Rational</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off" checked>Rational</input>';
                         }
                         
                     ?>
@@ -323,11 +354,11 @@ for ($i = 1; $i <= 12; $i++)
 
             if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) 
             {
-                echo '<a href="../mods/endpointMetrics" onclick="getFiltersPar()" class="btn btn-success endpoint-metrics-reload-button" id="btn-metrics-par" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#endpoint-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
+                echo '<a href="../mods/endpointMetrics" onclick="getFiltersPar()" class="btn btn-success endpoint-metrics-reload-button" id="btn-metrics-par" data-toggle="modal" data-dismiss="modal" data-target="#endpoint-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
             }
             else 
             {
-                echo '<a href="../mods/endpointMetrics" onclick="getFiltersImpar()" class="btn btn-success endpoint-metrics-noreload-button" id="btn-metrics-impar" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#endpoint-metrics" style="outline: 0 !important;">Apply filters</a>';
+                echo '<a href="../mods/endpointMetrics" onclick="getFiltersImpar()" class="btn btn-success endpoint-metrics-noreload-button" id="btn-metrics-impar" data-toggle="modal" data-dismiss="modal" data-target="#endpoint-metrics" style="outline: 0 !important;">Apply filters</a>';
             }
         
         ?>
@@ -335,66 +366,6 @@ for ($i = 1; $i <= 12; $i++)
     </div>
 
 </div>
-
-<!-- Button loading Par -->
-
-<script>
-
-var $btn;
-
-$("#btn-metrics-par").click(function() {
-    $btn = $(this);
-    $btn.button('loading');
-    setTimeout('getstatus()', 1000);
-});
-
-function getstatus()
-{
-    $.ajax({
-        url: "../helpers/processingStatus.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#statusmessage').html(data.message);
-            if(data.status=="pending")
-              setTimeout('getstatus()', 1000);
-            else
-                $btn.button('reset');
-        }
-    });
-}
-
-</script>
-
-<!-- Button loading Impar -->
-
-<script>
-
-var $btn;
-
-$("#btn-metrics-impar").click(function() {
-    $btn = $(this);
-    $btn.button('loading');
-    setTimeout('getstatus()', 1000);
-});
-
-function getstatus()
-{
-    $.ajax({
-        url: "../helpers/processingStatus.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#statusmessage').html(data.message);
-            if(data.status=="pending")
-              setTimeout('getstatus()', 1000);
-            else
-                $btn.button('reset');
-        }
-    });
-}
-
-</script>
 
 <!-- Modal for Endpoint Metrics -->
 

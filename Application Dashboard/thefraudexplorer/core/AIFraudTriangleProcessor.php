@@ -305,6 +305,10 @@ startWorkflows($ESAlerterIndex);
 
 startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile);
 
+/* Start fraud triangle metrics */
+
+fraudTriangleMetrics();
+
 /* Close Alerter UDP socket */
 
 socket_close($sockLT);

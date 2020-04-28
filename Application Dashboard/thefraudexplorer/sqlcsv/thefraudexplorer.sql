@@ -116,3 +116,15 @@ CREATE TABLE IF NOT EXISTS `t_wtriggers` (
     `name` varchar(128) DEFAULT NULL,
     `ids` varchar(65535) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `t_metrics` (
+    `endpoint` varchar(128) DEFAULT NULL,
+    `domain` varchar(128) DEFAULT NULL,
+    `ruleset` varchar(128) DEFAULT NULL,
+    `11P` int DEFAULT 0, `11O` int DEFAULT 0, `11R` int DEFAULT 0, `10P` int DEFAULT 0, `10O` int DEFAULT 0, `10R` int DEFAULT 0,
+    `9P` int DEFAULT 0, `9O` int DEFAULT 0, `9R` int DEFAULT 0, `8P` int DEFAULT 0, `8O` int DEFAULT 0, `8R` int DEFAULT 0,
+    `7P` int DEFAULT 0, `7O` int DEFAULT 0, `7R` int DEFAULT 0, `6P` int DEFAULT 0, `6O` int DEFAULT 0, `6R` int DEFAULT 0,
+    `5P` int DEFAULT 0, `5O` int DEFAULT 0, `5R` int DEFAULT 0, `4P` int DEFAULT 0, `4O` int DEFAULT 0, `4R` int DEFAULT 0,
+    `3P` int DEFAULT 0, `3O` int DEFAULT 0, `3R` int DEFAULT 0, `2P` int DEFAULT 0, `2O` int DEFAULT 0, `2R` int DEFAULT 0,
+    `1P` int DEFAULT 0, `1O` int DEFAULT 0, `1R` int DEFAULT 0, `0P` int DEFAULT 0, `0O` int DEFAULT 0, `0R` int DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

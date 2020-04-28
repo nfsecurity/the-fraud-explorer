@@ -15,8 +15,6 @@
  * Description: Code for fraud metrics
  */
 
-sleep(1);
-
 include "../lbs/login/session.php";
 include "../lbs/security.php";
 
@@ -40,112 +38,102 @@ include "../lbs/endpointMethods.php";
 require "../vendor/autoload.php";
 include "../lbs/elasticsearch.php";
 
-$endpointFilter = false;
-$rulesetFilter = false;
-$endpointID = NULL;
-
-if (isset($_SESSION['endpointFraudMetrics']['allendpoints']) || isset($_SESSION['endpointFraudMetrics']['allbusiness']))
-{
-    if ($_SESSION['endpointFraudMetrics']['allendpoints'] == "false" || $_SESSION['endpointFraudMetrics']['allbusiness'] == "false") 
-    { 
-        if ($_SESSION['endpointFraudMetrics']['endpoint'] != "null")
-        {
-            $endpointLogin = explode("@", $_SESSION['endpointFraudMetrics']['endpoint']);
-            $endpointID = $endpointLogin[0] . "*";
-            $endpointIdentification = $_SESSION['endpointFraudMetrics']['endpoint'];
-            $endpointFilter = true;
-        }
-        else if ($_SESSION['endpointFraudMetrics']['ruleset'] != "BASELINE")
-        {
-            $rulesetSelected = filter($_SESSION['endpointFraudMetrics']['ruleset']);
-            $rulesetFilter = true;
-        }
-    }
-}
-
-if (isset($_SESSION['endpointFraudMetrics']['allendpoints'])) unset($_SESSION['endpointFraudMetrics']['allendpoints']);
-if (isset($_SESSION['endpointFraudMetrics']['allbusiness'])) unset($_SESSION['endpointFraudMetrics']['allbusiness']);
-if (isset($_SESSION['endpointFraudMetrics']['endpoint'])) unset($_SESSION['endpointFraudMetrics']['endpoint']);
-if (isset($_SESSION['endpointFraudMetrics']['ruleset'])) unset($_SESSION['endpointFraudMetrics']['ruleset']);
-
 /* Elasticsearch querys for fraud triangle counts and score */
 
 $client = Elasticsearch\ClientBuilder::create()->build();
 $configFile = parse_ini_file("../config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
 
-/* Global data variables */
+$firstTime = false;
+
+if (!isset($_SESSION['endpointFraudMetrics']['ruleset'])) 
+{
+    $rulesetSelected = "BASELINE";
+    $firstTime = true;
+}
+else
+{
+    $rulesetSelected = $_SESSION['endpointFraudMetrics']['ruleset'];
+    if (isset($_SESSION['endpointFraudMetrics']['ruleset'])) unset($_SESSION['endpointFraudMetrics']['ruleset']);
+}
+
+if (isset($_SESSION['endpointFraudMetrics']['pressure'])) 
+{           
+    $pressureCheck = $_SESSION['endpointFraudMetrics']['pressure'];
+    unset($_SESSION['endpointFraudMetrics']['pressure']);
+}
+
+if (isset($_SESSION['endpointFraudMetrics']['opportunity'])) 
+{
+    $opportunityCheck = $_SESSION['endpointFraudMetrics']['opportunity'];
+    unset($_SESSION['endpointFraudMetrics']['opportunity']);
+}
+
+if (isset($_SESSION['endpointFraudMetrics']['rationalization'])) 
+{
+    $rationalizationCheck = $_SESSION['endpointFraudMetrics']['rationalization'];
+    unset($_SESSION['endpointFraudMetrics']['rationalization']);
+}
+
+/* Metrics logic */
+
+$zeroQuery = false;
 
 if ($session->domain == "all")
 {
-    if ($endpointFilter == true)
+    if ($firstTime == false)
     {
-        for ($i = 1; $i <= 12; $i++) 
+        $fraudTerms = $pressureCheck . " " . $opportunityCheck . " " . $rationalizationCheck;
+        $fraudTerms = str_replace(array("true", "false"), array("1", "0"), $fraudTerms);
+
+        for ($i = 0; $i <= 11; $i++) 
         {
             $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i-1] . "-01";
-            $daterangeto = $months[$i-1] . "-18||/M";
-            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
-        
-            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
-            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
-        }
-    }
-    else if ($rulesetFilter == true)
-    {
-        $queryEndpointsSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$rulesetSelected."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-        $resultSQLRuleset = mysqli_query($connection, $queryEndpointsSQLRuleset);
-        $endCounter = 0;
+            $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
 
-        while ($row = mysqli_fetch_array($resultSQLRuleset))
-        { 
-            $endpointID = $row['agent'] . "*";  
-
-            for ($i = 1; $i <= 12; $i++) 
+            if ($rulesetSelected == "BASELINE")
             {
-                $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-                $daterangefrom = $months[$i-1] . "-01";
-                $daterangeto = $months[$i-1] . "-18||/M";
-                $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
-        
-                $resultAlerts[$endCounter][] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
-                $countAlerts[$endCounter][] = json_decode(json_encode($resultAlerts), true);
+                if ($fraudTerms == "1 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics) AS QUERY", $i, $i, $i));
+                if ($fraudTerms == "1 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO FROM t_metrics) AS QUERY", $i, $i));
+                if ($fraudTerms == "1 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP) AS SUM FROM (SELECT SUM(%sP) AS SUMP FROM t_metrics) AS QUERY", $i));
+                if ($fraudTerms == "1 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sR) AS SUMR FROM t_metrics) AS QUERY", $i, $i));
+                if ($fraudTerms == "0 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMR) AS SUM FROM (SELECT SUM(%sR) AS SUMR FROM t_metrics) AS QUERY", $i));
+                if ($fraudTerms == "0 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO+SUMR) AS SUM FROM (SELECT SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics) AS QUERY", $i, $i));
+                if ($fraudTerms == "0 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO) AS SUM FROM (SELECT SUM(%sO) AS SUMO FROM t_metrics) AS QUERY", $i));
+                if ($fraudTerms == "0 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT * FROM t_metrics WHERE 1 != 1"));
             }
-
-            $endCounter++;
-        }     
-
-        /* Array correlation by month */
-
-        foreach($resultAlerts as $endpoint => $month) 
-        { 
-            $arrCount = 0;
-
-            foreach($month as $k) 
-            {         
-                $finalArray[$arrCount][] = $k['count'];
-                $arrCount++;
-            }            
-        } 
-
-        /* Array sumation */
-
-        foreach($finalArray as $month => $endpoint) 
-        { 
-            foreach($endpoint as $value)
+            else
             {
-                @$sumArray[$month] += $value;
+                if ($fraudTerms == "1 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $i, $i, $rulesetSelected));
+                if ($fraudTerms == "1 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $i, $rulesetSelected));
+                if ($fraudTerms == "1 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP) AS SUM FROM (SELECT SUM(%sP) AS SUMP FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $rulesetSelected));
+                if ($fraudTerms == "1 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $i, $rulesetSelected));
+                if ($fraudTerms == "0 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMR) AS SUM FROM (SELECT SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $rulesetSelected));
+                if ($fraudTerms == "0 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO+SUMR) AS SUM FROM (SELECT SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $i, $rulesetSelected));
+                if ($fraudTerms == "0 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO) AS SUM FROM (SELECT SUM(%sO) AS SUMO FROM t_metrics WHERE ruleset='%s') AS QUERY", $i, $rulesetSelected));
+                if ($fraudTerms == "0 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT * FROM t_metrics WHERE 1 != 1"));
             }
+        
+            $sumValue = mysqli_fetch_all($resultSQL, MYSQLI_ASSOC);
+
+            if (mysqli_num_rows($resultSQL) == 0) 
+            {
+                $countAlerts[$i] = 0;
+                $zeroQuery = true;
+            }
+            else $countAlerts[$i] = $sumValue[0]['SUM'];
         }
     }
     else 
     {
-        for ($i = 1; $i <= 12; $i++) 
+        /* First time modal load */
+
+        for ($i = 0; $i <= 11; $i++) 
         {
             $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i-1] . "-01";
-            $daterangeto = $months[$i-1] . "-18||/M";
-            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+            $daterangefrom = $months[$i] . "-01";
+            $daterangeto = $months[$i] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
         
             $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTerm($ESAlerterIndex, $daterangefrom, $daterangeto);
             $countAlerts[] = json_decode(json_encode($resultAlerts), true);
@@ -154,74 +142,59 @@ if ($session->domain == "all")
 }
 else
 {
-    if ($endpointFilter == true)
-    {
-        for ($i = 1; $i <= 12; $i++) 
-        {
-            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i-1] . "-01";
-            $daterangeto = $months[$i-1] . "-18||/M";
-            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
-        
-            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentIDWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID, $session->domain);
-            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
-        }
-    }
-    else if ($rulesetFilter == true)
+    if ($firstTime == false)
     {
         $queryEndpointsSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$rulesetSelected."' AND domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-        $resultSQLRuleset = mysqli_query($connection, $queryEndpointsSQLRuleset);
-        $endCounter = 0;
 
-        while ($row = mysqli_fetch_array($resultSQLRuleset))
-        { 
-            $endpointID = $row['agent'] . "*";  
+        $fraudTerms = $pressureCheck . " " . $opportunityCheck . " " . $rationalizationCheck;
+        $fraudTerms = str_replace(array("true", "false"), array("1", "0"), $fraudTerms);
 
-            for ($i = 1; $i <= 12; $i++) 
+        for ($i = 0; $i <= 11; $i++) 
+        {
+            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+            $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
+
+            if ($rulesetSelected == "BASELINE")
             {
-                $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-                $daterangefrom = $months[$i-1] . "-01";
-                $daterangeto = $months[$i-1] . "-18||/M";
-                $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+                if ($fraudTerms == "1 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE domain='%s') AS QUERY", $i, $i, $i, $session->domain));
+                if ($fraudTerms == "1 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO FROM t_metrics WHERE domain='%s') AS QUERY", $i, $i, $session->domain));
+                if ($fraudTerms == "1 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP) AS SUM FROM (SELECT SUM(%sP) AS SUMP FROM t_metrics WHERE domain='%s') AS QUERY", $i, $session->domain));
+                if ($fraudTerms == "1 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sR) AS SUMR FROM t_metrics WHERE domain='%s') AS QUERY", $i, $i, $session->domain));
+                if ($fraudTerms == "0 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMR) AS SUM FROM (SELECT SUM(%sR) AS SUMR FROM t_metrics WHERE domain='%s') AS QUERY", $i, $session->domain));
+                if ($fraudTerms == "0 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO+SUMR) AS SUM FROM (SELECT SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE domain='%s') AS QUERY", $i, $i, $session->domain));
+                if ($fraudTerms == "0 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO) AS SUM FROM (SELECT SUM(%sO) AS SUMO FROM t_metrics WHERE domain='%s') AS QUERY", $i, $session->domain));
+            }
+            else
+            {
+                if ($fraudTerms == "1 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $i, $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "1 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "1 0 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP) AS SUM FROM (SELECT SUM(%sP) AS SUMP FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "1 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "0 0 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMR) AS SUM FROM (SELECT SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "0 1 1") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO+SUMR) AS SUM FROM (SELECT SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $i, $rulesetSelected, $session->domain));
+                if ($fraudTerms == "0 1 0") $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMO) AS SUM FROM (SELECT SUM(%sO) AS SUMO FROM t_metrics WHERE ruleset='%s' AND domain='%s') AS QUERY", $i, $rulesetSelected, $session->domain));
+            }
         
-                $resultAlerts[$endCounter][] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentIDWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID, $session->domain);
-                $countAlerts[$endCounter][] = json_decode(json_encode($resultAlerts), true);
-            }
+            $sumValue = mysqli_fetch_all($resultSQL, MYSQLI_ASSOC);
 
-            $endCounter++;
-        }     
-
-        /* Array correlation by month */
-
-        foreach($resultAlerts as $endpoint => $month) 
-        { 
-            $arrCount = 0;
-
-            foreach($month as $k) 
-            {         
-                $finalArray[$arrCount][] = $k['count'];
-                $arrCount++;
-            }            
-        } 
-
-        /* Array sumation */
-
-        foreach($finalArray as $month => $endpoint) 
-        { 
-            foreach($endpoint as $value)
+            if (mysqli_num_rows($resultSQL) == 0) 
             {
-                @$sumArray[$month] += $value;
+                $countAlerts[$i] = 0;
+                $zeroQuery = true;
             }
+            else $countAlerts[$i] = $sumValue[0]['SUM'];
         }
     }
     else 
     {
-        for ($i = 1; $i <= 12; $i++) 
+        /* First time modal load */
+
+        for ($i = 0; $i <= 11; $i++) 
         {
             $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i-1] . "-01";
-            $daterangeto = $months[$i-1] . "-18||/M";
-            $monthName[] = substr(date("F", strtotime($months[$i-1])), 0, 3);
+            $daterangefrom = $months[$i] . "-01";
+            $daterangeto = $months[$i] . "-18||/M";
+            $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
         
             $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $session->domain);
             $countAlerts[] = json_decode(json_encode($resultAlerts), true);
@@ -239,17 +212,6 @@ else
         float: left;
         padding-bottom: 10px;
         padding-top: 10px;
-    }
-
-    .input-value-text
-    {
-        width: 100%; 
-        height: 30px; 
-        padding: 5px; 
-        border: solid 1px #c9c9c9; 
-        outline: none;
-        font-family: 'FFont', sans-serif; font-size: 12px;
-        border-radius: 5px;
     }
 
     .window-footer-config-fraudmetrics
@@ -301,21 +263,19 @@ else
     .master-container-metrics
     {
         width: 100%; 
-        height: 105px;
+        height: 70px !important;
     }
     
     .left-container-metrics
     {
         width: calc(50% - 5px); 
-        height: 100%; 
-        display: inline; 
+        display: inline;
         float: left;
     }
     
     .right-container-metrics
     {
         width: calc(50% - 5px); 
-        height: 100%; 
         display: inline; 
         float: right;
     }
@@ -354,8 +314,17 @@ else
 
     <?php 
     
-        if ($rulesetFilter == true) echo '<p>Metrics for ' . $rulesetSelected . '</p>'; 
-        else if ($endpointID != NULL) echo '<p>Metrics for ' . $endpointIdentification . '</p>'; 
+        if ($firstTime == false) 
+        {
+            $underVerticePressure = ($pressureCheck == "true" ? "P" : "");
+            $underVerticeOpportunity = ($opportunityCheck == "true" ? "O" : "");
+            $underVerticeRationalization = ($rationalizationCheck == "true" ? "R" : "");
+
+            if ($zeroQuery == true) echo "<p>Please select at leat one vertice&emsp;&emsp;</p>";
+            else if ($rulesetSelected == "BASELINE") echo '<p>Metrics filtered for all business units under ['.$underVerticePressure.$underVerticeOpportunity.$underVerticeRationalization.']&emsp;&emsp;</p>';
+            else echo '<p>Metrics filtered for ' . $rulesetSelected . ' under ['.$underVerticePressure.$underVerticeOpportunity.$underVerticeRationalization.']&emsp;&emsp;</p>';
+        }
+        else echo '<p>Metrics for all business units under [POR]&emsp;&emsp;</p>';
         
     ?>
 </div>
@@ -382,7 +351,104 @@ else
     <div class="master-container-metrics">
             <div class="left-container-metrics">              
                 
+                <p class="title-config">Filter by fraud triangle vertice</p><br><br>
+
+                <div style="line-height:9px; border: 1px solid white;"><br></div>
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">                                  
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+
+                    <?php
+
+                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($pressureCheck == "true") echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
+                                else echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off">Pressure</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxPressurePar()" name="pressurepar" value="pressure" id="pressurepar" autocomplete="off" checked>Pressure</input>';
+                        }
+                        else 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($pressureCheck == "true") echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off" checked>Pressure</input>';
+                                else echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off">Pressure</input>';
+
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxPressureImpar()" name="pressureimpar" value="pressure" id="pressureimpar" autocomplete="off" checked>Pressure</input>';
+                        }
+                        
+                    ?>
+
+                    </label>
+                </div>
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+
+                    <?php
+
+                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($opportunityCheck == "true") echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
+                                else echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off">Opportunity</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxOpportunityPar()" name="opportunitypar" value="opportunity" id="opportunitypar" autocomplete="off" checked>Opportunity</input>';
+                        }
+                        else 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($opportunityCheck == "true") echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off" checked>Opportunity</input>';
+                                else echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off">Opportunity</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxOpportunityImpar()" name="opportunityimpar" value="opportunity" id="opportunityimpar" autocomplete="off" checked>Opportunity</input>';
+                        }
+                        
+                    ?>
+
+                    </label>
+                </div>          
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+
+                    <?php
+
+                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($rationalizationCheck == "true") echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
+                                else echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off">Rational</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxRationalizationPar()" name="rationalizationpar" value="rationalization" id="rationalizationpar" autocomplete="off" checked>Rational</input>';
+                        }
+                        else 
+                        {
+                            if ($firstTime == false)
+                            {
+                                if ($rationalizationCheck == "true") echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off" checked>Rational</input>';
+                                else echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off">Rational</input>';
+                            }
+                            else echo '<input type="checkbox" onchange="checkboxRationalizationImpar()" name="rationalizationimpar" value="rationalization" id="rationalizationimpar" autocomplete="off" checked>Rational</input>';
+                        }
+                        
+                    ?>
+
+                    </label>
+                </div>
+          
+            </div>
+
+            <div class="right-container-metrics">
+                   
                 <p class="title-config">Filter by business unit</p><br><br>
+                <div style="line-height:9px; border: 1px solid white;"><br></div>
 
                 <?php
 
@@ -393,76 +459,30 @@ else
                     $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
                     $GLOBALS['listRuleset'] = null;
 
-                    foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                    if ($firstTime == true)
                     {
-                        if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected>ALL BUSINESS UNITS</option>';
-                        else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                        {
+                            if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected>ALL BUSINESS UNITS</option>';
+                            else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        }
                     }
+                    else
+                    {
+                        foreach ($jsonFT['dictionary'] as $ruleset => $value)
+                        {
+                            if ($ruleset == $rulesetSelected) 
+                            {
+                                if ($rulesetSelected == "BASELINE") echo '<option value="'.$ruleset.'" selected>ALL BUSINESS UNITS</option>';
+                                else echo '<option value="'.$ruleset.'" selected>'.$ruleset.'</option>'; 
+                            }
+                            else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                        }
+                    } 
 
                 ?>
 
                 </select>
-
-                <div style="line-height:47px; border: 1px solid white;"><br></div>
-
-                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxAllBusinessPar'; else echo 'checkboxAllBusinessImpar'; ?>" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-
-                    <?php
-
-                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
-                        {
-                            echo '<input type="checkbox" onchange="checkboxAllBusinessPar()" id="allbusinesspar" name="allbusinesspar" value="allbusiness" id="allbusinesspar" autocomplete="off" checked>I want all business units';
-                        }
-                        else 
-                        {
-                            echo '<input type="checkbox" onchange="checkboxAllBusinessImpar()" id="allbusinessimpar" name="allbusinessimpar" value="allbusiness" id="allbusinessimpar" autocomplete="off" checked>I want all business units';
-                        }
-                        
-                    ?>
-
-                    </label>
-                </div>          
-              
-            </div>
-            <div class="right-container-metrics">
-                   
-                <p class="title-config">Filter by endpoint</p><br><br>
-                <div style="line-height:9px; border: 1px solid white;"><br></div>
-
-                <?php
-
-                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
-                    {
-                        echo '<input type="text" name="endpointpar" id="endpointpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
-                    }
-                    else 
-                    {
-                        echo '<input type="text" name="endpointimpar" id="endpointimpar" autocomplete="off" placeholder="eleanor@mydomain" class="input-value-text" style="text-indent:5px;">';
-                    }
-                
-                ?>
-
-                <div style="line-height:6px; border: 1px solid white;"><br></div>
-
-                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="<?php if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxAllEndpointsPar'; else echo 'checkboxAllEndpointsImpar'; ?>" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-
-                    <?php
-
-                        if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
-                        {
-                            echo '<input type="checkbox" onchange="checkboxAllEndpointsPar()" id="allendpointspar" name="allendpointspar" value="allendpoints" id="allendpointspar" autocomplete="off" checked>I want all endpoints';
-                        }
-                        else 
-                        {
-                            echo '<input type="checkbox" onchange="checkboxAllEndpointsImpar()" id="allendpointsimpar" name="allendpointsimpar" value="allendpoints" id="allendpointsimpar" autocomplete="off" checked>I want all endpoints';
-                        }
-
-                    ?>
-
-                    </label>
-                </div>           
                     
             </div>
     </div>
@@ -474,74 +494,14 @@ else
 
         <?php
 
-            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFiltersPar()" class="btn btn-success fraud-metrics-reload-button" id="btn-metrics-par" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
-            else echo '<a href="../mods/fraudMetrics" onclick="getFiltersImpar()" class="btn btn-success fraud-metrics-noreload-button" id="btn-metrics-impar" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Filtering, please wait" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics" style="outline: 0 !important;">Apply filters</a>';
+            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFiltersPar()" class="btn btn-success fraud-metrics-reload-button" id="btn-metrics-par" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
+            else echo '<a href="../mods/fraudMetrics" onclick="getFiltersImpar()" class="btn btn-success fraud-metrics-noreload-button" id="btn-metrics-impar" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics" style="outline: 0 !important;">Apply filters</a>';
         
         ?>
 
     </div>
 
 </div>
-
-<!-- Button loading Par -->
-
-<script>
-
-var $btn;
-
-$("#btn-metrics-par").click(function() {
-    $btn = $(this);
-    $btn.button('loading');
-    setTimeout('getstatus()', 1000);
-});
-
-function getstatus()
-{
-    $.ajax({
-        url: "../helpers/processingStatus.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#statusmessage').html(data.message);
-            if(data.status=="pending")
-              setTimeout('getstatus()', 1000);
-            else
-                $btn.button('reset');
-        }
-    });
-}
-
-</script>
-
-<!-- Button loading Impar -->
-
-<script>
-
-var $btn;
-
-$("#btn-metrics-impar").click(function() {
-    $btn = $(this);
-    $btn.button('loading');
-    setTimeout('getstatus()', 1000);
-});
-
-function getstatus()
-{
-    $.ajax({
-        url: "../helpers/processingStatus.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#statusmessage').html(data.message);
-            if(data.status=="pending")
-              setTimeout('getstatus()', 1000);
-            else
-                $btn.button('reset');
-        }
-    });
-}
-
-</script>
 
 <!-- Modal for Fraud Metrics -->
 
@@ -560,19 +520,19 @@ function getstatus()
 <script>
     function getFiltersPar()
     {
-        var endpointData = document.getElementById("endpointpar").value;
         var businessData = document.getElementById("ruleset-businesspar").value;
-        var allEndpoints, allBusiness;
 
-        if (document.getElementById('allbusinesspar').checked) allBusiness = true;
-        else allBusiness = false;
+        if (document.getElementById('pressurepar').checked) pressure = true;
+        else pressure = false;
 
-        if (document.getElementById('allendpointspar').checked) allEndpoints = true;
-        else allEndpoints = false;
-        if (!endpointData) endpointData = "null";
+        if (document.getElementById('opportunitypar').checked) opportunity = true;
+        else opportunity = false;
+
+        if (document.getElementById('rationalizationpar').checked) rationalization = true;
+        else rationalization = false;
 
         $.get({
-            url: 'mods/fraudMetricsReload.php?nt=' + endpointData + '&ss=' + allBusiness + '&ts=' + allEndpoints + '&et=' + businessData, 
+            url: 'mods/fraudMetricsReload.php?et=' + businessData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
             success: function(data) { return true; }
         });
     }
@@ -583,19 +543,19 @@ function getstatus()
 <script>
     function getFiltersImpar()
     {
-        var endpointData = document.getElementById("endpointimpar").value;
         var businessData = document.getElementById("ruleset-businessimpar").value;
-        var allEndpoints, allBusiness;
 
-        if (document.getElementById('allbusinessimpar').checked) allBusiness = true;
-        else allBusiness = false;
+        if (document.getElementById('pressureimpar').checked) pressure = true;
+        else pressure = false;
 
-        if (document.getElementById('allendpointsimpar').checked) allEndpoints = true;
-        else allEndpoints = false;
-        if (!endpointData) endpointData = "null";
+        if (document.getElementById('opportunityimpar').checked) opportunity = true;
+        else opportunity = false;
+
+        if (document.getElementById('rationalizationimpar').checked) rationalization = true;
+        else rationalization = false;
 
         $.get({
-            url: 'mods/fraudMetricsReload.php?nt=' + endpointData + '&ss=' + allBusiness + '&ts=' + allEndpoints + '&et=' + businessData, 
+            url: 'mods/fraudMetricsReload.php?et=' + businessData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
             success: function(data) { return true; }
         });
     }
@@ -640,13 +600,13 @@ function getstatus()
 
                     <?php
 
-                        if ($rulesetFilter == true)
+                        if ($firstTime == false)
                         {
-                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2] . '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
                         }
                         else
                         {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                         }
 
@@ -678,13 +638,13 @@ function getstatus()
 
                     <?php
 
-                        if ($rulesetFilter == true)
+                        if ($firstTime == false)
                         {
-                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
                         }
                         else
                         {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                         }
 
@@ -815,17 +775,18 @@ function getstatus()
 
                     <?php
 
-                        if ($rulesetFilter == true)
+                        if ($firstTime == false)
                         {
-                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11] . '","' .$countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
                         }
                         else
                         {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                         }
 
                     ?>
+
 
                     spanGaps: false,
                 },
@@ -853,13 +814,13 @@ function getstatus()
 
                     <?php
 
-                        if ($rulesetFilter == true)
+                        if ($firstTime == false)
                         {
-                            echo 'data: [ "'. $sumArray[11]/3 . '","' . $sumArray[10]/3 . '","' . $sumArray[9]/3 . '","' . $sumArray[8]/3 . '","' . $sumArray[7]/3 . '","' . $sumArray[6]/3 . '","' . $sumArray[5]/3 . '","' . $sumArray[4]/3 . '","' . $sumArray[3]/3 . '","' . $sumArray[2]/3 . '","' . $sumArray[1]/3 . '","' . $sumArray[0]/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
                         }
                         else
                         {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']/3 . '","' . $countAlerts[10][10]['count']/3 . '","' . $countAlerts[9][9]['count']/3 . '","' . $countAlerts[8][8]['count']/3 . '","' . $countAlerts[7][7]['count']/3 . '","' . $countAlerts[6][6]['count']/3 . '","' . $countAlerts[5][5]['count']/3 . '","' . $countAlerts[4][4]['count']/3 . '","' . $countAlerts[3][3]['count']/3 . '","' . $countAlerts[2][2]['count']/3 . '","' . $countAlerts[1][1]['count']/3 . '","' . $countAlerts[0][0]['count']/3 . '" ],';
+                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                         }
 
@@ -963,63 +924,93 @@ function getstatus()
 
 <script>
 
-    function checkboxAllBusinessPar()
+    function checkboxPressurePar()
     {
-        var checkbox = document.getElementById('allbusinesspar');
-        var checkboxAllBusiness = document.getElementById('checkboxAllBusinessPar');
+        var checkbox = document.getElementById('pressurepar');
+        var checkboxPressure = document.getElementById('checkboxPressurePar');
 
         if(checkbox.checked === true)
         {
-            checkboxAllBusiness.style.background = "#E0E0E0";
+            checkboxPressure.style.background = "#E0E0E0";
         }
         else
         {
-            checkboxAllBusiness.style.background = "white";
+            checkboxPressure.style.background = "white";
         }
     }
 
-    function checkboxAllBusinessImpar()
+    function checkboxPressureImpar()
     {
-        var checkbox = document.getElementById('allbusinessimpar');
-        var checkboxAllBusiness = document.getElementById('checkboxAllBusinessImpar');
+        var checkbox = document.getElementById('pressureimpar');
+        var checkboxPressure = document.getElementById('checkboxPressureImpar');
 
         if(checkbox.checked === true)
         {
-            checkboxAllBusiness.style.background = "#E0E0E0";
+            checkboxPressure.style.background = "#E0E0E0";
         }
         else
         {
-            checkboxAllBusiness.style.background = "white";
+            checkboxPressure.style.background = "white";
         }
     }
 
-    function checkboxAllEndpointsPar()
+    function checkboxOpportunityPar()
     {
-        var checkbox = document.getElementById('allendpointspar');
-        var checkboxAllEndpoints = document.getElementById('checkboxAllEndpointsPar');
+        var checkbox = document.getElementById('opportunitypar');
+        var checkboxOpportunity = document.getElementById('checkboxOpportunityPar');
 
         if(checkbox.checked === true)
         {
-            checkboxAllEndpoints.style.background = "#E0E0E0";
+            checkboxOpportunity.style.background = "#E0E0E0";
         }
         else
         {
-            checkboxAllEndpoints.style.background = "white";
+            checkboxOpportunity.style.background = "white";
         }
     }
 
-    function checkboxAllEndpointsImpar()
+    function checkboxOpportunityImpar()
     {
-        var checkbox = document.getElementById('allendpointsimpar');
-        var checkboxAllEndpoints = document.getElementById('checkboxAllEndpointsImpar');
+        var checkbox = document.getElementById('opportunityimpar');
+        var checkboxOpportunity = document.getElementById('checkboxOpportunityImpar');
 
         if(checkbox.checked === true)
         {
-            checkboxAllEndpoints.style.background = "#E0E0E0";
+            checkboxOpportunity.style.background = "#E0E0E0";
         }
         else
         {
-            checkboxAllEndpoints.style.background = "white";
+            checkboxOpportunity.style.background = "white";
+        }
+    }
+
+    function checkboxRationalizationPar()
+    {
+        var checkbox = document.getElementById('rationalizationpar');
+        var checkboxRationalization = document.getElementById('checkboxRationalizationPar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxRationalization.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxRationalization.style.background = "white";
+        }
+    }
+
+    function checkboxRationalizationImpar()
+    {
+        var checkbox = document.getElementById('rationalizationimpar');
+        var checkboxRationalization = document.getElementById('checkboxRationalizationImpar');
+
+        if(checkbox.checked === true)
+        {
+            checkboxRationalization.style.background = "#E0E0E0";
+        }
+        else
+        {
+            checkboxRationalization.style.background = "white";
         }
     }
 
