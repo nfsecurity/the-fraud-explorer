@@ -561,6 +561,8 @@ else
     }
 </script>
 
+<!-- Graph --> 
+
 <script>
     var defaultOptions = {
         global: {
@@ -568,7 +570,7 @@ else
         }
     }
 
-    var ctx = document.getElementById("fraud-metrics-graph");
+    var ctx = document.getElementById("<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'fraud-metrics-graph'; else echo 'fraud-metrics-graph-reloaded'; ?>");
     var myChart = new Chart(ctx, {
         type: 'line',
         defaults: defaultOptions,
@@ -611,182 +613,6 @@ else
                         }
 
                     ?>
-
-                    spanGaps: false,
-                },
-                {
-                    label: "Fraud Metrics",
-                    type: 'line',
-                    fill: false,
-                    fillColor: "#13923D",
-                    lineTension: 0.0,
-                    backgroundColor: "rgb(75, 144, 111, 0.25)",
-                    borderColor: "rgb(75, 144, 111, 0.75)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'round',
-                    pointBorderColor: "rgb(75, 144, 111, 1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 0,
-                    pointHoverRadius: 0,
-                    pointHoverBackgroundColor: "rgb(75, 144, 111, 0.5)",
-                    pointHoverBorderColor: "rgb(75, 144, 111, 0.25)",
-                    pointHoverBorderWidth: 0,
-                    pointRadius: 0,
-                    pointHitRadius: 0,
-
-                    <?php
-
-                        if ($firstTime == false)
-                        {
-                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
-                        }
-                        else
-                        {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
-
-                        }
-
-                    ?>
-
-                    spanGaps: false,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-                display: false
-            },
-            tooltips: {
-                callbacks: {
-                    title: function(tooltipItems, data) {
-                        return "General statistics"
-                    },
-                    label: function(tooltipItems, data) {
-                        return "Status " + parseInt(tooltipItems.yLabel);
-                    },
-                    footer: function(tooltipItems, data) {
-                        return data['labels'][tooltipItems[0]['index']] + " Category";
-                    }
-                },
-                enabled: true,
-                backgroundColor: "#ededed",
-                titleFontColor: "#474747",
-                bodyFontColor: "#474747",
-                xPadding: 10,
-                yPadding: 15,
-                cornerRadius: 4,
-                titleFontSize: 11,
-                bodyFontSize: 11,
-                footerFontSize: 11,
-                borderColor: "#aaa",
-                borderWidth: 2,
-                caretPadding: 20,
-                displayColors: false,
-                titleMarginBottom: 15,
-                footerFontColor: "#474747",
-                titleFontFamily: "FFont-Bold"
-            },
-            animation: false,
-            scales: {
-                xAxes: [{       
-                    }, {
-                        position: 'top',
-                        ticks: {
-                            display: false
-                        },
-                        gridLines: {
-                            display: false,
-                            drawTicks: false
-                        }
-                    }],
-                yAxes: [{ 
-                    ticks: {
-                        padding: 10,
-                    }},
-                    {
-                        display: true,
-                        position: 'right',
-                        id: 'y-axis-right-normal',
-                        ticks: {
-                            padding: 15,
-                            beginAtZero: true,
-                            min: 0
-                        },
-                        gridLines: {
-                            display: false,
-                            drawTicks: false
-                        }
-                    }, {
-                        position: 'right',
-                        id: 'y-axis-right-hidden',
-                        ticks: {
-                            display: false
-                        },
-                        gridLines: {
-                            display: false,
-                            drawTicks: false
-                        },
-                    }]
-            }
-        }
-    });
-</script>
-
-<script>
-    var defaultOptions = {
-        global: {
-            defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'CFont'"
-        }
-    }
-
-    var ctx = document.getElementById("fraud-metrics-graph-reloaded");
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        defaults: defaultOptions,
-        data: {
-            labels: [ <?php echo '"'. $monthName[11] . '"'; ?>, <?php echo '"'. $monthName[10] . '"'; ?>, <?php echo '"'. $monthName[9] . '"'; ?>, <?php echo '"'. $monthName[8] . '"'; ?>, <?php echo '"'. $monthName[7] . '"'; ?>, <?php echo '"'. $monthName[6] . '"'; ?>, <?php echo '"'. $monthName[5] . '"'; ?>, <?php echo '"'. $monthName[4] . '"'; ?>, <?php echo '"'. $monthName[3] . '"'; ?>, <?php echo '"'. $monthName[2] . '"'; ?>, <?php echo '"'. $monthName[1] . '"'; ?>, <?php echo '"'. $monthName[0] . '"'; ?> ],
-            datasets: [
-                {
-                    label: "Fraud Metrics",
-                    yAxisID: "y-axis-right-normal",
-                    type: 'line',
-                    fill: true,
-                    fillColor: "#13923D",
-                    lineTension: 0.1,
-                    backgroundColor: "rgb(75, 144, 111, 0.25)",
-                    borderColor: "rgb(75, 144, 111, 0.75)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'round',
-                    pointBorderColor: "rgb(75, 144, 111, 1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgb(75, 144, 111, 0.5)",
-                    pointHoverBorderColor: "rgb(75, 144, 111, 0.25)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHitRadius: 10,
-
-                    <?php
-
-                        if ($firstTime == false)
-                        {
-                            echo 'data: [ "'. $countAlerts[11] . '","' .$countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
-                        }
-                        else
-                        {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
-
-                        }
-
-                    ?>
-
 
                     spanGaps: false,
                 },
