@@ -237,7 +237,7 @@ for ($i = 0; $i <= 11; $i++)
                 <div style="line-height:35px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
@@ -267,7 +267,7 @@ for ($i = 0; $i <= 11; $i++)
                 </div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
@@ -296,7 +296,7 @@ for ($i = 0; $i <= 11; $i++)
                 </div>          
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
