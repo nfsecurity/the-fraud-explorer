@@ -27,7 +27,6 @@ if(!$session->logged_in)
 
 $_SESSION['instance'] = "dashBoard";
 $_SESSION['endpointIDh'] = encRijndael("all");
-$_SESSION['endpointFraudMetrics']['launch'] = 0;
 $_SESSION['rulesetScope'] = "ALL";
 
 ?>
@@ -41,6 +40,7 @@ $_SESSION['rulesetScope'] = "ALL";
         <!-- JQuery 11 inclusion -->
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script src="js/jquery.cookie.js" type="text/javascript"></script>
 
         <!-- JS functions -->
 
@@ -537,4 +537,10 @@ function startTour() {
     tour.start(true);
 }
 
+</script>
+
+<!-- Cookies for metrics -->
+
+<script>
+    $.cookie('endpointFraudMetrics_launch', "0");
 </script>

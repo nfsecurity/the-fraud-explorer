@@ -203,6 +203,7 @@ if ($endpointDECSQL != "all")
         $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
         $userDomain = mysqli_fetch_assoc($queryUserDomain);
         $endpointName = $userDomain['agent']."@".$userDomain['domain'];
+        $endpointId = $endpointName;
     
         echo '<td class="detailstd">';
         echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.encRijndael($agentId).'&in='.encRijndael($userDomain['domain']).'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&ensp;';
@@ -232,13 +233,13 @@ if ($endpointDECSQL != "all")
         /* Endpoint metrics */
 
         echo '<td class="metricstd">';
-        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
+        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointId).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
         echo '</td>';
 
         /* Phrase typed */
 
         echo '<td class="phrasetypedtd">';
-        echo '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
+        echo '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
         echo '</td>';
 
         /* Mark false positive */
@@ -349,6 +350,7 @@ else
         echo '<td class="endpointtd-all">';
          
         $endpointName = $userDomain['agent']."@".$userDomain['domain'];
+        $endpointId = $endpointName;
         $endpointDec = encRijndael($userDomain['agent']);
         $totalWordHits = $userDomain['totalwords'];
         $countPressure = $userDomain['pressure'];
@@ -384,13 +386,13 @@ else
         /* Endpoint metrics */
 
         echo '<td class="metricstd-all">';
-        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointName).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
+        echo '<a href="../mods/endpointMetrics?id='. encRijndael($endpointId).'" data-toggle="modal" data-target="#endpoint-metrics" href="#" id="elm-endpoint-metrics" class="btn btn-default btn-metrics"><span class="fa fa-area-chart font-icon-color-gray"></span></a>';
         echo '</td>';
         
         /* Phrase typed */
       
         echo '<td class="phrasetypedtd-all">';
-        echo '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
+        echo '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
         echo '</td>';
         
         /* Mark false positive */

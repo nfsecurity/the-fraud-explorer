@@ -87,7 +87,6 @@ if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("locatio
 
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
-
     </head>
     <body>
         <div align="center" style="height:100%;">

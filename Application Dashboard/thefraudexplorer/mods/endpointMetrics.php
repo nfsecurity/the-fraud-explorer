@@ -15,8 +15,6 @@
  * Description: Code for endpoint metrics
  */
 
-sleep(1);
-
 include "../lbs/login/session.php";
 include "../lbs/security.php";
 
@@ -48,11 +46,21 @@ else
 {
     $metricForEndpoint = filter($_GET['id']);
     $metricForEndpoint = decRijndael($metricForEndpoint);
+    $fraudTerms = "1 1 1";
     $firstTime = true;
 }
 
+if ($firstTime == false)
+{
+    $pressureCheck = $_SESSION['endpointMetrics']['pressure'];
+    $opportunityCheck = $_SESSION['endpointMetrics']['opportunity'];
+    $rationalizationCheck = $_SESSION['endpointMetrics']['rationalization'];
+    $fraudTerms = $pressureCheck . " " . $opportunityCheck . " " . $rationalizationCheck;
+    $fraudTerms = str_replace(array("true", "false"), array("1", "0"), $fraudTerms);
+}
+
 $endpointLogin = explode("@", $metricForEndpoint);
-$endpointID = $endpointLogin[0] . "*";
+$endpointID = $endpointLogin[0] . "_*";
 $endpointIdentification = $metricForEndpoint;
 
 unset($_SESSION['endpointMetrics']['endpoint']);
@@ -65,29 +73,33 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 
 /* Global data variables */
 
+$zeroQuery = false;
+$resultSQL = mysqli_query($connection, sprintf("SELECT SUM(11P+11O+11R+10P+10O+10R+9P+9O+9R+8P+8O+8R+7P+7O+7R+6P+6O+6R+5P+5O+5R+4P+4O+4R+3P+3O+3R+2P+2O+2R+1P+1O+1R+0P+0O+0R) AS SUM FROM t_metrics WHERE endpoint='%s'", $endpointLogin[0]));
+$resultQuery = mysqli_fetch_assoc($resultSQL);
+
+if ($resultQuery['SUM'] == "NULL" || $resultQuery['SUM'] == "0" || $fraudTerms == "0 0 0") $zeroQuery = true;
+
 for ($i = 0; $i <= 11; $i++) 
 {
     $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
     $daterangefrom = $months[$i] . "-01";
     $daterangeto = $months[$i] . "-18||/M";
     $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
-        
+            
+    if ($zeroQuery == true) continue;
+
     if ($firstTime == true)
     {
         $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithAgentID($ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
     }
     else
     {    
-        $pressureCheck = $_SESSION['endpointMetrics']['pressure'];
-        $opportunityCheck = $_SESSION['endpointMetrics']['opportunity'];
-        $rationalizationCheck = $_SESSION['endpointMetrics']['rationalization'];
-        $fraudTerms = $pressureCheck . " " . $opportunityCheck . " " . $rationalizationCheck;
-        $fraudTerms = str_replace(array("true", "false"), array("1", "0"), $fraudTerms);
         $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithTermWithAgentID($fraudTerms, $ESAlerterIndex, $daterangefrom, $daterangeto, $endpointID);
     }
 
     $countAlerts[] = json_decode(json_encode($resultAlerts), true);
 }
+
 
 ?>
 
@@ -204,8 +216,18 @@ for ($i = 0; $i <= 11; $i++)
     <h4 class="modal-title window-title" id="myModalLabel">&nbsp;Endpoint history events</h4>
 
     <?php 
+
+        if ($firstTime == false) 
+        {
+            $underVerticePressure = ($pressureCheck == "true" ? "P" : "");
+            $underVerticeOpportunity = ($opportunityCheck == "true" ? "O" : "");
+            $underVerticeRationalization = ($rationalizationCheck == "true" ? "R" : "");
     
-        echo '<p>Metrics for ' . $endpointIdentification . '&nbsp;&nbsp;&nbsp;</p>'; 
+            if ($zeroQuery == true) echo "<p>Please select at leat one vertice&emsp;&emsp;</p>";
+            else echo '<p>Metrics filtered for ' . $endpointIdentification . ' under ['.$underVerticePressure.$underVerticeOpportunity.$underVerticeRationalization.']&emsp;&emsp;</p>';
+
+        }
+        else echo '<p>Metrics for ' . $endpointIdentification . ' under [POR]&emsp;&emsp;</p>'; 
         
     ?>
 </div>
@@ -370,12 +392,12 @@ for ($i = 0; $i <= 11; $i++)
 <!-- Modal for Endpoint Metrics -->
 
 <script>
-    $(document).on('hidden.bs.modal', function (e) {
-    $(e.target).removeData('bs.modal');
-    });
-
     $('#endpoint-metrics-reload').on('show.bs.modal', function(e){
         $(this).find('.endpoint-metrics-reload-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#endpoint-metrics-reload').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
 
@@ -467,7 +489,8 @@ for ($i = 0; $i <= 11; $i++)
 
                     <?php
 
-                        echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
+                        if ($zeroQuery == true) echo 'data : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],';
+                        else echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                     ?>
 
@@ -497,7 +520,8 @@ for ($i = 0; $i <= 11; $i++)
 
                     <?php
 
-                        echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
+                        if ($zeroQuery == true) echo 'data : ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],';
+                        else echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
 
                     ?>
 

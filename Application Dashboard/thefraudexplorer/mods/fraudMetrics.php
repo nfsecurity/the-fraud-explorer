@@ -46,33 +46,33 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 
 $firstTime = false;
 
-if (!isset($_SESSION['endpointFraudMetrics']['ruleset'])) 
+if ($_COOKIE['endpointFraudMetrics_launch'] == 0) 
 {
     $rulesetSelected = "BASELINE";
     $firstTime = true;
 }
 else
 {
-    $rulesetSelected = $_SESSION['endpointFraudMetrics']['ruleset'];
-    if (isset($_SESSION['endpointFraudMetrics']['ruleset'])) unset($_SESSION['endpointFraudMetrics']['ruleset']);
+    $rulesetSelected = $_COOKIE['endpointFraudMetrics_ruleset'];
+    if (isset($_COOKIE['endpointFraudMetrics_ruleset'])) setcookie("endpointFraudMetrics_ruleset", "", time() - 3600);
 }
 
-if (isset($_SESSION['endpointFraudMetrics']['pressure'])) 
+if (isset($_COOKIE['endpointFraudMetrics_pressure'])) 
 {           
-    $pressureCheck = $_SESSION['endpointFraudMetrics']['pressure'];
-    unset($_SESSION['endpointFraudMetrics']['pressure']);
+    $pressureCheck = $_COOKIE['endpointFraudMetrics_pressure'];
+    setcookie("endpointFraudMetrics_pressure", "", time() - 3600);
 }
 
-if (isset($_SESSION['endpointFraudMetrics']['opportunity'])) 
+if (isset($_COOKIE['endpointFraudMetrics_opportunity'])) 
 {
-    $opportunityCheck = $_SESSION['endpointFraudMetrics']['opportunity'];
-    unset($_SESSION['endpointFraudMetrics']['opportunity']);
+    $opportunityCheck = $_COOKIE['endpointFraudMetrics_opportunity'];
+    setcookie("endpointFraudMetrics_opportunity", "", time() - 3600);
 }
 
-if (isset($_SESSION['endpointFraudMetrics']['rationalization'])) 
+if (isset($_COOKIE['endpointFraudMetrics_rationalization'])) 
 {
-    $rationalizationCheck = $_SESSION['endpointFraudMetrics']['rationalization'];
-    unset($_SESSION['endpointFraudMetrics']['rationalization']);
+    $rationalizationCheck = $_COOKIE['endpointFraudMetrics_rationalization'];
+    setcookie("endpointFraudMetrics_rationalization", "", time() - 3600);
 }
 
 /* Metrics logic */
@@ -131,12 +131,17 @@ if ($session->domain == "all")
         for ($i = 0; $i <= 11; $i++) 
         {
             $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i] . "-01";
-            $daterangeto = $months[$i] . "-18||/M";
             $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
-        
-            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTerm($ESAlerterIndex, $daterangefrom, $daterangeto);
-            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
+
+            $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics) AS QUERY", $i, $i, $i));
+            $sumValue = mysqli_fetch_all($resultSQL, MYSQLI_ASSOC);
+
+            if (mysqli_num_rows($resultSQL) == 0) 
+            {
+                $countAlerts[$i] = 0;
+                $zeroQuery = true;
+            }
+            else $countAlerts[$i] = $sumValue[0]['SUM'];
         }
     }
 }
@@ -187,18 +192,23 @@ else
     }
     else 
     {
-        /* First time modal load */
+         /* First time modal load */
 
-        for ($i = 0; $i <= 11; $i++) 
-        {
-            $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-            $daterangefrom = $months[$i] . "-01";
-            $daterangeto = $months[$i] . "-18||/M";
-            $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
-        
-            $resultAlerts[] = countFraudTriangleMatchesWithDateRangeWithoutTermWithDomain($ESAlerterIndex, $daterangefrom, $daterangeto, $session->domain);
-            $countAlerts[] = json_decode(json_encode($resultAlerts), true);
-        }
+         for ($i = 0; $i <= 11; $i++) 
+         {
+             $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+             $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
+ 
+             $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(SUMP+SUMO+SUMR) AS SUM FROM (SELECT SUM(%sP) AS SUMP, SUM(%sO) AS SUMO, SUM(%sR) AS SUMR FROM t_metrics WHERE domain='%s') AS QUERY", $i, $i, $i, $session->domain));
+             $sumValue = mysqli_fetch_all($resultSQL, MYSQLI_ASSOC);
+ 
+             if (mysqli_num_rows($resultSQL) == 0) 
+             {
+                 $countAlerts[$i] = 0;
+                 $zeroQuery = true;
+             }
+             else $countAlerts[$i] = $sumValue[0]['SUM'];
+         }
     }
 }
 
@@ -335,7 +345,7 @@ else
         
         <?php
 
-            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+            if ($_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) 
             {
                 echo '<canvas id="fraud-metrics-graph"></canvas>'; 
             }
@@ -356,11 +366,11 @@ else
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">                                  
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($pressureCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo 'checkboxPressurePar'; else echo 'checkboxPressureImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
-                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) 
                         {
                             if ($firstTime == false)
                             {
@@ -386,11 +396,11 @@ else
                 </div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($opportunityCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo 'checkboxOpportunityPar'; else echo 'checkboxOpportunityImpar'; ?>" style="width: 95px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
-                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) 
                         {
                             if ($firstTime == false)
                             {
@@ -415,11 +425,11 @@ else
                 </div>          
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
+                    <label class="btn btn-default btn-sm <?php if ($firstTime == false) { if ($rationalizationCheck == "true") echo "active"; else echo ""; } else echo "active"; ?>" id="<?php if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo 'checkboxRationalizationPar'; else echo 'checkboxRationalizationImpar'; ?>" style="width: 85px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-size: 12px !important;">
 
                     <?php
 
-                        if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) 
+                        if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) 
                         {
                             if ($firstTime == false)
                             {
@@ -452,7 +462,7 @@ else
 
                 <?php
 
-                    if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-businesspar">';
+                    if ($_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo '<select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-businesspar">';
                     else echo '<select class="select-ruleset-metrics wide" name="ruleset" id="ruleset-businessimpar">';
 
                     $configFile = parse_ini_file("../config.ini");
@@ -494,7 +504,7 @@ else
 
         <?php
 
-            if ($_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFiltersPar()" class="btn btn-success fraud-metrics-reload-button" id="btn-metrics-par" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
+            if ($_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo '<a href="../mods/fraudMetrics" onclick="getFiltersPar()" class="btn btn-success fraud-metrics-reload-button" id="btn-metrics-par" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics-reload" style="outline: 0 !important;">Apply filters</a>';
             else echo '<a href="../mods/fraudMetrics" onclick="getFiltersImpar()" class="btn btn-success fraud-metrics-noreload-button" id="btn-metrics-impar" data-toggle="modal" data-dismiss="modal" data-target="#fraud-metrics" style="outline: 0 !important;">Apply filters</a>';
         
         ?>
@@ -506,12 +516,12 @@ else
 <!-- Modal for Fraud Metrics -->
 
 <script>
-    $(document).on('hidden.bs.modal', function (e) {
-    $(e.target).removeData('bs.modal');
-    });
-
     $('#fraud-metrics-reload').on('show.bs.modal', function(e){
         $(this).find('.fraud-metrics-reload-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#fraud-metrics-reload').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
 
@@ -531,10 +541,13 @@ else
         if (document.getElementById('rationalizationpar').checked) rationalization = true;
         else rationalization = false;
 
-        $.get({
-            url: 'mods/fraudMetricsReload.php?et=' + businessData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
-            success: function(data) { return true; }
-        });
+        var launchCounter = parseInt($.cookie('endpointFraudMetrics_launch')) + 1;
+
+        $.cookie('endpointFraudMetrics_ruleset', businessData);
+        $.cookie('endpointFraudMetrics_pressure', pressure);
+        $.cookie('endpointFraudMetrics_opportunity', opportunity);
+        $.cookie('endpointFraudMetrics_rationalization', rationalization);
+        $.cookie('endpointFraudMetrics_launch', launchCounter);
     }
 </script>
 
@@ -554,10 +567,13 @@ else
         if (document.getElementById('rationalizationimpar').checked) rationalization = true;
         else rationalization = false;
 
-        $.get({
-            url: 'mods/fraudMetricsReload.php?et=' + businessData + '&re=' + pressure + '&ty=' + opportunity + '&on=' + rationalization, 
-            success: function(data) { return true; }
-        });
+        var launchCounter = parseInt($.cookie('endpointFraudMetrics_launch')) + 1;
+
+        $.cookie('endpointFraudMetrics_ruleset', businessData);
+        $.cookie('endpointFraudMetrics_pressure', pressure);
+        $.cookie('endpointFraudMetrics_opportunity', opportunity);
+        $.cookie('endpointFraudMetrics_rationalization', rationalization);
+        $.cookie('endpointFraudMetrics_launch', launchCounter);
     }
 </script>
 
@@ -570,7 +586,7 @@ else
         }
     }
 
-    var ctx = document.getElementById("<?php if (@$_SESSION['endpointFraudMetrics']['launch'] % 2 != 0) echo 'fraud-metrics-graph'; else echo 'fraud-metrics-graph-reloaded'; ?>");
+    var ctx = document.getElementById("<?php if (@$_COOKIE['endpointFraudMetrics_launch'] % 2 != 0) echo 'fraud-metrics-graph'; else echo 'fraud-metrics-graph-reloaded'; ?>");
     var myChart = new Chart(ctx, {
         type: 'line',
         defaults: defaultOptions,
@@ -602,15 +618,7 @@ else
 
                     <?php
 
-                        if ($firstTime == false)
-                        {
-                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2] . '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
-                        }
-                        else
-                        {
-                            echo 'data: [ "'. $countAlerts[11][11]['count'] . '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
-
-                        }
+                        echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2] . '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
 
                     ?>
 
@@ -639,17 +647,9 @@ else
                     pointHitRadius: 0,
 
                     <?php
-
-                        if ($firstTime == false)
-                        {
-                            echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
-                        }
-                        else
-                        {
-                            echo 'data: [ "'. $countAlerts[11][11]['count']. '","' . $countAlerts[10][10]['count'] . '","' . $countAlerts[9][9]['count'] . '","' . $countAlerts[8][8]['count'] . '","' . $countAlerts[7][7]['count'] . '","' . $countAlerts[6][6]['count'] . '","' . $countAlerts[5][5]['count'] . '","' . $countAlerts[4][4]['count'] . '","' . $countAlerts[3][3]['count'] . '","' . $countAlerts[2][2]['count'] . '","' . $countAlerts[1][1]['count'] . '","' . $countAlerts[0][0]['count'] . '" ],';
-
-                        }
-
+ 
+                        echo 'data: [ "'. $countAlerts[11] . '","' . $countAlerts[10] . '","' . $countAlerts[9] . '","' . $countAlerts[8] . '","' . $countAlerts[7] . '","' . $countAlerts[6] . '","' . $countAlerts[5] . '","' . $countAlerts[4] . '","' . $countAlerts[3] . '","' . $countAlerts[2]. '","' . $countAlerts[1] . '","' . $countAlerts[0] . '" ],';
+     
                     ?>
 
                     spanGaps: false,
