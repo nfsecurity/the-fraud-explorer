@@ -627,6 +627,7 @@ else
                 {
                     label: "Fraud Metrics",
                     type: 'line',
+                    yAxisID: "y-axis-left-normal",
                     fill: false,
                     fillColor: "#13923D",
                     lineTension: 0.0,
@@ -708,8 +709,21 @@ else
                 yAxes: [{ 
                     ticks: {
                         padding: 10,
-                    }},
-                    {
+                        display: false
+                    }}, {
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-left-normal',
+                        ticks: {
+                            padding: 15,
+                            beginAtZero: true,
+                            min: 0
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        }
+                    }, {
                         display: true,
                         position: 'right',
                         id: 'y-axis-right-normal',
