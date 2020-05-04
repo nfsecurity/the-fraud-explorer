@@ -17,11 +17,19 @@
 
 include "globalVars.php";
 
-$rulesetLanguage = $configFile['fta_lang_selection'];
-$localLibraryPath = $configFile[$rulesetLanguage];
-$phraseName = explode("/", $configFile[$rulesetLanguage]);
-$phraseNameSelection = $phraseName[7];
-$remotePhraseLibraryURL = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelection;
+$phraseNameSpanish = explode("/", $configFile['fta_text_rule_spanish']);
+$phraseNameSelectionSpanish = $phraseNameSpanish[7];
+$phraseNameEnglish = explode("/", $configFile['fta_text_rule_english']);
+$phraseNameSelectionEnglish = $phraseNameEnglish[7];
 
-$onlineLibrary = file_get_contents($remotePhraseLibraryURL);
-file_put_contents($localLibraryPath, $onlineLibrary);
+$localLibraryPathSpanish = $configFile['fta_text_rule_spanish'];
+$localLibraryPathEnglish = $configFile['fta_text_rule_english'];
+
+$remotePhraseLibraryURLSpanish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionSpanish;
+$remotePhraseLibraryURLEnglish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionEnglish;
+
+$onlineLibrarySpanish = file_get_contents($remotePhraseLibraryURLSpanish);
+file_put_contents($localLibraryPathSpanish, $onlineLibrarySpanish);
+
+$onlineLibraryEnglish = file_get_contents($remotePhraseLibraryURLEnglish);
+file_put_contents($localLibraryPathEnglish, $onlineLibraryEnglish);

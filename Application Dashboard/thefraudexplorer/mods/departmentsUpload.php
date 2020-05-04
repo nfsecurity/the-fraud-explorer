@@ -52,10 +52,9 @@ else
 		{  
             $file = fopen($target_file, "r");
 
-            /* Ruleset existence */
+            /* Rulesets */
 
-            $rulesetLanguage = $configFile['fta_lang_selection'];
-            $jsonFT = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
+            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
             $rulesetInventory = Array();
             $rulesetCount = 0;
 

@@ -127,6 +127,7 @@ if (isset($_POST['librarylanguage']))
 
         if ($languageSelected == "es") $ftaLanguagetoSet = $ftaLanguagetoSet . "_spanish\\\"";
         else if ($languageSelected == "en") $ftaLanguagetoSet = $ftaLanguagetoSet . "_english\\\"";
+        else $ftaLanguagetoSet = $ftaLanguagetoSet . "_multilanguage\\\"";
 
         $wordCorrectiontoSet = "wc_language = \\\"" . $languageSelected . "\\\"";
      

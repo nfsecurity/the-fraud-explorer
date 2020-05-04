@@ -48,6 +48,16 @@ include "../lbs/cryptography.php";
     {
         color: #B4BCC2;
     }
+
+    .btn-success, .btn-success:hover, .btn-success:active, .btn-success:visited 
+    {
+        background-color: #4B906F !important;
+    }
+
+    .btn-default, .btn-default:active, .btn-default:visited, .btn-success, .btn-success:active, .btn-success:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
+    }
     
 </style>
 
@@ -79,7 +89,7 @@ include "../lbs/cryptography.php";
                 </select>
 
                 <span style="line-height: 0.7"><br><br></span>
-                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important; margin-bottom: 2px;" />
+                <input type="submit" name="submit" id="submit" value="Refresh graph" class="btn btn-default" style="width: 100%; outline:0 !important;"/>
             </form>
 
             <!-- SQL Queries -->
@@ -133,8 +143,7 @@ include "../lbs/cryptography.php";
 
             ?>
 
-            <span style="line-height: 0.3"><br></span>
-            <table class="table-leyend" id="elm-legend">
+            <table class="table-leyend" id="elm-legend" style="margin-top: 4px;">
                 <th colspan=2 class="table-leyend-header"><span class="fa fa-folder-o fa-lg font-aw-color">&nbsp;&nbsp;</span>Plot Graphic legend</th>
                 <tr>
                     <td class="table-leyend-point-left"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br>low</td>
@@ -247,17 +256,33 @@ include "../lbs/cryptography.php";
             echo '</table>';
             echo '<span style="line-height: 0.1"><br></span>';
 
-            $fraudTriangleTerms = array('0'=>'rationalization','1'=>'opportunity','2'=>'pressure');
-            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+            $fraudTriangleTerms = array('pressure','opportunity','rationalization');
+            $fta_lang = $configFile['fta_lang_selection'];
+
+            if ($fta_lang == "fta_text_rule_multilanguage") 
+            {
+                $numberOfLibraries = 2;
+                $jsonFTA[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                $jsonFTA[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+            }
+            else 
+            {
+                $numberOfLibraries = 1;
+                $jsonFTA[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+            }
+
             $dictionaryCount = array('pressure'=>'0', 'opportunity'=>'0', 'rationalization'=>'0');
 
-            foreach ($jsonFT['dictionary'] as $ruleset => $value)
-            {
-                foreach($fraudTriangleTerms as $term)
+            for ($lib = 1; $lib<=$numberOfLibraries; $lib++)
+            {  
+                foreach ($jsonFTA[$lib]['dictionary'] as $ruleset => $value)
                 {
-                    foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
+                    foreach($fraudTriangleTerms as $term)
                     {
-                        $dictionaryCount[$term]++;
+                        foreach ($jsonFTA[$lib]['dictionary'][$ruleset][$term] as $field => $termPhrase)
+                        {
+                            $dictionaryCount[$term]++;
+                        }
                     }
                 }
             }

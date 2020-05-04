@@ -74,7 +74,7 @@ $_SESSION['processingStatus'] = "notstarted";
         display: block;
     }
 
-    .window-footer-config
+    .window-footer-main-config
     {
         padding: 15px 0px 0px 0px;
         margin: 15px 0px 0px 0px;
@@ -338,11 +338,19 @@ $_SESSION['processingStatus'] = "notstarted";
                         {
                             echo '<option value="es" selected="selected">Spanish</option>';
                             echo '<option value="en">English</option>';
+                            echo '<option value="hu">Multi language</option>';
+                        }
+                        else if ($configFile["wc_language"] == "en")
+                        {
+                            echo '<option value="es">Spanish</option>';
+                            echo '<option value="en" selected="selected">English</option>';
+                            echo '<option value="hu">Multi language</option>';
                         }
                         else
                         {
                             echo '<option value="es">Spanish</option>';
-                            echo '<option value="en" selected="selected">English</option>';
+                            echo '<option value="en">English</option>';
+                            echo '<option value="hu" selected="selected">Multi language</option>';
                         }
 
                     ?>
@@ -379,7 +387,7 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
         </div>
 
-        <div class="modal-footer window-footer-config">
+        <div class="modal-footer window-footer-main-config">
             <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Exit without saving</button>
             <button type="submit" id="btn-apply-configuration" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Applying, please wait" class="btn btn-danger setup" style="outline: 0 !important;">Apply configuration</button>
         </div>

@@ -35,6 +35,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 include "../lbs/globalVars.php";
 include "../lbs/cryptography.php";
 
+$_SESSION['processingStatus'] = "notstarted";
+
 ?>
 
 <style>
@@ -89,11 +91,6 @@ include "../lbs/cryptography.php";
         width: 100%; 
     }
 
-    .latest-regionalism
-    {
-        font-family: 'FFont', sans-serif; font-size: 10px;
-    }
-
     .downloadfile
     {
         outline: 0 !important;
@@ -119,22 +116,35 @@ include "../lbs/cryptography.php";
     textarea 
     {
         resize: none;
-    }   
+    }
+
+    .select-option-styled-language
+    {
+        width: 130px;
+        height: 35px;
+        margin-right: 5px;
+        line-height: 33px;
+        font-family: 'FFont', sans-serif; font-size: 12px;
+    }
+
+    .select-option-styled-language .list
+    {
+        width: 130px;
+        max-height: 200px;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        font-family: 'FFont', sans-serif; font-size: 12px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
 
 </style>
 
 <?php
 
 $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
-$regionalismESFile = shell_exec("sudo find /var/www/html/thefraudexplorer/core/spell/*ES*.txt -printf '%T++%s+%p\n' | sort -r | head -n 1");
-$regionalismENFile = shell_exec("sudo find /var/www/html/thefraudexplorer/core/spell/*EN*.txt -printf '%T++%s+%p\n' | sort -r | head -n 1");
-
-if ($configFile["wc_language"] == "es") $regionalismFile = explode('+', trim($regionalismESFile));
-else $regionalismFile = explode('+', trim($regionalismENFile));
-
-$datetime = DateTime::createFromFormat('Y-m-d', $regionalismFile[0]);
-$regionalismHour = explode(':', trim($regionalismFile[1]));
-$size = $regionalismFile[2]/1024;
+$regionalismESFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/customESdictionary.txt");
+$regionalismENFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/customENdictionary.txt");
 
 ?>
 
@@ -150,7 +160,7 @@ $size = $regionalismFile[2]/1024;
     <div class="master-container-regionalism">
 
         <p class="regionalism-text">
-        Please specify the words you need to process as "regionalism" by the internal spell correction system. This words as treated as a valid words and will be included in the standard spanish dictionary for correction:<br><br>
+        Please specify the words you need to process as "regionalism" by the internal spell correction system. These strings will be treated as a valid words and included in the standard spanish and english dictionaries for correction:<br><br>
         </p>
 
         <textarea name="regionalismwords" id="regionalismwords" placeholder="hip, pajamas, frenemy, bromance, ginormous" class="input-value-text-regionalism"></textarea>
@@ -158,20 +168,31 @@ $size = $regionalismFile[2]/1024;
     </div>
 
     <br>
-    <a class="downloadfile" href="mods/downloadRegionalism?le=<?php echo encRijndael($regionalismFile[3]); ?>">
-    <button type="button" class="btn btn-default" style="width: 100%; outline: 0 !important;">
-        Download entire regionalism dictionary file<br>
-        <p class="latest-regionalism">
-
-            <?php 
-
-                echo $datetime->format('F d, Y') . ", at " . $regionalismHour[0] . ":" . $regionalismHour[1] . " with " . number_format(round($size)) . " Kb of size"; 
-            
-            ?>
-
-        </p>
-    </button>
+    <a class="downloadfile" onclick="libraryLanguage();" href="mods/downloadRegionalism?le=BhH193lFloVgj1Jd">
+        <button type="button" class="btn btn-default" style="width: 423px; outline: 0 !important;">
+            Download selected regionalism language dictionary file
+        </button>
     </a>
+
+    <select class="select-option-styled-language" name="library-language" id="library-language">
+
+        <?php
+
+            if ($configFile["wc_language"] == "es" || $configFile["wc_language"] == "hu") 
+            {
+                echo '<option value="'.$regionalismESFile.'" selected="selected">Spanish</option>';
+                echo '<option value="'.$regionalismENFile.'">English</option>';
+            }
+            else if ($configFile["wc_language"] == "en")
+            {
+                echo '<option value="'.$regionalismESFile.'">Spanish</option>';
+                echo '<option value="'.$regionalismENFile.'" selected="selected">English</option>';
+            }
+
+        ?>
+
+    </select>
+
     <br>
 
     <br>
@@ -187,8 +208,8 @@ $size = $regionalismFile[2]/1024;
             }
             else
             {
-                echo '<input type="submit" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
-                echo '<input type="submit" class="btn btn-success setup" value="Add all words" name="addwords" style="outline: 0 !important;">';
+                echo '<button type="submit" id="button-del-words" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Deleting, please wait" name="removewords" style="outline: 0 !important;">Remove words</button>';
+                echo '<button type="submit" id="button-add-words" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Adding, please wait" name="addwords" style="outline: 0 !important;">Add all words</button>';
             } 
 
         ?>
@@ -197,3 +218,60 @@ $size = $regionalismFile[2]/1024;
 
     </form>
 </div>
+
+<!-- Nice selects -->
+
+<script>
+    $(document).ready(function() {
+        $('select').niceSelect();
+    });
+</script>
+
+<!-- Download regionalism file -->
+
+<script>
+
+function libraryLanguage()
+{
+    var selection = $("#library-language").val();
+    var theLink = "mods/downloadRegionalism?le=BhH193lFloVgj1Jd".replace('BhH193lFloVgj1Jd', selection);
+    $('a').attr("href", theLink);
+}
+
+</script>
+
+<!-- Buttons Deleting & Adding -->
+
+<script>
+
+var $btn;
+
+$("#button-add-words").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+$("#button-del-words").click(function() {
+    $btn = $(this);
+    $btn.button('loading');
+    setTimeout('getstatus()', 1000);
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
+</script>

@@ -32,14 +32,14 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 
 $words = filter($_POST["regionalismwords"]);
+$regionalismFile = decRijndael(filter($_POST["library-language"]));
+
 $words = str_replace(' ', '', $words);
 $regionalismWords = explode(",", $words);
 $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
-
-if ($configFile["wc_language"] == "es") $regionalismFile = "../core/spell/customESdictionary.txt";
-else $regionalismFile = "../core/spell/customENdictionary.txt";
 
 if (isset($_POST["addwords"])) 
 {
@@ -48,8 +48,15 @@ if (isset($_POST["addwords"]))
         file_put_contents($regionalismFile, $word.PHP_EOL, FILE_APPEND);
     }
 
-    $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang='.$configFile["wc_language"].' create master /usr/lib64/aspell-0.60/'.$configFile["wc_language"].'-custom.pws < /var/www/html/thefraudexplorer/core/spell/custom'.strtoupper($configFile["wc_language"]).'dictionary.txt';
+    if(strpos($regionalismFile, "customESdictionary") !== false) $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=es create master /usr/lib64/aspell-0.60/es-custom.pws < /var/www/html/thefraudexplorer/core/spell/customESdictionary.txt';
+    else $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en create master /usr/lib64/aspell-0.60/en-custom.pws < /var/www/html/thefraudexplorer/core/spell/customENdictionary.txt';
+
     exec($runCustomDictionary, $output, $return);
+
+    /* ASPELL multilanguage */
+
+    $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
+    exec($runMultiDictionary, $output, $return);
 }
 if (isset($_POST["removewords"]))
 {
@@ -81,8 +88,15 @@ if (isset($_POST["removewords"]))
     fwrite($destinationFile, $t);
     fclose($destinationFile);
 
-    $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang='.$configFile["wc_language"].' create master /usr/lib64/aspell-0.60/'.$configFile["wc_language"].'-custom.pws < /var/www/html/thefraudexplorer/core/spell/custom'.strtoupper($configFile["wc_language"]).'dictionary.txt';
+    if(strpos($regionalismFile, "customESdictionary") !== false) $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=es create master /usr/lib64/aspell-0.60/es-custom.pws < /var/www/html/thefraudexplorer/core/spell/customESdictionary.txt';
+    else $runCustomDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en create master /usr/lib64/aspell-0.60/en-custom.pws < /var/www/html/thefraudexplorer/core/spell/customENdictionary.txt';
+
     exec($runCustomDictionary, $output, $return);
+
+     /* ASPELL multilanguage */
+
+     $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
+     exec($runMultiDictionary, $output, $return);
 }
 
 /* Page return to origin */

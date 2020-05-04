@@ -63,8 +63,8 @@ include "../lbs/openDBconn.php";
 
     .input-value-text-id-add
     {
-        width: calc(100% - 145px); 
-        height: 30px; 
+        width: 233px; 
+        height: 30px;
         padding: 5px; 
         border: solid 1px #c9c9c9; 
         outline: none;
@@ -145,6 +145,38 @@ include "../lbs/openDBconn.php";
         margin-right: 0px;
     }
 
+    .select-option-styled-language
+    {
+        width: 137px;
+        margin-top: 0px;
+        margin-right: 0px;
+    }
+
+    .select-option-styled-language .list
+    {
+        width: 137px;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .select-option-styled-language-search
+    {
+        width: 137px;
+        margin-top: 0px;
+        margin-right: 0px;
+    }
+
+    .select-option-styled-language-search .list
+    {
+        width: 137px;
+        border: 1px solid #e2e5e6;
+        margin-left: 5px;
+        background: #f9f9f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
     .select-option-styled-fraudvertice .list
     {
         width: 140px;
@@ -200,13 +232,30 @@ include "../lbs/openDBconn.php";
         text-align: left;
     }
     
-    .right-container-library
+    .right-container-library-mod
     {
-        width: calc(75% - 5px); 
+        width: 385px; 
         height: 100%; 
+        padding-left: 10px;
         display: inline; 
-        float: right;
+        float: left;
         text-align: left;
+    }
+
+    .right-container-library-add
+    {
+        width: 385px; 
+        height: 100%; 
+        padding-left: 10px;
+        display: inline; 
+        float: left;
+        text-align: left;
+    }
+
+    .right-container-library-language
+    {
+        width: 140px;
+        float: right;
     }
 
     .rule-button-add
@@ -221,9 +270,9 @@ include "../lbs/openDBconn.php";
         font-family: Verdana, sans-serif; font-size: 11px !important;
     }
 
-    .rule-button-delmodify
+    .rule-button-searchdelmodify
     {
-        width: 67px;
+        width: 42px;
         height: 30px;
         min-height: 30px;
         background: white;
@@ -323,7 +372,7 @@ include "../lbs/openDBconn.php";
                 </select>
                 
             </div>
-            <div class="right-container-library">
+            <div class="right-container-library-add">
 
                 <p class="title-config">Fraud vertice / Phrase identification</p><br>
 
@@ -335,8 +384,31 @@ include "../lbs/openDBconn.php";
                     <option>RATIONALIZATION</option>
                 </select>
 
-                <input type="text" name="phrase-identification-add" id="phrase-identification-add" autocomplete="off" placeholder="enter here the phrase identification" class="input-value-text-id-add">   
+                <input type="text" name="phrase-identification-add" id="phrase-identification-add" autocomplete="off" placeholder="enter here the phrase identification" class="input-value-text-id-add">
                     
+            </div>
+
+            <div class="right-container-library-language">
+
+                <p class="title-config">Library language</p><br>
+                <select class="select-option-styled-language" name="library-add-language" id="library-add-language">
+
+                    <?php
+
+                        if ($configFile["wc_language"] == "es" || $configFile["wc_language"] == "hu") 
+                        {
+                            echo '<option value="fta_text_rule_spanish" selected="selected">Spanish</option>';
+                            echo '<option value="fta_text_rule_english">English</option>';
+                        }
+                        else if ($configFile["wc_language"] == "en")
+                        {
+                            echo '<option value="fta_text_rule_spanish">Spanish</option>';
+                            echo '<option value="fta_text_rule_english" selected="selected">English</option>';
+                        }
+
+                    ?>
+
+                </select>
             </div>
 
             <div class="regexp-container">
@@ -374,7 +446,7 @@ include "../lbs/openDBconn.php";
                 </select>
                 
             </div>
-            <div class="right-container-library">
+            <div class="right-container-library-mod">
                    
                 <p class="title-config">Fraud vertice / Phrase identification</p><br>
 
@@ -386,18 +458,41 @@ include "../lbs/openDBconn.php";
                     <option>RATIONALIZATION</option>
                 </select>
 
-                <input type="text" name="phrase-identification-delmodify" id="phrase-identification-delmodify" autocomplete="off" placeholder="enter here the phrase identification" class="input-value-text-id-delmodify">
-                <button type="button" class="rule-button-add" id="search-rule">Search rule</button>
+                <input type="text" name="phrase-identification-delmodify" id="phrase-identification-delmodify" autocomplete="off" placeholder="enter here the phrase identification" class="input-value-text-id-delmodify"> 
                     
+            </div>
+
+            <div class="right-container-library-language">
+
+                <p class="title-config">Library language</p><br>
+                <select class="select-option-styled-language-search" name="library-search-language" id="library-search-language">
+
+                    <?php
+
+                        if ($configFile["wc_language"] == "es" || $configFile["wc_language"] == "hu") 
+                        {
+                            echo '<option value="fta_text_rule_spanish" selected="selected">Spanish</option>';
+                            echo '<option value="fta_text_rule_english">English</option>';
+                        }
+                        else if ($configFile["wc_language"] == "en")
+                        {
+                            echo '<option value="fta_text_rule_spanish">Spanish</option>';
+                            echo '<option value="fta_text_rule_english" selected="selected">English</option>';
+                        }
+
+                    ?>
+
+                </select>
             </div>
 
             <div class="regexp-container">
                 <p class="title-config">Phrase regular expression</p><br>
                 <button type="button" class="input-regexp-left">/</button>
                 <input type="text" name="regexpression-delmodify" id="regexpression-delmodify" autocomplete="off" placeholder="you will see here the regular expression" class="input-value-text-regexp-delmodify">
-                <button type="button" class="input-regexp-right">/</button>
-                <button type="submit" class="rule-button-delmodify" id="delete-rule" name="action" value="deleterule">Delete</button>
-                <button type="submit" class="rule-button-delmodify" id="modify-rule" name="action" value="modifyrule">Modify</button>
+                <button type="button" class="input-regexp-right" style="margin-right: 2px !important;">/</button>
+                <button type="button" class="rule-button-searchdelmodify" id="search-rule">SCH</button>
+                <button type="submit" class="rule-button-searchdelmodify" id="delete-rule" name="action" value="deleterule">DEL</button>
+                <button type="submit" class="rule-button-searchdelmodify" id="modify-rule" name="action" value="modifyrule">MOD</button>
             </div>
 
         </div>
@@ -408,24 +503,34 @@ include "../lbs/openDBconn.php";
 
                 /* Online phrase library upgrade process */
 
-                $rulesetLanguage = $configFile['fta_lang_selection'];
-                $localLibrary = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
-                $phraseName = explode("/", $configFile[$rulesetLanguage]);
-                $phraseNameSelection = $phraseName[7];
-                $remotePhraseLibraryURL = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelection;
-                $onlineLibrary = json_decode(file_get_contents($remotePhraseLibraryURL), true);
-                preg_match('/version: (.*),/', $localLibrary["_comment"], $localPhraseLibraryVersion);
-                preg_match('/version: (.*),/', $onlineLibrary["_comment"], $remotePhraseLibraryVersion);
+                $localLibrarySpanish = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                $localLibraryEnglish = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+
+                $phraseNameSpanish = explode("/", $configFile['fta_text_rule_spanish']);
+                $phraseNameSelectionSpanish = $phraseNameSpanish[7];
+                $phraseNameEnglish = explode("/", $configFile['fta_text_rule_english']);
+                $phraseNameSelectionEnglish = $phraseNameEnglish[7];
+
+                $remotePhraseLibraryURLSpanish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionSpanish;
+                $onlineLibrarySpanish = json_decode(file_get_contents($remotePhraseLibraryURLSpanish), true);
+                $remotePhraseLibraryURLEnglish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionEnglish;
+                $onlineLibraryEnglish = json_decode(file_get_contents($remotePhraseLibraryURLEnglish), true);
+
+                preg_match('/version: (.*),/', $localLibrarySpanish["_comment"], $localPhraseLibraryVersionSpanish);
+                preg_match('/version: (.*),/', $localLibraryEnglish["_comment"], $localPhraseLibraryVersionEnglish);
+
+                preg_match('/version: (.*),/', $onlineLibrarySpanish["_comment"], $remotePhraseLibraryVersionSpanish);
+                preg_match('/version: (.*),/', $onlineLibraryEnglish["_comment"], $remotePhraseLibraryVersionEnglish);
 
                 echo '<p class="warning"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;';
 
-                if (isset($localPhraseLibraryVersion) && isset($remotePhraseLibraryVersion))
+                if (isset($localPhraseLibraryVersionSpanish) && isset($remotePhraseLibraryVersionSpanish) && isset($localPhraseLibraryVersionEnglish) && isset($remotePhraseLibraryVersionEnglish))
                 {
-                    if ($localPhraseLibraryVersion[1] != $remotePhraseLibraryVersion[1])
+                    if (($localPhraseLibraryVersionSpanish[1] != $remotePhraseLibraryVersionSpanish[1]) || ($localPhraseLibraryVersionEnglish[1] != $remotePhraseLibraryVersionEnglish[1]))
                     {
-                        echo 'There is a different library version at the official site (v'.$remotePhraseLibraryVersion[1].'). Your current local version is (v'.$localPhraseLibraryVersion[1].'). Consider zynchronizing. ';
+                        echo 'There are different versions of the phrase libraries at the official repo. ES [loc'. $localPhraseLibraryVersionSpanish[1].'-rem'.$remotePhraseLibraryVersionSpanish[1].'] - EN [loc'.$localPhraseLibraryVersionEnglish[1].'-rem'.$remotePhraseLibraryVersionEnglish[1].']';
                     }
-                    else echo 'Your phrase library database is up to date, you don\'t need to upgrade your library now but pay future attention !';
+                    else echo 'Your phrase libraries database are up to date, you don\'t need to upgrade your libraries now but pay future attention !';
                 }
                 else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
 
@@ -439,8 +544,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize library</a>';
-            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download library</a>';
+            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize libraries</a>';
+            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download libraries</a>';
 
             ?>
         
@@ -486,40 +591,96 @@ include "../lbs/openDBconn.php";
 
     <?php
 
-    function escapeJsonString( $value ) 
-    {
-        $escapers =     array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
-        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
-        $result = str_replace($escapers, $replacements, $value);
-        return $result;
-    }
+        function escapeJsonString( $value ) 
+        {
+            $escapers =     array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+            $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+            $result = str_replace($escapers, $replacements, $value);
+            return $result;
+        }
 
-    $fta_lang = $configFile['fta_lang_selection'];
-    $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
-    $pureJSONforJS = str_replace("\u0022","\\\\\"", json_encode($jsonFT, JSON_HEX_APOS|JSON_HEX_QUOT)); 
-    $pureJSONforJS = escapeJsonString($pureJSONforJS);
+        $fta_lang = $configFile['fta_lang_selection'];
+
+        if ($fta_lang == "fta_text_rule_multilanguage") 
+        {
+            $numberOfLibraries = 2;
+            $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+            $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+
+            $pureJSONforJSSpanish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+            $pureJSONforJSSpanish = escapeJsonString($pureJSONforJSSpanish);
+
+            $pureJSONforJSEnglish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[2], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+            $pureJSONforJSEnglish = escapeJsonString($pureJSONforJSEnglish);
+        }
+        else 
+        {
+            $numberOfLibraries = 1;
+            $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+            $pureJSONforJS = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+            $pureJSONforJS = escapeJsonString($pureJSONforJS);
+        }
 
     ?>
 
   $(function() {
     $("#search-rule").on("click", function() {
-        
-        var data = '<?php echo $pureJSONforJS; ?>'
-        data = JSON.parse(data);
-        var search = document.getElementById('phrase-identification-delmodify').value
-        var ruleset = document.getElementById('ruleset-delmodify').value
-        var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
-        var searchPath = data["dictionary"][ruleset][vertice][search];
 
-        if (typeof(searchPath) === "undefined") 
+        var numLibraries = '<?php if(isset($numberOfLibraries)) echo $numberOfLibraries; else echo " "; ?>'
+
+        if (numLibraries == 1)
         {
-            var finalRegexpString = "no regular expression found";
+            var data = '<?php if (isset($pureJSONforJS)) echo $pureJSONforJS; else echo " "; ?>'
+            data = JSON.parse(data);
+            var search = document.getElementById('phrase-identification-delmodify').value
+            var ruleset = document.getElementById('ruleset-delmodify').value
+            var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
+            var searchPath = data["dictionary"][ruleset][vertice][search];
+
+            if (typeof(searchPath) === "undefined") var finalRegexpString = "no regular expression found";
+            else var finalRegexpString = searchPath.replace(/\//g, "");
         }
         else
         {
-            var finalRegexpString = searchPath.replace(/\//g, "");
-        }
+            var dataSpanish = '<?php if (isset($pureJSONforJSSpanish)) echo $pureJSONforJSSpanish; else echo " "; ?>'
+            var dataEnglish = '<?php if (isset($pureJSONforJSEnglish)) echo $pureJSONforJSEnglish; else echo " "; ?>'
 
+            dataSpanish = JSON.parse(dataSpanish);
+            dataEnglish = JSON.parse(dataEnglish);
+
+            var search = document.getElementById('phrase-identification-delmodify').value
+            var ruleset = document.getElementById('ruleset-delmodify').value
+            var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
+     
+            var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
+            var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
+
+            var finalRegexpString = null;
+
+            if (typeof(searchPathSpanish) === "undefined") finalRegexpString = "no regular expression found";
+            else 
+            {
+                finalRegexpString = searchPathSpanish.replace(/\//g, "");
+
+                $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                $('#library-search-language').val('fta_text_rule_spanish');
+                $('#library-search-language').niceSelect('update');
+
+            }
+
+            if (typeof(searchPathEnglish) === "undefined") inalRegexpString = "no regular expression found";
+            else 
+            {
+                finalRegexpString = searchPathEnglish.replace(/\//g, "");
+               
+                $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
+                $('#library-search-language').val('fta_text_rule_english');
+                $('#library-search-language').niceSelect('update');
+            }
+        }
+    
     $("#regexpression-delmodify").val(finalRegexpString);
     });
   });

@@ -48,7 +48,16 @@ $ESAlerterIndex = $configFile['es_alerter_index'];
 $fistTimeIndex = true;
 $fta_lang = $configFile['fta_lang_selection'];
 $fraudTriangleTerms = array('rationalization'=>'0 1 0','opportunity'=>'0 0 1','pressure'=>'1 0 0');
-$jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
+
+if ($fta_lang == "fta_text_rule_multilanguage") 
+{
+    $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+    $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+}
+else 
+{
+    $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+}
 
 /* Unique agentID List */
 

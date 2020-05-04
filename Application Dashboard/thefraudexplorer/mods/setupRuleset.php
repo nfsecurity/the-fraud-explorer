@@ -282,21 +282,36 @@ include "../lbs/endpointMethods.php";
 
             $fraudTriangleTerms = array('0'=>'pressure','1'=>'opportunity','2'=>'rationalization');
             $rulesetLanguage = $configFile['fta_lang_selection'];
-            $jsonFT = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
+
+            if ($rulesetLanguage == "fta_text_rule_multilanguage")
+            {
+                $numberOfLibraries = 2;
+                $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+            }
+            else
+            {
+                $numberOfLibraries = 1;
+                $jsonFT[1] = json_decode(file_get_contents($configFile[$rulesetLanguage]), true);
+            }
+
             $dictionaryCount = array();
             $phrasesCount = 0;
 
-            foreach ($jsonFT['dictionary'] as $ruleset => $value)
+            foreach ($jsonFT[1]['dictionary'] as $ruleset => $value)
             {
                 echo '<tr class="table-tr-ruleset">';
                 echo '<td class="table-td-ruleset-name" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-file-text-o font-icon-color-green fa-padding"></span>'.$ruleset.'</td>';
 
                 foreach($fraudTriangleTerms as $term)
                 {
-                    foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
-                    {
-                        @$dictionaryCount[$ruleset][$term]++;
-                        $phrasesCount++;
+                    for ($lib = 1; $lib<=$numberOfLibraries; $lib++)
+                    {  
+                        foreach ($jsonFT[$lib]['dictionary'][$ruleset][$term] as $field => $termPhrase)
+                        {
+                            @$dictionaryCount[$ruleset][$term]++;
+                            $phrasesCount++;
+                        }
                     }
 
                     if (empty($dictionaryCount[$ruleset][$term])) echo '<td class="table-td-ruleset"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>0</td>';

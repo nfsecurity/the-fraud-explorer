@@ -95,29 +95,42 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
 
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $fta_lang = $configFile['fta_lang_selection'];
-    $jsonFT = json_decode(file_get_contents($configFile[$fta_lang]), true);
-
-    $fraudTriangleTerms = array('rationalization', 'opportunity', 'pressure');
-
-    $rule = "BASELINE";
-
-    if ($ruleset != "BASELINE") $steps = 2;
-    else $steps = 1;
-
-    for($i=1; $i<=$steps; $i++)
-    {
-        foreach ($fraudTriangleTerms as $term)
+    
+    if ($fta_lang == "fta_text_rule_multilanguage") 
         {
-            foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+            $numberOfLibraries = 2;
+            $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+            $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+        }
+        else 
+        {
+            $numberOfLibraries = 1;
+            $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+        }
+
+        for ($lib = 1; $lib<=$numberOfLibraries; $lib++)
+        {        
+            $fraudTriangleTerms = array('pressure', 'opportunity', 'rationalization');
+            $rule = "BASELINE";
+
+            if ($ruleset != "BASELINE") $steps = 2;
+            else $steps = 1;
+
+            for($i=1; $i<=$steps; $i++)
             {
-                if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                foreach ($fraudTriangleTerms as $term)
                 {
-                    $phrasesMatched[] = $matches;
+                    foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
+                    {
+                        if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                        {
+                            $phrasesMatched[] = $matches;
+                        }
+                    }
                 }
+                $rule = $ruleset;
             }
         }
-        $rule = $ruleset;
-    }
 
     /* Print sanitized phrase history */
 

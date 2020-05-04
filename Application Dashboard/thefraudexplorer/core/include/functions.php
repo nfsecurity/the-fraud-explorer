@@ -317,36 +317,39 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
     $matched = FALSE;
     $countOutput = 1;
 
-    foreach ($fraudTriangleTerms as $term => $value)
-    {
-        $rule = "BASELINE";
-
-        if ($ruleset != "BASELINE") $steps = 2;
-        else $steps = 1;
-
-        for($i=1; $i<=$steps; $i++)
+    for ($lib = 1; $lib<=count($jsonFT); $lib++)
+    {   
+        foreach ($fraudTriangleTerms as $term => $value)
         {
-            foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+            $rule = "BASELINE";
+
+            if ($ruleset != "BASELINE") $steps = 2;
+            else $steps = 1;
+
+            for($i=1; $i<=$steps; $i++)
             {
-                if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
                 {
-                    $matched = TRUE;
-                    $now = DateTime::createFromFormat('U.u', microtime(true));
-                    $end = $now->format("Y-m-d\TH:i:s.u");
-                    $end = substr($end, 0, -3);
-                    $matchTime = (string)$end."Z";
-                    $domain = getUserDomain($agentID);
-                    $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords)." f: 0";
-                    $lenData = strlen($msgData);
-                    socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
-                    $GLOBALS[$matchesGlobalCount]++;
+                    if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                    {
+                        $matched = TRUE;
+                        $now = DateTime::createFromFormat('U.u', microtime(true));
+                        $end = $now->format("Y-m-d\TH:i:s.u");
+                        $end = substr($end, 0, -3);
+                        $matchTime = (string)$end."Z";
+                        $domain = getUserDomain($agentID);
+                        $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords)." f: 0";
+                        $lenData = strlen($msgData);
+                        socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
+                        $GLOBALS[$matchesGlobalCount]++;
 
-                    logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
+                        logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 
-                    $countOutput++;
+                        $countOutput++;
+                    }
                 }
+                $rule = $ruleset;
             }
-            $rule = $ruleset;
         }
     }
     
@@ -363,7 +366,7 @@ function checkRegexp($fraudTriangleTerms, $jsonFT, $ruleset)
     $errors = false;
     $numberOfTerms = 0;
     
-    if (!isset($jsonFT['dictionary'][$ruleset]))
+    if (!isset($jsonFT[1]['dictionary'][$ruleset]))
     {
         echo "[ERROR] The specified rule doesn't exist, please check ... \n";
         echo "[INFO] Exiting Fraud Triangle Analytics phrase matching processor ...\n\n";
@@ -372,17 +375,20 @@ function checkRegexp($fraudTriangleTerms, $jsonFT, $ruleset)
     
     echo "[INFO] Start checking regular expressions on fraud triangle phrases ... \n";
     
-    foreach ($fraudTriangleTerms as $term => $value)
-    {
-        foreach ($jsonFT['dictionary'][$ruleset][$term] as $field => $termPhrase)
+    for ($lib = 1; $lib<=count($jsonFT); $lib++)
+    {   
+        foreach ($fraudTriangleTerms as $term => $value)
         {
-            if (@preg_match_all($termPhrase, null) === false) 
+            foreach ($jsonFT[$lib]['dictionary'][$ruleset][$term] as $field => $termPhrase)
             {
-                $errors = true;
-                echo "[ERROR] Invalid regular expression in rule [".$ruleset."] term [".$term."] and phrase [".$field."]\n";
+                if (@preg_match_all($termPhrase, null) === false) 
+                {
+                    $errors = true;
+                    echo "[ERROR] Invalid regular expression in rule [".$ruleset."] term [".$term."] and phrase [".$field."]\n";
+                }
+                
+                $numberOfTerms++;
             }
-            
-            $numberOfTerms++;
         }
     }
     
@@ -687,24 +693,27 @@ function AIparseFraudTrianglePhrases($fraudTriangleTerms, $stringOfWords, $jsonF
     $matched = FALSE;
     $countTriangle = ['pressure' => 0, 'opportunity' => 0, 'rationalization' => 0]; 
 
-    foreach ($fraudTriangleTerms as $term => $value)
-    {
-        $rule = "BASELINE";
-
-        if ($ruleset != "BASELINE") $steps = 2;
-        else $steps = 1;
-
-        for($i=1; $i<=$steps; $i++)
+    for ($lib = 1; $lib<=count($jsonFT); $lib++)
+    {   
+        foreach ($fraudTriangleTerms as $term => $value)
         {
-            foreach ($jsonFT['dictionary'][$rule][$term] as $field => $termPhrase)
+            $rule = "BASELINE";
+
+            if ($ruleset != "BASELINE") $steps = 2;
+            else $steps = 1;
+
+            for($i=1; $i<=$steps; $i++)
             {
-                if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
                 {
-                    $matched = TRUE;
-                    $countTriangle[$term] = $countTriangle[$term] + 1;
+                    if (preg_match_all($termPhrase, $stringOfWords, $matches)) 
+                    {
+                        $matched = TRUE;
+                        $countTriangle[$term] = $countTriangle[$term] + 1;
+                    }
                 }
+                $rule = $ruleset;
             }
-            $rule = $ruleset;
         }
     }
 
