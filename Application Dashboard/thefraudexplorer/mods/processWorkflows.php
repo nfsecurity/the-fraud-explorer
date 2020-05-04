@@ -51,6 +51,7 @@ if (isset($_POST['delete']))
     foreach($workflowSelection as $workflow) 
     {
         mysqli_query($connection, sprintf("DELETE FROM t_workflows WHERE name='%s'", $workflow));
+        mysqli_query($connection, sprintf("DELETE FROM t_wtriggers WHERE name='%s'", $workflow));
     }
 }
 else if (isset($_POST['add']))
