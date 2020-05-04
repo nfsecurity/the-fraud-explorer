@@ -250,6 +250,7 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
                     sorter: false
                 },
             },
+            sortList: [[1,1]],
         })
             .tablesorterPager({
             container: $("#pager"),
