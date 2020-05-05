@@ -340,7 +340,7 @@ function countFraudTriangleMatchesWithDateRangeWithoutTerm($index, $from, $to)
     $matchesParams = [
         'index' => $index, 
         'type' => 'AlertEvent', 
-        'body' => [ 
+        'body' => [
             'query' => [
                 'bool' => [
                     'must' => [
@@ -428,8 +428,8 @@ function countFraudTriangleMatchesWithDateRangeWithTermWithAgentID($fraudTerms, 
     if ($pressureValue == "1" && $opportunityValue == "1" && $rationalizationValue == "1")
     {
         $matchesParams = [
-            'index' => $index, 
-            'type' => 'AlertEvent', 
+            'index' => $index,
+            'type' => 'AlertEvent',
             'body' => [ 
                 'query' => [
                     'bool' => [
@@ -998,6 +998,55 @@ function getAllFraudTriangleMatchesMonthsBack($index, $monthsBack)
     $getAlerts = $client->search($matchesParams);
 
     return $getAlerts;
+}
+
+/* Count All Typed Words by date range */
+
+function countWordsWithDateRange($index, $from, $to)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'TextEvent', 
+        'body' => [
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $phraseMatches = $client->count($matchesParams);
+
+    return $phraseMatches;
+}
+
+/* Count All Typed Words by date range with Domain */
+
+function countWordsWithDateRangeWithDomain($index, $from, $to, $userDomain)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'TextEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ],
+                        [ 'match' => [ 'userDomain' => $userDomain ] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $phraseMatches = $client->count($matchesParams);
+
+    return $phraseMatches;
 }
 
 /* Check if Elasticsearch alerter index exists */

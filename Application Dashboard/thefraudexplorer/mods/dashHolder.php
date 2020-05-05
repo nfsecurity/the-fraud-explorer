@@ -314,7 +314,7 @@ else $totalSystemWords= "0";
 
     <div class="container-upper-right" id="elm-generalstatistics">
         <h2>
-            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Endpoints general statistics</p>
+            <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>How many words are being processed</p>
             <p class="container-window-icon">
             <a href="mods/fraudTree" class="fraud-tree-button" data-toggle="modal" data-target="#fraudTree" href="#" id="elm-fraud-tree">&nbsp;&nbsp;View Fraud Tree&nbsp;&nbsp;</a>
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
@@ -523,48 +523,40 @@ else $totalSystemWords= "0";
 
 <?php
 
-/* Graph data calculation - The Fraud Explorer general statisctics */
+/* Graph data calculation - The Fraud Explorer general statistics */
+
+$ESWordsIndex = $configFile['es_words_index'];
+$countWordsLastMonths = 0;
+$numberOfMonthsBack = 5;
 
 if ($session->domain == "all")
 {
-    if (samplerStatus($session->domain) == "enabled") 
-    {                
-        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM t_agents) AS agents GROUP BY agent) AS totals";
-        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents";
-        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY)";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent FROM (SELECT agent FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus;";
-    }
-    else 
+    for ($i = 0; $i <= $numberOfMonthsBack; $i++) 
     {
-        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain NOT LIKE 'thefraudexplorer.com'";      
-        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
-        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain NOT LIKE 'thefraudexplorer.com'";
-    }
+        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+        $daterangefrom = $months[$i] . "-01";
+        $daterangeto = $months[$i] . "-18||/M";
+        $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
+                
+        $resultWords[] = countWordsWithDateRange($ESWordsIndex, $daterangefrom, $daterangeto);
+        $countPhrases[] = json_decode(json_encode($resultWords), true);
+    }    
 }
 else
 {
-    if (samplerStatus($session->domain) == "enabled") 
-    { 
-        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
-        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
-        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' OR domain='thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com'";
-    }
-    else 
+    for ($i = 0; $i <= $numberOfMonthsBack; $i++) 
     {
-        $queryUniqueEndpoints = "SELECT COUNT(*) AS total FROM (SELECT agent, domain FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM t_agents) AS agents GROUP BY agent) AS totals WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryEndpointSessions = "SELECT COUNT(*) AS total FROM t_agents WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryDeadEndpoints = "SELECT COUNT(*) AS total FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
-        $queryTyping = "SELECT COUNT(*) AS total FROM (SELECT * FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain FROM (SELECT agent, domain FROM t_agents WHERE totalwords <> '0') AS typing) AS totals GROUP BY agent) AS totalplus WHERE domain='".$session->domain."' AND domain NOT LIKE 'thefraudexplorer.com'";
-    }
+        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+        $daterangefrom = $months[$i] . "-01";
+        $daterangeto = $months[$i] . "-18||/M";
+        $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
+                
+        $resultWords[] = countWordsWithDateRangeWithDomain($ESWordsIndex, $daterangefrom, $daterangeto, $session->domain);
+        $countPhrases[] = json_decode(json_encode($resultWords), true);
+    }    
 }
 
-$countUniques = mysqli_fetch_assoc(mysqli_query($connection, $queryUniqueEndpoints));
-$countSessions = mysqli_fetch_assoc(mysqli_query($connection, $queryEndpointSessions));
-$countDead = mysqli_fetch_assoc(mysqli_query($connection, $queryDeadEndpoints));
-$countTyping = mysqli_fetch_assoc(mysqli_query($connection, $queryTyping));
-$countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'];
+for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLastMonths + $countPhrases[$numberOfMonthsBack][$i]['count'];
 
 ?>
 
@@ -631,12 +623,12 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
 <!-- Modal for Fraud Metrics -->
 
 <script>
-    $(document).on('hidden.bs.modal', function (e) {
-    $(e.target).removeData('bs.modal');
-    });
-
     $('#fraud-metrics').on('show.bs.modal', function(e){
         $(this).find('.fraud-metrics-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#fraud-metrics').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
 
@@ -672,6 +664,8 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
     });
 </script>
 
+<!-- Statistics graph -->
+
 <script>
     var defaultOptions = {
         global: {
@@ -684,14 +678,21 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
         type: 'bar',
         defaults: defaultOptions,
         data: {
-            labels: [ "Unique", "Events", "Sessions", "Typing", "Dead" ],
+            labels: [ 
+
+                <?php 
+                    
+                    echo '"'. $monthName[5] . '"'; ?>, <?php echo '"'. $monthName[4] . '"'; ?>, <?php echo '"'. $monthName[3] . '"'; ?>, <?php echo '"'. $monthName[2] . '"'; ?>, <?php echo '"'. $monthName[1] . '"'; ?>, <?php echo '"'. $monthName[0] . '"'; 
+                    
+                ?> ],
+
             datasets: [
                 {
-                    label: "Endpoint statistics",
+                    label: "Linear curvature",
                     type: 'line',
-                    fill: false,
-                    fillColor: "#13923D",
+                    fill: true,
                     lineTension: 0.1,
+                    fillColor: "#13923D",
                     backgroundColor: "rgb(75, 144, 111, 0.25)",
                     borderColor: "rgb(75, 144, 111, 0.75)",
                     borderCapStyle: 'butt',
@@ -707,23 +708,45 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
                     pointHoverBorderWidth: 2,
                     pointRadius: 5,
                     pointHitRadius: 10,
-                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countTyping['total'] . ", " . $countDead['total']; ?> ],
-                    spanGaps: false,
+
+                    <?php
+
+                        if ($countWordsLastMonths == 0)
+                        {
+                            if (samplerStatus($session->domain) == "enabled") echo 'data: ["539", "480", "522", "612", "430", "480"],';
+                            else echo 'data: ["0", "0", "0", "0", "0", "0"],';
+                        }
+                        else echo 'data: [ "'.$countPhrases[5][5]['count'] . '","' . $countPhrases[4][4]['count'] . '","' . $countPhrases[3][3]['count'] . '","' . $countPhrases[2][2]['count'] . '","' . $countPhrases[1][1]['count'] . '","' . $countPhrases[0][0]['count'] . '" ],'; 
+                        
+                    ?>
+                    
+                    spanGaps: false
                 },
                 {
-                    label: "Endpoint statistics",
+                    label: "Flat monthly totals",
                     type: 'bar',
                     backgroundColor: [
-                        "#bcdccd",
-                        "#bcdccd",
-                        "#bcdccd",
-                        "#bcdccd",
-                        "#bcdccd"
+                        "rgb(188, 220, 205, 0.75)",
+                        "rgb(188, 220, 205, 0.75)",
+                        "rgb(188, 220, 205, 0.75)",
+                        "rgb(188, 220, 205, 0.75)",
+                        "rgb(188, 220, 205, 0.75)",
+                        "rgb(188, 220, 205, 0.75)"
                     ],
                     borderColor: [],
-                    hoverBackgroundColor: "#bcdccd",
+                    hoverBackgroundColor: "rgb(188, 220, 205, 0.75)",
                     borderWidth: 0,
-                    data: [ <?php echo $countUniques['total'] . ", " . $countEvents . ", " . $countSessions['total'] . ", " . $countTyping['total'] . ", " . $countDead['total']; ?> ],
+
+                    <?php 
+
+                        if ($countWordsLastMonths == 0)
+                        {
+                            if (samplerStatus($session->domain) == "enabled") echo 'data: ["539", "480", "522", "612", "430", "480"],';
+                            else echo 'data: ["0", "0", "0", "0", "0", "0"],';
+                        }
+                        else echo 'data: [ "'.$countPhrases[5][5]['count'] . '","' . $countPhrases[4][4]['count'] . '","' . $countPhrases[3][3]['count'] . '","' . $countPhrases[2][2]['count'] . '","' . $countPhrases[1][1]['count'] . '","' . $countPhrases[0][0]['count'] . '" ],'; 
+                        
+                    ?>
                 }
             ]
         },
@@ -731,18 +754,18 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
             responsive: true,
             maintainAspectRatio: false,
             legend: {
-                display: false
+                display: true
             },
             tooltips: {
                 callbacks: {
                     title: function(tooltipItems, data) {
-                        return "General statistics"
+                        return "Word statistics"
                     },
                     label: function(tooltipItems, data) {
-                        return "Status " + parseInt(tooltipItems.yLabel);
+                        return "Words: " + parseInt(tooltipItems.yLabel);
                     },
                     footer: function(tooltipItems, data) {
-                        return data['labels'][tooltipItems[0]['index']] + " Category";
+                        return "Month: " + data['labels'][tooltipItems[0]['index']];
                     }
                 },
                 enabled: true,
@@ -765,7 +788,7 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
             },
             animation: false,
             scales: {
-                xAxes: [{       
+                xAxes: [{
                     }, {
                         position: 'top',
                         ticks: {
@@ -794,6 +817,8 @@ $countEvents = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerm
         }
     });
 </script>
+
+<!-- Fraud Triangle graph -->
 
 <script>
     var defaultOptions = {

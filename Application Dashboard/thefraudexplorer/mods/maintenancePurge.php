@@ -164,8 +164,8 @@ $_SESSION['processingStatus'] = "notstarted";
                 <p class="title-config">Purge old endpoint phrases</p><br>
                 <select class="select-option-styled wide" name="deletephrases" id="deletephrases">
                     <option value="1month">Preserve last month</option>
-                    <option value="2month">Preserve last 2 months</option>
                     <option value="3month">Preserve last 3 months</option>
+                    <option value="6month">Preserve last 6 months</option>
                     <option value="preserveall" selected="selected">Preserve all</option>
                 </select>            
                 

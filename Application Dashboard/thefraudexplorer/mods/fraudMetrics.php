@@ -630,7 +630,7 @@ else
                     yAxisID: "y-axis-left-normal",
                     fill: false,
                     fillColor: "#13923D",
-                    lineTension: 0.0,
+                    lineTension: 0.1,
                     backgroundColor: "rgb(75, 144, 111, 0.25)",
                     borderColor: "rgb(75, 144, 111, 0.75)",
                     borderCapStyle: 'butt',

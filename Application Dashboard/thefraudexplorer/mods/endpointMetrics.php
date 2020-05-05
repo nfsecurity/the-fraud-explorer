@@ -100,7 +100,6 @@ for ($i = 0; $i <= 11; $i++)
     $countAlerts[] = json_decode(json_encode($resultAlerts), true);
 }
 
-
 ?>
 
 <style>
@@ -502,7 +501,7 @@ for ($i = 0; $i <= 11; $i++)
                     yAxisID: "y-axis-left-normal",
                     fill: false,
                     fillColor: "#13923D",
-                    lineTension: 0.0,
+                    lineTension: 0.1,
                     backgroundColor: "rgb(75, 144, 111, 0.25)",
                     borderColor: "rgb(75, 144, 111, 0.75)",
                     borderCapStyle: 'butt',

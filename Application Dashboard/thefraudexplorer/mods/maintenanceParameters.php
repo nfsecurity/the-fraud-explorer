@@ -53,13 +53,13 @@ if ((isset($_POST['deadsessions'])) && ($_POST['deadsessions'] != "preserveall")
 if ((isset($_POST['deletephrases'])) && ($_POST['deletephrases'] != "preserveall"))
 {
     $curate30days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases30d.yml';
-    $curate60days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases60d.yml';
     $curate90days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases90d.yml';
+    $curate180days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases180d.yml';
     $setDeletePhrases = filter($_POST['deletephrases']);
      
     if (!empty($setDeletePhrases) && $setDeletePhrases == "1month") $commandCurator = shell_exec($curate30days);
-    else if (!empty($setDeletePhrases) && $setDeletePhrases == "2month") $commandCurator = shell_exec($curate60days);
     else if (!empty($setDeletePhrases) && $setDeletePhrases == "3month") $commandCurator = shell_exec($curate90days);
+    else if (!empty($setDeletePhrases) && $setDeletePhrases == "6month") $commandCurator = shell_exec($curate180days);
 }
 
 /* Delete old alert indexes (logstash-alerter-*) */
