@@ -55,7 +55,7 @@ if (isset($_POST["addwords"]))
 
     /* ASPELL multilanguage */
 
-    $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
+    $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
     exec($runMultiDictionary, $output, $return);
 }
 if (isset($_POST["removewords"]))
@@ -95,7 +95,7 @@ if (isset($_POST["removewords"]))
 
      /* ASPELL multilanguage */
 
-     $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
+     $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
      exec($runMultiDictionary, $output, $return);
 }
 
