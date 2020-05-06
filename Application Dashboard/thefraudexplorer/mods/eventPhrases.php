@@ -146,7 +146,6 @@ $windowTitle = filter($_GET['le']);
     
     <?php
     
-        $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
         $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
         $agentId = $eventPhrase['hits']['hits'][0]['_source']['agentId'];
         

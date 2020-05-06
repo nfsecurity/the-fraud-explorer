@@ -332,6 +332,8 @@ if ($endpointDECSQL == "all")
 
         /* Excel report */
 
+        foreach($notwantedWords as $notWanted) $stringHistory = str_replace($notWanted, '', $stringHistory);
+
         $stringHistory = "<font face=\"Century Gothic\" color=\"#4C4D4B\">". $stringHistory. "</font>";
         $stringHistory = str_replace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
         $html = new PhpOffice\PhpSpreadsheet\Helper\Html();

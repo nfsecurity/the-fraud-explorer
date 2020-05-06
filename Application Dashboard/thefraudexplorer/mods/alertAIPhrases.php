@@ -79,7 +79,6 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
     
 <?php
    
-    $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
     $sanitizedPhrases = decRijndael($alertPhrase['hits']['hits'][0]['_source']['stringHistory']);
     $phraseTyped = decRijndael($alertPhrase['hits']['hits'][0]['_source']['wordTyped']);
     $agentId = $alertPhrase['hits']['hits'][0]['_source']['agentId'];

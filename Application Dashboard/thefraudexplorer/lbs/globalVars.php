@@ -20,6 +20,10 @@ $configFile = parse_ini_file($globalINI);
 $serverURL = $configFile['php_server_url'];
 $documentRoot = $configFile['php_document_root'];
 
+/* Unwanted words */
+
+$notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+
 /* Set TimeZone */
 
 date_default_timezone_set('America/Bogota');
