@@ -39,6 +39,10 @@ $_SESSION['processingStatus'] = "notstarted";
 
 ?>
 
+<!-- Date range picker -->
+
+<link rel="stylesheet" type="text/css" href="../css/datepicker.css" />
+
 <style>
 
     .title-config
@@ -224,8 +228,8 @@ $_SESSION['processingStatus'] = "notstarted";
                    
                 <p class="title-config">Date range</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
-                <input type="text" name="daterangefrom" id="daterangefrom" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date" style="text-indent:5px;"> to
-                <input type="text" name="daterangeto" id="daterangeto" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date" style="text-indent:5px;">
+                <input type="text" name="daterangefrom" id="daterangefrom" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date start-date" style="text-indent:5px;" data-toggle="datepicker"> to
+                <input type="text" name="daterangeto" id="daterangeto" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date end-date" style="text-indent:5px;" data-toggle="datepicker">
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
@@ -320,7 +324,7 @@ $_SESSION['processingStatus'] = "notstarted";
         <div class="master-container-reports">
             <div class="left-container-reports">              
                 
-                <p class="title-config">Departments</p><br>
+                <p class="title-config">Business units</p><br>
                 
                 <select class="select-ruleset-styled wide" name="ruleset" id="ruleset">
                     
@@ -378,6 +382,38 @@ $_SESSION['processingStatus'] = "notstarted";
 
     </form>
 </div>
+
+<!-- Date picker -->
+
+<script type="text/javascript" src="../js/datepicker.js"></script>
+
+<script>
+
+$(function() {
+    var $startDate = $('.start-date');
+    var $endDate = $('.end-date');
+
+    $('[data-toggle="datepicker"]').datepicker({
+        autoHide: true,
+        zIndex: 2048,
+        format: 'yyyy/mm/dd'
+    });
+
+    $startDate.datepicker({
+        autoHide: true,
+    });
+      
+    $endDate.datepicker({
+        autoHide: true,
+        startDate: $startDate.datepicker('getDate'),
+    });
+
+    $startDate.on('change', function () {
+        $endDate.datepicker('setStartDate', $startDate.datepicker('getDate'));
+    });
+});
+
+</script>
 
 <!-- Button loading -->
 
