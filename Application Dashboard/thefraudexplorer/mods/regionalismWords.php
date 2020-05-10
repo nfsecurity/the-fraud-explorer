@@ -118,7 +118,7 @@ $_SESSION['processingStatus'] = "notstarted";
         resize: none;
     }
 
-    .select-option-styled-language
+    .select-option-styled-language-reg
     {
         width: 130px;
         height: 35px;
@@ -127,7 +127,7 @@ $_SESSION['processingStatus'] = "notstarted";
         font-family: 'FFont', sans-serif; font-size: 12px;
     }
 
-    .select-option-styled-language .list
+    .select-option-styled-language-reg .list
     {
         width: 130px;
         max-height: 200px;
@@ -174,7 +174,7 @@ $regionalismENFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/cust
         </button>
     </a>
 
-    <select class="select-option-styled-language" name="library-language" id="library-language">
+    <select class="select-option-styled-language-reg" name="library-language" id="library-language">
 
         <?php
 

@@ -127,6 +127,13 @@ include "../lbs/openDBconn.php";
     .select-option-styled-rulesworkshop
     {
         width: 165px;
+        height: 30px;
+        border: 1px solid #ccc;
+        color: #757575;
+        padding: 8px 0px 0px 10px;
+        position: relative;
+        line-height: 11.6px;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
     .select-option-styled-rulesworkshop .list
@@ -137,28 +144,46 @@ include "../lbs/openDBconn.php";
         margin-left: 5px;
         background: #f9f9f9;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        overflow-y: scroll;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
     .select-option-styled-fraudvertice
     {
         width: 140px;
         margin-right: 0px;
+        height: 30px;
+        border: 1px solid #ccc;
+        color: #757575;
+        padding: 8px 0px 0px 10px;
+        position: relative;
+        line-height: 11.6px;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
-    .select-option-styled-language
+    .select-option-styled-language-add
     {
         width: 137px;
         margin-top: 0px;
         margin-right: 0px;
+        height: 30px;
+        border: 1px solid #ccc;
+        color: #757575;
+        padding: 8px 0px 0px 10px;
+        position: relative;
+        line-height: 11.6px;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
-    .select-option-styled-language .list
+    .select-option-styled-language-add .list
     {
         width: 137px;
         border: 1px solid #e2e5e6;
         margin-left: 5px;
         background: #f9f9f9;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        overflow-y: scroll;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
     .select-option-styled-language-search
@@ -166,6 +191,13 @@ include "../lbs/openDBconn.php";
         width: 137px;
         margin-top: 0px;
         margin-right: 0px;
+        height: 30px;
+        border: 1px solid #ccc;
+        color: #757575;
+        padding: 8px 0px 0px 10px;
+        position: relative;
+        line-height: 11.6px;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
     .select-option-styled-language-search .list
@@ -175,6 +207,8 @@ include "../lbs/openDBconn.php";
         margin-left: 5px;
         background: #f9f9f9;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        overflow-y: scroll;
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
 
     .select-option-styled-fraudvertice .list
@@ -184,21 +218,6 @@ include "../lbs/openDBconn.php";
         margin-left: 5px;
         background: #f9f9f9;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .nice-select
-    {
-        height: 30px;
-        border: 1px solid #ccc;
-        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
-        color: #757575;
-        padding: 8px 0px 0px 10px;
-        position: relative;
-        line-height: 11.6px;
-    }
-
-    .nice-select .list 
-    { 
         overflow-y: scroll;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px;
     }
@@ -391,7 +410,7 @@ include "../lbs/openDBconn.php";
             <div class="right-container-library-language">
 
                 <p class="title-config">Library language</p><br>
-                <select class="select-option-styled-language" name="library-add-language" id="library-add-language">
+                <select class="select-option-styled-language-add" name="library-add-language" id="library-add-language">
 
                     <?php
 

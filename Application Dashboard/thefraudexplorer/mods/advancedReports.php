@@ -199,6 +199,7 @@ $_SESSION['processingStatus'] = "notstarted";
         max-height: 200px !important;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+
 }
 
 </style>
@@ -233,7 +234,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-date-range" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-all-date-range" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" onchange="checkboxAllDateRange()" id="checkbox-all-date-range" name="alldaterange" value="alldaterange" autocomplete="off" checked>I want all date range
                     </label>
                 </div>
@@ -269,7 +270,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:10px; border: 1px solid white;"><br></div>
                             
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-pressure" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-pressure" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" onchange="checkboxPressureButton()" id="checkbox-pressure" name="pressure" value="pressure" autocomplete="off" checked>Pressure
                     </label>
                 </div>
@@ -277,7 +278,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-opportunity" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-opportunity" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" onchange="checkboxOpportunityButton()" id="checkbox-opportunity" name="opportunity" value="opportunity" autocomplete="off" checked>Opportunity
                     </label>
                 </div>
@@ -285,7 +286,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-rationalization" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-rationalization" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" onchange="checkboxRationalizationButton()" id="checkbox-rationalization" name="rationalization" value="rationalization" autocomplete="off" checked>Rationalization
                     </label>
                 </div>
@@ -296,10 +297,10 @@ $_SESSION['processingStatus'] = "notstarted";
                 <p class="title-config">Application</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
                 <input type="text" name="applications" id="applications" autocomplete="off" placeholder="Microsoft Teams" class="input-value-text" style="text-indent:5px;">
-                <div style="line-height:6px; border: 1px solid white;"><br></div>
+                <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-applications" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-all-applications" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" onchange="checkboxAllApplicationsButton()" id="checkbox-all-applications" name="allapplications" value="allapplications" autocomplete="off" checked>I want all applications
                     </label>
                 </div>           
@@ -346,7 +347,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:60px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-departments" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-all-departments" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" name="alldepartments" onchange="checkboxAllDepartmentsButton()" id="checkbox-all-departments" value="alldepartments" autocomplete="off" checked>I want all departments
                     </label>
                 </div> 
@@ -359,7 +360,7 @@ $_SESSION['processingStatus'] = "notstarted";
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-phrases" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-all-phrases" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" name="allphrases" onchange="checkboxAllPhrasesButton()" id="checkbox-all-phrases" value="allphrases" autocomplete="off" checked>I want all phrases
                     </label>
                 </div>
