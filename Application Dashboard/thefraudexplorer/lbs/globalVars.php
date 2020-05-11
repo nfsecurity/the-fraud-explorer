@@ -22,7 +22,7 @@ $documentRoot = $configFile['php_document_root'];
 
 /* Unwanted words */
 
-$notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot");
+$notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot", "cv");
 
 /* Set TimeZone */
 
