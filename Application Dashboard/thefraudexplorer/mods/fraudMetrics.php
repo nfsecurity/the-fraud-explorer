@@ -666,13 +666,13 @@ else
             tooltips: {
                 callbacks: {
                     title: function(tooltipItems, data) {
-                        return "General statistics"
+                        return "Fraud metrics"
                     },
                     label: function(tooltipItems, data) {
-                        return "Status " + parseInt(tooltipItems.yLabel);
+                        return "Events: " + parseInt(tooltipItems.yLabel);
                     },
                     footer: function(tooltipItems, data) {
-                        return data['labels'][tooltipItems[0]['index']] + " Category";
+                        return "Month: " + data['labels'][tooltipItems[0]['index']];
                     }
                 },
                 enabled: true,
