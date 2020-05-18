@@ -179,6 +179,7 @@ include "../lbs/openDBconn.php";
                 <select class="select-option-build-styled wide" name="platform" id="platform" onChange="changeBehavior();">
                     <option value="windows" selected="selected">Microsoft Windows</option>
                     <option value="android">Android Devices</option>
+                    <option value="pbx">Asterisk VoIP PBX</option>
                     <option value="macosx" disabled>Apple macOSX</option>
                 </select>            
                 
@@ -365,6 +366,13 @@ include "../lbs/openDBconn.php";
             document.getElementById("companydomain").disabled=false;
             document.getElementById("restcredentials").disabled=false;
             document.getElementById("pcenabled").disabled=false;
+            document.getElementById("excluded").disabled=true;
+        }
+        else if (document.getElementById("platform").value == "pbx") 
+        {
+            document.getElementById("companydomain").disabled=true;
+            document.getElementById("restcredentials").disabled=false;
+            document.getElementById("pcenabled").disabled=true;
             document.getElementById("excluded").disabled=true;
         }
     }

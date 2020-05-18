@@ -1,0 +1,182 @@
+#!/bin/php
+
+<?php
+
+/*
+ * The Fraud Explorer
+ * https://www.thefraudexplorer.com/
+ *
+ * Copyright (c) 2014-2020 The Fraud Explorer
+ * email: customer@thefraudexplorer.com
+ * Licensed under GNU GPL v3
+ * https://www.thefraudexplorer.com/License
+ *
+ * Date: 2020-05
+ * Revision: v1.4.4-aim
+ *
+ * Description: PBX endpoint code
+ */
+
+function encRijndael($unencrypted, $cipherkey)
+{
+    $key = $cipherkey;
+    $iv = $cipherkey;
+    $iv_utf = mb_convert_encoding($iv, 'UTF-8');
+    $toreturn = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $unencrypted, MCRYPT_MODE_CBC, $iv_utf);
+    $toreturn = base64_encode($toreturn);
+
+    return $toreturn;
+}
+
+function decRijndael($encrypted, $cipherkey)
+{
+    $encrypted = rawurldecode($encrypted);
+    $key = $cipherkey;
+    $iv = $cipherkey;
+    $iv_utf = mb_convert_encoding($iv, 'UTF-8');
+    $toreturn = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode(str_replace("_","/",str_replace("-","+",$encrypted))), MCRYPT_MODE_CBC, $iv_utf);
+    $toreturn = filter_var($toreturn, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+    return $toreturn;
+}
+
+function reportOnline($agentID, $serverTFE, $agentVersion, $keyPass, $domain, $cipherKey)
+{
+     $rawURL = $serverTFE."/update.php";
+     $pbxVersion = shell_exec("/sbin/asterisk -rx \"core show version\" | grep \"Asterisk\" | awk '{ print $2 }'");
+     $pbxVersion = trim(preg_replace('/\s+/', '', $pbxVersion));
+     $unwanted_chars = array('+'=>'-', '/'=>'_');
+     $params = "";
+     
+     $getRequest = array(
+          'token' => encRijndael($agentID, $cipherKey),
+          's' => encRijndael($pbxVersion, $cipherKey),
+          'v' => encRijndael($agentVersion, $cipherKey),
+          'k' => encRijndael($keyPass, $cipherKey),
+          'd' => encRijndael($domain, $cipherKey)
+     );
+
+     foreach($getRequest as $key=>$value) $params .= $key.'='.$value.'&';
+         
+     $params = trim($params, '&');
+     $params = strtr($params, $unwanted_chars);
+     $ch = curl_init();
+
+     curl_setopt($ch, CURLOPT_URL, $rawURL.'?'.$params );
+     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+     curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
+     curl_setopt($ch, CURLOPT_HEADER, 0);
+    
+     $result = curl_exec($ch);
+     curl_close($ch);
+}
+
+function phraseSanitization($rawPhrase)
+{
+     $unwanted_chars = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 
+     'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 
+     'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 
+     'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 
+     'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+
+     $sanitizedPhrase = strtr($rawPhrase, $unwanted_chars);
+     $sanitizedPhrase = strtolower($sanitizedPhrase);
+
+     return $sanitizedPhrase;
+}
+
+function sendData($serverTFE, $agentId, $restUser, $restPass, $ipAddress, $domain, $callWith, $phrases)
+{
+     $serverAddress = $serverTFE."/rest/endPoints?query=phrases&id=".$agentId;
+     $APIuser = $restUser;
+     $APIpass = $restPass;
+
+     $postRequest = array(
+          'hostPrivateIP' => $ipAddress,
+          'userDomain' => $domain,
+          'appTitle' => $callWith,
+          'phrases' => $phrases
+     );
+
+     $payload = json_encode($postRequest);
+
+     $ch = curl_init();
+     curl_setopt($ch, CURLOPT_URL, $serverAddress);
+     curl_setopt($ch, CURLOPT_POST, 1);
+     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+     $headers = [
+     'username: ' .$APIuser,
+     'password: ' .$APIpass,
+     'Content-Type: application/json',
+     ];
+
+     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     $server_output = curl_exec($ch);
+     curl_close ($ch);
+}
+
+function collectionPhraseStatus($serverTFE, $cipherKey)
+{   
+    $xml = simplexml_load_file($serverTFE.'/update.xml');
+    $phraseCollectionStatus = decRijndael($xml->token[0]['arg'], $cipherKey);
+    
+    if ($phraseCollectionStatus == "textAnalytics 1") $phraseStatus = "enabled";
+    else $phraseStatus = "disabled";
+
+    return $phraseStatus;
+}
+
+/* PBX internal variables */
+
+$agivars = array();
+
+while (!feof(STDIN)) 
+{
+     $agivar = trim(fgets(STDIN));
+     
+     if ($agivar === '') break;
+     
+     $agivar = explode(':', $agivar);
+     $agivars[$agivar[0]] = trim($agivar[1]);
+}
+
+extract($agivars);
+
+/* PBX Endpoint variables */
+
+$serverTFE = "https://cloud.thefraudexplorer.com";
+$keyPass = "31173";
+$cipherKey = "yourkeyandiv";
+$restUser = "apirestuser";
+$restPass = "apirestpassword";
+$agentVersion = "0.1";
+$ipAddress = shell_exec("/sbin/asterisk -rx \"sip show peers\" | grep \"".$agi_callerid."/".$agi_callerid."\" | awk '{ print $2 }'");
+$ipAddress = trim(preg_replace('/\s+/', '', $ipAddress));
+$callerName = $agi_calleridname;
+$callerNameArray = explode("@", $callerName);
+$domain = $callerNameArray[1];
+$name = $callerNameArray[0];
+$agentId = $name."_".$agi_callerid."1kc9_pbx";
+$callWith = "Phone call with ".$agi_dnid;
+$phrases = phraseSanitization($argv[1]);
+
+/* Exit if no phrase */
+
+if ($phrases == "" || collectionPhraseStatus($serverTFE, $cipherKey) == "disabled")
+{
+     echo "SET VARIABLE ftaStatus no-sent";
+     exit;
+}
+
+/* Create or update endpoint and send data */
+
+reportOnline($agentId, $serverTFE, $agentVersion, $keyPass, $domain, $cipherKey);
+sendData($serverTFE, $agentId, $restUser, $restPass, $ipAddress, $domain, $callWith, $phrases);
+
+/* Finish AGI */
+
+echo "SET VARIABLE ftaStatus sent-ok";
+
+?>

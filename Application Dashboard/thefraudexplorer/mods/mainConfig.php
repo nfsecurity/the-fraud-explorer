@@ -178,6 +178,7 @@ $_SESSION['processingStatus'] = "notstarted";
     .select-ftacron-styled
     {
         max-height: 30px !important;
+        width: 170px;
         min-height: 30px !important;
         border: 1px solid #ccc !important;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
@@ -190,6 +191,7 @@ $_SESSION['processingStatus'] = "notstarted";
     .select-ftacron-styled .list
     {
         margin-left: 5px;
+        width: 170px;
         max-height: 120px;
         overflow-y: scroll !important;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
@@ -246,6 +248,18 @@ $_SESSION['processingStatus'] = "notstarted";
         font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
+    .btn-fta-run, .btn-fta-run:active, .btn-fta-run:visited
+    {
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        color: #757575 !important;
+        display: inline;
+        width: 96px;
+        height: 30px;
+        outline: none !important;
+        float: right;
+        text-align: left;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -300,7 +314,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
             <div class="cron-container">
                 <p class="title-config">Run FTA AI-Processor every</p><br>
-                <select class="select-ftacron-styled wide" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
+                <select class="select-ftacron-styled" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
                      <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); if ($minutes != "false") echo $minutes; else echo "disabled"; ?>" selected="selected"> 
                         
                         <?php
@@ -316,7 +330,10 @@ $_SESSION['processingStatus'] = "notstarted";
                     <?php if ($minutes != "60") echo '<option value="60">60 minutes</option>'; ?>
                     <?php if ($minutes != "90") echo '<option value="90">90 minutes</option>'; ?>
                     <?php if ($minutes != "120") echo '<option value="120">120 minutes</option>'; ?>
-                </select>               
+                </select>      
+
+                <button type="button" class="btn btn-default btn-fta-run" id="btnftanow" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Running">Run FTA now</button>
+
             </div>
         </div>
 
@@ -429,5 +446,28 @@ function getstatus()
         }
     });
 }
+
+</script>
+
+<!-- Button Run FTA now -->
+
+<script>
+
+$(document).ready(function () {
+        $("#btnftanow").click(function () {
+            var $btn = $(this);
+            $btn.button('loading');
+            $.ajax({
+                    type: "POST",
+                    url: "../mods/runFTAnow.php",
+                    data: {
+                        params: "n/a"
+                    }
+                })
+                .done(function () {
+                    $btn.button('reset');
+                });
+        });
+    });
 
 </script>

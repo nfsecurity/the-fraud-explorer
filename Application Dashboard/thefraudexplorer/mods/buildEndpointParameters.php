@@ -162,6 +162,31 @@ else if ($finalPlatformForBuild == "android")
         exit;
     }
 }
+else if ($finalPlatformForBuild == "pbx")
+{
+    /* Replace data in the Asterisk AGI */
+
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/yourkeyandiv/'.$finalCryptKey.'/g; s/31173/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com/'.$finalServerHTTPSAddress.'/g; s/apirestuser/'.$finalRESTusername.'/g;s/apirestpassword/'.$finalRESTpassword.'/g" '.$documentRoot.'endpoints/pbx/thefraudexplorerTemplate.agi > '.$documentRoot.'endpoints/pbx/thefraudexplorer.agi';
+    $commandReplacements = shell_exec($replaceParams);
+
+    /* Auto download */
+
+    $agiFile = $documentRoot.'endpoints/pbx/thefraudexplorer.agi';
+
+    if (file_exists($agiFile)) 
+    {
+        $original_filename = $documentRoot.'endpoints/pbx/thefraudexplorer.agi';
+        $new_filename = 'thefraudexplorer.agi';
+
+        header("Content-Type: application/octet-stream");
+        header('Content-Transfer-Encoding: binary');
+        header("Content-Length: " . filesize($original_filename));
+        header('Content-Disposition: attachment; filename="' . $new_filename . '"');
+
+        readfile($original_filename);
+        exit;
+    }
+}
 
 /* Close DB Connections */
 
