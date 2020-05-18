@@ -12,7 +12,7 @@ Las instrucciones de instalación y configuración las encontrará en la [Wiki](
 
 ## Metodología y estrategia
 
-A través de endpoints instalados en los equipos de las personas en un entorno corporativo, se identifican, clasifican y envían datos conductuales (frases digitadas en aplicaciones) a una plataforma de **Big Data**, donde se procesan, convierten y almacenan para luego ser presentados estadística y probabilísticamente a través de tablas y gráficas construidas en base a un sistema de alertas e **Inteligencia Artificial** diseñado para identificar qué frases convergen con los vértices del [triángulo del fraude](http://www.acfe.com/fraud-triangle.aspx) y así generar un espacio de **Inteligencia Operacional/Accionable** alrededor de la posible ocurrencia de un fraude.
+A través de endpoints instalados en los equipos de las personas, móviles o teléfonos fijos (a través del PBX) en un entorno corporativo, se identifican, clasifican y envían datos conductuales (frases dichas o digitadas) a una plataforma de **Big Data**, donde se procesan, convierten y almacenan para luego ser presentados estadística y probabilísticamente a través de tablas y gráficas construidas en base a un sistema de alertas e **Inteligencia Artificial** diseñado para identificar qué frases convergen con los vértices del [triángulo del fraude](http://www.acfe.com/fraud-triangle.aspx) y así generar un espacio de **Inteligencia Operacional/Accionable** alrededor de la posible ocurrencia de un fraude.
 
 ## Instalación y configuración
 
