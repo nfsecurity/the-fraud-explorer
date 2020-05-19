@@ -15,13 +15,25 @@
  * Description: Main Application, Fraud Triangle Analytics Alerting
  */
 
+/* Locking control */
+
+$sLock = '/var/www/html/thefraudexplorer/core/FTA.lock';
+
+if (file_exists($sLock)) 
+{
+    die("Already running another instance, exiting ...\n");
+    exit;
+}
+
+file_put_contents($sLock, 1);
+   
 /* External includes */
 
 include "/var/www/html/thefraudexplorer/lbs/cryptography.php";
 
 /* Error control */
 
-//error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ERROR | E_PARSE);
 
 /* Current time */
 
@@ -346,5 +358,9 @@ $execution_time = ($time_end - $time_start)/60;
 
 echo "[INFO] Total execution time in minutes: ".round($execution_time, 2)."\n";
 echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+
+/* Release the lock */
+
+unlink($sLock);
 
 ?>

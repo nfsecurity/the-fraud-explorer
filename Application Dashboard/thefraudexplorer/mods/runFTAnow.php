@@ -32,13 +32,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
     exit;
 }
 
-$process = shell_exec('/usr/bin/sudo /usr/bin/ps auxf | grep \"AIFraudTriangleProcessor\" | grep \"php\"');
-$process = trim(preg_replace('/\s+/', '', $process));
-
-if ($process == null || $process == "" || $process == " ")
-{
-    $output = shell_exec('/bin/php /var/www/html/thefraudexplorer/core/AIFraudTriangleProcessor.php > /dev/null 2>/dev/null &');
-}
+$output = shell_exec('/bin/php /var/www/html/thefraudexplorer/core/AIFraudTriangleProcessor.php > /dev/null 2>/dev/null &');
 
 sleep(5);
 
