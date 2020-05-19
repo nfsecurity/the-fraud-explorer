@@ -279,7 +279,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
             $counter = 0;
             $stringOfWords = decRijndael($value[0]);
         }
@@ -299,7 +299,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, "matchesGlobalCount", $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }
 
         $counter++;
@@ -310,7 +310,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
 
 /* Parse Fraud Triangle phrases */
 
-function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $matchesGlobalCount, $configFile, $jsonFT, $ruleset, $lastArrayElement)
+function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement)
 {
     $timeStartparseFraudTrianglePhrases = microtime(true); 
     
@@ -341,7 +341,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                         $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords)." f: 0";
                         $lenData = strlen($msgData);
                         socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
-                        $GLOBALS[$matchesGlobalCount]++;
+                        $GLOBALS['matchesGlobalCount']++;
 
                         logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 
