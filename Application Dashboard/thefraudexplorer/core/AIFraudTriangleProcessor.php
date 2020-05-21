@@ -53,7 +53,13 @@ include 'include/functions.php';
 
 $sockLT = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 $client = Elasticsearch\ClientBuilder::create()->build();
-$GLOBALS['matchesGlobalCount'] = 0;
+
+$matchesGlobalCount = 0;
+$socketIPC = array();
+$socketINT = array();
+socket_create_pair(AF_UNIX, SOCK_STREAM, 0, $socketIPC);
+socket_create_pair(AF_UNIX, SOCK_STREAM, 0, $socketINT);
+
 $startTime = microtime(true);
 $ESindex = $configFile['es_words_index'];
 $ESAlerterIndex = $configFile['es_alerter_index'];
@@ -150,6 +156,7 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
     $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
     $arrayLenght = mysqli_num_rows($resultQueryAgentList);
+    $firstTime = true;
        
     if ($endpointSelected == "all" && $singleEndpoint == false)
     {
@@ -185,8 +192,28 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
                     if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
                
-                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
-               
+                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
+
+                    /* Inter Process Communication to store number of matches */ 
+
+                    $socketIPCResult = trim(socket_read($socketIPC[1], 1024));
+                    socket_close($socketIPC[1]);
+                    
+                    if ($firstTime != true) 
+                    {
+                        $socketINTResult = trim(socket_read($socketINT[1], 1024));
+                        socket_close($socketINT[1]);
+                    }
+                    else $socketINTResult = 0;
+                                         
+                    $matchesGlobalCount = $socketINTResult + $socketIPCResult;
+                    socket_write($socketINT[0], str_pad($matchesGlobalCount, 1024), 1024);
+                    socket_close($socketINT[0]);
+
+                    $firstTime = false;
+
+                    /* Finish Inter Process Communication */
+                    
                     $arrayCounter++;
                 }
                 exit();
@@ -219,7 +246,27 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
             
             $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
+
+            /* Inter Process Communication to store number of matches */ 
+
+            $socketIPCResult = trim(socket_read($socketIPC[1], 1024));
+            socket_close($socketIPC[1]);
+           
+            if ($firstTime != true) 
+            {
+                $socketINTResult = trim(socket_read($socketINT[1], 1024));
+                socket_close($socketINT[1]);
+            }
+            else $socketINTResult = 0;
+                                    
+            $matchesGlobalCount = $socketINTResult + $socketIPCResult;
+            socket_write($socketINT[0], str_pad($matchesGlobalCount, 1024), 1024);
+            socket_close($socketINT[0]);
+
+            $firstTime = false;
+
+            /* Finish Inter Process Communication */
         }        
     }
 
@@ -239,6 +286,7 @@ else
     include "../lbs/openDBconn.php";
     
     $arrayCounter = 0;
+    $firstTime = true;
     $effectiveEndpointCounter = 1;
     $lastArrayElement = false;
     $arrayLenght = mysqli_num_rows($resultQueryAgentList);
@@ -277,8 +325,28 @@ else
             
                     if ($arrayCounter == $arrayLenght - 1) $lastArrayElement = true;
             
-                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+                    startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
                 
+                    /* Inter Process Communication to store number of matches */ 
+
+                    $socketIPCResult = trim(socket_read($socketIPC[1], 1024));
+                    socket_close($socketIPC[1]);
+                    
+                    if ($firstTime != true) 
+                    {
+                        $socketINTResult = trim(socket_read($socketINT[1], 1024));
+                        socket_close($socketINT[1]);
+                    }
+                    else $socketINTResult = 0;
+                                         
+                    $matchesGlobalCount = $socketINTResult + $socketIPCResult;
+                    socket_write($socketINT[0], str_pad($matchesGlobalCount, 1024), 1024);
+                    socket_close($socketINT[0]);
+
+                    $firstTime = false;
+
+                    /* Finish Inter Process Communication */
+
                     $arrayCounter++;
                 }
                 exit();
@@ -311,7 +379,27 @@ else
             
             $lastArrayElement = true;
             
-            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement);      
+            startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);  
+            
+            /* Inter Process Communication to store number of matches */ 
+
+            $socketIPCResult = trim(socket_read($socketIPC[1], 1024));
+            socket_close($socketIPC[1]);
+            
+            if ($firstTime != true) 
+            {
+                $socketINTResult = trim(socket_read($socketINT[1], 1024));
+                socket_close($socketINT[1]);
+            }
+            else $socketINTResult = 0;
+                                 
+            $matchesGlobalCount = $socketINTResult + $socketIPCResult;
+            socket_write($socketINT[0], str_pad($matchesGlobalCount, 1024), 1024);
+            socket_close($socketINT[0]);
+
+            $firstTime = false;
+
+            /* Finish Inter Process Communication */
         }     
     }
 
@@ -341,8 +429,11 @@ $sockAlerter = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 $timeTaken = microtime(true) - $startTime;
 $timeTaken = floor($timeTaken * 100) / 100;
 
+$matchesGlobalCount = trim(socket_read($socketINT[1], 1024));
+socket_close($socketINT[1]);
+
 if ($firstTimeIndex = true) $GLOBALS['lastAlertDate'][0] = $endTime;
-$msgData = $endTime." - ".$GLOBALS['lastAlertDate'][0]." TextEvent ".$timeTaken." ".$GLOBALS['matchesGlobalCount'];
+$msgData = $endTime." - ".$GLOBALS['lastAlertDate'][0]." TextEvent ".$timeTaken." ".$matchesGlobalCount;
 
 $lenData = strlen($msgData);
 socket_sendto($sockAlerter, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_status_port']);
@@ -350,7 +441,7 @@ socket_close($sockAlerter);
 
 echo "[INFO] Sending this alert status to log file ...\n";
 
-logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$GLOBALS['matchesGlobalCount']."]");
+logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$matchesGlobalCount."]");
 include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";
 
 $time_end = microtime(true);

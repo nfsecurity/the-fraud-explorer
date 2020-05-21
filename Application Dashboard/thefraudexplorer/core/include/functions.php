@@ -241,7 +241,7 @@ function deleteAlertIndex()
 
 /* Start data procesing */ 
 
-function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement)
+function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC)
 {   
     $GLOBALS['arrayPosition'] = 0;
     getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", "userDomain", $agentID."_typedWords");
@@ -279,7 +279,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
             $counter = 0;
             $stringOfWords = decRijndael($value[0]);
         }
@@ -299,7 +299,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
+            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
         }
 
         $counter++;
@@ -310,7 +310,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
 
 /* Parse Fraud Triangle phrases */
 
-function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement)
+function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC)
 {
     $timeStartparseFraudTrianglePhrases = microtime(true); 
     
@@ -356,6 +356,11 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
     $timeEndparseFraudTrianglePhrases = microtime(true);
     $executionTimeparseFraudTrianglePhrases = ($timeEndparseFraudTrianglePhrases - $timeStartparseFraudTrianglePhrases);
     
+    /* Inter Process Communication */
+
+    socket_write($socketIPC[0], str_pad($matchesGlobalCount, 1024), 1024);
+    socket_close($socketIPC[0]);
+
     // echo "Time taken parseFraudTrianglePhrases in seconds: ".$executionTimeparseFraudTrianglePhrases."\n";
 }
 
