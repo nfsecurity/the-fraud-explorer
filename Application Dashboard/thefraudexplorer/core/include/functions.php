@@ -257,6 +257,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $dictLan = $configFile['wc_language'];
     $dictEna = $configFile['wc_enabled'];
+    $totalMatches = 0;
 
     foreach($arrayOfWordsAndWindows as $key=>$value)
     {
@@ -279,7 +280,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
+            $totalMatches = $totalMatches + parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
             $counter = 0;
             $stringOfWords = decRijndael($value[0]);
         }
@@ -299,23 +300,27 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
                 $stringOfWords = checkPhrases($stringOfWords, $dictLan);
             }
 
-            parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC);
+            $totalMatches = $totalMatches + parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }
 
         $counter++;
         $lastWindowTitle = $windowTitle;
         $lastTimeStamp = $timeStamp;
     }
+
+    socket_write($socketIPC[$agentID][0], str_pad($totalMatches, 1024), 1024);
+    socket_close($socketIPC[$agentID][0]);
 }
 
 /* Parse Fraud Triangle phrases */
 
-function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC)
+function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $windowTitle, $timeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement)
 {
     $timeStartparseFraudTrianglePhrases = microtime(true); 
     
     $matched = FALSE;
     $countOutput = 1;
+    $matchesGlobalCount = 0;
 
     for ($lib = 1; $lib<=count($jsonFT); $lib++)
     {   
@@ -341,7 +346,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                         $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".encRijndael($matches[0][0])." t: ".encRijndael($windowTitle)." z: ".encRijndael($stringOfWords)." f: 0";
                         $lenData = strlen($msgData);
                         socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
-                        $GLOBALS['matchesGlobalCount']++;
+                        $matchesGlobalCount++;
 
                         logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
 
@@ -356,10 +361,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
     $timeEndparseFraudTrianglePhrases = microtime(true);
     $executionTimeparseFraudTrianglePhrases = ($timeEndparseFraudTrianglePhrases - $timeStartparseFraudTrianglePhrases);
     
-    /* Inter Process Communication */
-
-    socket_write($socketIPC[0], str_pad($matchesGlobalCount, 1024), 1024);
-    socket_close($socketIPC[0]);
+    return $matchesGlobalCount;
 
     // echo "Time taken parseFraudTrianglePhrases in seconds: ".$executionTimeparseFraudTrianglePhrases."\n";
 }
