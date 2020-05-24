@@ -134,6 +134,11 @@ $windowTitle = filter($_GET['le']);
         border: 1px solid #4B906F !important;
     }
 
+    .font-aw-color-phrases
+    {
+        color: #555;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -156,8 +161,8 @@ $windowTitle = filter($_GET['le']);
 
         /* Session validation */
 
-        echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
-        echo 'At <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
+        echo '<div class="phrase-viewer-resume font-aw-color-phrases" contenteditable=false>';
+        echo 'At <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color-phrases">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
         echo '</div>';
 
         if($session->username == "admin")
@@ -175,7 +180,7 @@ $windowTitle = filter($_GET['le']);
 
         $regularExpression = (strlen(decRijndael($regExp)) > 40) ? substr(decRijndael($regExp), 0, 40) . ' ...' : decRijndael($regExp);
 
-        echo '<div class="footer-statistics-event"><span class="fa fa-exclamation-triangle font-aw-color">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
+        echo '<div class="footer-statistics-event"><span class="fa fa-exclamation-triangle font-aw-color-phrases">&nbsp;&nbsp;</span>Triggered by <i><b>"'.$regularExpression.'"</b></i> regular expression</div>'; 
 
         /* Traverse phrase library searching for matched phrases */
 
