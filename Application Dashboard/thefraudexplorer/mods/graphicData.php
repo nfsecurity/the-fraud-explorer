@@ -199,7 +199,7 @@ include "../lbs/cryptography.php";
     .not-ruleset
     {
         text-align: justify;
-        font-family: 'FFont', sans-serif; font-size: 11px;
+        font-family: 'FFont', sans-serif; font-size: 12px;
     }
 
     .font-icon-color-green

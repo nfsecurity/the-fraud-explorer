@@ -1192,4 +1192,28 @@ function deleteIndex($index, $configFile)
     }
 }
 
+/* Extract data from alerter status */
+
+function extractDataFromAlerterStatus()
+{
+    $endDateParams = [
+        'index' => "tfe-alerter-status",
+        'type' => "AlertStatus",
+        'body' =>[
+            'size' => 500,
+            'query' => [
+                'term' => [ 'host' => '127.0.0.1' ]
+            ],
+            'sort' => [
+                'endTime' => [ 'order' => 'desc' ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $latestEvents = $client->search($endDateParams);
+
+    return $latestEvents;
+}
+
 ?>

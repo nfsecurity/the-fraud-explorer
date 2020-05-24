@@ -332,7 +332,7 @@ $_SESSION['processingStatus'] = "notstarted";
                     <?php if ($minutes != "120") echo '<option value="120">120 minutes</option>'; ?>
                 </select>      
 
-                <button type="button" class="btn btn-default btn-fta-run" id="btnftanow" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Running">Run FTA now</button>
+                <button type="button" class="btn btn-default btn-fta-run" id="btnftanow" style="font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Running">Run FTA now</button>
 
             </div>
         </div>
