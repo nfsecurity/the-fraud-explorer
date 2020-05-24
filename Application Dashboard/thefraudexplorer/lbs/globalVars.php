@@ -28,4 +28,26 @@ $notwantedWords = array("rwin", "lwin", "decimal", "next", "snapshot", "cv");
 
 date_default_timezone_set('America/Bogota');
 
+/* String sanitization */
+
+function phraseSanitization($sanitizedPhrases, $notwantedWords)
+{
+    foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+
+    $sanitizedPhrases = strtolower($sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/\.+/', '.', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace('.', '. ', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(' .', '.', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(' ,', ',', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(',', ', ', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/\s+/', ' ', $sanitizedPhrases);
+    $sanitizedPhrases = ucfirst($sanitizedPhrases);
+
+    preg_match_all("/\.\s*\w/", $sanitizedPhrases, $matches);
+
+    foreach($matches[0] as $match) $sanitizedPhrases = str_replace($match, strtoupper($match), $sanitizedPhrases);
+
+    return $sanitizedPhrases;
+}
+
 ?>

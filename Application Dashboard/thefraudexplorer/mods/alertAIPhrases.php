@@ -83,8 +83,10 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
     $phraseTyped = decRijndael($alertPhrase['hits']['hits'][0]['_source']['wordTyped']);
     $agentId = $alertPhrase['hits']['hits'][0]['_source']['agentId'];
 
-    foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
-    
+    /* Phrase sanitization process */
+
+    $sanitizedPhrases = phraseSanitization($sanitizedPhrases, $notwantedWords);
+
     /* Traverse phrase library searching for matched phrases */
 
     $rulesetQuery = sprintf("SELECT ruleset FROM t_agents WHERE agent='%s'", $agentId);
@@ -121,7 +123,7 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
                 {
                     foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
                     {
-                        if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                        if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                         {
                             $phrasesMatched[] = $matches;
                         }

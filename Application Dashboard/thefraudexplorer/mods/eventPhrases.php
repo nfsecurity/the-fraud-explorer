@@ -149,15 +149,18 @@ $windowTitle = filter($_GET['le']);
         $sanitizedPhrases = decRijndael($eventPhrase['hits']['hits'][0]['_source']['stringHistory']);
         $agentId = $eventPhrase['hits']['hits'][0]['_source']['agentId'];
         
-        foreach($notwantedWords as $notWanted) $sanitizedPhrases = str_replace($notWanted, '', $sanitizedPhrases);
+        /* Phrase sanitization process */
+
+        $sanitizedPhrases = phraseSanitization($sanitizedPhrases, $notwantedWords);
+
+        /* Session validation */
 
         echo '<div class="phrase-viewer-resume font-aw-color" contenteditable=false>';
         echo 'At <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
         echo '</div>';
 
         if($session->username == "admin")
-        {
-            
+        { 
             echo '<div id="reviewPhrasesDivArea" class="phrase-viewer-event" contenteditable=true>';
             echo '<p>'.$sanitizedPhrases.'</p>';
             echo '</div>';
@@ -209,7 +212,7 @@ $windowTitle = filter($_GET['le']);
                 {
                     foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
                     {
-                        if (preg_match_all($termPhrase, $sanitizedPhrases, $matches))
+                        if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                         {
                             $phrasesMatched[] = $matches;
                         }
