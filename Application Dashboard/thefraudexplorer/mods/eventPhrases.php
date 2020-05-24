@@ -100,6 +100,7 @@ $windowTitle = filter($_GET['le']);
         text-align: justify;
         font-family: 'FFont', sans-serif; 
         font-size: 12px;
+        color: #555;
         padding: 0px 0px 0px 0px;
         background: #FFFFFF;
         margin-bottom: 0px;
