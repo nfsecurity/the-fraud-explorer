@@ -462,6 +462,7 @@ else $totalSystemWords= "0";
                         $countOpportunity = $userDomain['opportunity'];
                         $countRationalization = $userDomain['rationalization'];
                         $score = $userDomain['score'];
+                        $endpointId = $endPoint[0]."@".$userDomain['domain'];
                             
                         if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
                         else $dataRepresentation = "0";
@@ -485,7 +486,7 @@ else $totalSystemWords= "0";
 
                         echo '</td>';
                         echo '<td class="td-phrase">';
-                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 2px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointName).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
+                        echo '<div class="phrase-without-app"><span class="fa fa-chevron-right font-icon-color-gray awfont-padding-right" style="vertical-align: middle;"></span><a style="padding-left: 2px;" class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#">'.strip_tags(substr($wordTyped, 0, 80)).'</a></div>';
                         echo '</td>';
                     
                         echo '<td class="td-vertice td-with-bg">';

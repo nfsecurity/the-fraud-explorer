@@ -50,6 +50,8 @@ $alertType = filter($_GET['pe']);
 $endPoint = filter($_GET['nt']);
 $windowTitle = filter($_GET['le']);
 
+$date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
+
 ?>
 
 <script type="text/javascript">
@@ -139,6 +141,93 @@ $windowTitle = filter($_GET['le']);
         color: #555;
     }
 
+    .container-event-headers
+    {
+        display: block;
+    }
+
+    .container-event-headers::after 
+    {
+        display:block;
+        content:"";
+        clear:both;
+    }
+
+    .align-left-headers
+    {
+        display: inline;
+        text-align: center;
+        background: #f2f2f2;
+        border-radius: 5px;
+        padding: 10px;
+        width: 49.2%;
+        height: 33px;
+        float: left;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .align-right-headers
+    {
+        display: inline;
+        text-align: center;
+        background: #f2f2f2;
+        border-radius: 5px;
+        padding: 10px;
+        width: 49.2%;
+        height: 33px;
+        float: right;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .left-header-title
+    {
+        font-family: 'FFont-Bold', sans-serif; 
+        font-size: 12px;   
+        width: 49.2%;
+        float: left;
+        display: inline;
+        text-align: left;
+    }
+
+    .right-header-title
+    {
+        font-family: 'FFont-Bold', sans-serif; 
+        font-size: 12px;   
+        width: 49.2%;
+        float: right;
+        display: inline;
+        text-align: left;
+    }
+
+    .mightOverflow
+    {
+        margin-left: 6px;
+        width: 243px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tooltip .tooltip-inner 
+    {
+        background-color: #E8E9E8; 
+        color: #666666;
+        padding: 10px;
+        max-width: 250px !important;
+        border: 2px solid #9A9A9A;
+    } 
+
+    .tooltip.top .tooltip-arrow 
+    {
+        border-top-color: #9A9A9A;
+    }
+
+    .tooltip.in
+    {
+        opacity:1 !important;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -159,11 +248,43 @@ $windowTitle = filter($_GET['le']);
 
         $sanitizedPhrases = phraseSanitization($sanitizedPhrases, $notwantedWords);
 
-        /* Session validation */
+    ?>
 
-        echo '<div class="phrase-viewer-resume font-aw-color-phrases" contenteditable=false>';
-        echo 'At <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($alertDate).'</span> the endpoint <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($endPoint).'</span> under <span class="matchedStyle-resume font-aw-color-phrases">'.substr(decRijndael($windowTitle), 0, 60) . ' ...' . '</span> expressed a <span class="matchedStyle-resume font-aw-color-phrases">'.decRijndael($alertType).'</span> behavior as shown below:<br><br>';
-        echo '</div>';
+    <!-- Event headers -->
+
+    <p class="left-header-title">Fraud Triangle Event date</p>
+    <p class="right-header-title">Endpoint triggered the event</p>
+
+    <div class="container-event-headers">
+            
+        <div class="align-left-headers">      
+            <p><?php echo $date; ?></p>      
+        </div>
+  
+        <div class="align-right-headers">
+            <p><?php echo decRijndael($endPoint); ?></p>
+        </div>
+    </div>
+
+    <br>
+
+    <p class="left-header-title">Application where the phrase matches</p>
+    <p class="right-header-title">Fraud Triangle vertice matched</p>
+
+    <div class="container-event-headers">
+            
+        <div class="align-left-headers">      
+            <p class="mightOverflow"><?php echo decRijndael($windowTitle); ?></p>      
+        </div>
+  
+        <div class="align-right-headers">
+            <p><?php echo decRijndael($alertType); ?></p>
+        </div>
+    </div>
+
+    <br>
+
+    <?php
 
         if($session->username == "admin")
         { 
@@ -263,5 +384,29 @@ foreach ($phrasesMatched as $key => $value)
 }
 
 ?>
+
+</script>
+
+<!-- Overflow tooltip -->
+
+<script>
+
+$.fn.tooltipOnOverflow = function(options) {
+	$(this).on("mouseenter", function() {
+  	if (this.offsetWidth < this.scrollWidth) {
+    	options = options || { placement: "auto"}
+    	options.title = $(this).text();
+      $(this).tooltip(options);
+      $(this).tooltip("show");
+    } else {
+      if ($(this).data("bs.tooltip")) {
+        $tooltip.tooltip("hide");
+        $tooltip.removeData("bs.tooltip");
+      }
+    }
+  });
+};
+
+$('.mightOverflow').tooltipOnOverflow();
 
 </script>
