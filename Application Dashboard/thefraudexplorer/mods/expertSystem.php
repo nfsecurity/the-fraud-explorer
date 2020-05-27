@@ -237,6 +237,11 @@ include "../lbs/elasticsearch.php";
         color: white !important;
     }
 
+    .fa-custom-size
+    {
+        font-size: 15px;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -366,7 +371,7 @@ include "../lbs/elasticsearch.php";
                     echo '<td class="table-td-expert"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$timeDate.'</td>';
                     echo '<td class="table-td-expert-app"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$application.'</td>';
                     echo '<td class="table-td-expert-why">'.$row_a['reason'].'</td>';
-                    echo '<td class="table-td-expert-view"><a id="viewAlert" href="#" onclick="showAlert(this.id, \''.$row_a['alertid'].'\')"><span class="fa fa-diamond fa-lg font-icon-color-green"></span></a></td>';
+                    echo '<td class="table-td-expert-view"><a id="viewAlert" href="#" onclick="showAlert(this.id, \''.$row_a['alertid'].'\')"><span class="fa fa-file-text-o fa-custom-size font-icon-color-green"></span></a></td>';
                     echo '</tr>';
                 }
                 while ($row_a = mysqli_fetch_array($result_a));

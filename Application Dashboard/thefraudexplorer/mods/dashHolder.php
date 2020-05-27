@@ -117,8 +117,8 @@ else $totalSystemWords= "0";
 
                     <?php
 
-                    if ($session->username != "admin") echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">wfw</div><span class="fa fa-list-ol font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>';
-                    else echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">wfw</div><span class="fa fa-list-ol font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>';
+                    if ($session->username != "admin") echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">wfw</div><span class="fa fa-plus font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>';
+                    else echo '<span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">wfw</div><span class="fa fa-plus font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>';
                     
                     ?>
 
@@ -177,7 +177,7 @@ else $totalSystemWords= "0";
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai"><div class="left-menu-button"><div class="menu-title">int</div><span class="fa fa-drupal font-icon-color-gray" style="font-size: 19px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai"><div class="left-menu-button"><div class="menu-title">int</div><span class="fa fa-percent font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>

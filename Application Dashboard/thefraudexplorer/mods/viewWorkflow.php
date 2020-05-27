@@ -93,8 +93,8 @@ $workflowName = filter(decRijndael($_GET['ed']));
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background: white;
-        min-width: 110px;
-        width: 110px;
+        min-width: 140px;
+        width: 140px;
         text-align: left;
         padding: 0px 0px 0px 0px;
         height: 45px;
@@ -123,8 +123,8 @@ $workflowName = filter(decRijndael($_GET['ed']));
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background: white;
-        min-width: 292px;
-        width: 292px;
+        min-width: 262px;
+        width: 262px;
         text-align: left;
         padding: 0px 0px 0px 7px;
         height: 45px;
@@ -187,8 +187,8 @@ $workflowName = filter(decRijndael($_GET['ed']));
     .table-td-workflow-application
     {
         border: 0px solid gray;
-        width: 292px;
-        max-width: 292px;
+        width: 262px;
+        max-width: 262px;
         height: 30px;
         min-height: 30px;
         padding: 0px 5px 0px 5px;
@@ -214,12 +214,12 @@ $workflowName = filter(decRijndael($_GET['ed']));
     .table-td-workflow-eventtime
     {
         border: 0px solid gray;
-        width: 110px;
-        min-width: 110px;
+        width: 140px;
+        min-width: 140px;
         height: 30px;
         min-height: 30px;
-        padding: 0px 0px 0px 0px;
-        text-align: center;
+        padding: 0px 0px 0px 5px;
+        text-align: left;
         border-right: 0px solid white;
         font-family: 'FFont', sans-serif; font-size: 10px;
     }
@@ -246,6 +246,11 @@ $workflowName = filter(decRijndael($_GET['ed']));
     .fa-padding 
     { 
         padding-right: 5px; 
+    }
+
+    .fa-custom-size
+    {
+        font-size: 15px;
     }
 
 </style>
@@ -299,15 +304,18 @@ $workflowName = filter(decRijndael($_GET['ed']));
                         $alertDocument = getAlertIdData($alert, $ESalerterIndex, "AlertEvent");
                         $datetime = $alertDocument['hits']['hits'][0]['_source']['eventTime'];
                         preg_match('/(.*) (.*),/', $datetime, $eventTime);
+
+                        $dateOne = date('M d, Y', strtotime($eventTime[1]));
+
                         $agent = $alertDocument['hits']['hits'][0]['_source']['agentId'];
                         preg_match('/([a-z0-9]*)_/', $agent, $endpoint);
                         $application = decRijndael($alertDocument['hits']['hits'][0]['_source']['windowTitle']);
 
                         echo '<tr class="table-tr-workflow">';
-                        echo '<td class="table-td-workflow-eventtime" style="border-right: 2px solid white;">'.$eventTime[1] . " ". $eventTime[2].'</td>';
+                        echo '<td class="table-td-workflow-eventtime" style="border-right: 2px solid white;">&nbsp;<span class="fa fa-calendar font-icon-gray fa-padding"></span>'.$dateOne . ", ". $eventTime[2].'</td>';
                         echo '<td class="table-td-workflow-endpoint"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$endpoint[1].'</td>';
                         echo '<td class="table-td-workflow-application"><span class="fa fa-window-maximize font-icon-gray fa-padding"></span>'.$application.'</td>';
-                        echo '<td class="table-td-workflow-view"><a id="viewAlert" href="#" onclick="showAlert(this.id, \''.$alert.'\')"><span class="fa fa-diamond fa-lg '.$coloredClass.'"></span></a></td>';
+                        echo '<td class="table-td-workflow-view"><a id="viewAlert" href="#" onclick="showAlert(this.id, \''.$alert.'\')"><span class="fa fa-file-text-o fa-custom-size '.$coloredClass.'"></span></a></td>';
                         echo '</tr>';
                     }
                     $agrupation++;

@@ -1055,7 +1055,7 @@ a.welcome
     filter: alpha(opacity=0);
 }
 
-.fa-list-ol:hover, .fa-file-text-o:hover, .fa-user-plus:hover, .fa-book:hover, .fa-language:hover, .fa-toggle-on:hover, .fa-table:hover, .fa-sitemap:hover, .fa-drupal:hover, .fa-database:hover, .fa-wpforms:hover
+.fa-plus:hover, .fa-file-text-o:hover, .fa-user-plus:hover, .fa-book:hover, .fa-language:hover, .fa-toggle-on:hover, .fa-table:hover, .fa-sitemap:hover, .fa-percent:hover, .fa-database:hover, .fa-wpforms:hover
 {
     color:#999999 !important;
 }
