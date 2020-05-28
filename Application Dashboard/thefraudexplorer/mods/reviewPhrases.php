@@ -35,25 +35,84 @@ include "../lbs/cryptography.php";
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
-if (isset($_POST['reviewPhrasesTextArea']))
+$documentId = filter($_GET['id']);
+$indexId = filter(decRijndael($_GET['ex']));
+$type = "AlertEvent";
+
+if (!empty($_POST['review-save']))
 {
-    $textArea = encRijndael(filter_var($_POST['reviewPhrasesTextArea'], FILTER_SANITIZE_STRING));
+    if (isset($_POST['reviewPhrasesTextArea']))
+    {
+        $textArea = encRijndael(filter_var($_POST['reviewPhrasesTextArea'], FILTER_SANITIZE_STRING));
 
-    if (isset($_GET['id'])) $documentId = filter($_GET['id']);
-    if (isset($_GET['ex'])) $indexId = filter(decRijndael($_GET['ex']));
+        $urlReview = "http://localhost:9200/".$indexId."/AlertEvent/".$documentId."/_update?pretty&pretty";
+        $params = '{ "doc" : { "stringHistory" : "'.$textArea.'" } }';
 
-    $urlReview = "http://localhost:9200/".$indexId."/AlertEvent/".$documentId."/_update?pretty&pretty";
-    $params = '{ "doc" : { "stringHistory" : "'.$textArea.'" } }';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $urlReview);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $resultReview = curl_exec($ch);
+        curl_close($ch);
+    }
+}
+else if (!empty($_POST['delete-event']))
+{
+    /* Delete alert from t_inferences table */
+
+    $queryDeleteAIAlert = "DELETE FROM t_inferences WHERE alertid='".$documentId."'";        
+    $resultQuery = mysqli_query($connection, $queryDeleteAIAlert);
+
+    /* Delete alert from t_wtriggers table */
+
+    $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$documentId."%'";        
+    $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
+
+    /* Delete endpoint elasticsearch documents */
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://localhost:9200/".$indexId."/".$type."/".$documentId); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_exec($ch); 
+    curl_close($ch); 
+}
+
+else if (!empty($_POST['relevancy']))
+{
+    $urlEventValue="http://localhost:9200/".$indexId."/".$type."/".$documentId;
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $urlEventValue);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $resultValues = curl_exec($ch);
+    curl_close($ch);
+
+    $jsonResultValue = json_decode($resultValues);
+    $falsePositiveValue = $jsonResultValue->_source->falsePositive;
+    $mark = 0;
+
+    if ($falsePositiveValue == "0") $mark = 1;
+
+    /* Toggle falsePositive value */
+
+    $urlEvents="http://localhost:9200/".$indexId."/".$type."/".$documentId."/_update?pretty&pretty";
+    $params = '{ "doc" : { "falsePositive" : "'.$mark.'" } } }';
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $urlReview);
+    curl_setopt($ch, CURLOPT_URL,$urlEvents);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $resultReview = curl_exec($ch);
+    $resultEvents = curl_exec($ch);
     curl_close($ch);
-}   
+}
     
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 include "../lbs/closeDBconn.php";

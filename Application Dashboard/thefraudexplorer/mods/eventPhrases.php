@@ -360,12 +360,29 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
         
             <?php
         
-            if($session->username == "admin") echo '<input type="submit" class="btn btn-danger" value="Review & Save" style="outline: 0 !important;">';
-        
+            if($session->username == "admin") echo '<input type="submit" name="review-save" class="btn btn-default" value="Review & save" style="outline: 0 !important;">';
+                               
+            /* Check relevancy status */
+
+            $urlEventValue="http://localhost:9200/".decRijndael($indexId)."/AlertEvent/".$documentId;
+    
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $urlEventValue);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resultValues = curl_exec($ch);
+            curl_close($ch);
+
+            $jsonResultValue = json_decode($resultValues);
+            $falsePositiveValue = $jsonResultValue->_source->falsePositive;
+
+            if ($falsePositiveValue == "0") echo '<input type="submit" name="relevancy" class="btn btn-default" style="outline: 0 !important;" value="Not relevant">';
+            else echo '<input type="submit" name="relevancy" class="btn btn-default" style="outline: 0 !important;" value="Set relevant">';
+
             ?>
-            
-            <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Accept</button>
+
+            <input type="submit" name="delete-event" class="btn btn-danger" style="outline: 0 !important;" value="Delete event">
         </form>
     </div>
    
