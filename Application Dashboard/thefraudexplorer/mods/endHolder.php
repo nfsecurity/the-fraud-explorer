@@ -24,7 +24,7 @@ if(!$session->logged_in)
     exit;
 }
 
-/* Prevent direct access to this URL */ 
+/* Prevent direct access to this URL */
 
 if(!isset($_SERVER['HTTP_REFERER']))
 {
@@ -39,14 +39,6 @@ include "../lbs/elasticsearch.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
-/* SQL Queries */
-
-$queryConfig = "SELECT * FROM t_config";
-$queryEndpointsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
-$queryEndpointsSQL_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
-$queryEndpointsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
-$queryEndpointsSQLDomain_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
-
 /* Local styles */
 
 echo '<style>';
@@ -54,6 +46,14 @@ echo '.font-icon-color { color: #B4BCC2; }';
 echo '.font-icon-color-green { color: #1E9141; }';
 echo '.fa-padding { padding-right: 5px; }';
 echo '</style>';
+
+/* SQL Queries */
+
+$queryConfig = "SELECT * FROM t_config";
+$queryEndpointsSQL = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
+$queryEndpointsSQL_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS agents GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
+$queryEndpointsSQLDomain = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
+$queryEndpointsSQLDomain_wOSampler = "SELECT agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, SUM(totalwords) AS totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, COUNT(agent) AS sessions FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, heartbeat, NOW(), system, version, status, domain, ipaddress, name, ruleset, gender, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE domain='".$session->domain."' GROUP BY agent ORDER BY SUM(agents.pressure+agents.opportunity+agents.rationalization)/3 DESC";
 
 /* Elasticsearch querys for fraud triangle counts and score */
 
@@ -200,144 +200,35 @@ $resultSize = json_decode($resultSize, true);
 $dataSize = $resultSize['_all']['primaries']['store']['size_in_bytes']/1024/1024;
 
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
-else $totalSystemWords= "0"; 
+else $totalSystemWords= "0";
 
-/* Main data */
+?>
 
-echo '<table id="endpointsTable" class="tablesorter">';
-echo '<thead><tr>';
-echo '<th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>';
-echo '<th class="totalwordsth"></th>';
-echo '<th class="endpointth" id="elm-endpoints-dashboard">AUDIENCE UNDER FRAUD ANALYTICS</th>';
-echo '<th class="compth" id="elm-ruleset-dashboard">RULE SET</th>';
-echo '<th class="verth" id="elm-version-dashboard">VERSION</th>';
-echo '<th class="stateth" id="elm-status-dashboard">STT</th>';
-echo '<th class="lastth" id="elm-last-dashboard">LAST</th>';
-echo '<th class="countpth">P</th><th class="countoth" id="elm-triangle-dashboard">O</th><th class="countrth">R</th>';
-echo '<th class="countcth" id="elm-level-dashboard">L</th>';
-echo '<th class="scoreth" id="elm-score-dashboard">SCORE</th>';
-echo '<th class="specialth" id="elm-delete-dashboard">DEL</th>';
-echo '<th class="specialth" id="elm-set-dashboard">SET</th></tr>';
-echo '</thead><tbody>';
+<table id="endpointsTable" class="tablesorter">
+    <thead>
+        <tr>
+            <th class="detailsth" id="elm-details-dashboard"><span class="fa fa-list fa-lg"></span></th>
+            <th class="endpointth" id="elm-endpoints-dashboard">AUDIENCE UNDER FRAUD ANALYTICS</th>
+            <th class="totalwordsth"></th>
+            <th class="compth" id="elm-ruleset-dashboard">RULE SET</th>
+            <th class="verth" id="elm-version-dashboard">VERSION</th>
+            <th class="stateth" id="elm-status-dashboard">STT</th>
+            <th class="lastth" id="elm-last-dashboard">LAST</th>
+            <th class="countpth">P</th>
+            <th class="countoth" id="elm-triangle-dashboard">O</th>
+            <th class="countrth">R</th>
+            <th class="countcth" id="elm-level-dashboard">L</th>
+            <th class="scoreth" id="elm-score-dashboard">SCORE</th>
+            <th class="specialth" id="elm-delete-dashboard">DEL</th>
+            <th class="specialth" id="elm-set-dashboard">SET</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
-if ($row_a = mysqli_fetch_array($result_a))
-{
-    do
-    {
-        echo '<tr>';
+<?php
 
-        $endpointEnc = encRijndael($row_a["agent"]);
-        $domain_enc = encRijndael($row_a["domain"]);
-
-        /* Enpoint Details */
-
-        echo '<td class="detailstd">';
-        echo '<a class="endpoint-card-viewer" href="mods/endpointCard?id='.encRijndael($row_a["agent"]).'&in='.encRijndael($row_a["domain"]).'" data-toggle="modal" data-target="#endpoint-card" href="#"><img src="images/card.svg" class="card-settings"></a>&nbsp;&nbsp;';
-        echo '</td>';
-
-        /* Endpoint data retrieval */
-
-        if($row_a['rationalization'] == NULL) $countRationalization = 0;
-        else $countRationalization = $row_a['rationalization'];
-
-        if($row_a['opportunity'] == NULL) $countOpportunity = 0;
-        else $countOpportunity = $row_a['opportunity'];
-
-        if($row_a['pressure'] == NULL) $countPressure = 0;
-        else $countPressure = $row_a['pressure'];
-
-        if($row_a['totalwords'] == NULL) $totalWordHits = 0;
-        else $totalWordHits = $row_a['totalwords'];
-
-        $score=($countPressure+$countOpportunity+$countRationalization)/3;
-        if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
-        else $dataRepresentation = "0";
-
-        /* Total words (hidden) sorting purpose */
-
-        echo '<td class="totalwordstd">'.$totalWordHits.'</td>';
-
-        /* Endpoint name */
-
-        $endpointName = $row_a['agent']."@".$row_a['domain'];
-
-        if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
-        {
-            echo '<td class="endpointtd">';
-            if ($row_a["gender"] == "male") endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-        }
-        else
-        {
-            $endpointName = $row_a['name']."@".$row_a['domain'];
-            echo '<td class="endpointtd">';
-            if ($row_a["gender"] == "male") endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else echo endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-        }
-
-        /* Company, department or group */
-
-        if ($row_a["ruleset"] == NULL || $row_a["ruleset"] == "NYET") echo '<td class="comptd"><center><div class="ruleset-button"><center><div class="rule-title">ruleset</div></center><center>BASELINE</center></div></center></td>';
-        else echo '<td class="comptd"><center><div class="ruleset-button"><center><div class="rule-title">ruleset</div></center><center>' . $row_a["ruleset"] . "</center></div></center></td>";
-
-        /* Endpoint software version */
-
-        echo '<td class="vertd"><span class="fa fa-codepen font-icon-color fa-padding"></span>' .$row_a["version"] .'</td>';
-
-        /* Endpoint status */
-
-        if($row_a["status"] == "active")
-        {
-            echo '<td class="statetd"><span class="fa fa-power-off fa-lg font-icon-color-green"></span></td>';
-        }
-        else
-        {
-            echo '<td class="statetd"><span class="fa fa-power-off fa-lg"></span></td>';
-        }
-
-        /* Last connection to the server */
-
-        echo '<td class="lasttd">';
-        echo '<span class="hidden-date">'.date('Y/m/d H:i',strtotime($row_a["heartbeat"])).'</span>';
-        echo '<center><div class="date-container">'.date('H:i',strtotime($row_a["heartbeat"])).'<br>'.'<div class="year-container">'.date('Y/m/d',strtotime($row_a["heartbeat"])).'</div></div></center>';
-        echo '</td>';
-        
-        echo '<div id="fraudCounterHolder"></div>';
-
-        /* Fraud triangle counts and score */
-
-        $scoreQuery = mysqli_query($connection, $queryConfig);
-        $scoreResult = mysqli_fetch_array($scoreQuery);
-
-        $level = "low";
-        if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']) $level="low";
-        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']) $level="med";
-        if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']) $level="high";
-        if ($score >= $scoreResult['score_ts_critic_from']) $level="critic";
-
-        echo '<td class="countptd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countPressure.'</td>';
-        echo '<td class="countotd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity.'</td>';
-        echo '<td class="countrtd"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countRationalization.'</td>';
-        echo '<td class="countctd"><center><div class="score-container-underline">'.$level.'</div></center></td>';
-
-        if ($score != 0) echo '<td class="scoretd"><a href=eventData?nt='.$endpointEnc.'>'.round($score, 1).'</a></td>';
-        else echo '<td class="scoretd">'.round($score, 1).'</td>';
-
-        /* Option for delete the endpoint */
-
-        echo '<td class="specialtd"><a class="delete-endpoint" data-href="mods/deleteEndpoint?nt='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-delete" href="#"><img src="images/delete-button.svg" onmouseover="this.src=\'images/delete-button-mo.svg\'" onmouseout="this.src=\'images/delete-button.svg\'" alt="" title=""/></a></td>';	
-
-        /* Endpoint setup */
-
-        echo '<td class="specialtd"><a class="setup-endpoint" href="mods/setupEndpoint?nt='.$endpointEnc.'" data-toggle="modal" data-target="#confirm-setup" href="#"><img src="images/setup.svg" onmouseover="this.src=\'images/setup-mo.svg\'" onmouseout="this.src=\'images/setup.svg\'" alt="" title=""/></a></td>';
-        echo '</tr>';
-    }
-    while ($row_a = mysqli_fetch_array($result_a));
-
-    echo '</tbody></table>'; 
-    
     /* Button to switch phrase collection */
     
     $xml = simplexml_load_file('../update.xml');
@@ -348,7 +239,6 @@ if ($row_a = mysqli_fetch_array($result_a))
     
     if ($session->username == "admin") echo '&nbsp;<a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection">Press to switch between enabled and disabled phrase collection on endpoints, this feature applies at the next reboot of the user machines. The current status of phrase collection is: '.$phraseStatus.'</a>';
     else echo '&nbsp;<a href="#" class="enable-analytics-button" id="elm-switch-phrase-collection">Press to switch between enabled and disabled phrase collection on endpoints, this feature applies at the next reboot of the user machines. The current status of phrase collection is: '.$phraseStatus.'</a>';
-}
 
 ?>
 
@@ -387,7 +277,6 @@ if ($row_a = mysqli_fetch_array($result_a))
                         <option value="50"> Show by 50 endpoints</option>
                         <option value="100"> Show by 100 endpoints</option>
                         <option value="500"> Show by 500 endpoints</option>
-                        <option value="all"> Show all Endpoints</option>
                     </select>
                     
                     <?php 
@@ -465,32 +354,151 @@ if ($row_a = mysqli_fetch_array($result_a))
     });
 </script>
 
-<!-- Tooltipster -->
+<!-- Tablesorter script -->
 
 <script>
-    $(document).ready(function(){
-        $('.tooltip-custom').tooltipster({
-            theme: 'tooltipster-custom',
-            contentAsHTML: true,
-            side: 'right',
-            delay: 0,
-            animationDuration: 0
-        });
+
+$(function() {
+$("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
+    $("#endpointsTable")
+    .tablesorter({
+        sortLocaleCompare: true,
+        widgets: ['filter'],
+        widgetOptions : 
+        {
+            filter_external: '.search_text',
+            filter_columnFilters : false,
+            output_separator: ',',
+            output_ignoreColumns : [ 0, 5, 12, 13, 14 ],
+            output_dataAttrib: 'data-name',
+            output_headerRows: false,
+            output_delivery: 'download',
+            output_saveRows: 'all',
+            output_replaceQuote: '\u201c;',
+            output_includeHTML: false,
+            output_trimSpaces: true,
+            output_wrapQuotes: false,
+            output_saveFileName: 'endpointsList.csv',
+            output_callback: function (data) {
+                return true;
+            },
+            output_callbackJSON: function ($cell, txt, cellIndex) {
+                return txt + '(' + (cellIndex + col) + ')';
+            }
+        },
+        headers:
+        {
+            0:
+            {
+                sorter: false
+            },
+            4:
+            {
+                sorter: false
+            },
+            5:
+            {
+                sorter: false
+            },
+            10:
+            {
+                sorter: false
+            },
+            11:
+            {
+                sorter: false
+            },
+            12:
+            {
+                sorter: false
+            },
+            13:
+            {
+                sorter: false
+            },
+            14:
+            {
+                sorter: false
+            },
+        },
+    })
+
+    .tablesorterPager({
+        container: $(".pager"),
+        ajaxUrl : 'helpers/endpointsProcessing.php?page={page+1}&size={size}&{filterList:filter}&{sortList:col}&totalSystemWords=<?php echo $totalSystemWords; ?>',
+        ajaxError: null,
+        ajaxObject: {
+        type: 'GET',
+        dataType: 'json'
+        },
+        ajaxProcessing: function(data) {
+        if (data && data.hasOwnProperty('rows')) {
+            var indx, r, row, c, d = data.rows,
+            total = data.total_rows,
+            headers = data.headers,
+            headerXref = headers.join(',').split(','),
+            rows = [],
+            len = d.length;
+            for ( r=0; r < len; r++ ) {
+            row = []; 
+            for ( c in d[r] ) {
+                if (typeof(c) === "string") {
+                indx = $.inArray( c, headerXref );
+                if (indx >= 0) {
+                    row[indx] = d[r][c];
+                }
+                }
+            }
+            rows.push(row);
+            }
+            return [ total, rows, headers ];
+        }
+        },
+        processAjaxOnInit: true,
+        output: '{startRow} to {endRow} ({totalRows})',
+        updateArrows: true,
+        page: 0,
+        size: 20,
+        savePages: true,
+        storageKey: 'tablesorter-pager',
+        pageReset: 0,
+        fixedHeight: false,
+        removeRows: false,
+        countChildRows: false,
+    }).bind("sortEnd pagerChange pagerComplete pagerInitialized pageMoved",function() {
+            $('td:nth-child(1)').addClass("detailstd");
+            $('td:nth-child(2)').addClass("endpointtd");
+            $('td:nth-child(3)').addClass("totalwordstd");
+            $('td:nth-child(4)').addClass("comptd");
+            $('td:nth-child(5)').addClass("vertd");
+            $('td:nth-child(6)').addClass("statetd");
+            $('td:nth-child(7)').addClass("lasttd");
+            $('td:nth-child(8)').addClass("countptd");
+            $('td:nth-child(9)').addClass("countotd");
+            $('td:nth-child(10)').addClass("countrtd");
+            $('td:nth-child(11)').addClass("countctd");
+            $('td:nth-child(12)').addClass("scoretd");
+            $('td:nth-child(13)').addClass("specialtd");
+            $('td:nth-child(14)').addClass("specialtd");
+
+            /* Tooltipster callback */
+
+            $('.tooltip-custom').tooltipster({
+                    theme: 'tooltipster-custom',
+                    contentAsHTML: true,
+                    side: 'right',
+                    delay: 0,
+                    animationDuration: 0
+            });
+
+            /* Nice selects callback */
+
+            $(document).ready(function() {
+                $('select').niceSelect();
+            });
+
     });
-</script>
-
-<!-- Nice selects -->
-
-<script>
-    $(document).ready(function() {
-        $('select').niceSelect();
     });
-</script>
+});
 
-<!-- Call tablesorter when page is loaded -->
-
-<script>
-    $(document).ready(function() {
-        applyTablesorter();
-    });
 </script>

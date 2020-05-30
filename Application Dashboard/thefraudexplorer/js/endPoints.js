@@ -13,12 +13,6 @@
  * Description: Code for AJAX
  */
 
- /* Code for html top menu include */
-
-$(function(){
-    $("#includedTopMenu").load("helpers/topMenu.php?or=endpoints");
-});
-
 /* Code for html footer include */
 
 $(function(){

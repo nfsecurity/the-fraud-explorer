@@ -66,6 +66,7 @@ include "../lbs/elasticsearch.php";
         border-spacing: 0px;
         border-collapse: collapse;
         border-radius: 5px !important;
+        background-color: white !important;
     }
 
     .table-thead-logging
@@ -78,6 +79,7 @@ include "../lbs/elasticsearch.php";
         border-right: 0px solid gray;
         width: 100%;
         height: 45px;
+        background-color: white !important;
     }
 
     .table-th-logging
@@ -120,6 +122,7 @@ include "../lbs/elasticsearch.php";
         overflow-y: scroll;
         border-radius: 5px;
         font-size: 11px;
+        background-color: white !important;
     }
 
     .table-tr-logging
@@ -134,6 +137,11 @@ include "../lbs/elasticsearch.php";
     .table-tbody-logging tr:nth-child(odd)
     {
         background-color: #EDEDED !important;
+    }
+
+    .table-tbody-logging tr:nth-child(even)
+    {
+        background-color: white !important;
     }
 
     .table-td-logging

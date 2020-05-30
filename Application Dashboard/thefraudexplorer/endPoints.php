@@ -29,221 +29,223 @@ $_SESSION['instance'] = "endPoints";
 ?>
 
 <html>
-    <head>
-        <title>Endpoints &raquo; The Fraud Explorer</title>
-        <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <!-- JQuery 11 inclusion -->
+<head>
+    <title>Endpoints &raquo; The Fraud Explorer</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <script type="text/javascript" src="js/jquery.min.js"></script>
+    <!-- JQuery 11 inclusion -->
 
-        <!-- JS functions -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
 
-        <script type="text/javascript" src="js/endPoints.js"></script>
+    <!-- JS functions -->
 
-        <!-- Styles and JS for modal dialogs -->
+    <script type="text/javascript" src="js/endPoints.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-        <link href="css/bootstrap-tourist.css" rel="stylesheet">
-        <script src="js/bootstrap.js"></script>
-        <script src="js/bootstrap-tourist.js"></script>
+    <!-- Styles and JS for modal dialogs -->
 
-        <!-- JS/CSS for Tooltip -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link href="css/bootstrap-tourist.css" rel="stylesheet">
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-tourist.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
-        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipsterCustom.css">
-        <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
+    <!-- JS/CSS for Tooltip -->
 
-        <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
+    <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipsterCustom.css">
+    <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/endPoints.css?<?php echo filemtime('css/endPoints.css') ?>" media="screen" />
+    <!-- CSS -->
 
-        <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="css/endPoints.css?<?php echo filemtime('css/endPoints.css') ?>" media="screen" />
 
-        <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <!-- Font Awesome -->
 
-        <!-- JQuery Table -->
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 
-        <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
-        <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
-        <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
-        <script type="text/javascript" src="js/widgets/widget-output.js"></script>
+    <!-- JQuery Table -->
 
-        <!-- Footer -->
+    <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
+    <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
+    <script type="text/javascript" src="js/widgets/widget-output.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/footer.css?<?php echo filemtime('css/footer.css') ?>" />
+    <!-- Footer -->
 
-        <!-- JQuery nice select -->
+    <link rel="stylesheet" type="text/css" href="css/footer.css?<?php echo filemtime('css/footer.css') ?>" />
 
-        <script src="js/jquery.nice-select.js"></script>
-        <link rel="stylesheet" href="css/nice-select.css">
+    <!-- JQuery nice select -->
+      
+    <script src="js/jquery.nice-select.js"></script>
+    <link rel="stylesheet" href="css/nice-select.css">
 
-        <style>
+    <style>
 
-            .font-icon-color-white 
-            { 
-                color: #FFFFFF; 
-            }
+        .font-icon-color-white 
+        { 
+            color: #FFFFFF; 
+        }
 
-            .btn-success, .btn-success:active, .btn-success:visited 
-            {
-                background-color: #4B906F !important;
-                border: 1px solid #4B906F !important;
-            }
+        .btn-success, .btn-success:active, .btn-success:visited 
+        {
+            background-color: #4B906F !important;
+            border: 1px solid #4B906F !important;
+        }
 
-            .btn-success:hover
-            {
-                background-color: #57a881 !important;
-                border: 1px solid #57a881 !important;
-            }
+        .btn-success:hover
+        {
+            background-color: #57a881 !important;
+            border: 1px solid #57a881 !important;
+        } 
 
-        </style>
-    </head>
-    <body>
-        <div align="center" style="height:100%;">
+    </style>
+</head>
 
-            <!-- Top main menu -->
+<body>
+    <div align="center" style="height:100%;">
 
-            <div id="includedTopMenu"></div>
+    <!-- Top main menu -->
 
-            <!-- Footer inclusion -->
+    <div id="includedTopMenu"></div>
 
-            <div id="includedFooterContent"></div>
+    <!-- Footer inclusion -->
 
-            <?php
+    <div id="includedFooterContent"></div>
 
-            /* Code for paint endpoint table via AJAX */
+    <?php
 
-            echo '<div id="tableHolder" class="table-holder"></div>';
+        /* Code for paint endpoint table via AJAX */
 
-            ?>
+        echo '<div id="tableHolder" class="table-holder"></div>';
+
+    ?>
+     </div>
+
+    <!-- Modal for deletion -->
+
+    <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
+                    </div>
+
+                    <div class="modal-body" style="margin: 0px 10px 15px 10px;">
+                        <p style="text-align:left; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                        <p class="debug-url window-debug"></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
+                        <a class="btn btn-danger delete" style="outline: 0 !important;">Delete</a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Modal for deletion -->
+    <!-- Modal for endpoint setup -->
 
-        <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p class="debug-url window-debug"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Build Endpoint -->
+
+    <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p class="debug-url window-debug"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Endpoint Card -->
+
+    <center>
+        <div class="modal" id="endpoint-card" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    <!-- Modal for Business Units Segmentation -->
+
+    <center>
+        <div class="modal" id="business-units" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="debug-url window-debug"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+        
+    <!-- Modal for switch phrases collection -->
+
+    <center>
+        <div class="modal" id="switch-phrase-collection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title window-title" id="myModalLabel">Confirm Delete</h4>
+                            <h4 class="modal-title window-title" id="myModalLabel">Phrase collection switching</h4>
                         </div>
 
                         <div class="modal-body" style="margin: 0px 10px 15px 10px;">
-                            <p style="text-align:left; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                            <p style="text-align:justify; font-size: 12px;"><br>You are about to switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server, and The Fraud Explorer can't do the work. You can switch the times you want. Do you want to proceed ?</p>
                             <p class="debug-url window-debug"></p>
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Cancel</button>
-                            <a class="btn btn-danger delete" style="outline: 0 !important;">Delete</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">I'm not sure</button>
 
-        <!-- Modal for endpoint setup -->
-
-        <div class="modal" id="confirm-setup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p class="debug-url window-debug"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal for Build Endpoint -->
-
-        <div class="modal" id="build-endpoint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p class="debug-url window-debug"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal for Endpoint Card -->
-
-        <center>
-            <div class="modal" id="endpoint-card" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <p class="debug-url window-debug"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </center>
-
-         <!-- Modal for Business Units Segmentation -->
-
-         <center>
-            <div class="modal" id="business-units" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <p class="debug-url window-debug"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </center>
-        
-        <!-- Modal for switch phrases collection -->
-
-        <center>
-            <div class="modal" id="switch-phrase-collection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title window-title" id="myModalLabel">Phrase collection switching</h4>
-                            </div>
-
-                            <div class="modal-body" style="margin: 0px 10px 15px 10px;">
-                                <p style="text-align:justify; font-size: 12px;"><br>You are about to switch between enable/disable phrase collection. This means that depends of your selection, the endpoints will not send data (phrases that are being typing in applications) to the server, and The Fraud Explorer can't do the work. You can switch the times you want. Do you want to proceed ?</p>
-                                <p class="debug-url window-debug"></p>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">I'm not sure</button>
-
-                                <?php
+                            <?php
     
-                                    include "lbs/cryptography.php";
+                                include "lbs/cryptography.php";
 
-                                    $xml = simplexml_load_file('update.xml');
-                                    $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
+                                $xml = simplexml_load_file('update.xml');
+                                $phraseCollectionStatus = decRijndael($xml->token[0]['arg']);
         
-                                    if ($phraseCollectionStatus == "textAnalytics 1") echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Disable collection</a>';
-                                    else echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Enable collection</a>';
+                                if ($phraseCollectionStatus == "textAnalytics 1") echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Disable collection</a>';
+                                else echo '<a class="btn btn-success switch-phrase-collection-button" style="outline: 0 !important;">Enable collection</a>';
                                 
-                                ?>
+                            ?>
 
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </center>
-    </body>
+        </div>
+    </center>
+</body>
 </html>
 
 <!-- Take tour -->
