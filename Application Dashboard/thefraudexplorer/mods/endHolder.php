@@ -277,16 +277,10 @@ else $totalSystemWords= "0";
                         <option value="50"> Show by 50 endpoints</option>
                         <option value="100"> Show by 100 endpoints</option>
                         <option value="500"> Show by 500 endpoints</option>
-                    </select>
-                    
-                    <?php 
-                    
-                        echo '&nbsp;<button type="button" class="download-csv" id="elm-csv">Export & Download</button>&nbsp;';
-                        echo '<a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint">Build endpoint</a>';
-                    ?>
-                    
+                    </select>    
                 </form>
-                                     
+                              
+                <a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint">Build endpoint</a>
                 <a href="mods/businessUnits" data-toggle="modal" class="departments-load" data-backdrop="static" data-keyboard="false" data-target="#business-units" href="#" id="elm-business-units">Business units</a>     
                         
             </div>
@@ -465,7 +459,7 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
         fixedHeight: false,
         removeRows: false,
         countChildRows: false,
-    }).bind("sortEnd pagerChange pagerComplete pagerInitialized pageMoved",function() {
+    }).bind("pagerComplete",function() {
             $('td:nth-child(1)').addClass("detailstd");
             $('td:nth-child(2)').addClass("endpointtd");
             $('td:nth-child(3)').addClass("totalwordstd");
@@ -496,8 +490,7 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
             $(document).ready(function() {
                 $('select').niceSelect();
             });
-
-    });
+        });
     });
 });
 

@@ -320,11 +320,6 @@ var tour = new Tour({
         title: "Data statistics and pager",
         content: "You can see here some statistics about the amount of data collected. Also, you can do paging between endpoints with the ability to download the entire endpoint list in a CSV format."
     }, {
-        element: "#elm-csv",
-        placement: 'top',
-        title: "Export endpoints",
-        content: "By pressing thus button you can export the endpoint list in a comma separated value (CSV) file. This file is useful when you need to filter and make some reports in an executive manner."
-    }, {
         element: "#elm-build-endpoint",
         placement: 'top',
         title: "Download endpoint",

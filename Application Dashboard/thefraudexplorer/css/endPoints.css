@@ -829,18 +829,6 @@ input[type=checkbox]
     background-color: #e6bf99;
 }
 
-.download-csv
-{
-    cursor: pointer;
-    border-radius: 5px;
-    height: 20px;
-    position: relative;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    outline: 0 !important;
-    color: #808080;
-}
-
 .build-endpoint-button
 {
     cursor: pointer;
@@ -852,6 +840,7 @@ input[type=checkbox]
     background-color: #fff;
     outline: 0 !important;
     color: #808080;
+    display: inline-block;
 }
 
 a.build-endpoint-button:link, a.build-endpoint-button:visited, a.build-endpoint-button:hover, a.build-endpoint-button:active
