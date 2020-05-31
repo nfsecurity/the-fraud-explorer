@@ -398,7 +398,7 @@ else
         if($row_a['totalwords'] == NULL) $totalWordHits = 0;
         else $totalWordHits = $row_a['totalwords'];
 
-        $score=($countPressure+$countOpportunity+$countRationalization)/3;
+        $score = ($countPressure+$countOpportunity+$countRationalization)/3;
 
         if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
         else $dataRepresentation = "0";
@@ -447,10 +447,10 @@ else
         $scoreResult = mysqli_fetch_array($scoreQuery);
         $level = "low";
 
-        if ($score >= $scoreResult['score_ts_low_from'] && $score <= $scoreResult['score_ts_low_to']) $level="low";
-        if ($score >= $scoreResult['score_ts_medium_from'] && $score <= $scoreResult['score_ts_medium_to']) $level="med";
-        if ($score >= $scoreResult['score_ts_high_from'] && $score <= $scoreResult['score_ts_high_to']) $level="high";
-        if ($score >= $scoreResult['score_ts_critic_from']) $level="critic";
+        if (intval($score) >= $scoreResult['score_ts_low_from'] && intval($score) <= $scoreResult['score_ts_low_to']) $level="low";
+        if (intval($score) >= $scoreResult['score_ts_medium_from'] && intval($score) <= $scoreResult['score_ts_medium_to']) $level="med";
+        if (intval($score) >= $scoreResult['score_ts_high_from'] && intval($score) <= $scoreResult['score_ts_high_to']) $level="high";
+        if (intval($score) >= $scoreResult['score_ts_critic_from']) $level="critic";
 
         $pressureColumnData = '<span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countPressure;
         $opportunityColumnData = '<span class="fa fa-bookmark-o font-icon-color fa-padding"></span>'.$countOpportunity;
