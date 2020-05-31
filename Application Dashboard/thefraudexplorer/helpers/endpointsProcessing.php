@@ -214,16 +214,16 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
 
         if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
         {
-            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsightsT("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
         else
         {
             $endpointName = $row_a['name']."@".$row_a['domain'];
-            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsightsT("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
 
         /* Total words hidden */
@@ -407,16 +407,16 @@ else
 
         if ($row_a["name"] == NULL || $row_a["name"] == "NULL")
         {
-            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsightsT("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
         else
         {
             $endpointName = $row_a['name']."@".$row_a['domain'];
-            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsightsT("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-            else $endpointsColumnData = endpointInsightsT("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            if ($row_a["gender"] == "male") $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else if ($row_a["gender"] == "female") $endpointsColumnData = endpointInsights("endPoints", "female", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+            else $endpointsColumnData = endpointInsights("endPoints", "male", $endpointEnc, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
         }
 
         /* Total words hidden */
