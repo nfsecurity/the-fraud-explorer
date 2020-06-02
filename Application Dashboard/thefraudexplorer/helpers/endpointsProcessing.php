@@ -43,6 +43,9 @@ include "../lbs/cryptography.php";
 
 $page = $_GET['page'];
 $size = $_GET['size'];
+
+if ($size == "all") $size = 100000;  
+
 $search = $_GET['filter'];
 $offset = ($page-1) * $size;
 $orderParam = $_GET['col'];

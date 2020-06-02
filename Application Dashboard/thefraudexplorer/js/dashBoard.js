@@ -28,5 +28,5 @@ $(function(){
 /* Code for dashboard module holder */
 
 $(function(){
-    $("#mainDashHolder").html("<div style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: auto; eight: auto; text-align: center;\"><img src=\"../images/ajax-loader.gif\"/><br>Please wait</div>").load("mods/dashHolder.php"); 
+    $("#mainDashHolder").html("<div id=\"wrapper\"><div class=\"spinner\"><div class=\"rect1\" style=\"margin-right: 3px;\"></div><div class=\"rect2\" style=\"margin-right: 3px;\"></div><div class=\"rect3\" style=\"margin-right: 3px;\"></div><div class=\"rect4\" style=\"margin-right: 3px;\"></div><div class=\"rect5\"></div></div></div>").load("mods/dashHolder.php"); 
 });

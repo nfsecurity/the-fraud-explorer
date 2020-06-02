@@ -39,10 +39,6 @@ $_SESSION['instance'] = "endPoints";
 
     <script type="text/javascript" src="js/jquery.min.js"></script>
 
-    <!-- JS functions -->
-
-    <script type="text/javascript" src="js/endPoints.js"></script>
-
     <!-- Styles and JS for modal dialogs -->
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -79,6 +75,10 @@ $_SESSION['instance'] = "endPoints";
       
     <script src="js/jquery.nice-select.js"></script>
     <link rel="stylesheet" href="css/nice-select.css">
+
+    <!-- JS functions -->
+
+    <script type="text/javascript" src="js/endPoints.js"></script>
 
     <style>
 

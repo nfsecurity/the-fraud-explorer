@@ -42,10 +42,6 @@ $_SESSION['rulesetScope'] = "ALL";
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script src="js/jquery.cookie.js" type="text/javascript"></script>
 
-        <!-- JS functions -->
-
-        <script type="text/javascript" src="js/dashBoard.js"></script>
-
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -91,6 +87,10 @@ $_SESSION['rulesetScope'] = "ALL";
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
 
+        <!-- JS functions -->
+
+        <script type="text/javascript" src="js/dashBoard.js"></script>
+
         <style>
 
             .btn-success, .btn-success:active, .btn-success:visited 
@@ -123,7 +123,7 @@ $_SESSION['rulesetScope'] = "ALL";
             
             include "lbs/openDBconn.php";
 
-            echo '<div id="mainDashHolder" class="table-holder"></div>';
+            echo '<div id="mainDashHolder"></div>';
             if (isset($_SESSION['welcome']) && $_SESSION['welcome'] == "enable") echo '<script type="text/javascript"> $(document).ready(function(){$(\'#welcomeScreen\').modal(\'show\');});</script>';
 
             $_SESSION['welcome'] = "disable";

@@ -43,10 +43,6 @@ include "lbs/elasticsearch.php";
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
 
-        <!-- JS functions -->
-
-        <script type="text/javascript" src="js/analyticsData.js"></script>
-
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -71,6 +67,17 @@ include "lbs/elasticsearch.php";
 
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
+        
+        <!-- JQuery Table -->
+
+        <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.pager.js"></script>
+        <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
+        <script type="text/javascript" src="js/widgets/widget-output.js"></script>
+
+        <!-- JS functions -->
+
+        <script type="text/javascript" src="js/analyticsData.js"></script>
 
         <style>
 

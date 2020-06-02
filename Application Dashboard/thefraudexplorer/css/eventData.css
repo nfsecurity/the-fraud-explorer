@@ -23,12 +23,12 @@ dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td 
 {
-    margin:0;
-    padding:0;
-    border:0;
-    outline:0;
-    font-size:100%;
-    background:transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    background: transparent;
 }
 
 ::-webkit-scrollbar 
@@ -60,7 +60,7 @@ body
 {
     margin:0;
     padding:0;
-    font:11px "Verdana", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font: 11px "Verdana", "Helvetica Neue", Arial, Helvetica, sans-serif;
     color: #555;
     background:#f5f5f5 url(../images/simpletable/bg.jpg);
 }
@@ -111,7 +111,7 @@ a:active
 
 .content 
 {
-    width:95%;
+    width: 95%;
 }
 
 .table-holder
@@ -120,17 +120,18 @@ a:active
     bottom: 70px; 
     top: 50px; 
     left: 6px;
-    right: 6px; 
+    right: 6px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
 }
 
 table 
 {
     overflow: hidden;
-    border: 1px solid #d3d3d3;
-    background: #d3d3d3;
+    background-image: url(../images/pattern-6j3d.png);
     width: 100%;
     border-spacing: 0px;
-    table-layout:fixed;
+    table-layout: fixed;
     height: 100%;
     border-radius: 5px;
 }
@@ -1029,4 +1030,78 @@ th
 .hidden-date
 {
     display: none;
+}
+
+.spinner 
+{
+    margin: 100px auto;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+}
+  
+.spinner > div 
+{
+    background-color: #e7e7e7;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+  
+.spinner .rect2 
+{
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+}
+  
+.spinner .rect3 
+{
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+  
+.spinner .rect4 
+{
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+}
+  
+.spinner .rect5 
+{
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+}
+  
+@-webkit-keyframes sk-stretchdelay 
+{
+    0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+    20% { -webkit-transform: scaleY(1.0) }
+}
+  
+@keyframes sk-stretchdelay 
+{
+    0%, 40%, 100% { 
+      transform: scaleY(0.4);
+      -webkit-transform: scaleY(0.4);
+    }  20% { 
+      transform: scaleY(1.0);
+      -webkit-transform: scaleY(1.0);
+    }
+}
+
+#wrapper
+{
+    position: fixed;
+    top: 47%;
+    left: 50%;
+    z-index: 100;
+    transform: translate(-47%, -50%);
+}
+
+.tableBodyBackground
+{
+    background-image: url(../images/pattern-6j3d.png);
 }

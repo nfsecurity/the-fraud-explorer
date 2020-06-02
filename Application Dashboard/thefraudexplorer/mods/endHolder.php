@@ -204,6 +204,16 @@ else $totalSystemWords= "0";
 
 ?>
 
+<div id="wrapper">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+</div>
+
 <table id="endpointsTable" class="tablesorter">
     <thead>
         <tr>
@@ -267,16 +277,17 @@ else $totalSystemWords= "0";
 
             <div class="pager-inside-pager">
                 <form>
-                    <span class="fa fa-fast-backward fa-lg first"></span>
-                    <span class="fa fa-arrow-circle-o-left fa-lg prev"></span>
+                    <span class="fa fa-fast-backward fa-lg first" id="backward"></span>
+                    <span class="fa fa-arrow-circle-o-left fa-lg prev" id="left"></span>
                     <span class="pagedisplay"></span>
-                    <span class="fa fa-arrow-circle-o-right fa-lg next"></span>
-                    <span class="fa fa-fast-forward fa-lg last"></span>&nbsp;
+                    <span class="fa fa-arrow-circle-o-right fa-lg next" id="right"></span>
+                    <span class="fa fa-fast-forward fa-lg last" id="forward"></span>&nbsp;
                     <select class="pagesize select-styled right">
                         <option value="20"> Show by 20 endpoints</option>
                         <option value="50"> Show by 50 endpoints</option>
                         <option value="100"> Show by 100 endpoints</option>
                         <option value="500"> Show by 500 endpoints</option>
+                        <option value="all"> Show by all endpoints</option>
                     </select>    
                 </form>
                               
@@ -348,12 +359,49 @@ else $totalSystemWords= "0";
     });
 </script>
 
+<!-- Progress spinner on table -->
+
+<script>
+ 
+    $('.pagesize').change(function(){ 
+        startSpinner();
+    });
+
+    $('#left, #right, #backward, #forward').click(function(){ 
+        startSpinner();
+    });
+
+    function startSpinner() 
+    {
+        $('#wrapper').show();
+        $('tbody').css("display","none");
+    }
+
+    function stopSpinner()
+    {
+        $('#wrapper').hide();
+        $('tbody').css("display","block");
+    }
+
+</script>
+
 <!-- Tablesorter script -->
 
 <script>
 
 $(function() {
 $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
+
+    var timer, delay = 500;
+
+    $('#search-box').bind('keydown', function(e) {
+        var _this = $(this);
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            startSpinner();
+        }, delay);
+    });
+
     $("#endpointsTable")
     .tablesorter({
         sortLocaleCompare: true,
@@ -362,23 +410,7 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
         {
             filter_external: '.search_text',
             filter_columnFilters : false,
-            output_separator: ',',
-            output_ignoreColumns : [ 0, 5, 12, 13, 14 ],
-            output_dataAttrib: 'data-name',
-            output_headerRows: false,
-            output_delivery: 'download',
-            output_saveRows: 'all',
-            output_replaceQuote: '\u201c;',
-            output_includeHTML: false,
-            output_trimSpaces: true,
-            output_wrapQuotes: false,
-            output_saveFileName: 'endpointsList.csv',
-            output_callback: function (data) {
-                return true;
-            },
-            output_callbackJSON: function ($cell, txt, cellIndex) {
-                return txt + '(' + (cellIndex + col) + ')';
-            }
+            pager_size: 20
         },
         headers:
         {
@@ -454,12 +486,16 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
         page: 0,
         size: 20,
         savePages: true,
-        storageKey: 'tablesorter-pager',
         pageReset: 0,
         fixedHeight: false,
         removeRows: false,
         countChildRows: false,
-    }).bind("pagerComplete",function() {
+    })
+    
+    .bind("pagerComplete",function() {
+
+            /* Set CSS column styles */
+
             $('td:nth-child(1)').addClass("detailstd");
             $('td:nth-child(2)').addClass("endpointtd");
             $('td:nth-child(3)').addClass("totalwordstd");
@@ -490,7 +526,16 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
             $(document).ready(function() {
                 $('select').niceSelect();
             });
-        });
+
+            /* Hide spinner when finish load */
+
+            stopSpinner();
+    })
+
+    .bind("sortStart",function() {
+      startSpinner();
+    });
+
     });
 });
 

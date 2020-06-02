@@ -43,10 +43,6 @@ if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("locatio
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
 
-        <!-- JS functions -->
-
-        <script type="text/javascript" src="js/eventData.js"></script>
-
         <!-- Styles and JS for modal dialogs -->
 
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -87,6 +83,10 @@ if (!checkEvent(decRijndael(filter($_SESSION['endpointIDh'])))) header ("locatio
 
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
+
+        <!-- JS functions -->
+
+        <script type="text/javascript" src="js/eventData.js"></script>
     </head>
     <body>
         <div align="center" style="height:100%;">
