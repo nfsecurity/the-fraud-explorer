@@ -241,7 +241,7 @@ if ($endpointDECSQL != "all")
     echo '<span class="fa fa-fast-forward fa-lg last" id="forward"></span>&nbsp;&nbsp;';
 
     echo '<select class="pagesize select-styled right">';
-    echo '<option value="20"> Show by 20 events</option>';
+    echo '<option value="20" selected="selected"> Show by 20 events</option>';
     echo '<option value="50"> Show by 50 events</option>';
     echo '<option value="100"> Show by 100 events</option>';
     echo '<option value="500"> Show by 500 events</option>';
@@ -301,7 +301,7 @@ else
     echo '<span class="fa fa-fast-forward fa-lg last" id="forward"></span>&nbsp;&nbsp;';
     
     echo '<select class="pagesize select-styled right">';
-    echo '<option value="20"> Show by 20 events</option>';
+    echo '<option value="20" selected="selected"> Show by 20 events</option>';
     echo '<option value="50"> Show by 50 events</option>';
     echo '<option value="100"> Show by 100 events</option>';
     echo '<option value="500"> Show by 500 events</option>';

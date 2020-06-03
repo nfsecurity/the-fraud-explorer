@@ -283,7 +283,7 @@ else $totalSystemWords= "0";
                     <span class="fa fa-arrow-circle-o-right fa-lg next" id="right"></span>
                     <span class="fa fa-fast-forward fa-lg last" id="forward"></span>&nbsp;
                     <select class="pagesize select-styled right">
-                        <option value="20"> Show by 20 endpoints</option>
+                        <option value="20" selected="selected"> Show by 20 endpoints</option>
                         <option value="50"> Show by 50 endpoints</option>
                         <option value="100"> Show by 100 endpoints</option>
                         <option value="500"> Show by 500 endpoints</option>
