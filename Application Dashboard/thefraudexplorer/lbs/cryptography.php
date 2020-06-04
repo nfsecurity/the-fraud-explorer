@@ -49,7 +49,7 @@ function decRijndael($encrypted)
 
     preg_match_all('/[\x80-\xFF]/i', $toreturn, $results);
 
-    if (count($results[0]) > 0) return $encrypted;
+    if (count($results[0]) > 0 || $toreturn == "") return $encrypted;
     else return $toreturn;
 }
 

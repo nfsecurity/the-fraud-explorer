@@ -1177,7 +1177,7 @@ function insertSampleData($configFile)
         
         foreach ($data as $row)
         {
-            insertAlertDocument($configFile['es_sample_alerter_index'], "AlertEvent", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], encRijndael($row[7]), encRijndael($row[8]), encRijndael($row[9]));
+            insertAlertDocument($configFile['es_sample_alerter_index'], "AlertEvent", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], encRijndael($row[9]));
         }
     }
 }
