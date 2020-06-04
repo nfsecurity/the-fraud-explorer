@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-05
- * Revision: v1.4.4-aim
+ * Date: 2020-06
+ * Revision: v1.4.5-aim
  *
  * Description: SQL database
  */
