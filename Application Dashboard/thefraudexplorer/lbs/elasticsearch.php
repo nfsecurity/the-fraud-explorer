@@ -2144,11 +2144,11 @@ function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, 
                     'minimum_should_match' => '1',
                     'must' => [
                         [ 'wildcard' => [ 'agentId' => $agentID ] ],
-                        [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
-                        [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                     ],
                     'should' => [
-                        [ 'wildcard' => [ 'alertType' => $searchString] ]
+                        [ 'wildcard' => [ 'alertType' => $searchString] ],
+                        [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                        [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                     ],
                     'must_not' => [
                         [ 'match' => [ 'falsePositive' => '2'] ]
