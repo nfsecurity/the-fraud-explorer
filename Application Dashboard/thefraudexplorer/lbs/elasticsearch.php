@@ -1474,7 +1474,7 @@ function getAllFraudTriangleEvents($index, $domain, $samplerStatus, $context, $s
 function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $context, $size, $offset, $sortOrder, $sortColumn, $searchString)
 {
     $querySize = $size;
-    $searchString = $searchString."*";
+    $searchString = "*".$searchString."*";
 
     if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
 
@@ -1504,7 +1504,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ]
@@ -1536,7 +1538,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ],
@@ -1577,7 +1581,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1615,7 +1621,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1655,7 +1663,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ]
@@ -1687,7 +1697,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ],
@@ -1728,7 +1740,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1766,7 +1780,9 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1791,7 +1807,7 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
 
 function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $context, $searchString)
 {
-    $searchString = $searchString."*";
+    $searchString = "*".$searchString."*";
 
     if ($context != "allalerts")
     {
@@ -1811,7 +1827,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ]
@@ -1835,7 +1853,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '1'] ],
@@ -1868,7 +1888,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1898,7 +1920,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -1930,7 +1954,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ]
@@ -1954,7 +1980,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                 ],
                                 'should' => [
                                     [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                    [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                    [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                    [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                 ],
                                 'must_not' => [
                                     [ 'match' => [ 'falsePositive' => '2'] ],
@@ -1987,7 +2015,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -2017,7 +2047,9 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
                                     'bool' => [
                                         'should' => [
                                             [ 'wildcard' => [ 'agentId' => $searchString] ],
-                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ]
+                                            [ 'wildcard' => [ 'userDomain' => $searchString ] ],
+                                            [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                                            [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                                         ]
                                     ]
                                 ],
@@ -2093,7 +2125,7 @@ function countAgentIdEvents($agentID, $index, $alertType)
 function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, $sortOrder, $sortColumn, $searchString)
 {
     if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
-    $searchString = $searchString."*";
+    $searchString = "*".$searchString."*";
 
     $matchesParams = [
         'index' => $index,
@@ -2111,7 +2143,9 @@ function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, 
                 'bool' => [
                     'minimum_should_match' => '1',
                     'must' => [
-                        'wildcard' => [ 'agentId' => $agentID ]
+                        [ 'wildcard' => [ 'agentId' => $agentID ] ],
+                        [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                        [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                     ],
                     'should' => [
                         [ 'wildcard' => [ 'alertType' => $searchString] ]
@@ -2134,7 +2168,7 @@ function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, 
 
 function countSpecificAgentIdEvents($agentID, $index, $alertType, $searchString)
 {
-    $searchString = $searchString."*";
+    $searchString = "*".$searchString."*";
 
     $matchesParams = [
         'index' => $index,
@@ -2147,7 +2181,9 @@ function countSpecificAgentIdEvents($agentID, $index, $alertType, $searchString)
                         'wildcard' => [ 'agentId' => $agentID ]
                     ],
                     'should' => [
-                        [ 'wildcard' => [ 'alertType' => $searchString] ]
+                        [ 'wildcard' => [ 'alertType' => $searchString] ],
+                        [ 'wildcard' => [ 'windowTitle' => $searchString ] ],
+                        [ 'wildcard' => [ 'wordTyped' => $searchString ] ]
                     ],
                     'must_not' => [
                         [ 'match' => [ 'falsePositive' => '2'] ]
