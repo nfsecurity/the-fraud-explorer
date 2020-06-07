@@ -40,7 +40,7 @@ airish
 airn
 ajo
 ajusi
-a.k.
+aka
 akua
 akualele
 akule
@@ -874,7 +874,7 @@ dunkard
 dunker
 duppy
 durn
-d.w.i.
+dwi
 eaceworm
 earbob
 earlapper
@@ -930,7 +930,6 @@ everwho
 eyebright
 eyewink
 facecloth
-fa¢chae
 faculized
 faggot
 faid
@@ -951,7 +950,7 @@ fatback
 fatwood
 faunch
 favorance
-f.d.r.
+fdr
 fearnought
 feedlot
 feedway
@@ -962,7 +961,7 @@ fescue
 fessor
 fester
 fetticus
-f.f.v.
+ffv
 fiador
 fiddlehead
 fidget
@@ -1766,7 +1765,7 @@ mosshorn
 moughty
 mourner
 mousie
-mrs.
+mrs
 mucker
 mudbug
 muddle
@@ -1940,7 +1939,6 @@ passel
 passez
 pasty
 pathmaster
-paâ€˜u
 pauhagen
 paunch
 pawpaw
@@ -1979,10 +1977,10 @@ persimmon
 persnickety
 petrushki
 pewee
-p.g.
+pg
 phiz
 phlegm
-p.i.
+pi
 pial
 picacho
 piccalilli
@@ -2806,7 +2804,6 @@ upstreeter
 uptrip
 urp
 usen
-`u`u
 vaciero
 vamoose
 vamos
