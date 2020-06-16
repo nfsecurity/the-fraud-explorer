@@ -88,11 +88,7 @@ include "../lbs/openDBconn.php";
         width: 513px;
         height: 30px; 
         padding: 5px;
-        margin-right: -6px !important;
-        margin-left: 0px !important;
-        border-left: 0px;
-        border-top: solid 1px #c9c9c9;
-        border-bottom: solid 1px #c9c9c9;
+        border: solid 1px #c9c9c9;
         outline: none;
         font-family: Courier; font-size: 12px;
         border-radius: 0px 0px 0px 0px;
@@ -103,11 +99,9 @@ include "../lbs/openDBconn.php";
         width: 513px;
         height: 30px; 
         padding: 5px;
-        margin-right: -6px !important;
         margin-left: 0px !important;
         border-left: 0px;
-        border-top: solid 1px #c9c9c9;
-        border-bottom: solid 1px #c9c9c9;
+        border: solid 1px #c9c9c9;
         outline: none;
         font-family: Courier; font-size: 12px;
         border-radius: 0px 0px 0px 0px;
@@ -311,26 +305,28 @@ include "../lbs/openDBconn.php";
         background: #c9c9c9;
         width: 20px;
         height: 30px;
+        display: inline-block;
         border-radius: 5px 0px 0px 5px;
-        margin-top: 1px;
-        margin-left: 2px !important;
+        margin-left: 2px;
         font-family: Courier; font-size: 14px;
-        border: 0px solid #c9c9c9;
         text-align: center;
-        float: left;
+        line-height: 28px;
+        margin-right: -4px;
     }
 
     .input-regexp-right
     {
         background: #c9c9c9;
         width: 20px;
-        height: 31px;
+        display: inline-block;
+        height: 30px;
+        margin-left: -6px;
+        margin-top: 1;
+        margin-right: 2px;
         border-radius: 0px 5px 5px 0px;
-        margin-left: 0px !important;
         font-family: Courier; font-size: 14px;
-        border-top: 1px solid #f2f2f2;
+        line-height: 28px;
         text-align: center;
-        margin-bottom: 0px;
     }
 
     .warning
@@ -432,9 +428,9 @@ include "../lbs/openDBconn.php";
 
             <div class="regexp-container">
                 <p class="title-config">Phrase regular expression</p><br>
-                <button type="button" class="input-regexp-left">/</button>
+                <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-add" id="regexpression-add" autocomplete="off" placeholder="enter here the regular expression in PCRE format" class="input-value-text-regexp-add">
-                <button type="button" class="input-regexp-right">/</button>
+                <div class="input-regexp-right">/</div>
                 <button type="submit" class="rule-button-add" id="add-rule" name="action" value="addrule">Add rule</button>
             </div>
 
@@ -506,9 +502,9 @@ include "../lbs/openDBconn.php";
 
             <div class="regexp-container">
                 <p class="title-config">Phrase regular expression</p><br>
-                <button type="button" class="input-regexp-left">/</button>
+                <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-delmodify" id="regexpression-delmodify" autocomplete="off" placeholder="you will see here the regular expression" class="input-value-text-regexp-delmodify">
-                <button type="button" class="input-regexp-right" style="margin-right: 2px !important;">/</button>
+                <div class="input-regexp-right">/</div>
                 <button type="button" class="rule-button-searchdelmodify" id="search-rule">SCH</button>
                 <button type="submit" class="rule-button-searchdelmodify" id="delete-rule" name="action" value="deleterule">DEL</button>
                 <button type="submit" class="rule-button-searchdelmodify" id="modify-rule" name="action" value="modifyrule">MOD</button>

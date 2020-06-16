@@ -112,6 +112,10 @@ if (isset($argv[1]))
             checkRegexp($fraudTriangleTerms, $jsonFT, $ruleToCheck);
                    
             echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+
+            /* Release the lock */
+
+            unlink($sLock);
             exit;
         }
     }
@@ -120,6 +124,10 @@ if (isset($argv[1]))
         startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile);
 
         echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+
+        /* Release the lock */
+
+        unlink($sLock);
         exit;
     }
 }

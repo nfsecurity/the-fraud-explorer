@@ -557,7 +557,7 @@ include "../lbs/cryptography.php";
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Fraud Triangle Workflows</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Fraud Triangle Alerting Workflows</h4>
 </div>
 
 <div class="div-container-flow">
