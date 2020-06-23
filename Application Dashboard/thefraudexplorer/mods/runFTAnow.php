@@ -32,7 +32,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
     exit;
 }
 
-$output = shell_exec('/bin/php /var/www/html/thefraudexplorer/core/AIFraudTriangleProcessor.php > /dev/null 2>/dev/null &');
+$output = shell_exec('cd /var/www/html/thefraudexplorer/core ; /usr/bin/sudo /bin/php AIFraudTriangleProcessor.php > /dev/null 2>/dev/null &);
 
 sleep(5);
 

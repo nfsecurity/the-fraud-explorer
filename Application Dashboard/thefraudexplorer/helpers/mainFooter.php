@@ -49,13 +49,13 @@ $currentversion = $configFile['sw_version'];
         color: #FFFFFF; 
     }
 
-    .software-version, .logging
+    .software-version, .logging, .simulator
     {
         display: inline-block;
         color: white;
     }
 
-    .software-version a, .software-version a:link, .software-version a:hover, .software-version a:visited, .logging a, .logging a:link, .logging a:hover, .logging a:visited
+    .software-version a, .software-version a:link, .software-version a:hover, .software-version a:visited, .logging a, .logging a:link, .logging a:hover, .logging a:visited, .simulator a, .simulator a:link, .simulator a:hover, .simulator a:visited
     {
         color: white;
     }
@@ -70,7 +70,7 @@ $currentversion = $configFile['sw_version'];
         </div>
         <div class="helpers-container">
             <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" rel="noopener noreferrer">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/wiki" target="_blank" rel="noopener noreferrer">Documentation</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="logging"><a href="../mods/fraudTriangleLogging" data-toggle="modal" class="logging-button" data-target="#logging" href="#" id="elm-logging">Logging</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-address-card fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Profile [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,6 +82,20 @@ $currentversion = $configFile['sw_version'];
 <!-- Modal for Software Update -->
 
 <div class="modal" id="software-update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Fraud simulator -->
+
+<div class="modal" id="fraud-simulator" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">
@@ -112,6 +126,14 @@ $currentversion = $configFile['sw_version'];
 <script>
     $('#software-update').on('show.bs.modal', function(e){
         $(this).find('.software-update-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Script for Fraud simulator -->
+
+<script>
+    $('#fraud-simulator').on('show.bs.modal', function(e){
+        $(this).find('.fraud-simulator-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
