@@ -59,7 +59,7 @@ function phraseFixes($rawPhrase)
     $sanitizedPhrase = strtr($rawPhrase, $unwanted_chars);
     $sanitizedPhrase = strtolower($sanitizedPhrase);
     $sanitizedPhrase = preg_replace('/[\x80-\xFF]/i', '', $sanitizedPhrase);
-    $rawPhrase = preg_replace('/\s+/', ' ', $rawPhrase);
+    $sanitizedPhrase = preg_replace('/\s+/', ' ', $sanitizedPhrase);
 
     return $sanitizedPhrase;
 }
@@ -147,10 +147,6 @@ else if ($simulatorAction == "putEvent")
         'appTitle' => $applicationSimulator,
         'phrases' => $phrases
     );
-
-    $fp = fopen('dataPhrases.txt', 'w');
-    fwrite($fp, $eventRequest['phrases']);
-    fclose($fp);
 
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $timeZone = $configFile['php_timezone'];

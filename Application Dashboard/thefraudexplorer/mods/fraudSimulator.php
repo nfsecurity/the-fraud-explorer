@@ -47,12 +47,13 @@ include "../lbs/elasticsearch.php";
         src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
     }
 
-    .window-footer-event
+    .window-footer-simulator
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
+        margin: 15px 0px 0px 0px;
     }
 
-    .div-container-event
+    .div-container-simulator
     {
         margin: 20px;
     }
@@ -70,9 +71,10 @@ include "../lbs/elasticsearch.php";
         padding: 7px 7px 7px 7px;
         background: #f7f7f7;
         overflow-y: scroll;
+        margin: 15px 0px 15px 0px;
     }
 
-    .matchedStyle-event
+    .matchedStyle-simulator
     {
         color: black;
         font-family: 'FFont-Bold', sans-serif;
@@ -132,6 +134,7 @@ include "../lbs/elasticsearch.php";
         height: 33px;
         float: left;
         margin: 10px 0px 0px 0px;
+        font-family: Verdana; font-size: 11px;
     }
 
     .align-right-footers-simulator
@@ -145,6 +148,7 @@ include "../lbs/elasticsearch.php";
         height: 33px;
         float: right;
         margin: 10px 0px 0px 0px;
+        font-family: Verdana; font-size: 11px;
     }
 
     .left-header-title-simulator
@@ -206,6 +210,11 @@ include "../lbs/elasticsearch.php";
         height: 34px;
     }
 
+    .btn-success, .btn-success:active, .btn-success:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
+    {
+        font-family: Verdana, sans-serif; font-size: 14px !important;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -213,7 +222,7 @@ include "../lbs/elasticsearch.php";
     <h4 class="modal-title window-title" id="myModalLabel">Fraud simulator</h4>
 </div>
 
-<div class="div-container-event">
+<div class="div-container-simulator">
 
     <form id="simulatorForm">
 
@@ -261,8 +270,6 @@ include "../lbs/elasticsearch.php";
             </div>
         </div>
 
-        <br>
-
         <!-- Text speak area -->
 
         <div id="simulatorParagraph" name="simulatorPhrases" class="phrase-speak-area" contenteditable=true>
@@ -271,14 +278,12 @@ include "../lbs/elasticsearch.php";
             nuestro codigo de etica relacionada con conflictos de interes. Aqui todos dicen que cerremos la boca pero yo te estoy contando, saludos.
         </div>
 
-        <br>
-
         <!-- Fraud simulator results -->
 
         <p class="left-header-title-simulator">Fraud Triangle probability</p>
         <p class="right-header-title-simulator">Number of pressure events</p>
 
-        <div class="container-simulator-headers">
+        <div class="container-simulator-headers" style="margin: 0px 0px 15px 0px;">
                 
             <div class="align-left-footers-simulator">      
                 <p id="deductionPercentage">0% of fraud probability</p>      
@@ -288,8 +293,6 @@ include "../lbs/elasticsearch.php";
                 <p id="pressureCount">0 matched phrases</p>
             </div>
         </div>
-
-        <br>
 
         <p class="left-header-title-simulator">Number of opportunity events</p>
         <p class="right-header-title-simulator">Number of rationalization events</p>
@@ -305,10 +308,8 @@ include "../lbs/elasticsearch.php";
             </div>
         </div>
 
-        <br>
-
-        <div class="modal-footer window-footer-event">
-            <br><button type="submit" name="putEvent" class="btn btn-danger" style="outline: 0 !important;" value="putEvent">Put event</button>
+        <div class="modal-footer window-footer-simulator">
+            <button type="submit" name="putEvent" class="btn btn-danger" style="outline: 0 !important;" value="putEvent">Put event</button>
             <button type="submit" name="runCheck" id="btnRunCheck" class="btn btn-success" style="outline: 0 !important;" value="runCheck">Run check</button>               
         </div>
 
@@ -360,6 +361,11 @@ include "../lbs/elasticsearch.php";
 <script>
 
 $('#simulatorForm button').click(function(e) {
+
+    jQuery.expr[':'].contains = function(a, i, m) {
+        return jQuery(a).text().toUpperCase()
+        .indexOf(m[3].toUpperCase()) >= 0;
+    };
 
     e.preventDefault();
     var form = new FormData(document.getElementById("simulatorForm"));
@@ -422,7 +428,7 @@ $('#simulatorForm button').click(function(e) {
                         var matchedPhrase = phrases['pressure'];
 
                         $('#simulatorParagraph:contains('+matchedPhrase+')', document.body).each(function() { 
-                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Pressure</div></div></div>\">'+matchedPhrase+'</span>'));
+                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'gi'), '<span class=\"matchedStyle-simulator tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Pressure</div></div></div>\">'+matchedPhrase+'</span>'));
                         });
 
                         pressureCount++;
@@ -433,7 +439,7 @@ $('#simulatorForm button').click(function(e) {
                         var matchedPhrase = phrases['opportunity'];
 
                         $('#simulatorParagraph:contains('+matchedPhrase+')', document.body).each(function() { 
-                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Opportunity</div></div></div>\">'+matchedPhrase+'</span>'));
+                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'gi'), '<span class=\"matchedStyle-simulator tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Opportunity</div></div></div>\">'+matchedPhrase+'</span>'));
                         });
 
                         opportunityCount++;
@@ -444,7 +450,7 @@ $('#simulatorForm button').click(function(e) {
                         var matchedPhrase = phrases['rationalization'];
 
                         $('#simulatorParagraph:contains('+matchedPhrase+')', document.body).each(function() { 
-                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Rationalization</div></div></div>\">'+matchedPhrase+'</span>'));
+                            $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'gi'), '<span class=\"matchedStyle-simulator tooltip-simulator\" title=\"<div class=tooltip-container><div class=tooltip-row><div class=tooltip-item>Phrase match</div><div class=tooltip-value>'+matchedPhrase+'</div></div><div class=tooltip-row><div class=tooltip-item>Fraud vertice</div><div class=tooltip-value>Rationalization</div></div></div>\">'+matchedPhrase+'</span>'));
                         });
 
                         rationalizationCount++;
