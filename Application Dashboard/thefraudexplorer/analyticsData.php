@@ -177,6 +177,26 @@ var tour = new Tour({
         placement: 'right',
         title: "Library workshop",
         content: "You can use this option to add, modify or delete rules in the phrase library database based on JSON representation. Please note that is neccesary that you have knowledge in PCRE regular expressions."
+    }, {
+        element: "#elm-bugreport",
+        placement: 'auto',
+        title: "Bug reporting",
+        content: "Please use this link to access to the bug reporting platform at GitHub. If you have troubles using this application due to a malfunctioning feature, please feel free to report it."
+    }, {
+        element: "#elm-fraud-simulator",
+        placement: 'auto',
+        title: "Fraud simulator",
+        content: "This is a special feature that can be used to test the Fraud Triangle Theory in one shoot, emulating the presense of an endpoint typing phrases under a set of predefined applications."
+    }, {
+        element: "#elm-logging",
+        placement: 'auto',
+        title: "Audit logging",
+        content: "Every time the fraud triangle processor with artificial intelligence runs, leaves a trail of information you can review, like the launch date, time taken and number of event matches."
+    }, {
+        element: "#elm-software-update",
+        placement: 'auto',
+        title: "Software update",
+        content: "The Fraud Explorer, like other software, is being developed actively, therefore you should expect many upgrades, fixes, changes and improvements in the core, server and client architecture."
     }]
 });
 
