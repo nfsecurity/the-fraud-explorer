@@ -362,9 +362,60 @@ include "../lbs/elasticsearch.php";
 
 $('#simulatorForm button').click(function(e) {
 
+    // Accents elimination from phrases div
+
+    (function ($) {
+        $.fn.removeAccentedChar = function() {
+            return this.each(function() {
+                var strString = $(this).text();
+                strString = strString.replace(/À|Á|Â|Ã|Ä|Å|Ǻ|Ā|Ă|Ą|Ǎ|Α|Ά|Ả|Ạ|Ầ|Ẫ|Ẩ|Ậ|Ằ|Ắ|Ẵ|Ẳ|Ặ|А/g,'a');
+                strString = strString.replace(/à|á|â|ã|å|ǻ|ā|ă|ą|ǎ|ª|α|ά|ả|ạ|ầ|ấ|ẫ|ẩ|ậ|ằ|ắ|ẵ|ẳ|ặ|а/g,'a');
+                strString = strString.replace(/È|É|Ê|Ë|Ē|Ĕ|Ė|Ę|Ě|Ε|Έ|Ẽ|Ẻ|Ẹ|Ề|Ế|Ễ|Ể|Ệ|Е|Э/g,'E');
+                strString = strString.replace(/è|é|ê|ë|ē|ĕ|ė|ę|ě|έ|ε|ẽ|ẻ|ẹ|ề|ế|ễ|ể|ệ|е|э/g,'e');
+                strString = strString.replace(/Ì|Í|Î|Ï|Ĩ|Ī|Ĭ|Ǐ|Į|İ|Η|Ή|Ί|Ι|Ϊ|Ỉ|Ị|И|Ы/g,'I');
+                strString = strString.replace(/ì|í|î|ï|ĩ|ī|ĭ|ǐ|į|ı|η|ή|ί|ι|ϊ|ỉ|ị|и|ы|ї/g,'i');
+                strString = strString.replace(/Ñ|Ń|Ņ|Ň|Ν|Н/g,'N');
+                strString = strString.replace(/ñ|ń|ņ|ň|ŉ|ν|н/g,'n');
+                strString = strString.replace(/Ò|Ó|Ô|Õ|Ō|Ŏ|Ǒ|Ő|Ơ|Ø|Ǿ|Ο|Ό|Ω|Ώ|Ỏ|Ọ|Ồ|Ố|Ỗ|Ổ|Ộ|Ờ|Ớ|Ỡ|Ở|Ợ|О/g,'O');
+                strString = strString.replace(/ò|ó|ô|õ|ō|ŏ|ǒ|ő|ơ|ø|ǿ|º|ο|ό|ω|ώ|ỏ|ọ|ồ|ố|ỗ|ổ|ộ|ờ|ớ|ỡ|ở|ợ|о/g,'o');
+                strString = strString.replace(/Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ|Ũ|Ủ|Ụ|Ừ|Ứ|Ữ|Ử|Ự|У/g,'U');
+                strString = strString.replace(/ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ|υ|ύ|ϋ|ủ|ụ|ừ|ứ|ữ|ử|ự|у/g,'u');
+                $(this).text(strString);
+            });
+        };
+    }(jQuery));
+ 
+    $('#simulatorParagraph').removeAccentedChar();
+
+    // Case and accent insensitive "contains" override
+
     jQuery.expr[':'].contains = function(a, i, m) {
-        return jQuery(a).text().toUpperCase()
-        .indexOf(m[3].toUpperCase()) >= 0;
+        var rExps=[
+            {re: /[\xC0-\xC6]/g, ch: "A"},
+            {re: /[\xE0-\xE6]/g, ch: "a"},
+            {re: /[\xC8-\xCB]/g, ch: "E"},
+            {re: /[\xE8-\xEB]/g, ch: "e"},
+            {re: /[\xCC-\xCF]/g, ch: "I"},
+            {re: /[\xEC-\xEF]/g, ch: "i"},
+            {re: /[\xD2-\xD6]/g, ch: "O"},
+            {re: /[\xF2-\xF6]/g, ch: "o"},
+            {re: /[\xD9-\xDC]/g, ch: "U"},
+            {re: /[\xF9-\xFC]/g, ch: "u"},
+            {re: /[\xC7-\xE7]/g, ch: "c"},
+            {re: /[\xD1]/g, ch: "N"},
+            {re: /[\xF1]/g, ch: "n"}
+        ];
+
+        var element = $(a).text();
+        var search  = m[3];
+
+        $.each(rExps, function() {
+            element    = element.replace(this.re, this.ch);
+            search     = search.replace(this.re, this.ch);
+        });
+
+        return element.toUpperCase()
+            .indexOf(search.toUpperCase()) >= 0;
     };
 
     e.preventDefault();
