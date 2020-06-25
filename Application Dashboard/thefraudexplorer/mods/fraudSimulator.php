@@ -539,6 +539,9 @@ $('#simulatorForm button').click(function(e) {
                 else if (pressureCount != 0 && opportunityCount != 0) $('#deductionPercentage').text("70% of fraud probability");
                 else if (pressureCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("80% of fraud probability");
                 else if (opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("50% of fraud probability");
+                else if (pressureCount != 0) $('#deductionPercentage').text("10% of fraud probability");
+                else if (opportunityCount != 0) $('#deductionPercentage').text("20% of fraud probability");
+                else if (rationalizationCount != 0) $('#deductionPercentage').text("15% of fraud probability");
 
                 /* Testore triangulating button */ 
 
