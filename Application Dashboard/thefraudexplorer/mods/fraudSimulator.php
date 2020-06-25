@@ -272,7 +272,7 @@ include "../lbs/elasticsearch.php";
 
         <!-- Text speak area -->
 
-        <div id="simulatorParagraph" name="simulatorPhrases" class="phrase-speak-area" contenteditable=true>
+        <div id="simulatorParagraph" name="simulatorPhrases" class="phrase-speak-area" contenteditable="true" maxlength="1024">
             Hola buenos dias, espero todo ande muy bien, escribo para contarte que estamos algo estresados en el area porque imaginate
             que un proveedor le hizo una propuesta de trabajo a uno de nuestros colaboradores y eso definitivamente representa una violacion a 
             nuestro codigo de etica relacionada con conflictos de interes. Aqui todos dicen que cerremos la boca pero yo te estoy contando, saludos.
@@ -319,6 +319,24 @@ include "../lbs/elasticsearch.php";
     <button class="btn btn-default btn-mic-stop" id="btnMicStop"><span class="fa fa-microphone-slash fa-lg mic-color"></span></button> 
    
 </div>
+
+<!-- Limit content editable -->
+
+<script>
+
+$("div[contenteditable='true'][maxlength]").on('keyup paste', function (event) {
+     var cntMaxLength = parseInt($(this).attr('maxlength'));
+
+     if ($(this).text().length >= cntMaxLength && event.keyCode != 8 && event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40) {
+         event.preventDefault();
+
+        $(this).html(function(i, currentHtml) {
+            return currentHtml.substring(0, cntMaxLength-1);
+        });
+     }
+});
+
+</script>
 
 <!-- Speech to text -->
 
