@@ -533,7 +533,7 @@ $('#simulatorForm button').click(function(e) {
                 $('#rationalizationCount').text(rationalizationCount + " matched phrases");
                 $('#deductionPercentage').text("0% of fraud probability");
 
-                /* AI deductions */
+                /* Expert deductions */
 
                 if (pressureCount != 0 && opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("100% of fraud probability");
                 else if (pressureCount != 0 && opportunityCount != 0) $('#deductionPercentage').text("70% of fraud probability");

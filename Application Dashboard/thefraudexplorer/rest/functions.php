@@ -613,4 +613,160 @@ function workflowsGet($username, $workflowName)
     else echo json_encode("You don't have the permission to do that"); 
 }
 
+/* Fraud Triangle Proccessor over REST */
+
+function fraudTrianglePOSTQuery($rawJSON)
+{
+    $receivedJSON = json_decode($rawJSON, true);
+    $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+    $timeZone = $configFile['php_timezone'];
+    $sockLT = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+
+    if(!isJson($rawJSON))
+    {
+        echo json_encode("You have a JSON syntax error");
+        exit;
+    }
+    else
+    {
+        if(isset($receivedJSON['businessUnit']) && isset($receivedJSON['application']) && isset($receivedJSON['phrases']))
+        {
+            $ruleset = $receivedJSON['businessUnit'];
+            $application = $receivedJSON['application'];
+            $sanitizedPhrases = phraseFixes($receivedJSON['phrases']);
+            $pressureCount = 0;
+            $opportunityCount = 0;
+            $rationalizationCount = 0;
+
+            if (strlen($receivedJSON['businessUnit']) > 65535 || strlen($receivedJSON['application']) > 65535 || strlen($receivedJSON['phrases']) > 65535)
+            {
+                $json = "string_limit_exceeded";
+                echo json_encode($json, JSON_PRETTY_PRINT);
+                exit;
+            }
+
+            $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+            $fta_lang = $configFile['fta_lang_selection'];
+
+            if ($fta_lang == "fta_text_rule_multilanguage") 
+            {
+                $numberOfLibraries = 2;
+                $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+                $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+            }
+            else 
+            {
+                $numberOfLibraries = 1;
+                $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+            }
+
+            for ($lib = 1; $lib<=$numberOfLibraries; $lib++)
+            {        
+                $fraudTriangleTerms = array('pressure', 'opportunity', 'rationalization');
+                $rule = "BASELINE";
+
+                if ($ruleset != "BASELINE") $steps = 2;
+                else $steps = 1;
+
+                if(!isset($jsonFT[$lib]['dictionary'][$ruleset])) 
+                { 
+                    $rule = "BASELINE";
+                    $steps = 1;
+                }
+
+                for($i=1; $i<=$steps; $i++)
+                {
+                    foreach ($fraudTriangleTerms as $term)
+                    {
+                        foreach ($jsonFT[$lib]['dictionary'][$rule][$term] as $field => $termPhrase)
+                        {
+                            if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
+                            {
+                                $phrasesMatched[][$term] = $matches[0][0];
+
+                                if ($term == "pressure")
+                                {
+                                    if ($pressureCount == 0) $replyJSON["pressureTerms"] = $matches[0][0];
+                                    else $replyJSON["pressureTerms"] = $replyJSON["pressureTerms"] . ", " . $matches[0][0];
+                                    
+                                    $pressureCount++;
+                                }
+                                if ($term == "opportunity")
+                                {
+                                    if ($opportunityCount == 0) $replyJSON["opportunityTerms"] = $matches[0][0];
+                                    else $replyJSON["opportunityTerms"] = $replyJSON["opportunityTerms"] . ", " . $matches[0][0];
+                                    
+                                    $opportunityCount++;
+                                }
+                                if ($term == "rationalization")
+                                {
+                                    if ($rationalizationCount == 0) $replyJSON["rationalizationTerms"] = $matches[0][0];
+                                    else $replyJSON["rationalizationTerms"] = $replyJSON["rationalizationTerms"] . ", " . $matches[0][0];
+                                    
+                                    $rationalizationCount++;
+                                }
+                            }
+                        }
+                    }
+                    $rule = $ruleset;
+                }
+            }
+
+            /* Expert deductions */
+
+            if ($pressureCount != 0 && $opportunityCount != 0 && $rationalizationCount != 0) $probability = "100%";
+            else if ($pressureCount != 0 && $opportunityCount != 0) $probability = "70%";
+            else if ($pressureCount != 0 && $rationalizationCount != 0) $probability = "80%";
+            else if ($opportunityCount != 0 && $rationalizationCount != 0) $probability = "50%";
+            else if ($pressureCount != 0) $probability = "10%";
+            else if ($opportunityCount != 0) $probability = "20%";
+            else if ($rationalizationCount != 0) $probability = "15%";
+
+            $finaJSON = Array("pressureEvents" => $pressureCount, 
+                            "opportunityEvents" => $opportunityCount, 
+                            "rationalizationEvents" => $rationalizationCount,
+                            "fraudProbability" => $probability,
+                            "phrasesMatched" => $replyJSON);
+
+            /* Return JSON data */
+
+            if (!isset($phrasesMatched)) 
+            {
+                $json = "no_matches";
+                echo json_encode($json, JSON_PRETTY_PRINT);
+            }
+            else
+            {
+                $json = $finaJSON;
+                echo json_encode($json, JSON_PRETTY_PRINT);
+            }
+        }
+    }
+}
+
+/* Phrase sanitization */
+
+function phraseFixes($rawPhrase)
+{
+    $rawPhrase = preg_replace('/\.+/', '.', $rawPhrase);
+    $rawPhrase = str_replace('.', '. ', $rawPhrase);
+    $rawPhrase = str_replace(' .', '.', $rawPhrase);
+    $rawPhrase = str_replace(' ,', ',', $rawPhrase);
+    $rawPhrase = str_replace(',', ', ', $rawPhrase);
+    $rawPhrase = trim($rawPhrase);
+
+    $unwanted_chars = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 
+    'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 
+    'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 
+    'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 
+    'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+
+    $sanitizedPhrase = strtr($rawPhrase, $unwanted_chars);
+    $sanitizedPhrase = strtolower($sanitizedPhrase);
+    $sanitizedPhrase = preg_replace('/[\x80-\xFF]/i', '', $sanitizedPhrase);
+    $sanitizedPhrase = preg_replace('/\s+/', ' ', $sanitizedPhrase);
+
+    return $sanitizedPhrase;
+}
+
 ?>
