@@ -1010,7 +1010,7 @@ th
 
 .card-settings:hover
 {
-    color: blue;
+    color: #808080;
 }
 
 .btn-metrics
@@ -1104,4 +1104,14 @@ th
 .tableBodyBackground
 {
     background-image: url(../images/pattern-6j3d.png);
+}
+
+.corporate-endpoint
+{
+    display: inline;
+}
+
+.corporate-endpoint:hover
+{
+    color: #4B906F;
 }

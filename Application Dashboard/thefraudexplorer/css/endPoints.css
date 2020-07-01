@@ -1077,3 +1077,13 @@ form
 {
     background-image: url(../images/pattern-6j3d.png);
 }
+
+.corporate-endpoint
+{
+    display: inline;
+}
+
+.corporate-endpoint:hover
+{
+    color: #4B906F;
+}

@@ -1176,3 +1176,13 @@ a.welcome
     z-index: 100;
     transform: translate(-47%, -50%);
 }
+
+.corporate-endpoint
+{
+    display: inline;
+}
+
+.corporate-endpoint:hover
+{
+    color: #4B906F;
+}
