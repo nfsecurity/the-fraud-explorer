@@ -41,13 +41,12 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     $sanitizedPhrases = str_replace(' ,', ',', $sanitizedPhrases);
     $sanitizedPhrases = str_replace(',', ', ', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/\s+/', ' ', $sanitizedPhrases);
-    $sanitizedPhrases = ucfirst($sanitizedPhrases);
 
     preg_match_all("/\.\s*\w/", $sanitizedPhrases, $matches);
 
     foreach($matches[0] as $match) $sanitizedPhrases = str_replace($match, strtoupper($match), $sanitizedPhrases);
 
-    return $sanitizedPhrases;
+    return ucfirst(trim($sanitizedPhrases));
 }
 
 ?>

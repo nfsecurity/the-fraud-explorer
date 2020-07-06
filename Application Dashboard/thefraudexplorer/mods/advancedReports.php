@@ -229,13 +229,13 @@ $_SESSION['processingStatus'] = "notstarted";
                    
                 <p class="title-config">Date range</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
-                <input type="text" name="daterangefrom" id="daterangefrom" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date start-date" style="text-indent:5px;" data-toggle="datepicker"> to
-                <input type="text" name="daterangeto" id="daterangeto" autocomplete="off" placeholder="YYYY/MM/DD" class="input-value-text-date end-date" style="text-indent:5px;" data-toggle="datepicker">
+                <input type="text" name="daterangefrom" id="daterangefrom" autocomplete="off" value="<?php $date = new DateTime('7 days ago'); echo $date->format('Y/m/d'); ?>" class="input-value-text-date start-date" style="text-indent:5px;" data-toggle="datepicker"> to
+                <input type="text" name="daterangeto" id="daterangeto" autocomplete="off" value="<?php $date = new DateTime(); echo $date->format('Y/m/d'); ?>" class="input-value-text-date end-date" style="text-indent:5px;" data-toggle="datepicker">
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-date-range" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
-                        <input type="checkbox" onchange="checkboxAllDateRange()" id="checkbox-all-date-range" name="alldaterange" value="alldaterange" autocomplete="off" checked>I want all date range
+                    <label class="btn btn-default btn-sm" id="button-all-date-range" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
+                        <input type="checkbox" onchange="checkboxAllDateRange()" id="checkbox-all-date-range" name="alldaterange" value="alldaterange" autocomplete="off">I want all date range
                     </label>
                 </div>
 

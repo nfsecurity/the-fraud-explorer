@@ -333,9 +333,16 @@ if ($endpointDECSQL == "all")
         /* Excel report */
 
         $stringHistory = phraseSanitization($stringHistory, $notwantedWords);
+        $stringHistory = str_ireplace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
+
+        if (substr($stringHistory, 0, 3) === "<b>")
+        {
+            $charUppr = strtoupper(substr($wordTyped, 0, 1));
+            $stringHistory = preg_replace('/^<b>[a-z]/', '<b>'.$charUppr, $stringHistory);
+        }
 
         $stringHistory = "<font face=\"Century Gothic\" color=\"#4C4D4B\">". $stringHistory. "</font>";
-        $stringHistory = str_replace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
+        
         $html = new PhpOffice\PhpSpreadsheet\Helper\Html();
         $richCellValue = $html->toRichTextObject($stringHistory);
 
