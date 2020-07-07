@@ -138,6 +138,16 @@ $_SESSION['processingStatus'] = "notstarted";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
+    @keyframes blink 
+    { 
+        50% { border-color: #ff6666; } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <?php
@@ -203,13 +213,13 @@ $regionalismENFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/cust
             
             if ($session->username != "admin") 
             {
-                echo '<input type="submit" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
-                echo '<input type="submit" class="btn btn-success setup" value="Add words" name="addwords" style="outline: 0 !important;">';
+                echo '<input type="button" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
+                echo '<input type="button" class="btn btn-success setup" value="Add words" name="addwords" style="outline: 0 !important;">';
             }
             else
             {
-                echo '<button type="submit" id="button-del-words" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Deleting, please wait" name="removewords" style="outline: 0 !important;">Remove words</button>';
-                echo '<button type="submit" id="button-add-words" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Adding, please wait" name="addwords" style="outline: 0 !important;">Add all words</button>';
+                echo '<button type="button" id="button-del-words" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Deleting, please wait" name="removewords" style="outline: 0 !important;">Remove words</button>';
+                echo '<button type="button" id="button-add-words" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Adding, please wait" name="addwords" style="outline: 0 !important;">Add all words</button>';
             } 
 
         ?>
@@ -247,12 +257,44 @@ function libraryLanguage()
 var $btn;
 
 $("#button-add-words").click(function() {
+
+    var phrasesContainer = $('#regionalismwords').val();
+
+    if (!phrasesContainer)
+    {
+        $target = $('#regionalismwords');
+        $target.removeClass('blink-check');
+        setTimeout("$target.addClass('blink-check');", 100);
+        
+        return;
+    }
+    else
+    {
+        $('#formRegionalism').submit();
+    }
+
     $btn = $(this);
     $btn.button('loading');
     setTimeout('getstatus()', 1000);
 });
 
 $("#button-del-words").click(function() {
+
+    var phrasesContainer = $('#regionalismwords').val();
+
+    if (!phrasesContainer)
+    {
+        $target = $('#regionalismwords');
+        $target.removeClass('blink-check');
+        setTimeout("$target.addClass('blink-check');", 100);
+        
+        return;
+    }
+    else
+    {
+        $('#formRegionalism').submit();
+    }
+
     $btn = $(this);
     $btn.button('loading');
     setTimeout('getstatus()', 1000);
