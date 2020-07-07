@@ -262,10 +262,9 @@ $("#button-add-words").click(function() {
 
     if (!phrasesContainer)
     {
-        $target = $('#regionalismwords');
-        $target.removeClass('blink-check');
-        setTimeout("$target.addClass('blink-check');", 100);
-        
+        setTimeout("$('#regionalismwords').addClass('blink-check');", 100);
+        setTimeout("$('#regionalismwords').removeClass('blink-check');", 1000);
+
         return;
     }
     else
