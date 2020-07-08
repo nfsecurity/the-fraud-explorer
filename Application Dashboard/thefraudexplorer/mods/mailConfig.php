@@ -157,6 +157,19 @@ $mailSmtp = $configFile['mail_smtp'];
         clear:both;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -166,7 +179,7 @@ $mailSmtp = $configFile['mail_smtp'];
 
 <div class="div-container-mail">
 
-    <form id="formBuild" name="formBuild" method="post" action="mods/buildMailAlerts">
+    <form id="formMail" name="formMail" method="post" action="mods/buildMailAlerts">
 
     <div class="master-container-mail">
             <div class="left-container-mail">              
@@ -231,8 +244,8 @@ $mailSmtp = $configFile['mail_smtp'];
         
         <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-success setup disabled" value="Set mail preferences" style="outline: 0 !important;">';
-            else echo '<input type="submit" class="btn btn-success setup" value="Set mail preferences" style="outline: 0 !important;">';
+            if ($session->username != "admin") echo '<input type="button" id="button-set-preferences" class="btn btn-success setup disabled" value="Set mail preferences" style="outline: 0 !important;">';
+            else echo '<input type="button" id="button-set-preferences" class="btn btn-success setup" value="Set mail preferences" style="outline: 0 !important;">';
 
         ?>
 
@@ -240,3 +253,46 @@ $mailSmtp = $configFile['mail_smtp'];
 
     </form>
 </div>
+
+<!-- Button set preferences -->
+
+<script>
+
+var $btn;
+
+$("#button-set-preferences").click(function(e) {
+
+    var smtpserver = $('#smtpserver').val();
+    var port = $('#port').val();
+    var smtpuserpass = $('#smtpuserpass').val();
+    var mailaddress = $('#mailaddress').val();
+    var allvalues = new Array(smtpserver, port, smtpuserpass, mailaddress);
+
+    if (!smtpserver || !port || !smtpuserpass || !mailaddress)
+    {
+        var smtpserverfield = "#smtpserver,";
+        var portfield = "#port,";
+        var smtpuserpassfield = "#smtpuserpass,";
+        var mailaddressfield = "#mailaddress,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") finalfield = smtpserverfield;
+        if (allvalues[1] == "") finalfield = finalfield + portfield;
+        if (allvalues[2] == "") finalfield = finalfield + smtpuserpassfield;
+        if (allvalues[3] == "") finalfield = finalfield + mailaddressfield;
+ 
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $('#formMail').submit();
+    }
+
+});
+
+</script>

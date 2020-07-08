@@ -176,6 +176,19 @@ include "../lbs/cryptography.php";
         outline: 0 !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <?php
@@ -259,8 +272,8 @@ if (!isset($latestBackup[1])) $noBackup = true;
         
         <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-success setup disabled" value="Set schedule" style="outline: 0 !important;">';
-            else echo '<input type="submit" class="btn btn-success setup" value="Set schedule" style="outline: 0 !important;">';
+            if ($session->username != "admin") echo '<input type="button" id="button-set-schedule" class="btn btn-success setup disabled" value="Set schedule" style="outline: 0 !important;">';
+            else echo '<input type="button" id="button-set-schedule" class="btn btn-success setup" value="Set schedule" style="outline: 0 !important;">';
 
         ?>
 
@@ -268,3 +281,52 @@ if (!isset($latestBackup[1])) $noBackup = true;
 
     </form>
 </div>
+
+<!-- Button set schedule -->
+
+<script>
+
+var $btn;
+
+$("#button-set-schedule").click(function(e) {
+
+    var min = $('#min').val();
+    var hours = $('#hours').val();
+    var day = $('#day').val();
+    var month = $('#month').val();
+    var weekday = $('#weekday').val();
+    var password = $('#password').val();
+    var allvalues = new Array(min, hours, day, month, weekday, password);
+
+    if (!min || !hours || !day || !month || !weekday || !password)
+    {
+        var minfield = "#min,";
+        var hoursfield = "#hours,";
+        var dayfield = "#day,";
+        var monthfield = "#month,";
+        var weekdayfield = "#weekday,";
+        var passwordfield = "#password,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") finalfield = minfield;
+        if (allvalues[1] == "") finalfield = finalfield + hoursfield;
+        if (allvalues[2] == "") finalfield = finalfield + dayfield;
+        if (allvalues[3] == "") finalfield = finalfield + monthfield;
+        if (allvalues[4] == "") finalfield = finalfield + weekdayfield;
+        if (allvalues[5] == "") finalfield = finalfield + passwordfield;
+ 
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $('#formBackup').submit();
+    }
+
+});
+
+</script>

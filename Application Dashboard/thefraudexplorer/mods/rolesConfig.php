@@ -168,6 +168,19 @@ include "../lbs/openDBconn.php";
         font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -177,7 +190,7 @@ include "../lbs/openDBconn.php";
 
 <div class="div-container-roles">
     <form id="formRoles" name="formRoles" method="post" action="mods/rolesParameters">
-        <p class="title-config">Type the user name</p><br>
+        <p class="title-config">Username you want to add or delete</p><br>
         <input class="input-value-text-config" type="text" name="username" id="username" autocomplete="new-password" placeholder=":username here">
         <br><p class="title-config">Type password (only for new user option)</p><br>
         <input class="input-value-text-config" type="password" name="password" id="password" autocomplete="new-password" placeholder=":password here">
@@ -216,8 +229,74 @@ include "../lbs/openDBconn.php";
         </div>
 
         <div class="modal-footer window-footer-roles">
-            <input type="submit" name="delete" class="btn btn-danger setup" value="Delete profile" style="outline: 0 !important;">
-            <input type="submit" name="createmodify" class="btn btn-success setup" value="Create/Modify profile" style="outline: 0 !important;">
+            <input type="button" name="delete" id="button-del-profile" class="btn btn-danger setup" value="Delete profile" style="outline: 0 !important;">
+            <input type="button" name="createmodify" id="button-createmodify-profile" class="btn btn-success setup" value="Create/Modify profile" style="outline: 0 !important;">
         </div>
     </form>
-</div> 
+</div>
+
+<!-- Buttons Deleting & Adding -->
+
+<script>
+
+var $btn;
+
+$("#button-createmodify-profile").click(function(e) {
+
+    var username = $('#username').val();
+    var password = $('#password').val();
+    var domain = $('#domain').val();
+    var allvalues = new Array(username, password, domain);
+
+    if (!username || !password || !domain)
+    {
+        var usernamefield = "#username,";
+        var passwordfield = "#password,";
+        var domainfield = "#domain,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") finalfield = usernamefield;
+        if (allvalues[1] == "") finalfield = finalfield + passwordfield;
+        if (allvalues[2] == "") finalfield = finalfield + domainfield;
+ 
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $("#formRoles").submit(function(event) {
+            $(this).append('<input type="hidden" name="createmodify" value="Add profile" /> ');
+            return true;
+        });
+
+        $('#formRoles').submit();
+    }
+
+});
+
+$("#button-del-profile").click(function(e) {
+
+    var username = $('#username').val();
+
+    if (!username)
+    {
+        setTimeout("$('#username').addClass('blink-check');", 100);
+        setTimeout("$('#username').removeClass('blink-check');", 1000);
+    }
+    else
+    {
+        $("#formRoles").submit(function(event) {
+            $(this).append('<input type="hidden" name="delete" value="Delete profile" /> ');
+            return true;
+        });
+
+        $('#formRoles').submit();
+    }
+
+});
+
+</script>

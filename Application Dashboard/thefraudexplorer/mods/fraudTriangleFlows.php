@@ -553,6 +553,19 @@ include "../lbs/cryptography.php";
         opacity:1 !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -693,7 +706,7 @@ include "../lbs/cryptography.php";
 
         <p class="title-config">List of current defined & working workflows</p><br>
 
-        <table class="table-flows">
+        <table class="table-flows" id="table-flows">
             <thead class="table-thead-flows">                       
                 <th class="table-th-flows-name" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Workflow name</th>
                 <th class="table-th-flows-workflow" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Fraud Triangle Flow</th>
@@ -743,13 +756,13 @@ include "../lbs/cryptography.php";
                 
                 if ($session->username != "admin") 
                 {
-                    echo '<input type="submit" class="btn btn-danger setup disabled" value="Delete workflow" name="delete" style="outline: 0 !important;">';
-                    echo '<input type="submit" class="btn btn-success setup disabled" value="Add workflow" name="add" style="outline: 0 !important;">';
+                    echo '<input type="button" class="btn btn-danger setup disabled" id="button-del-workflow" value="Delete workflow" name="delete" style="outline: 0 !important;">';
+                    echo '<input type="button" class="btn btn-success setup disabled" id="button-add-workflow" value="Add workflow" name="add" style="outline: 0 !important;">';
                 }
                 else 
                 {
-                    echo '<input type="submit" class="btn btn-danger setup" value="Delete workflow" name="delete" style="outline: 0 !important;">';
-                    echo '<input type="submit" class="btn btn-success setup" value="Add workflow" name="add" style="outline: 0 !important;">';
+                    echo '<input type="button" class="btn btn-danger setup" id="button-del-workflow" value="Delete workflow" name="delete" style="outline: 0 !important;">';
+                    echo '<input type="button" class="btn btn-success setup" id="button-add-workflow" value="Add workflow" name="add" style="outline: 0 !important;">';
                 }
 
                 ?>
@@ -759,6 +772,73 @@ include "../lbs/cryptography.php";
     </form>
 
 </div>
+
+<!-- Buttons Deleting & Adding -->
+
+<script>
+
+var $btn;
+
+$("#button-add-workflow").click(function(e) {
+
+    var workflowName = $('#workflowName').val();
+    var custodianEmail = $('#custodianEmail').val();
+
+    if (!workflowName || !custodianEmail)
+    {
+        if (!workflowName && !custodianEmail) 
+        {
+            setTimeout("$('#workflowName, #custodianEmail').addClass('blink-check');", 100);
+            setTimeout("$('#workflowName, #custodianEmail').removeClass('blink-check');", 1000);
+        }
+        else if (!workflowName)
+        {
+            setTimeout("$('#workflowName').addClass('blink-check');", 100);
+            setTimeout("$('#workflowName').removeClass('blink-check');", 1000);
+        }
+        else if (!custodianEmail)
+        {
+            setTimeout("$('#custodianEmail').addClass('blink-check');", 100);
+            setTimeout("$('#custodianEmail').removeClass('blink-check');", 1000);
+        }
+
+        return;
+    }
+    else
+    {
+        $("#formWorkflow").submit(function(event) {
+            $(this).append('<input type="hidden" name="add" value="Add workflow" /> ');
+            return true;
+        });
+
+        $('#formWorkflow').submit();
+    }
+
+});
+
+$("#button-del-workflow").click(function(e) {
+
+    var workflowSelection = $('input[name="workflowSelection[]"]:checked').length > 0;
+
+    if (workflowSelection == false)
+    {
+        setTimeout("$('#table-flows').addClass('blink-check');", 100);
+        setTimeout("$('#table-flows').removeClass('blink-check');", 1000);
+    }
+    else
+    {
+        $("#formWorkflow").submit(function(event) {
+            $(this).append('<input type="hidden" name="delete" value="Delete workflow" /> ');
+            return true;
+        });
+
+        $('#formWorkflow').submit();
+    }
+
+});
+
+
+</script>
 
 <!-- Add or remove workflows -->
 

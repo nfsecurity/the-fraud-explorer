@@ -132,6 +132,19 @@ $_SESSION['processingStatus'] = "notstarted";
         font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -188,7 +201,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
             <?php
 
-                echo '<button type="submit" id="btn-update" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Updating, please wait" style="outline: 0 !important;">';
+                echo '<button type="button" id="btn-update" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Updating, please wait" style="outline: 0 !important;">';
                 echo 'Update now';
                 echo '</button>';
 
@@ -207,6 +220,21 @@ $_SESSION['processingStatus'] = "notstarted";
 var $btn;
 
 $("#btn-update").click(function() {
+
+    var urlrepo = $('#urlrepo').val();
+
+    if (!urlrepo)
+    {
+        setTimeout("$('#urlrepo').addClass('blink-check');", 100);
+        setTimeout("$('#urlrepo').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $('#formRegionalism').submit();
+    }
+
     $btn = $(this);
     $btn.button('loading');
     setTimeout('getstatus()', 1000);

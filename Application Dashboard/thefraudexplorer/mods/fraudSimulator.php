@@ -215,6 +215,19 @@ include "../lbs/elasticsearch.php";
         font-family: Verdana, sans-serif; font-size: 14px !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -309,8 +322,8 @@ include "../lbs/elasticsearch.php";
         </div>
 
         <div class="modal-footer window-footer-simulator">
-            <button type="submit" name="putEvent" class="btn btn-danger" style="outline: 0 !important;" value="putEvent">Put event</button>
-            <button type="submit" name="runCheck" id="btnRunCheck" class="btn btn-success" style="outline: 0 !important;" value="runCheck">Run check</button>               
+            <button type="button" name="putEvent" id="btnPutEvent" class="btn btn-danger" style="outline: 0 !important;" value="putEvent">Put event</button>
+            <button type="button" name="runCheck" id="btnRunCheck" class="btn btn-success" style="outline: 0 !important;" value="runCheck">Run check</button>               
         </div>
 
     </form>
@@ -380,6 +393,18 @@ $("div[contenteditable='true'][maxlength]").on('keyup paste', function (event) {
 
 $('#simulatorForm button').click(function(e) {
 
+    // Simulator paragraph empty validation
+
+    var phrasesContainer = $('#simulatorParagraph').text();
+
+    if (!phrasesContainer)
+    {
+        setTimeout("$('#simulatorParagraph').addClass('blink-check');", 100);
+        setTimeout("$('#simulatorParagraph').removeClass('blink-check');", 1000);
+
+        return;
+    }
+
     // Accents elimination from phrases div
 
     (function ($) {
@@ -436,7 +461,6 @@ $('#simulatorForm button').click(function(e) {
             .indexOf(search.toUpperCase()) >= 0;
     };
 
-    e.preventDefault();
     var form = new FormData(document.getElementById("simulatorForm"));
 
     if ($(this).attr("value") == "putEvent") form.append('action', 'putEvent');

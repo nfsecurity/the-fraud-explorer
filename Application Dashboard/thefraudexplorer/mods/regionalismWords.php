@@ -140,7 +140,10 @@ $_SESSION['processingStatus'] = "notstarted";
 
     @keyframes blink 
     { 
-        50% { border-color: #ff6666; } 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
     }
 
     .blink-check
@@ -213,8 +216,8 @@ $regionalismENFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/cust
             
             if ($session->username != "admin") 
             {
-                echo '<input type="button" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
-                echo '<input type="button" class="btn btn-success setup" value="Add words" name="addwords" style="outline: 0 !important;">';
+                echo '<input type="button" id="button-del-words" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
+                echo '<input type="button" id="button-add-words" class="btn btn-success setup" value="Add words" name="addwords" style="outline: 0 !important;">';
             }
             else
             {
@@ -269,6 +272,11 @@ $("#button-add-words").click(function() {
     }
     else
     {
+        $("#formRegionalism").submit(function(event) {
+            $(this).append('<input type="hidden" name="addwords" value="Add words" /> ');
+            return true;
+        });
+
         $('#formRegionalism').submit();
     }
 
@@ -283,14 +291,18 @@ $("#button-del-words").click(function() {
 
     if (!phrasesContainer)
     {
-        $target = $('#regionalismwords');
-        $target.removeClass('blink-check');
-        setTimeout("$target.addClass('blink-check');", 100);
+        setTimeout("$('#regionalismwords').addClass('blink-check');", 100);
+        setTimeout("$('#regionalismwords').removeClass('blink-check');", 1000);
         
         return;
     }
     else
     {
+        $("#formRegionalism").submit(function(event) {
+            $(this).append('<input type="hidden" name="removewords" value="Delete words" /> ');
+            return true;
+        });
+
         $('#formRegionalism').submit();
     }
 
