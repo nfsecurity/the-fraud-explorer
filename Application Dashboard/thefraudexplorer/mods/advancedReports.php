@@ -200,6 +200,19 @@ $_SESSION['processingStatus'] = "notstarted";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 }
 
 </style>
@@ -210,19 +223,19 @@ $_SESSION['processingStatus'] = "notstarted";
 </div>
 
 <div class="div-container-reports">
-    <form id="formBuild" name="formBuild" method="post" action="mods/buildAdvancedReport">
+    <form id="formReport" name="formReport" method="post" action="mods/buildAdvancedReport">
 
         <div class="master-container-reports">
             <div class="left-container-reports">              
                 
                 <p class="title-config">Report type</p><br>
-                <select class="select-option-typereport-styled wide" name="typereport" id="typereport">
+                <select class="select-option-typereport-styled wide" name="typereport" id="typereport" onchange="checklistReportType()">
                     <option value="byendpoint">By endpoint</option>
                     <?php if($session->domain == "all") echo '<option value="bydomain">By domain</option>'; ?>
                     <option value="allendpoints" selected="selected">All endpoints & domains</option>
                 </select>
                 <div style="line-height:60px; border: 1px solid white;"><br></div>
-                <input type="text" name="typeinput" id="typeinput" autocomplete="off" placeholder="endpoint, domain" class="input-value-text" style="text-indent:5px;">
+                <input type="text" name="typeinput" disabled="disabled" id="typeinput" autocomplete="off" placeholder="endpoint, domain" class="input-value-text" style="text-indent:5px;">
                 
             </div>
             <div class="right-container-reports">
@@ -296,7 +309,7 @@ $_SESSION['processingStatus'] = "notstarted";
                    
                 <p class="title-config">Application</p><br><br>
                 <div style="line-height:9px; border: 1px solid white;"><br></div>
-                <input type="text" name="applications" id="applications" autocomplete="off" placeholder="Microsoft Teams" class="input-value-text" style="text-indent:5px;">
+                <input type="text" name="applications" disabled="disabled" id="applications" autocomplete="off" placeholder="Microsoft Teams" class="input-value-text" style="text-indent:5px;">
                 <div style="line-height:8px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
@@ -356,7 +369,7 @@ $_SESSION['processingStatus'] = "notstarted";
             <div class="right-container-reports">
                    
                 <p class="title-config">Filter by phrase match</p><br>
-                <input type="text" name="excluded" id="excluded" autocomplete="off" placeholder="me parece injusto, por una buena causa" class="input-value-text" style="text-indent:5px;">   
+                <input type="text" name="excluded" disabled="disabled" id="excluded" autocomplete="off" placeholder="me parece injusto, por una buena causa" class="input-value-text" style="text-indent:5px;">   
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
@@ -373,7 +386,7 @@ $_SESSION['processingStatus'] = "notstarted";
             
             <?php    
             
-                echo '<button type="submit" id="btn-excel" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Generating, please wait" style="outline: 0 !important;">';
+                echo '<button type="button" id="btn-excel" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Generating, please wait" style="outline: 0 !important;">';
                 echo 'Make report';
                 echo '</button>';
         
@@ -423,6 +436,70 @@ $(function() {
 var $btn;
 
 $("#btn-excel").click(function() {
+
+    var reporttype = $("#typereport option:selected").val();
+    var reporttext = $('#typeinput').val();
+    var datefrom = $("#daterangefrom").val();
+    var dateto = $("#daterangeto").val();
+    var applications = $('#applications').val();
+    var excluded = $('#excluded').val();
+    var checkboxdate = document.getElementById('checkbox-all-date-range');
+    var checkboxapplications = document.getElementById('checkbox-all-applications');
+    var checkboxphrases = document.getElementById('checkbox-all-phrases');
+    var allvalues = new Array(reporttext, datefrom, dateto, applications, excluded);
+
+    if (reporttype != "allendpoints" || checkboxdate.checked === false || checkboxapplications.checked === false || checkboxphrases.checked === false)
+    {
+        var reporttextfield = "#typeinput,";
+        var datefromfield = "#daterangefrom,";
+        var datetofield = "#daterangeto,";
+        var applicationsfield = "#applications,";
+        var excludedfield = "#excluded,";
+        var finalfield = "";
+        var continueAnyway = true;
+
+        if (allvalues[0] == "" && reporttype != "allendpoints") 
+        {
+            finalfield = reporttextfield;
+            continueAnyway = false;
+        }
+        if (allvalues[1] == "" && checkboxdate.checked === false) 
+        {
+            finalfield = finalfield + datefromfield;
+            continueAnyway = false;
+        }
+        if (allvalues[2] == "" && checkboxdate.checked === false) 
+        {
+            finalfield = finalfield + datetofield;
+            continueAnyway = false;
+        }
+        if (allvalues[3] == "" && checkboxapplications.checked === false) 
+        {
+            finalfield = finalfield + applicationsfield;
+            continueAnyway = false;
+        }
+        if (allvalues[4] == "" && checkboxphrases.checked === false) 
+        {
+            finalfield = finalfield + excludedfield;
+            continueAnyway = false;
+        }
+        
+        if (continueAnyway == true) $('#formReport').submit();
+        else
+        {
+            finalfield = finalfield.replace(/(,$)/g, "");
+
+            setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+            setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+            return;
+        }
+    }
+    else
+    {
+        $('#formReport').submit();
+    }
+
     $btn = $(this);
     $btn.button('loading');
     setTimeout('getstatus()', 1000);
@@ -458,6 +535,14 @@ function getstatus()
 
 <script>
 
+    function checklistReportType()
+    {
+        var select = $("#typereport option:selected").val();
+        
+        if (select == "allendpoints") $('#typeinput').attr("disabled", "disabled");
+        else $('#typeinput').removeAttr("disabled"); 
+    }
+
     function checkboxAllDateRange()
     {
         var checkbox = document.getElementById('checkbox-all-date-range');
@@ -465,10 +550,12 @@ function getstatus()
 
         if(checkbox.checked === true)
         {
+            $('#daterangefrom, #daterangeto').attr("disabled", "disabled");
             checkboxGeneral.style.background = "#E0E0E0";
         }
         else
         {
+            $('#daterangefrom, #daterangeto').removeAttr("disabled");
             checkboxGeneral.style.background = "white";
         }
     }
@@ -525,10 +612,12 @@ function getstatus()
 
         if(checkbox.checked === true)
         {
+            $('#applications').attr("disabled", "disabled");
             checkboxGeneral.style.background = "#E0E0E0";
         }
         else
         {
+            $('#applications').removeAttr("disabled");
             checkboxGeneral.style.background = "white";
         }
     }
@@ -555,10 +644,12 @@ function getstatus()
 
         if(checkbox.checked === true)
         {
+            $('#excluded').attr("disabled", "disabled");
             checkboxGeneral.style.background = "#E0E0E0";
         }
         else
         {
+            $('#excluded').removeAttr("disabled");
             checkboxGeneral.style.background = "white";
         }
     }
