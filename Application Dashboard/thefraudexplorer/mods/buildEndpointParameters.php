@@ -188,6 +188,8 @@ else if ($finalPlatformForBuild == "pbx")
     }
 }
 
+$_SESSION['processingStatus'] = "finished";
+
 /* Close DB Connections */
 
 include "../lbs/closeDBconn.php";

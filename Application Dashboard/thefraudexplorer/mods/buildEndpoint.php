@@ -35,6 +35,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
+$_SESSION['processingStatus'] = "notstarted";
+
 ?>
 
 <style>
@@ -162,6 +164,19 @@ include "../lbs/openDBconn.php";
         border: 1px solid #57a881 !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -170,7 +185,7 @@ include "../lbs/openDBconn.php";
 </div>
 
 <div class="div-container">
-    <form id="formBuild" name="formBuild" method="post" action="mods/buildEndpointParameters">
+    <form id="formEndpoint" name="formEndpoint" method="post" action="mods/buildEndpointParameters">
 
         <div class="master-container">
             <div class="left-container">              
@@ -331,8 +346,8 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-success setup disabled" value="Build & Download" style="outline: 0 !important;">';
-            else echo '<input type="submit" class="btn btn-success setup" value="Build & Download" style="outline: 0 !important;">';
+            if ($session->username != "admin") echo '<button type="button" id="btn-build-endpoint" class="btn btn-success setup disabled" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Building, please wait" style="outline: 0 !important;">Build & Download</button>';
+            else echo '<button type="button" id="btn-build-endpoint" class="btn btn-success setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Building, please wait" style="outline: 0 !important;">Build & Download</button>';
 
             ?>
         
@@ -340,6 +355,142 @@ include "../lbs/openDBconn.php";
 
     </form>
 </div>
+
+<!-- Button build endpoint -->
+
+<script>
+
+var $btn;
+
+$("#btn-build-endpoint").click(function() {
+
+    var platform = $("#platform option:selected").val();
+    var address = $('#address').val();
+    var excluded = $('#excluded').val();
+    var domain = $('#companydomain').val();
+    var rest = $('#restcredentials').val();
+    var allvalues = new Array(address, excluded, domain, rest);
+    var continueSubmit = true;
+
+    if (platform == "windows")
+    {    
+        var addressfield = "#address,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") 
+        {
+            finalfield = addressfield;
+            continueSubmit = false;
+        }
+
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        if (continueSubmit == true) 
+        {
+            $('#formEndpoint').submit();
+
+            $btn = $('#btn-build-endpoint');
+            $btn.button('loading');
+            setTimeout('getstatus()', 1000);
+        }
+
+        return;
+    }
+    if (platform == "android")
+    {    
+        var addressfield = "#address,";
+        var domainfield = "#companydomain,";
+        var restfield = "#restcredentials,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") 
+        {
+            finalfield = addressfield;
+            continueSubmit = false;
+        }
+        if (allvalues[2] == "") 
+        {
+            finalfield = finalfield + domainfield;
+            continueSubmit = false;
+        }
+        if (allvalues[3] == "") 
+        {
+            finalfield = finalfield + restfield;
+            continueSubmit = false;
+        }
+
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        if (continueSubmit == true) 
+        {
+            $('#formEndpoint').submit();
+
+            $btn = $('#btn-build-endpoint');
+            $btn.button('loading');
+            setTimeout('getstatus()', 1000);
+        }
+
+        return;
+    }
+    if (platform == "pbx")
+    {    
+        var addressfield = "#address,";
+        var restfield = "#restcredentials,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") 
+        {
+            finalfield = addressfield;
+            continueSubmit = false;
+        }
+        if (allvalues[3] == "") 
+        {
+            finalfield = finalfield + restfield;
+            continueSubmit = false;
+        }
+
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        if (continueSubmit == true) 
+        {
+            $('#formEndpoint').submit();
+
+            $btn = $('#btn-build-endpoint');
+            $btn.button('loading');
+            setTimeout('getstatus()', 1000);
+        }
+
+        return;
+    }
+ 
+});
+
+function getstatus()
+{
+    $.ajax({
+        url: "../helpers/processingStatus.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            $('#statusmessage').html(data.message);
+            if(data.status=="pending")
+              setTimeout('getstatus()', 1000);
+            else
+                $btn.button('reset');
+        }
+    });
+}
+
+</script>
 
 <!-- Nice selects -->
 

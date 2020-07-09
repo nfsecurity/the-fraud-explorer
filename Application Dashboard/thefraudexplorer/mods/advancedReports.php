@@ -213,8 +213,6 @@ $_SESSION['processingStatus'] = "notstarted";
         -webkit-animation: blink .1s step-end 6 alternate;
     }
 
-}
-
 </style>
 
 <div class="modal-header">
