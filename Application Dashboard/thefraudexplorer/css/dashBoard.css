@@ -197,11 +197,12 @@ a:active
 
 .container-upper-right-sub
 {
-    position: relative; 
-    border: 0px solid red; 
+    position: relative;
+    border: 0px solid red;
     height: calc(100% - 55px); 
-    width: calc(100% - 60px);
+    width: calc(100% - 120px);
     padding-top: 5px; 
+    margin-left: 35px;
 }
 
 .container-bottom-left
@@ -1185,4 +1186,47 @@ a.welcome
 .corporate-endpoint:hover
 {
     color: #4B906F;
+}
+
+.statistics-container
+{
+    position: absolute;
+    top: 80px;
+    left: 17px;
+    border: 2px solid #e5e5e5;
+    height: 39px;
+    line-height: 25px;
+    width: 45px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 12px;
+    color: gray;
+    background-color: white;
+    border-radius: 4px 4px 2px 2px;
+}
+
+.statistics-label-container
+{
+    border-top: 1px solid #e5e5e5;
+    height: 12px;
+    line-height: 10px;
+    width: 42px;
+    background-color: #e5e5e5;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 8px;
+    color: #6d6d6d;
+}
+
+.separator-line
+{
+    position: absolute;
+    left: 17px;
+    top: 130px;
+    border: 1px solid #5c9678;
+    width: 45px;
+    height: 1px;
+    border-radius: 3px;
 }

@@ -106,6 +106,52 @@ $resultWords = json_decode($resultWords, true);
 if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
 else $totalSystemWords= "0";
 
+/* Event statistics */
+
+$queryTermsSQL = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents;";
+$queryTermsSQL_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
+$queryTermsSQLDomain_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='".$session->domain."'";
+$queryTermsSQLDomain = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."'";
+    
+$queryEventsSQL = "SELECT COUNT(*) AS count FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) from t_agents WHERE pressure <> 0 OR opportunity <> 0 OR rationalization <> 0) AS totals";
+$queryEventsSQL_wOSampler = "SELECT COUNT(*) AS count FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) from t_agents WHERE (pressure <> 0 OR opportunity <> 0 OR rationalization <> 0) AND (domain NOT LIKE 'thefraudexplorer.com')) AS totals";
+$queryEventsSQLDomain_wOSampler = "SELECT COUNT(*) AS count FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) from t_agents WHERE (pressure <> 0 OR opportunity <> 0 OR rationalization <> 0) AND (domain='".$session->domain."')) AS totals";
+$queryEventsSQLDomain = "SELECT COUNT(*) AS count FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) from t_agents WHERE (pressure <> 0 OR opportunity <> 0 OR rationalization <> 0) AND (domain='thefraudexplorer.com' OR domain='".$session->domain."')) AS totals";
+
+$samplerStatus = samplerStatus($session->domain);
+    
+if ($session->domain == "all")
+{
+    if ($samplerStatus == "enabled") 
+    {
+        $queryTerms = mysqli_query($connection, $queryTermsSQL);
+        $queryEvents = mysqli_query($connection, $queryEventsSQL);
+    }
+    else 
+    {
+        $queryTerms = mysqli_query($connection, $queryTermsSQL_wOSampler);
+        $queryEvents = mysqli_query($connection, $queryEventsSQL_wOSampler);
+    }
+}
+else
+{
+    if ($samplerStatus == "enabled") 
+    {
+        $queryTerms = mysqli_query($connection, $queryTermsSQLDomain);
+        $queryEvents = mysqli_query($connection, $queryEventsSQLDomain);
+    }
+    else 
+    {
+        $queryTerms = mysqli_query($connection, $queryTermsSQLDomain_wOSampler);
+        $queryEvents = mysqli_query($connection, $queryEventsSQLDomain_wOSampler);
+    }
+}
+        
+$fraudTerms = mysqli_fetch_assoc($queryTerms);
+$fraudEvents = mysqli_fetch_assoc($queryEvents);
+$fraudScore = ($fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'])/3;
+$numberOfEndpointWithEvents = $fraudEvents['count'];
+
 ?>
 
 <div class="dashboard-left-menu">
@@ -320,35 +366,19 @@ else $totalSystemWords= "0";
                 <span class="fa fa-window-maximize fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>
             </p>
         </h2><br>
+
+        <!-- Graph parallel stats -->
+
+        <div class="statistics-container"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total words</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $totalSystemWords; ?><br>words stored in our database.</div></div></div>">122m<br><div class="statistics-label-container">Words</div></span></div>   
+        <div class="separator-line"></div>
+        <div class="statistics-container" style="top: 137px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total events</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization']; ?> fraud<br>triangle events triggered by AI.</div></div></div>">12k<br><div class="statistics-label-container">Events</div></span></div>
+        <div class="separator-line" style="top: 181px;"></div>
+        <div class="statistics-container" style="top: 193px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoints reporting</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $numberOfEndpointWithEvents; ?><br>people reporting FTA events.</div></div></div>">281m<br><div class="statistics-label-container">Rpting</div></span></div>
+
         <div class="container-upper-right-sub">
             <canvas id="upper-right"></canvas>
         </div>
     </div>
-
-    <?php
-    
-    $queryTermsSQL = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents;";
-    $queryTermsSQL_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com'";
-    $queryTermsSQLDomain_wOSampler = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='".$session->domain."'";
-    $queryTermsSQLDomain = "SELECT SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM t_agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."'";
-    
-    $samplerStatus = samplerStatus($session->domain);
-    
-    if ($session->domain == "all")
-    {
-        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQL);
-        else $queryTerms = mysqli_query($connection, $queryTermsSQL_wOSampler);
-    }
-    else
-    {
-        if ($samplerStatus == "enabled") $queryTerms = mysqli_query($connection, $queryTermsSQLDomain);
-        else $queryTerms = mysqli_query($connection, $queryTermsSQLDomain_wOSampler);
-    }
-        
-    $fraudTerms = mysqli_fetch_assoc($queryTerms);
-    $fraudScore = ($fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'])/3;
-    
-    ?>
 
     <div class="container-bottom-left" id="elm-termstatistics">
         <h2>
@@ -665,7 +695,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
     });
 </script>
 
-<!-- Statistics graph -->
+<!-- Word statistics graph -->
 
 <script>
     var defaultOptions = {
@@ -790,6 +820,12 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
             animation: false,
             scales: {
                 xAxes: [{
+                    gridLines: {
+                        drawTicks: false
+                    },
+                    ticks: {
+                        padding: 15
+                    },
                     }, {
                         position: 'top',
                         ticks: {
@@ -801,8 +837,12 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                         }
                     }],
                 yAxes: [{ 
+                    gridLines: {
+                        drawTicks: false,
+                        drawBorder: false
+                    },
                     ticks: {
-                        padding: 10,
+                        display: false
                     }
                     }, {
                         position: 'right',
@@ -920,6 +960,7 @@ $(document).ready(function() {
 
 <script>
     $(document).ready(function(){
+
         $('.tooltip-custom').tooltipster({
             theme: 'tooltipster-custom',
             contentAsHTML: true,
