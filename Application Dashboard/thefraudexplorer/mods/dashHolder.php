@@ -369,11 +369,43 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
 
         <!-- Graph parallel stats -->
 
-        <div class="statistics-container"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total words</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $totalSystemWords; ?><br>words stored in our database.</div></div></div>">122m<br><div class="statistics-label-container">Words</div></span></div>   
+        <?php
+
+            $totalWordsReduced = null;
+
+            if (strlen($totalSystemWords) == 5) $totalWordsReduced = substr($totalSystemWords, 0,2) . "k";
+            else if (strlen($totalSystemWords) == 6) $totalWordsReduced = substr($totalSystemWords, 0,3) . "k";
+            else if (strlen($totalSystemWords) == 7) $totalWordsReduced = substr($totalSystemWords, 0,2)/10 . "m";
+            else if (strlen($totalSystemWords) == 8) $totalWordsReduced = substr($totalSystemWords, 0,2) . "m";
+            else if (strlen($totalSystemWords) == 9) $totalWordsReduced = substr($totalSystemWords, 0,3) . "m";
+            else $totalWordsReduced = $totalSystemWords;
+
+            $totalEventsReduced = null;
+            $totalEventsCount = $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'];
+
+            if (strlen($totalEventsCount) == 5) $totalEventsReduced = substr($totalEventsCount, 0,2) . "k";
+            else if (strlen($totalEventsCount) == 6) $totalEventsReduced = substr($totalEventsCount, 0,3) . "k";
+            else if (strlen($totalEventsCount) == 7) $totalEventsReduced = substr($totalEventsCount, 0,2)/10 . "m";
+            else if (strlen($totalEventsCount) == 8) $totalEventsReduced = substr($totalEventsCount, 0,2) . "m";
+            else if (strlen($totalEventsCount) == 9) $totalEventsReduced = substr($totalEventsCount, 0,3) . "m";
+            else $totalEventsReduced = $totalEventsCount;
+
+            $endpointWithEventsReduced = null;
+
+            if (strlen($numberOfEndpointWithEvents) == 5) $endpointWithEventsReduced = substr($numberOfEndpointWithEvents, 0,2) . "k";
+            else if (strlen($numberOfEndpointWithEvents) == 6) $endpointWithEventsReduced = substr($numberOfEndpointWithEvents, 0,3) . "k";
+            else if (strlen($numberOfEndpointWithEvents) == 7) $endpointWithEventsReduced = substr($numberOfEndpointWithEvents, 0,2)/10 . "m";
+            else if (strlen($numberOfEndpointWithEvents) == 8) $endpointWithEventsReduced = substr($numberOfEndpointWithEvents, 0,2) . "m";
+            else if (strlen($numberOfEndpointWithEvents) == 9) $endpointWithEventsReduced = substr($numberOfEndpointWithEvents, 0,3) . "m";
+            else $endpointWithEventsReduced = $numberOfEndpointWithEvents;
+
+        ?>
+
+        <div class="statistics-container"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total words</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $totalSystemWords; ?><br>words stored in our database.</div></div></div>"><?php echo $totalWordsReduced; ?><br><div class="statistics-label-container">Words</div></span></div>   
         <div class="separator-line"></div>
-        <div class="statistics-container" style="top: 137px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total events</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization']; ?> fraud<br>triangle events triggered by AI.</div></div></div>">12k<br><div class="statistics-label-container">Events</div></span></div>
+        <div class="statistics-container" style="top: 137px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total events</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization']; ?> fraud<br>triangle events triggered by AI.</div></div></div>"><?php echo $totalEventsReduced; ?><br><div class="statistics-label-container">Events</div></span></div>
         <div class="separator-line" style="top: 181px;"></div>
-        <div class="statistics-container" style="top: 193px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoints reporting</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $numberOfEndpointWithEvents; ?><br>people reporting FTA events.</div></div></div>">281m<br><div class="statistics-label-container">Rpting</div></span></div>
+        <div class="statistics-container" style="top: 193px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoints reporting</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $numberOfEndpointWithEvents; ?><br>people reporting FTA events.</div></div></div>"><?php echo $endpointWithEventsReduced; ?><br><div class="statistics-label-container">Rpting</div></span></div>
 
         <div class="container-upper-right-sub">
             <canvas id="upper-right"></canvas>

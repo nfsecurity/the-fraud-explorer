@@ -1191,6 +1191,7 @@ a.welcome
 .statistics-container
 {
     position: absolute;
+    cursor: default;
     top: 80px;
     left: 17px;
     border: 2px solid #e5e5e5;
