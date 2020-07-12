@@ -581,6 +581,40 @@ include "../lbs/openDBconn.php";
     </form>
 </div>
 
+<?php
+
+    function escapeJsonString( $value ) 
+    {
+        $escapers =     array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+        $result = str_replace($escapers, $replacements, $value);
+        return $result;
+    }
+
+    $fta_lang = $configFile['fta_lang_selection'];
+
+    if ($fta_lang == "fta_text_rule_multilanguage") 
+    {
+        $numberOfLibraries = 2;
+        $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+        $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
+
+        $pureJSONforJSSpanish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+        $pureJSONforJSSpanish = escapeJsonString($pureJSONforJSSpanish);
+
+        $pureJSONforJSEnglish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[2], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+        $pureJSONforJSEnglish = escapeJsonString($pureJSONforJSEnglish);
+    }
+    else 
+    {
+        $numberOfLibraries = 1;
+        $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
+        $pureJSONforJS = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
+        $pureJSONforJS = escapeJsonString($pureJSONforJS);
+    }
+
+?>
+
 <!-- Buttons Add, Delete, Modify -->
 
 <script>
@@ -611,6 +645,68 @@ $("#add-rule").click(function(e) {
     }
     else
     {
+        var numLibraries = '<?php if(isset($numberOfLibraries)) echo $numberOfLibraries; else echo " "; ?>'
+
+        if (numLibraries == 1)
+        {
+            var data = '<?php if (isset($pureJSONforJS)) echo $pureJSONforJS; else echo " "; ?>'
+            data = JSON.parse(data);
+            var search = document.getElementById('phrase-identification-add').value
+            var ruleset = document.getElementById('ruleset-add').value
+            var vertice = document.getElementById('fraudvertice-add').value.toLowerCase();
+            var searchPath = data["dictionary"][ruleset][vertice][search];
+
+            if (typeof(searchPath) != "undefined") 
+            {
+                var finalRegexpString = "the regular expression already exists";
+                $("#regexpression-add").val(finalRegexpString);
+
+                setTimeout("$('#regexpression-add').addClass('blink-check');", 100);
+                setTimeout("$('#regexpression-add').removeClass('blink-check');", 1000);
+
+                return;
+            }
+        }
+        else
+        {
+            var dataSpanish = '<?php if (isset($pureJSONforJSSpanish)) echo $pureJSONforJSSpanish; else echo " "; ?>'
+            var dataEnglish = '<?php if (isset($pureJSONforJSEnglish)) echo $pureJSONforJSEnglish; else echo " "; ?>'
+
+            dataSpanish = JSON.parse(dataSpanish);
+            dataEnglish = JSON.parse(dataEnglish);
+
+            var search = document.getElementById('phrase-identification-add').value
+            var ruleset = document.getElementById('ruleset-add').value
+            var vertice = document.getElementById('fraudvertice-add').value.toLowerCase();
+        
+            var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
+            var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
+
+            var finalRegexpString = null;
+
+            if (typeof(searchPathSpanish) != "undefined") 
+            {
+                finalRegexpString = "the regular expression already exists";
+                $("#regexpression-add").val(finalRegexpString);
+
+                setTimeout("$('#regexpression-add').addClass('blink-check');", 100);
+                setTimeout("$('#regexpression-add').removeClass('blink-check');", 1000);
+
+                return;
+            }
+           
+            if (typeof(searchPathEnglish) != "undefined") 
+            {
+                finalRegexpString = "the regular expression already exists";
+                $("#regexpression-add").val(finalRegexpString);
+
+                setTimeout("$('#regexpression-add').addClass('blink-check');", 100);
+                setTimeout("$('#regexpression-add').removeClass('blink-check');", 1000);
+
+                return;
+            }
+        }
+
         $("#formRules").submit(function(event) {
             $(this).append('<input type="hidden" name="action" value="addrule" /> ');
             return true;
@@ -731,40 +827,6 @@ $("#modify-rule").click(function(e) {
 
 <script>
 
-    <?php
-
-        function escapeJsonString( $value ) 
-        {
-            $escapers =     array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
-            $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
-            $result = str_replace($escapers, $replacements, $value);
-            return $result;
-        }
-
-        $fta_lang = $configFile['fta_lang_selection'];
-
-        if ($fta_lang == "fta_text_rule_multilanguage") 
-        {
-            $numberOfLibraries = 2;
-            $jsonFT[1] = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
-            $jsonFT[2] = json_decode(file_get_contents($configFile['fta_text_rule_english']), true);
-
-            $pureJSONforJSSpanish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
-            $pureJSONforJSSpanish = escapeJsonString($pureJSONforJSSpanish);
-
-            $pureJSONforJSEnglish = str_replace("\u0022","\\\\\"", json_encode($jsonFT[2], JSON_HEX_APOS|JSON_HEX_QUOT)); 
-            $pureJSONforJSEnglish = escapeJsonString($pureJSONforJSEnglish);
-        }
-        else 
-        {
-            $numberOfLibraries = 1;
-            $jsonFT[1] = json_decode(file_get_contents($configFile[$fta_lang]), true);
-            $pureJSONforJS = str_replace("\u0022","\\\\\"", json_encode($jsonFT[1], JSON_HEX_APOS|JSON_HEX_QUOT)); 
-            $pureJSONforJS = escapeJsonString($pureJSONforJS);
-        }
-
-    ?>
-
   $(function() {
     $("#search-rule").on("click", function() {
 
@@ -819,10 +881,9 @@ $("#modify-rule").click(function(e) {
                     $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
                     $('#library-search-language').val('fta_text_rule_spanish');
                     $('#library-search-language').niceSelect('update');
-
                 }
 
-                if (typeof(searchPathEnglish) === "undefined") inalRegexpString = "no regular expression found";
+                if (typeof(searchPathEnglish) === "undefined") finalRegexpString = "no regular expression found";
                 else 
                 {
                     finalRegexpString = searchPathEnglish.replace(/\//g, "");
