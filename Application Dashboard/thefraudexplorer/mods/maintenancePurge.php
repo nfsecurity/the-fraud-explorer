@@ -319,7 +319,7 @@ $_SESSION['processingStatus'] = "notstarted";
             
             <?php    
             
-            if ($session->username != "admin") echo '<input type="submit" class="btn btn-danger setup disabled" value="Purge data now" style="outline: 0 !important;">';
+            if ($session->username != "admin") echo '<button type="submit" class="btn btn-danger setup disabled" value="Purge data now" style="outline: 0 !important;">';
             else echo '<button type="submit" id="btn-purge" class="btn btn-danger setup" data-loading-text="<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Purging, please wait" style="outline: 0 !important;">Purge data now</button>';
 
             ?>

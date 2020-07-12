@@ -216,8 +216,8 @@ $regionalismENFile = encRijndael("/var/www/html/thefraudexplorer/core/spell/cust
             
             if ($session->username != "admin") 
             {
-                echo '<input type="button" id="button-del-words" class="btn btn-danger setup" value="Remove words" name="removewords" style="outline: 0 !important;">';
-                echo '<input type="button" id="button-add-words" class="btn btn-success setup" value="Add words" name="addwords" style="outline: 0 !important;">';
+                echo '<button type="button" id="button-del-words" class="btn btn-danger setup" name="removewords" style="outline: 0 !important;">Remove words</button>';
+                echo '<button type="button" id="button-add-words" class="btn btn-success setup" name="addwords" style="outline: 0 !important;">Add all words</button>';
             }
             else
             {

@@ -352,6 +352,19 @@ include "../lbs/openDBconn.php";
         border: 1px solid #57a881 !important;
     }
 
+    @keyframes blink 
+    { 
+        50% 
+        { 
+            border: 1px solid white;
+        } 
+    }
+
+    .blink-check
+    {
+        -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -431,7 +444,7 @@ include "../lbs/openDBconn.php";
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-add" id="regexpression-add" autocomplete="off" placeholder="enter here the regular expression in PCRE format" class="input-value-text-regexp-add">
                 <div class="input-regexp-right">/</div>
-                <button type="submit" class="rule-button-add" id="add-rule" name="action" value="addrule">Add rule</button>
+                <button type="submit" class="rule-button-add btn-default" id="add-rule" name="action" value="addrule">Add rule</button>
             </div>
 
         </div>
@@ -505,9 +518,9 @@ include "../lbs/openDBconn.php";
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-delmodify" id="regexpression-delmodify" autocomplete="off" placeholder="you will see here the regular expression" class="input-value-text-regexp-delmodify">
                 <div class="input-regexp-right">/</div>
-                <button type="button" class="rule-button-searchdelmodify" id="search-rule">SCH</button>
-                <button type="submit" class="rule-button-searchdelmodify" id="delete-rule" name="action" value="deleterule">DEL</button>
-                <button type="submit" class="rule-button-searchdelmodify" id="modify-rule" name="action" value="modifyrule">MOD</button>
+                <button type="button" class="rule-button-searchdelmodify btn-default" id="search-rule">SCH</button>
+                <button type="submit" class="rule-button-searchdelmodify btn-default" id="delete-rule" name="action" value="deleterule">DEL</button>
+                <button type="submit" class="rule-button-searchdelmodify btn-default" id="modify-rule" name="action" value="modifyrule">MOD</button>
             </div>
 
         </div>
@@ -567,6 +580,120 @@ include "../lbs/openDBconn.php";
         </div>
     </form>
 </div>
+
+<!-- Buttons Add, Delete, Modify -->
+
+<script>
+
+$("#add-rule").click(function(e) {
+
+    e.preventDefault();
+
+    var regexpadd = $('#regexpression-add').val();
+    var phraseidentification = $('#phrase-identification-add').val();
+    var allvalues = new Array(regexpadd, phraseidentification);
+
+    if (!regexpadd || !phraseidentification)
+    {
+        var regexpaddfield = "#regexpression-add,";
+        var phraseidentificationfield = "#phrase-identification-add,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") finalfield = regexpaddfield;
+        if (allvalues[1] == "") finalfield = finalfield + phraseidentificationfield;
+ 
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $("#formRules").submit(function(event) {
+            $(this).append('<input type="hidden" name="action" value="addrule" /> ');
+            return true;
+        });
+
+        $('#formRules').submit();
+    }
+
+});
+
+$("#delete-rule").click(function(e) {
+
+    e.preventDefault();
+
+    var regexpdel = $('#regexpression-delmodify').val();
+    var phraseidentification = $('#phrase-identification-delmodify').val();
+    var allvalues = new Array(regexpdel, phraseidentification);
+
+    if (!regexpdel || !phraseidentification || regexpdel == "no regular expression found")
+    {
+        var regexpdelfield = "#regexpression-delmodify,";
+        var phraseidentificationfield = "#phrase-identification-delmodify,";
+        var finalfield = "";
+
+        if (allvalues[0] == "" || allvalues[0] == "no regular expression found") finalfield = regexpdelfield;
+        if (allvalues[1] == "") finalfield = finalfield + phraseidentificationfield;
+    
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $("#formRules").submit(function(event) {
+            $(this).append('<input type="hidden" name="action" value="deleterule" /> ');
+            return true;
+        });
+
+        $('#formRules').submit();
+    }
+
+});
+
+$("#modify-rule").click(function(e) {
+
+    e.preventDefault();
+
+    var regexpmod = $('#regexpression-delmodify').val();
+    var phraseidentification = $('#phrase-identification-delmodify').val();
+    var allvalues = new Array(regexpmod, phraseidentification);
+
+    if (!regexpmod || !phraseidentification || regexpmod == "no regular expression found")
+    {
+        var regexpmodfield = "#regexpression-delmodify,";
+        var phraseidentificationfield = "#phrase-identification-delmodify,";
+        var finalfield = "";
+
+        if (allvalues[0] == "" || allvalues[0] == "no regular expression found") finalfield = regexpmodfield;
+        if (allvalues[1] == "") finalfield = finalfield + phraseidentificationfield;
+
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        return;
+    }
+    else
+    {
+        $("#formRules").submit(function(event) {
+            $(this).append('<input type="hidden" name="action" value="modifyrule" /> ');
+            return true;
+        });
+
+        $('#formRules').submit();
+    }
+
+});
+
+</script>
 
 <!-- Download multiple rule files -->
 
@@ -641,62 +768,75 @@ include "../lbs/openDBconn.php";
   $(function() {
     $("#search-rule").on("click", function() {
 
-        var numLibraries = '<?php if(isset($numberOfLibraries)) echo $numberOfLibraries; else echo " "; ?>'
+        var phraseidentification = $('#phrase-identification-delmodify').val();
 
-        if (numLibraries == 1)
+        if (!phraseidentification)
         {
-            var data = '<?php if (isset($pureJSONforJS)) echo $pureJSONforJS; else echo " "; ?>'
-            data = JSON.parse(data);
-            var search = document.getElementById('phrase-identification-delmodify').value
-            var ruleset = document.getElementById('ruleset-delmodify').value
-            var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
-            var searchPath = data["dictionary"][ruleset][vertice][search];
+            setTimeout("$('#phrase-identification-delmodify').addClass('blink-check');", 100);
+            setTimeout("$('#phrase-identification-delmodify').removeClass('blink-check');", 1000);
 
-            if (typeof(searchPath) === "undefined") var finalRegexpString = "no regular expression found";
-            else var finalRegexpString = searchPath.replace(/\//g, "");
+            return;
         }
         else
         {
-            var dataSpanish = '<?php if (isset($pureJSONforJSSpanish)) echo $pureJSONforJSSpanish; else echo " "; ?>'
-            var dataEnglish = '<?php if (isset($pureJSONforJSEnglish)) echo $pureJSONforJSEnglish; else echo " "; ?>'
+            var numLibraries = '<?php if(isset($numberOfLibraries)) echo $numberOfLibraries; else echo " "; ?>'
 
-            dataSpanish = JSON.parse(dataSpanish);
-            dataEnglish = JSON.parse(dataEnglish);
-
-            var search = document.getElementById('phrase-identification-delmodify').value
-            var ruleset = document.getElementById('ruleset-delmodify').value
-            var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
-     
-            var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
-            var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
-
-            var finalRegexpString = null;
-
-            if (typeof(searchPathSpanish) === "undefined") finalRegexpString = "no regular expression found";
-            else 
+            if (numLibraries == 1)
             {
-                finalRegexpString = searchPathSpanish.replace(/\//g, "");
+                var data = '<?php if (isset($pureJSONforJS)) echo $pureJSONforJS; else echo " "; ?>'
+                data = JSON.parse(data);
+                var search = document.getElementById('phrase-identification-delmodify').value
+                var ruleset = document.getElementById('ruleset-delmodify').value
+                var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
+                var searchPath = data["dictionary"][ruleset][vertice][search];
 
-                $(".select-option-styled-language-search option:selected").removeAttr("selected");
-                $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
-                $('#library-search-language').val('fta_text_rule_spanish');
-                $('#library-search-language').niceSelect('update');
-
+                if (typeof(searchPath) === "undefined") var finalRegexpString = "no regular expression found";
+                else var finalRegexpString = searchPath.replace(/\//g, "");
             }
-
-            if (typeof(searchPathEnglish) === "undefined") inalRegexpString = "no regular expression found";
-            else 
+            else
             {
-                finalRegexpString = searchPathEnglish.replace(/\//g, "");
-               
-                $(".select-option-styled-language-search option:selected").removeAttr("selected");
-                $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
-                $('#library-search-language').val('fta_text_rule_english');
-                $('#library-search-language').niceSelect('update');
+                var dataSpanish = '<?php if (isset($pureJSONforJSSpanish)) echo $pureJSONforJSSpanish; else echo " "; ?>'
+                var dataEnglish = '<?php if (isset($pureJSONforJSEnglish)) echo $pureJSONforJSEnglish; else echo " "; ?>'
+
+                dataSpanish = JSON.parse(dataSpanish);
+                dataEnglish = JSON.parse(dataEnglish);
+
+                var search = document.getElementById('phrase-identification-delmodify').value
+                var ruleset = document.getElementById('ruleset-delmodify').value
+                var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
+        
+                var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
+                var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
+
+                var finalRegexpString = null;
+
+                if (typeof(searchPathSpanish) === "undefined") finalRegexpString = "no regular expression found";
+                else 
+                {
+                    finalRegexpString = searchPathSpanish.replace(/\//g, "");
+
+                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                    $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                    $('#library-search-language').val('fta_text_rule_spanish');
+                    $('#library-search-language').niceSelect('update');
+
+                }
+
+                if (typeof(searchPathEnglish) === "undefined") inalRegexpString = "no regular expression found";
+                else 
+                {
+                    finalRegexpString = searchPathEnglish.replace(/\//g, "");
+                
+                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                    $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
+                    $('#library-search-language').val('fta_text_rule_english');
+                    $('#library-search-language').niceSelect('update');
+                }
             }
+        
+            $("#regexpression-delmodify").val(finalRegexpString);
+
         }
-    
-    $("#regexpression-delmodify").val(finalRegexpString);
     });
   });
 

@@ -197,7 +197,7 @@ $mailSmtp = $configFile['mail_smtp'];
 
         <form action="mods/departmentsUpload" id="departmentsUpload" method="post" enctype="multipart/form-data" accept-charset="utf-8">  
             <div class="departmentsUploadStyle" style="outline: 0 !important;">  
-                <button type="button" class="btn btn-default csv-button-upload" onclick="document.getElementById('departmentsToUpload').click();">Upload and process CSV file from my computer</button>
+                <button type="button" class="btn btn-default csv-button-upload" id="departmentsToUpload-button" onclick="document.getElementById('departmentsToUpload').click();">Upload and process CSV file from my computer</button>
                 <input type="file" name="departmentsToUpload" id="departmentsToUpload" class="upload" />
             </div>
         </form>

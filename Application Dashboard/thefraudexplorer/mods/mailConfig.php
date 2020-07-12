@@ -233,7 +233,7 @@ $mailSmtp = $configFile['mail_smtp'];
             </div>
 
             <div class="status-align-right-mail">
-               <p>Mail to receive general messages</p>
+               <p>Mail used to send alert messages</p>
             </div>
     </div>
 
