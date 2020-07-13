@@ -669,7 +669,7 @@ include "../lbs/cryptography.php";
 
                 <div style="width: 49%; display: inline-block; vertical-align: top;">
 
-                    <p class="title-config">Workflow domain</p><br>
+                    <p class="title-config">Workflow FQDN domain</p><br>
                     <input type="text" class="code input-value-text" id="workflowDomain" name="workflowDomain" value="" placeholder="Company domain" />
 
                 </div>

@@ -130,6 +130,17 @@ if (isset($argv[1]))
         unlink($sLock);
         exit;
     }
+    else if ($argv[1] == "onlyWF")
+    {
+        startWorkflows($ESAlerterIndex);
+
+        echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+
+        /* Release the lock */
+
+        unlink($sLock);
+        exit;
+    }
 }
 
 if (indexExist($configFile['es_alerter_status_index'], $configFile))

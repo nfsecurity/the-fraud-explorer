@@ -861,12 +861,6 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                         $resultDeduction = mysqli_query($connection, $queryDeduction);
 
                         logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - Time[".$timeStamp."] - AgentID[".rtrim($endPoint, "*")."] A.I Deduction - Reason[".$matchReason."] Ruleset [".$ruleset."] Application[".$application."] Probability[".$fraudProbDeduction."]");
-                    
-                        /* Send message alert */
-
-                        $mailEventPath = $configFile['php_document_root']."lbs/mailEventAI.php";
-                        include $mailEventPath;
-                        mail($to, $subject, $message, $headers);
                     }
                 }
 
@@ -1060,6 +1054,28 @@ function startWorkflows($ESAlerterIndex)
 
                                     /* Send message alert */
 
+                                    $alert_workflowName = $name;
+                                    $alert_amount = count($query);
+                                    $eventIds = explode(" ", $idS);
+                                    
+                                    for ($i=0; $i<count($query); $i++)
+                                    {        
+                                        $idsQuery[$i] = $eventIds[$i];
+
+                                        $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                        $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+
+                                        $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                        $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                        $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                        $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                        $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                        $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                        $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                        $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                        $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                                    }
+
                                     $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                     include $mailEventWFPath;
                                     mail($to, $subject, $message, $headers);
@@ -1137,6 +1153,28 @@ function startWorkflows($ESAlerterIndex)
 
                             /* Send message alert */
 
+                            $alert_workflowName = $name;
+                            $alert_amount = count($query);
+                            $eventIds = explode(" ", $idS);
+                            
+                            for ($i=0; $i<count($query); $i++)
+                            {        
+                                $idsQuery[$i] = $eventIds[$i];
+
+                                $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+
+                                $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                            }
+
                             $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                             include $mailEventWFPath;
                             mail($to, $subject, $message, $headers);
@@ -1189,6 +1227,28 @@ function startWorkflows($ESAlerterIndex)
                             mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
 
                             /* Send message alert */
+
+                            $alert_workflowName = $name;
+                            $alert_amount = count($query);
+                            $eventIds = explode(" ", $idS);
+                            
+                            for ($i=0; $i<count($query); $i++)
+                            {        
+                                $idsQuery[$i] = $eventIds[$i];
+
+                                $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+
+                                $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                            }
 
                             $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                             include $mailEventWFPath;
@@ -1243,6 +1303,28 @@ function startWorkflows($ESAlerterIndex)
 
                             /* Send message alert */
 
+                            $alert_workflowName = $name;
+                            $alert_amount = count($query);
+                            $eventIds = explode(" ", $idS);
+                            
+                            for ($i=0; $i<count($query); $i++)
+                            {        
+                                $idsQuery[$i] = $eventIds[$i];
+
+                                $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+
+                                $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                            }
+
                             $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                             include $mailEventWFPath;
                             mail($to, $subject, $message, $headers);
@@ -1294,11 +1376,33 @@ function startWorkflows($ESAlerterIndex)
                         {
                             mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
 
-                            /* Send message alert */
+                                /* Send message alert */
 
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
+                                $alert_workflowName = $name;
+                                $alert_amount = count($query);
+                                $eventIds = explode(" ", $idS);
+                                
+                                for ($i=0; $i<count($query); $i++)
+                                {        
+                                    $idsQuery[$i] = $eventIds[$i];
+    
+                                    $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                    $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+    
+                                    $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                    $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                    $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                    $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                    $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                    $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                    $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                    $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                    $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                                }
+    
+                                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                include $mailEventWFPath;
+                                mail($to, $subject, $message, $headers);
                         }
                     }
 
@@ -1348,6 +1452,28 @@ function startWorkflows($ESAlerterIndex)
                             mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
 
                             /* Send message alert */
+
+                            $alert_workflowName = $name;
+                            $alert_amount = count($query);
+                            $eventIds = explode(" ", $idS);
+                            
+                            for ($i=0; $i<count($query); $i++)
+                            {        
+                                $idsQuery[$i] = $eventIds[$i];
+
+                                $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+
+                                $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                            }
 
                             $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                             include $mailEventWFPath;
