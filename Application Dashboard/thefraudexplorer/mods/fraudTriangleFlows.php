@@ -347,8 +347,8 @@ include "../lbs/cryptography.php";
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background-color: white;
-        max-width: 80px;
-        width: 80px;
+        max-width: 60px;
+        width: 60px;
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
@@ -381,8 +381,8 @@ include "../lbs/cryptography.php";
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background-color: white;
-        max-width: 45px;
-        width: 45px;
+        max-width: 65px;
+        width: 65px;
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
@@ -466,8 +466,8 @@ include "../lbs/cryptography.php";
         border-top: 0px solid white;
         border-left: 0px solid white;
         border-bottom: 0px solid white;
-        width: 80px;
-        max-width: 80px;
+        width: 60px;
+        max-width: 60px;
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
@@ -500,8 +500,8 @@ include "../lbs/cryptography.php";
         border-top: 0px solid white;
         border-left: 0px solid white;
         border-bottom: 0px solid white;
-        width: 45px;
-        max-width: 45px;
+        width: 65px;
+        max-width: 65px;
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
@@ -656,20 +656,20 @@ include "../lbs/cryptography.php";
 
                 <div style="width: 49%; display: inline-block; vertical-align: top;">
 
-                    <p class="title-config">Workflow interval</p><br>
+                    <p class="title-config">Events range</p><br>
                     <select class="select-option-styled-interval wide" name="workflowInterval" id="workflowInterval">
                         <option value="1">1 day</option>
                         <option value="8">8 days</option>
                         <option value="15">15 days</option>
                         <option value="30">1 month</option>
-                        <option value="0" selected="selected">Without interval</option>
+                        <option value="0" selected="selected">Without range</option>
                     </select>  
 
                 </div>
 
                 <div style="width: 49%; display: inline-block; vertical-align: top;">
 
-                    <p class="title-config">Workflow FQDN domain</p><br>
+                    <p class="title-config">Company FQDN</p><br>
                     <input type="text" class="code input-value-text" id="workflowDomain" name="workflowDomain" value="" placeholder="Company domain" />
 
                 </div>
@@ -710,7 +710,7 @@ include "../lbs/cryptography.php";
             <thead class="table-thead-flows">                       
                 <th class="table-th-flows-name" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Workflow name</th>
                 <th class="table-th-flows-workflow" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Fraud Triangle Flow</th>
-                <th class="table-th-flows-interval" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Interval</th>
+                <th class="table-th-flows-interval" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Range</th>
                 <th class="table-th-flows-custodian" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Custodian</th>
                 <th class="table-th-flows-triggers" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Hits</th>
             </thead>
@@ -854,7 +854,7 @@ $(document).ready(function()
     
         if(x > 5) return;
 
-        $("#customFields").append('<tr valign="top"><th scope="row"><label for="customFieldName"></label></th><td><div class="flow-table"><div class="flow-cell"><select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="rulesetFlow"><?php $configFile = parse_ini_file("../config.ini"); $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true); foreach ($jsonFT['dictionary'] as $ruleset => $value) { if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>'; else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>'; } ?> </select></div><div class="flow-cell"><select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudverticeFlow"><option selected="selected">ALL VERTICES</option><option>PRESSURE</option><option>OPPORTUNITY</option><option>RATIONALIZATION</option></select></div><div class="flow-cell"><input type="text" class="code input-value-text-endpoint" style="margin-right: 3px;" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" /><input type="text" class="code input-value-text-application" style="margin-right: 3px;" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" /><input type="text" class="code input-value-text-phrase" style="margin-right: 7px;" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" /></div><div class="flow-cell"><select class="select-option-styled-operator" name="fraudOperator[]" id="fraudOperator-flow"><option>AND</option><option selected="selected">END</option></select></div><div class="flow-cell"><a href="javascript:void(0);" onclick="deleteRow(this)">&nbsp;&nbsp;<i class="fa fa-minus fa-lg" aria-hidden="true"></i></a></div></div></td></tr>');
+        $("#customFields").append('<tr valign="top"><th scope="row"><label for="customFieldName"></label></th><td><div class="flow-table"><div class="flow-cell"><select class="select-option-styled-rulesflow" name="rulesetFlow[]" id="rulesetFlow"><?php $configFile = parse_ini_file("../config.ini"); $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true); foreach ($jsonFT['dictionary'] as $ruleset => $value) { if ($ruleset == "BASELINE") echo '<option value="'.$ruleset.'" selected="selected">ALL DEPARTMENTS</option>'; else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>'; } ?> </select></div><div class="flow-cell"><select class="select-option-styled-verticeflow" name="fraudverticeFlow[]" id="fraudverticeFlow"><option selected="selected">ALL VERTICES</option><option>PRESSURE</option><option>OPPORTUNITY</option><option>RATIONALIZATION</option></select></div><div class="flow-cell"><input type="text" class="code input-value-text-endpoint" style="margin-right: 4px;" id="endpointsFlow" name="endpointsFlow[]" value="" placeholder="All Endpoints" /><input type="text" class="code input-value-text-application" style="margin-right: 3px;" id="applicationsFlow" name="applicationsFlow[]" value="" placeholder="All Applications" /><input type="text" class="code input-value-text-phrase" style="margin-right: 7px;" id="phrasesFlow" name="phrasesFlow[]" value="" placeholder="All Phrases" /></div><div class="flow-cell"><select class="select-option-styled-operator" name="fraudOperator[]" id="fraudOperator-flow"><option>AND</option><option selected="selected">END</option></select></div><div class="flow-cell"><a href="javascript:void(0);" onclick="deleteRow(this)">&nbsp;&nbsp;<i class="fa fa-minus fa-lg" aria-hidden="true"></i></a></div></div></td></tr>');
         $(document).ready(function() {
             $('select').niceSelect();
         });
