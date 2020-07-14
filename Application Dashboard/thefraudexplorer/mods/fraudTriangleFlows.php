@@ -733,7 +733,13 @@ include "../lbs/cryptography.php";
 
                     if ($workflowEntry['triggers'] != 0)
                     {
-                        echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span><a href="../mods/viewWorkflow?ed='.encRijndael($workflowEntry['name']).'" data-toggle="modal" data-dismiss="modal" class="viewworkflow-button" data-target="#viewWorkflow" href="#" id="elm-view-workflow">'.$workflowEntry['triggers'].'</a></td>';
+                        preg_match('/\s\[D\]=[a-zA-Z.]*/', $workflowEntry['workflow'], $workflowDomainCompanyEntry);
+                        $companyDomainEntry = explode("=", $workflowDomainCompanyEntry[0]);
+                        $companyDomain = $companyDomainEntry[1];
+
+                        if ($session->domain == $companyDomain || $session->domain == "all" ) echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span><a href="../mods/viewWorkflow?ed='.encRijndael($workflowEntry['name']).'" data-toggle="modal" data-dismiss="modal" class="viewworkflow-button" data-target="#viewWorkflow" href="#" id="elm-view-workflow">'.$workflowEntry['triggers'].'</a></td>';
+                        else echo '<td class="table-td-flows-triggers"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['triggers'].'</td>';
+                    
                     }
                     else
                     {

@@ -463,7 +463,11 @@ $('#simulatorForm button').click(function(e) {
 
     var form = new FormData(document.getElementById("simulatorForm"));
 
-    if ($(this).attr("value") == "putEvent") form.append('action', 'putEvent');
+    if ($(this).attr("value") == "putEvent") 
+    {
+        $('#btnPutEvent').html('<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Sending phrases&nbsp;');
+        form.append('action', 'putEvent');
+    }
     else 
     {
         $('#btnRunCheck').html('<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Triangulating&nbsp;');
@@ -499,7 +503,7 @@ $('#simulatorForm button').click(function(e) {
                 $('#rationalizationCount').text("0 matched phrases");
                 $('#deductionPercentage').text("0% of fraud probability");
 
-                 /* Testore triangulating button */ 
+                 /* Restore triangulating button */ 
 
                 $('#btnRunCheck').html('Run check');
             }
@@ -567,7 +571,7 @@ $('#simulatorForm button').click(function(e) {
                 else if (opportunityCount != 0) $('#deductionPercentage').text("20% of fraud probability");
                 else if (rationalizationCount != 0) $('#deductionPercentage').text("15% of fraud probability");
 
-                /* Testore triangulating button */ 
+                /* Restore triangulating button */ 
 
                 $('#btnRunCheck').html('Run check');
 

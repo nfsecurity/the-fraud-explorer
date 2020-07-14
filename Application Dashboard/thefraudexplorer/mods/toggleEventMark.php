@@ -101,8 +101,7 @@ else if (!empty($_POST['delete-event']))
 
 /* Return to refering url */
 
-if ($urlrefer == "allevents") header ("location: ../eventData?nt=".encRijndael("all"));
-else header ("location: ../eventData?nt=".encRijndael($endpoint));
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 
 ?>
 

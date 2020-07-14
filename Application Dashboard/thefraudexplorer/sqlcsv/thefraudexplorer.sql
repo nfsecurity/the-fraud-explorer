@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `t_workflows` (
 INSERT INTO `t_workflows` (`name`, `workflow`, `interval`, `custodian`, `triggers`) VALUES ('Executives external businesses', '[D]=CLEVEL, [V]=ALLV, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Credit alternatives', '[D]=CREDIT, [V]=ALLV, [D]=thefraudexplorer.com, [E]=ALLE, [A]=WhatsApp, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Purchases pressures and opportunities', '[D]=PURCHASES, [V]=PRESSURE, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=AND, [D]=PURCHASES, [V]=OPPORTUNITY, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=END', '8', 'events@thefraudexplorer.com', '0');
 
 CREATE TABLE IF NOT EXISTS `t_wtriggers` (
+    `date` datetime DEFAULT NULL,
     `name` varchar(128) DEFAULT NULL,
     `ids` varchar(65535) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

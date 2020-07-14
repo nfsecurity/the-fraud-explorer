@@ -964,7 +964,7 @@ function startWorkflows($ESAlerterIndex)
         $sqlQuery[$row["name"]] = preg_replace($regAgent, $subAgent, $sqlQuery[$row["name"]]);
 
         $sqlQuery[$row["name"]] = preg_replace('/\s+/', ' ', $sqlQuery[$row["name"]]);
-        $sqlQuery[$row["name"]] = str_replace(" --", " AND falsePositive='0'", $sqlQuery[$row["name"]]);
+        $sqlQuery[$row["name"]] = str_replace(" --", " AND falsePositive='0' ORDER BY eventTime ASC", $sqlQuery[$row["name"]]);
     }
 
     /* Traverse generated queries */
@@ -1050,7 +1050,7 @@ function startWorkflows($ESAlerterIndex)
 
                                 if ($existCount == 0)
                                 {
-                                    mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+                                    mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                                     /* Send message alert */
 
@@ -1149,7 +1149,7 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $idS));
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                             /* Send message alert */
 
@@ -1224,7 +1224,7 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s', '%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
 
                             /* Send message alert */
 
@@ -1299,7 +1299,7 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
 
                             /* Send message alert */
 
@@ -1374,7 +1374,7 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
 
                                 /* Send message alert */
 
@@ -1449,7 +1449,7 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(name, ids) values('%s','%s')", $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
 
                             /* Send message alert */
 
@@ -1489,9 +1489,9 @@ function startWorkflows($ESAlerterIndex)
         }
     }
 
-     /* Drop temporary tables */
+    /* Drop temporary tables */
 
-     mysqli_query($connection, "DROP TABLE t_wevents");
+    mysqli_query($connection, "DROP TABLE t_wevents");
 
     /* Troubleshooting for validation queries */
 

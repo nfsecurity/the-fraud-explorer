@@ -159,7 +159,7 @@ else if ($simulatorAction == "putEvent")
         $now = DateTime::createFromFormat('U.u', microtime(true));
         $now->setTimezone(new DateTimeZone($timeZone));
         $wordTime = $now->format("Y-m-d H:i:s,v");
-        usleep(10 * 1000);
+        usleep(50000);
 
         $msgData = $wordTime." a: ".$eventRequest['hostPrivateIP']." b: ".$eventRequest['userDomain']." c: ".$endpoint." d: TextEvent - e: ".encRijndael($eventRequest['appTitle'])." f: ".encRijndael($word);
         $lenData = strlen($msgData);

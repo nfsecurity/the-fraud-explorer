@@ -310,7 +310,7 @@ function endPointsPOSTQuery($endpoint, $rawJSON)
                     $now = DateTime::createFromFormat('U.u', microtime(true));
                     $now->setTimezone(new DateTimeZone($timeZone));
                     $wordTime = $now->format("Y-m-d H:i:s,v");
-                    usleep(10 * 1000);
+                    usleep(50000);
 
                     $msgData = $wordTime." a: ".$receivedJSON['hostPrivateIP']." b: ".$receivedJSON['userDomain']." c: ".$endpoint." d: TextEvent - e: ".encRijndael($receivedJSON['appTitle'])." f: ".encRijndael($word);
                     $lenData = strlen($msgData);
