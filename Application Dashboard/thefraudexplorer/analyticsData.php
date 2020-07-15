@@ -50,6 +50,12 @@ include "lbs/elasticsearch.php";
         <script src="js/bootstrap.js"></script>
         <script src="js/bootstrap-tourist.js"></script>
 
+        <!-- JS/CSS for Tooltip -->
+
+        <link rel="stylesheet" type="text/css" href="css/tooltipster.bundle.css"/>
+        <link rel="stylesheet" type="text/css" href="css/tooltipster-themes/tooltipsterCustom.css">
+        <script type="text/javascript" src="js/tooltipster.bundle.js"></script>
+
         <!-- Charts CSS -->
 
         <link rel="stylesheet" type="text/css" href="css/analyticsData.css?<?php echo filemtime('css/analyticsData.css') ?>"/>
