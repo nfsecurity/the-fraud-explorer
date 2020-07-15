@@ -232,7 +232,7 @@ $("#btn-update").click(function() {
     }
     else
     {
-        $('#formRegionalism').submit();
+        $('#formUpdate').submit();
     }
 
     $btn = $(this);
