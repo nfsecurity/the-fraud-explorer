@@ -341,8 +341,6 @@ include "../lbs/elasticsearch.php";
 
 $("#simulatorParagraph").on('keyup paste', function (event) {
 
-    console.log("Enter event");
-
     var cntMaxLength = parseInt($(this).attr('maxlength'));
 
     if ($(this).text().length == 0) 
