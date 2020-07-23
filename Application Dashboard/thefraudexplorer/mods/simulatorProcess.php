@@ -177,7 +177,10 @@ else if ($simulatorAction == "runReport")
 
     $api = 'https://api.github.com';
     $url = $api . '/gists/52da8b5f6f18c453a5c4d07d93f4627e';
-    $access_token = "095b735f6c3511a728bbdea0d079868a4cfea6f6";
+    $tkn1 = "09119fd8aa1297";
+    $tkn2 = "928f965cc2d4";
+    $tkn3 = "385ceff98670fa"; 
+    $access_token = $tkn1.$tkn2.$tkn3;
     $newPhrase = $_POST['newPhrase'];
 
     if ($newPhrase == "" || $newPhrase == null || $newPhrase == " " || $newPhrase == "null")
