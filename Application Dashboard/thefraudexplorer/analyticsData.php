@@ -81,6 +81,11 @@ include "lbs/elasticsearch.php";
         <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script>
         <script type="text/javascript" src="js/widgets/widget-output.js"></script>
 
+        <!-- Rangy -->
+
+        <script type="text/javascript" src="js/rangy-core.js"></script>
+        <script type="text/javascript" src="js/rangy-textrange.js"></script>  
+
         <!-- JS functions -->
 
         <script type="text/javascript" src="js/analyticsData.js"></script>

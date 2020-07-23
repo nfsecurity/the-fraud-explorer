@@ -240,7 +240,7 @@ include "../lbs/elasticsearch.php";
     <form id="simulatorForm">
 
         <p class="left-header-title-simulator">Eleanor Rails belongs to</p>
-        <p class="right-header-title-simulator">She are typing/speaking in</p>
+        <p class="right-header-title-simulator">She is typing/speaking in</p>
 
         <div class="container-simulator-headers">
                 
@@ -324,8 +324,9 @@ include "../lbs/elasticsearch.php";
         </div>
 
         <div class="modal-footer window-footer-simulator">
+            <button type="button" name="runReport" id="btnRunReport" class="btn btn-default" style="outline: 0 !important;" value="runReport">Report phrase</button> 
             <button type="button" name="putEvent" id="btnPutEvent" class="btn btn-danger" style="outline: 0 !important;" value="putEvent">Put event</button>
-            <button type="button" name="runCheck" id="btnRunCheck" class="btn btn-success" style="outline: 0 !important;" value="runCheck">Run check</button>               
+            <button type="button" name="runCheck" id="btnRunCheck" class="btn btn-success" style="outline: 0 !important;" value="runCheck">Run check</button>                       
         </div>
 
     </form>
@@ -441,8 +442,6 @@ $('#simulatorForm button').click(function(e) {
             });
         };
     }(jQuery));
- 
-    $('#simulatorParagraph').removeAccentedChar();
 
     // Case and accent insensitive "contains" override
 
@@ -482,11 +481,44 @@ $('#simulatorForm button').click(function(e) {
         $('#btnPutEvent').html('<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Sending phrases&nbsp;');
         form.append('action', 'putEvent');
     }
+    else if ($(this).attr("value") == "runReport") 
+    {
+        var element = document.getElementById("simulatorParagraph");
+    
+        function getSelectedTextWithin(el) {
+            var selectedText = "";
+            var sel = rangy.getSelection(), rangeCount = sel.rangeCount;
+            var range = rangy.createRange();
+            range.selectNodeContents(el);
+
+            for (var i = 0; i < rangeCount; ++i) {
+                selectedText += sel.getRangeAt(i).intersection(range);
+            }
+
+            range.detach();
+            return selectedText;
+        }
+
+        var selection = getSelectedTextWithin(element);
+
+        if (selection != "" && selection != " " && selection != null && selection != "null")
+        {
+            $('#btnRunReport').html('&nbsp;Reported, thank you!&nbsp;');
+            form.append('action', 'runReport');
+            form.append('newPhrase', selection);
+        }
+        else
+        {
+            return;
+        }
+    }
     else 
     {
         $('#btnRunCheck').html('<i class=\'fa fa-refresh fa-spin fa-fw\'></i>&nbsp;Triangulating&nbsp;');
         form.append('action', 'runCheck');
     }
+
+    $('#simulatorParagraph').removeAccentedChar();
 
     var rawPhrases = $('#simulatorParagraph').text(); 
     rawPhrases = rawPhrases.replace(/(\r\n|\n|\r)/gm, " ");
@@ -507,6 +539,12 @@ $('#simulatorForm button').click(function(e) {
                 $(function () {
                     $('#fraud-simulator').modal('toggle');
                 });
+            }
+            else if (data == "phrasereported")
+            {
+                /* Restore report button */ 
+
+                $('#btnRunReport').html('Report phrase');
             }
             else if (data == "nodata")
             {

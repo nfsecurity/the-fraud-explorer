@@ -87,6 +87,11 @@ $_SESSION['rulesetScope'] = "ALL";
         <script src="js/jquery.nice-select.js"></script>
         <link rel="stylesheet" href="css/nice-select.css">
 
+        <!-- Rangy -->
+
+        <script type="text/javascript" src="js/rangy-core.js"></script>
+        <script type="text/javascript" src="js/rangy-textrange.js"></script>        
+
         <!-- JS functions -->
 
         <script type="text/javascript" src="js/dashBoard.js"></script>

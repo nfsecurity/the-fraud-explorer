@@ -171,3 +171,72 @@ else if ($simulatorAction == "putEvent")
     $json = "eventputted";
     echo json_encode($json, JSON_PRETTY_PRINT);
 }
+else if ($simulatorAction == "runReport")
+{
+    ini_set('user_agent', "PHP");
+
+    $api = 'https://api.github.com';
+    $url = $api . '/gists/52da8b5f6f18c453a5c4d07d93f4627e';
+    $access_token = "095b735f6c3511a728bbdea0d079868a4cfea6f6";
+    $newPhrase = $_POST['newPhrase'];
+
+    if ($newPhrase == "" || $newPhrase == null || $newPhrase == " " || $newPhrase == "null")
+    {
+        header('Content-Type: application/json');
+
+        $json = "phrasereported";
+        echo json_encode($json, JSON_PRETTY_PRINT);
+
+        exit;
+    }
+
+    /* Get content */
+
+    $dataRead = json_encode(array(
+        'description' => 'The Fraud Explorer - Proposed phrases',
+    ));
+
+    $options = ["http" => [
+        "method" => "POST",
+        "header" => ["Authorization: token " . $access_token,
+            "Content-Type: application/json"
+        ],
+        "content" => $dataRead
+    ]];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+    $dataReply = json_decode($response, true);
+
+    $oldData = $dataReply['files']['newphrases.txt']['content'];
+
+    /* Update content */
+
+    if ($oldData != "" || $oldData != " " || $oldData != NULL || $oldData != "null" || $oldData != null) $newData = $oldData . "\n" . $newPhrase;
+    else $newData = $newPhrase;
+
+    $dataUpdate = json_encode(array(
+        'description' => 'The Fraud Explorer - Proposed phrases',
+        'files' => array(
+            'newphrases.txt' => array(
+                'content' => $newData
+            )
+        )
+    )); 
+
+    $options = ["http" => [
+        "method" => "PATCH",
+        "header" => ["Authorization: token " . $access_token,
+            "Content-Type: application/json"
+        ],
+        "content" => $dataUpdate
+    ]];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+
+    header('Content-Type: application/json');
+
+    $json = "phrasereported";
+    echo json_encode($json, JSON_PRETTY_PRINT);
+}
