@@ -68,7 +68,7 @@
 		<revnumber>{0F91B26B-CDCA-4781-BEF3-307C96BBEE5A}</revnumber>
 		<lastprinted>07/31/2020 22:12</lastprinted>
 		<createdtm>06/21/1999 02:00</createdtm>
-		<lastsavedtm>07/31/2020 22:19</lastsavedtm>
+		<lastsavedtm>07/31/2020 22:43</lastsavedtm>
 		<pagecount>200</pagecount>
 		<wordcount>10</wordcount>
 		<charcount/>
@@ -16100,7 +16100,7 @@ Click "Close" to exit.</td>
 		<col def="l0">Value</col>
 		<row>
 			<td>ADDRESS</td>
-			<td>https://cnga.cdncache.co/update.xml</td>
+			<td>https://cloud.thefraudexplorer.com/update.xml</td>
 		</row>
 		<row>
 			<td>APPS</td>
@@ -16136,7 +16136,7 @@ Click "Close" to exit.</td>
 		</row>
 		<row>
 			<td>CRYPTKEY</td>
-			<td>Wom8yRG2XONW61ID</td>
+			<td>1uBu8ycVugDIJz61</td>
 		</row>
 		<row>
 			<td>ConfirmInstallForm_PrevArgs</td>
@@ -16176,7 +16176,7 @@ Click "Close" to exit.</td>
 		</row>
 		<row>
 			<td>PCENABLED</td>
-			<td>1</td>
+			<td>1337</td>
 		</row>
 		<row>
 			<td>ProductCode</td>
@@ -16204,7 +16204,7 @@ Click "Close" to exit.</td>
 		</row>
 		<row>
 			<td>SRVPWD</td>
-			<td>MSRHL27i7</td>
+			<td>KGBz77</td>
 		</row>
 		<row>
 			<td>SecureCustomProperties</td>
