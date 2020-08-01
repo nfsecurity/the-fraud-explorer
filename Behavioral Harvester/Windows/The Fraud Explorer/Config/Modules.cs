@@ -7,8 +7,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-04
- * Revision: v2.0.2-aim
+ * Date: 2020-08
+ * Revision: v2.0.3-aim
  *
  * Description: Module control
  */
@@ -38,18 +38,27 @@ namespace TFE_core.Config
         {
             try
             {
-                // Module Load: Text Analytics
-
-                if (SQLStorage.RetrievePar("textAnalytics") == "1")
+                if (GC.TryStartNoGCRegion(67108864, true))
                 {
-                    TextAnalyticsLogger.Setup_textAnalytics();
-                    KeyboardListener.KeyDown += new RawKeyEventHandler(KBHelpers.KeyboardListener_KeyDown);
-                    GC.KeepAlive(KeyboardListener);
+                    try
+                    {
+                        // Module Load: Text Analytics
+
+                        if (SQLStorage.RetrievePar("textAnalytics") == "1")
+                        {
+                            TextAnalyticsLogger.Setup_textAnalytics();
+                            KeyboardListener.KeyDown += new RawKeyEventHandler(KBHelpers.KeyboardListener_KeyDown);
+                        }
+
+                        // Start XML reader
+
+                        XMLTimer = new System.Threading.Timer(new TimerCallback(EnTimer), null, 0, (long)Convert.ToInt64(SQLStorage.RetrievePar("heartbeat")));
+                    }
+                    finally
+                    {
+                        GC.EndNoGCRegion();
+                    }
                 }
-
-                // Start XML reader
-
-                XMLTimer = new System.Threading.Timer(new TimerCallback(EnTimer), null, 0, (long)Convert.ToInt64(SQLStorage.RetrievePar("heartbeat")));
             }
             catch (Exception ex)
             {

@@ -15,31 +15,31 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1FBAF8FFBC353692AE7D9A5A4CAA6263"
-        "OwnerKey" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1FBAF8FFBC353692AE7D9A5A4CAA6263"
-        "OwnerKey" = "8:_43A256385B3ED94B23A8C7951BE38929"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_43A256385B3ED94B23A8C7951BE38929"
+        "MsmKey" = "8:_62D9FAFA2FC092E41B42FA46324A88D3"
         "OwnerKey" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_552A8E69B3596B8797B3AD947E6935E1"
+        "MsmKey" = "8:_9EE5D3FC4A88E1DE1714701953288589"
+        "OwnerKey" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9EE5D3FC4A88E1DE1714701953288589"
+        "OwnerKey" = "8:_F7A4AC480124254CD9BEB4A4F37CD89A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F7A4AC480124254CD9BEB4A4F37CD89A"
         "OwnerKey" = "8:_22B0BBFA1D8C4C2ABF673EE644E302D0"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -52,19 +52,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_43A256385B3ED94B23A8C7951BE38929"
+        "OwnerKey" = "8:_F7A4AC480124254CD9BEB4A4F37CD89A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1FBAF8FFBC353692AE7D9A5A4CAA6263"
+        "OwnerKey" = "8:_9EE5D3FC4A88E1DE1714701953288589"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_552A8E69B3596B8797B3AD947E6935E1"
+        "OwnerKey" = "8:_62D9FAFA2FC092E41B42FA46324A88D3"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -203,9 +203,9 @@
             {
                 "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_5DA9F19B38D643628503A865A1DA69AB"
                 {
-                "Name" = "8:.NET Framework 4 Client Profile"
+                "Name" = "8:.NET Framework 4.6"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.6"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=395269"
                 }
@@ -213,14 +213,45 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1FBAF8FFBC353692AE7D9A5A4CAA6263"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_62D9FAFA2FC092E41B42FA46324A88D3"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_62D9FAFA2FC092E41B42FA46324A88D3"
+                    {
+                    "Name" = "8:log4net.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:log4net.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9EE5D3FC4A88E1DE1714701953288589"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Community.CsharpSqlite, Version=3.7.7.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_1FBAF8FFBC353692AE7D9A5A4CAA6263"
+                    "_9EE5D3FC4A88E1DE1714701953288589"
                     {
                     "Name" = "8:Community.CsharpSqlite.dll"
                     "Attributes" = "3:512"
@@ -244,51 +275,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_43A256385B3ED94B23A8C7951BE38929"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F7A4AC480124254CD9BEB4A4F37CD89A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Community.CsharpSqlite.SQLiteClient, Version=3.7.7.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_43A256385B3ED94B23A8C7951BE38929"
+                    "_F7A4AC480124254CD9BEB4A4F37CD89A"
                     {
                     "Name" = "8:Community.CsharpSqlite.SQLiteClient.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:Community.CsharpSqlite.SQLiteClient.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_552A8E69B3596B8797B3AD947E6935E1"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_552A8E69B3596B8797B3AD947E6935E1"
-                    {
-                    "Name" = "8:log4net.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:log4net.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"
@@ -362,15 +362,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Fraud Explorer"
-        "ProductCode" = "8:{2E2E3381-22E7-40CF-973D-1F3425D944C2}"
-        "PackageCode" = "8:{18BA4BDA-4BC6-4BAF-8BDB-E233387B9B52}"
+        "ProductCode" = "8:{6E3E608A-F92C-4E56-B4EF-3AB9D2B18E42}"
+        "PackageCode" = "8:{0E451942-7AE4-4FC8-934E-0B3CA7B84A54}"
         "UpgradeCode" = "8:{C0DC7C39-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.2"
+        "ProductVersion" = "8:2.0.3"
         "Manufacturer" = "8:NF S.A.S"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
