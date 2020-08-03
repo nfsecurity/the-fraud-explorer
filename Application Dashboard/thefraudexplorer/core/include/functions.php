@@ -343,12 +343,26 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                         $end = substr($end, 0, -3);
                         $matchTime = (string)$end."Z";
                         $domain = getUserDomain($agentID);
-                        $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0";
+                        $tone = "0";
+
+                        /* Check phrase tone */
+
+                        if (checkTone($stringOfWords, $lib) == true) $tone = "1";
+
+                        /* Prepare the message to send through socket */
+
+                        $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0 n: ".$tone;
                         $lenData = strlen($msgData);
+
+                        /* Send message to Logstash */
+
                         socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
+                        
                         $matchesGlobalCount++;
 
-                        logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."]");
+                        /* Send message to Logfile */
+
+                        logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."] Tone[".$tone."]");
 
                         $countOutput++;
                     }
@@ -360,10 +374,31 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
     
     $timeEndparseFraudTrianglePhrases = microtime(true);
     $executionTimeparseFraudTrianglePhrases = ($timeEndparseFraudTrianglePhrases - $timeStartparseFraudTrianglePhrases);
-    
-    return $matchesGlobalCount;
 
+    return $matchesGlobalCount;
+    
     // echo "Time taken parseFraudTrianglePhrases in seconds: ".$executionTimeparseFraudTrianglePhrases."\n";
+}
+
+/* Check for message tone */
+
+function checkTone($message, $library)
+{
+    $toneSpanishFile = file("tone/negative_spanish.txt", FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+    $toneEnglishFile = file("tone/negative_english.txt", FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+
+    if ($library == 1) $lines = $toneSpanishFile;
+    else $lines = $toneEnglishFile;
+
+    foreach ($lines as $numLine => $line)
+    {
+        $toneWord = $line;
+        $toneWordExpression = "/\\b(".$toneWord.")\\b/i";
+
+        if (preg_match($toneWordExpression, $message)) return true;
+    }    
+    
+    return false;
 }
 
 /* Check regular expressions */
@@ -544,7 +579,7 @@ function checkPhrases($string, $language)
 
     if (preg_match('#[0-9]#', $string)) return $string;
 
-    $unwanted_chars = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+    $unwanted_chars = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', '\''=>'');
 
     $config_dic = pspell_config_create($language);
     pspell_config_mode($config_dic, PSPELL_FAST);

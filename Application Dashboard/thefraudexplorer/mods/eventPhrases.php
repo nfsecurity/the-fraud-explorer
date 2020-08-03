@@ -136,7 +136,7 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
         border: 1px solid #4B906F !important;
     }
 
-    .font-aw-color-phrases
+    .font-aw-color-phrases, .tone-color
     {
         color: #555;
     }
@@ -226,6 +226,15 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
     .tooltip.in
     {
         opacity:1 !important;
+    }
+
+    .btn-tone
+    {
+        position: absolute;
+        left: 20;
+        bottom: 20;
+        outline: 0 !important;
+        height: 34px;
     }
 
 </style>
@@ -383,7 +392,20 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
             ?>
 
             <input type="submit" name="delete-event" class="btn btn-danger" style="outline: 0 !important;" value="Delete event">
+
         </form>
+
+        <?php
+
+            $messageTone = "0";
+
+            if (isset($eventPhrase['hits']['hits'][0]['_source']['messageTone'])) $messageTone = $eventPhrase['hits']['hits'][0]['_source']['messageTone'];
+
+            if ($messageTone == 0) echo '<button class="btn btn-default btn-tone"><span class="fa fa-meh-o fa-lg tone-color"></span></button>';
+            else echo '<button class="btn btn-default btn-tone"><span class="fa fa-frown-o fa-lg tone-color"></span></button>';
+
+        ?>
+
     </div>
    
 </div>

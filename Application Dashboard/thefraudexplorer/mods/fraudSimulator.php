@@ -88,7 +88,7 @@ include "../lbs/elasticsearch.php";
         border: 1px solid #4B906F !important;
     }
 
-    .font-aw-color-phrases, .mic-color
+    .font-aw-color-phrases, .mic-color, .tone-color
     {
         color: #555;
     }
@@ -201,7 +201,7 @@ include "../lbs/elasticsearch.php";
         height: 34px;
     }
 
-    .btn-mic-stop
+    .btn-tone
     {
         position: absolute;
         left: 66;
@@ -331,8 +331,8 @@ include "../lbs/elasticsearch.php";
 
     </form>
 
-    <button class="btn btn-default btn-mic-start" id="btnMicStart"><span class="fa fa-microphone fa-lg mic-color"></span></button>   
-    <button class="btn btn-default btn-mic-stop" id="btnMicStop"><span class="fa fa-microphone-slash fa-lg mic-color"></span></button> 
+    <button class="btn btn-default btn-mic-start" id="btnMic"><span class="fa fa-microphone fa-lg mic-color"></span></button>   
+    <button class="btn btn-default btn-tone" id="btnTone"><span class="fa fa-meh-o fa-lg tone-color"></span></button> 
    
 </div>
 
@@ -389,15 +389,26 @@ $("#simulatorParagraph").on('keyup paste', function (event) {
         
             $('#simulatorParagraph').text(txtRec);
         };
+
+        var micClicks = 0;
     
-        $('#btnMicStart').click(function () {
-            $('#simulatorParagraph').focus();
-            recognition.start();
+        $('#btnMic').click(function () {
+  
+            if (micClicks == 0) {
+                $('#btnMic').html('<span class="fa fa-microphone-slash fa-lg mic-color"></span>');
+                $('#simulatorParagraph').focus();
+                micClicks = 1;
+
+                recognition.start();
+            } else {
+                $('#btnMic').html('<span class="fa fa-microphone fa-lg mic-color"></span>');
+
+                micClicks = 0;
+                recognition.stop();
+            }
+
         });
 
-        $('#btnMicStop').click(function () {
-            recognition.stop();
-        });
     });
 
 </script>
@@ -438,6 +449,7 @@ $('#simulatorForm button').click(function(e) {
                 strString = strString.replace(/ò|ó|ô|õ|ō|ŏ|ǒ|ő|ơ|ø|ǿ|º|ο|ό|ω|ώ|ỏ|ọ|ồ|ố|ỗ|ổ|ộ|ờ|ớ|ỡ|ở|ợ|о/g,'o');
                 strString = strString.replace(/Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ|Ũ|Ủ|Ụ|Ừ|Ứ|Ữ|Ử|Ự|У/g,'U');
                 strString = strString.replace(/ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ|υ|ύ|ϋ|ủ|ụ|ừ|ứ|ữ|ử|ự|у/g,'u');
+                strString = strString.replace(/'/g,'');
                 $(this).text(strString);
             });
         };
@@ -463,11 +475,11 @@ $('#simulatorForm button').click(function(e) {
         ];
 
         var element = $(a).text();
-        var search  = m[3];
+        var search = m[3];
 
         $.each(rExps, function() {
-            element    = element.replace(this.re, this.ch);
-            search     = search.replace(this.re, this.ch);
+            element = element.replace(this.re, this.ch);
+            search = search.replace(this.re, this.ch);
         });
 
         return element.toUpperCase()
@@ -536,6 +548,8 @@ $('#simulatorForm button').click(function(e) {
 
             if (data == "eventputted")
             {
+                $('#btnPutEvent').html('Put event');                
+
                 $(function () {
                     $('#fraud-simulator').modal('toggle');
                 });
@@ -562,15 +576,20 @@ $('#simulatorForm button').click(function(e) {
             else
             {
                 var resultObject = eval(data);
+                var resultObjectTone = resultObject[0];
+                var resultObjectPhrases = resultObject[1];
                 var pressureCount = 0;
                 var opportunityCount = 0; 
                 var rationalizationCount = 0;
 
-                for(var i = 0; i < resultObject.length; i++) 
-                {
-                    var phrases = resultObject[i];
+                if (resultObjectTone == true) $('#btnTone').html('<span class="fa fa-frown-o fa-lg tone-color"></span>');
+                else $('#btnTone').html('<span class="fa fa-meh-o fa-lg tone-color"></span>');
 
-                    var matchedPhrase = resultObject[i];
+                for(var i = 0; i < resultObjectPhrases.length; i++) 
+                {
+                    var phrases = resultObjectPhrases[i];
+
+                    var matchedPhrase = resultObjectPhrases[i];
 
                     if ('pressure' in phrases) 
                     {
