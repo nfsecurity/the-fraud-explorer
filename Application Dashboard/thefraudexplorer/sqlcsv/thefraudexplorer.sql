@@ -107,10 +107,11 @@ CREATE TABLE IF NOT EXISTS `t_workflows` (
     `workflow` varchar(2048) DEFAULT NULL,
     `interval` int DEFAULT 0,
     `custodian` varchar(128) DEFAULT NULL,
+    `tone` int DEFAULT 0,
     `triggers` int DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-INSERT INTO `t_workflows` (`name`, `workflow`, `interval`, `custodian`, `triggers`) VALUES ('Executives external businesses', '[D]=CLEVEL, [V]=ALLV, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Credit alternatives', '[D]=CREDIT, [V]=ALLV, [D]=thefraudexplorer.com, [E]=ALLE, [A]=WhatsApp, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '0'), ('Purchases pressures and opportunities', '[D]=PURCHASES, [V]=PRESSURE, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=AND, [D]=PURCHASES, [V]=OPPORTUNITY, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=END', '8', 'events@thefraudexplorer.com', '0');
+INSERT INTO `t_workflows` (`name`, `workflow`, `interval`, `custodian`, `tone`, `triggers`) VALUES ('Executives external businesses', '[D]=CLEVEL, [V]=ALLV, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '0', '0'), ('Credit alternatives', '[D]=CREDIT, [V]=ALLV, [D]=thefraudexplorer.com, [E]=ALLE, [A]=WhatsApp, [P]=billing statement, [O]=END', '0', 'events@thefraudexplorer.com', '1', '0'), ('Purchases pressures and opportunities', '[D]=PURCHASES, [V]=PRESSURE, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=AND, [D]=PURCHASES, [V]=OPPORTUNITY, [D]=ALLD, [E]=ALLE, [A]=ALLA, [P]=ALLP, [O]=END', '8', 'events@thefraudexplorer.com', '2', '0');
 
 CREATE TABLE IF NOT EXISTS `t_wtriggers` (
     `date` datetime DEFAULT NULL,

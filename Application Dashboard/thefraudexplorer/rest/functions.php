@@ -722,11 +722,21 @@ function fraudTrianglePOSTQuery($rawJSON)
             else if ($opportunityCount != 0) $probability = "20%";
             else if ($rationalizationCount != 0) $probability = "15%";
 
+            /* Message tone */
+
+            $messageTone = false;
+
+            if ($pressureCount != 0 || $opportunityCount != 0 || $rationalizationCount != 0) $messageTone = checkTone($sanitizedPhrases);
+            if ($messageTone == true) $tone = "negative";
+            else $tone = "neutral";
+
             $finaJSON = Array("pressureEvents" => $pressureCount, 
                             "opportunityEvents" => $opportunityCount, 
                             "rationalizationEvents" => $rationalizationCount,
                             "fraudProbability" => $probability,
-                            "phrasesMatched" => $replyJSON);
+                            "messageTone" => $tone,
+                            "phrasesMatched" => $replyJSON
+                        );
 
             /* Return JSON data */
 
@@ -767,6 +777,30 @@ function phraseFixes($rawPhrase)
     $sanitizedPhrase = preg_replace('/\s+/', ' ', $sanitizedPhrase);
 
     return $sanitizedPhrase;
+}
+
+/* Check for message tone */
+
+function checkTone($message)
+{
+    $toneSpanishFile = file("../core/tone/negative_spanish.txt", FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+    $toneEnglishFile = file("../core/tone/negative_english.txt", FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
+
+    for ($library=1; $library<=2; $library++)
+    {
+        if ($library == 1) $lines = $toneSpanishFile;
+        else $lines = $toneEnglishFile;
+
+        foreach ($lines as $numLine => $line)
+        {
+            $toneWord = $line;
+            $toneWordExpression = "/\\b(".$toneWord.")\\b/i";
+
+            if (preg_match($toneWordExpression, $message)) return true;
+        }
+    }
+
+    return false;
 }
 
 ?>

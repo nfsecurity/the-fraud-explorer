@@ -62,6 +62,7 @@ else if (isset($_POST['add']))
     else header('Location: ' . $_SERVER['HTTP_REFERER']);
 
     if (isset($_POST['workflowInterval']) && $_POST['workflowInterval'] != "") $workflowInterval = filter($_POST['workflowInterval']);
+    if (isset($_POST['workflowTone']) && $_POST['workflowTone'] != "") $workflowTone = filter($_POST['workflowTone']);
     if (isset($_POST['workflowDomain'])) $workflowDomain = filter($_POST['workflowDomain']);
 
     if (isset($_POST['custodianEmail']) && $_POST['custodianEmail'] != "") $custodianEmail = filter($_POST['custodianEmail']);
@@ -78,7 +79,7 @@ else if (isset($_POST['add']))
 
     /* Flows storage */
 
-    mysqli_query($connection, sprintf("INSERT INTO t_workflows values('%s', '%s', '%d', '%s', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail));
+    mysqli_query($connection, sprintf("INSERT INTO t_workflows values('%s', '%s', '%d', '%s', '%d', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail, $workflowTone));
 }
 
 /* Page return to origin */
