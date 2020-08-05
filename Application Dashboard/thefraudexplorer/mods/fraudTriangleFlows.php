@@ -684,8 +684,7 @@ include "../lbs/cryptography.php";
                     <p class="title-config">Tone</p><br>
                     <select class="select-option-styled-tone wide" name="workflowTone" id="workflowTone">
                         <option value="1">Negative</option>
-                        <option value="0">Neutral</option>
-                        <option value="2" selected="selected">All</option>
+                        <option value="0" selected="selected">All tones</option>
                     </select>  
 
                 </div>

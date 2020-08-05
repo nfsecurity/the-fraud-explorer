@@ -922,7 +922,7 @@ function startWorkflows($ESAlerterIndex)
     /* Database */
 
     mysqli_query($connection, "DROP TABLE t_wevents"); 
-    mysqli_query($connection, "CREATE TABLE t_wevents (alertId varchar(512) PRIMARY KEY, indexId varchar(256) not null, department varchar(256) not null, agentId varchar(256) not null, alertType varchar(256) not null, eventTime datetime DEFAULT NULL, falsePositive int DEFAULT 0, domain varchar(256) not null, application varchar(1024) not null, phrase varchar(512) not null)");
+    mysqli_query($connection, "CREATE TABLE t_wevents (alertId varchar(512) PRIMARY KEY, indexId varchar(256) not null, department varchar(256) not null, agentId varchar(256) not null, alertType varchar(256) not null, eventTime datetime DEFAULT NULL, falsePositive int DEFAULT 0, messageTone int DEFAULT 0, domain varchar(256) not null, application varchar(1024) not null, phrase varchar(512) not null)");
 
     /* Start */
 
@@ -935,8 +935,11 @@ function startWorkflows($ESAlerterIndex)
 
         $departmentQuery = mysqli_query($connection, sprintf("SELECT ruleset from t_agents WHERE agent='%s'", $result["_source"]["agentId"])); 
         $departmentResult = mysqli_fetch_assoc($departmentQuery);
+        $messageTone = 0;
 
-        mysqli_query($connection, sprintf("INSERT INTO t_wevents values('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s')", $result["_id"], $result["_index"], $departmentResult["ruleset"], $result["_source"]["agentId"], $result["_source"]["alertType"], $result["_source"]["eventTime"], $result["_source"]["falsePositive"], $result["_source"]["userDomain"], decRijndael($result['_source']['windowTitle']), decRijndael($result['_source']['wordTyped'])));    
+        if (isset($result["_source"]["messageTone"])) $messageTone = $result["_source"]["messageTone"];
+
+        mysqli_query($connection, sprintf("INSERT INTO t_wevents values('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s')", $result["_id"], $result["_index"], $departmentResult["ruleset"], $result["_source"]["agentId"], $result["_source"]["alertType"], $result["_source"]["eventTime"], $result["_source"]["falsePositive"], $result["_source"]["messageTone"], $result["_source"]["userDomain"], decRijndael($result['_source']['windowTitle']), decRijndael($result['_source']['wordTyped'])));    
     }
 
     $queryWorkflows = mysqli_query($connection, "SELECT * FROM t_workflows");
@@ -1055,14 +1058,15 @@ function startWorkflows($ESAlerterIndex)
                         $queryTrueWorkflow[$name][] = $query[1];
                         $superFinalQuery[$name] = $query[1];
 
-                        /* Search the workflow interval */
+                        /* Search the workflow interval, custodian and tone */
 
-                        $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                        $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                        while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                        while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                         {
                             $interval = $row["interval"];
                             $custodian = $row["custodian"];
+                            $tone = $row["tone"];
                         }      
 
                         /* Finally execute the query and populate triggered table */
@@ -1072,23 +1076,21 @@ function startWorkflows($ESAlerterIndex)
 
                         if ($rowCount > 0)
                         {
+                            $realMatches = 0;
+
                             while ($row = mysqli_fetch_array($resultQuery))
                             {
                                 $idS = $row["alertId"];
 
                                 /* Verify if the trigger already exist */
 
-                                $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                                $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                                 $existCount = mysqli_num_rows($existQuery);
 
                                 /* If not exist, insert trigger & send alert */
 
                                 if ($existCount == 0)
                                 {
-                                    mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
-
-                                    /* Send message alert */
-
                                     $alert_workflowName = $name;
                                     $alert_amount = count($query);
                                     $eventIds = explode(" ", $idS);
@@ -1100,6 +1102,7 @@ function startWorkflows($ESAlerterIndex)
                                         $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
                                         $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
+                                        $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
                                         $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                         $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                         $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1111,15 +1114,33 @@ function startWorkflows($ESAlerterIndex)
                                         $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                                     }
 
-                                    $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                                    include $mailEventWFPath;
-                                    mail($to, $subject, $message, $headers);
+                                    /* Check if the event was tone negative */
+
+                                    $sumTones = 0;
+                                    $proceedTones = false;
+
+                                    foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                                    
+                                    if ($sumTones >= $tone) $proceedTones = true;
+
+                                    if ($proceedTones == true)
+                                    {
+                                        $realMatches++;
+
+                                        mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
+
+                                        /* Send message alert */
+
+                                        $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                        include $mailEventWFPath;
+                                        mail($to, $subject, $message, $headers);
+                                    }
                                 }
                             }
 
                             /* Trigger for table t_workflows */
 
-                            mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
+                            mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $realMatches, $name));
                         }
                     }
                     else
@@ -1148,14 +1169,15 @@ function startWorkflows($ESAlerterIndex)
 
             if(count($query) == 2)
             {
-                /* Search the workflow interval & custodian */
+                /* Search the workflow interval, custodian and tone */
 
-                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
+                    $tone = $row["tone"];
                 }
 
                 /* Join the final query */
@@ -1177,17 +1199,13 @@ function startWorkflows($ESAlerterIndex)
 
                         /* Verify if the trigger already exist */
 
-                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                         $existCount = mysqli_num_rows($existQuery);
 
                         /* If not exist, insert trigger & send alert */
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
-
-                            /* Send message alert */
-
                             $alert_workflowName = $name;
                             $alert_amount = count($query);
                             $eventIds = explode(" ", $idS);
@@ -1199,6 +1217,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
+                                $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1210,9 +1229,25 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
+                            /* Check at leat one event with specified tone if selected was negative */
+
+                            $sumTones = 0;
+                            $proceedTones = false;
+
+                            foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                            
+                            if ($sumTones >= $tone) $proceedTones = true;
+
+                            if ($proceedTones == true)
+                            {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
+
+                                /* Send message alert */
+
+                                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                include $mailEventWFPath;
+                                mail($to, $subject, $message, $headers);
+                            }
                         }
                     }
 
@@ -1223,14 +1258,15 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 3)
             {
-                /* Search the workflow interval */
+                /* Search the workflow interval, custodian and tone */
 
-                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
+                    $tone = $row["tone"];
                 }    
 
                 /* Join the final query */
@@ -1252,17 +1288,13 @@ function startWorkflows($ESAlerterIndex)
 
                         /* Verify if the trigger already exist */
 
-                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                         $existCount = mysqli_num_rows($existQuery);
 
                         /* If not exist, insert trigger & send alert */
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s', '%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
-
-                            /* Send message alert */
-
                             $alert_workflowName = $name;
                             $alert_amount = count($query);
                             $eventIds = explode(" ", $idS);
@@ -1274,6 +1306,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
+                                $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1285,9 +1318,25 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
+                             /* Check at leat one event with specified tone if selected was negative */
+
+                             $sumTones = 0;
+                             $proceedTones = false;
+ 
+                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                             
+                             if ($sumTones >= $tone) $proceedTones = true;
+ 
+                             if ($proceedTones == true)
+                             {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s', '%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+
+                                /* Send message alert */
+
+                                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                include $mailEventWFPath;
+                                mail($to, $subject, $message, $headers);
+                             }
                         }
                     }
 
@@ -1298,14 +1347,15 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 4)
             {
-                /* Search the workflow interval */
+                /* Search the workflow interval, custodian and tone */
 
-                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
+                    $tone = $row["tone"];
                 }      
 
                 /* Join the final query */
@@ -1327,17 +1377,13 @@ function startWorkflows($ESAlerterIndex)
 
                         /* Verify if the trigger already exist */
 
-                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                         $existCount = mysqli_num_rows($existQuery);
 
                         /* If not exist, insert trigger & send alert */
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
-
-                            /* Send message alert */
-
                             $alert_workflowName = $name;
                             $alert_amount = count($query);
                             $eventIds = explode(" ", $idS);
@@ -1349,6 +1395,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
+                                $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1360,9 +1407,25 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
+                            /* Check at leat one event with specified tone if selected was negative */
+
+                            $sumTones = 0;
+                            $proceedTones = false;
+
+                            foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                            
+                            if ($sumTones >= $tone) $proceedTones = true;
+
+                            if ($proceedTones == true)
+                            {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+
+                                /* Send message alert */
+
+                                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                include $mailEventWFPath;
+                                mail($to, $subject, $message, $headers);
+                            }
                         }
                     }
 
@@ -1373,14 +1436,15 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 5)
             {
-                /* Search the workflow interval */
+                /* Search the workflow interval, custodian and tone */
 
-                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
+                    $tone = $row["tone"];
                 } 
 
                 /* Join the final query */
@@ -1402,42 +1466,55 @@ function startWorkflows($ESAlerterIndex)
 
                         /* Verify if the trigger already exist */
 
-                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                         $existCount = mysqli_num_rows($existQuery);
 
                         /* If not exist, insert trigger & send alert */
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+                            $alert_workflowName = $name;
+                            $alert_amount = count($query);
+                            $eventIds = explode(" ", $idS);
+                                
+                            for ($i=0; $i<count($query); $i++)
+                            {        
+                                $idsQuery[$i] = $eventIds[$i];
+    
+                                $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
+                                $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
+    
+                                $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
+                                $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
+                                $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
+                                $alert_eventType[$i] = $allEventsQueryResult['alertType'];
+                                $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
+                                $alert_eventCompany[$i] = $alert_eventDomain[0];
+                                $alert_eventApplication[$i] = $allEventsQueryResult['application'];
+                                $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
+                                $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
+                            }
+
+                            /* Check at leat one event with specified tone if selected was negative */
+
+                            $sumTones = 0;
+                            $proceedTones = false;
+
+                            foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                            
+                            if ($sumTones >= $tone) $proceedTones = true;
+
+                            if ($proceedTones == true)
+                            {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
 
                                 /* Send message alert */
 
-                                $alert_workflowName = $name;
-                                $alert_amount = count($query);
-                                $eventIds = explode(" ", $idS);
-                                
-                                for ($i=0; $i<count($query); $i++)
-                                {        
-                                    $idsQuery[$i] = $eventIds[$i];
-    
-                                    $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
-                                    $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
-    
-                                    $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
-                                    $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
-                                    $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
-                                    $alert_eventType[$i] = $allEventsQueryResult['alertType'];
-                                    $alert_eventDomain = preg_split('/\./', $allEventsQueryResult['domain']);
-                                    $alert_eventCompany[$i] = $alert_eventDomain[0];
-                                    $alert_eventApplication[$i] = $allEventsQueryResult['application'];
-                                    $alert_eventDepartment[$i] = $allEventsQueryResult['department'];
-                                    $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
-                                }
-    
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
                                 mail($to, $subject, $message, $headers);
+                            }
                         }
                     }
 
@@ -1448,14 +1525,15 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 6)
             {
-                /* Search the workflow interval */
+                /* Search the workflow interval, custodian and tone */
 
-                $intervalCustodianQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
+                    $tone = $row["tone"];
                 }  
 
                 /* Join the final query */
@@ -1477,17 +1555,13 @@ function startWorkflows($ESAlerterIndex)
 
                         /* Verify if the trigger already exist */
 
-                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s'", $idS));
+                        $existQuery = mysqli_query($connection, sprintf("SELECT * FROM t_wtriggers WHERE ids='%s' AND name='%s'", $idS, $name));
                         $existCount = mysqli_num_rows($existQuery);
 
                         /* If not exist, insert trigger & send alert */
 
                         if ($existCount == 0)
                         {
-                            mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
-
-                            /* Send message alert */
-
                             $alert_workflowName = $name;
                             $alert_amount = count($query);
                             $eventIds = explode(" ", $idS);
@@ -1499,6 +1573,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQuery = mysqli_query($connection, sprintf("SELECT * from t_wevents WHERE alertId='%s'", $idsQuery[$i])); 
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
+                                $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1510,9 +1585,25 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
-                            include $mailEventWFPath;
-                            mail($to, $subject, $message, $headers);
+                            /* Check at leat one event with specified tone if selected was negative */
+
+                            $sumTones = 0;
+                            $proceedTones = false;
+
+                            foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                            
+                            if ($sumTones >= $tone) $proceedTones = true;
+
+                            if ($proceedTones == true)
+                            {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+
+                                /* Send message alert */
+
+                                $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
+                                include $mailEventWFPath;
+                                mail($to, $subject, $message, $headers);
+                            }
                         }
                     }
 

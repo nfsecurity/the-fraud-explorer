@@ -23,6 +23,9 @@ $subject = "[The Fraud Explorer] Flow: " . $alert_workflowName . ", from: " . $a
 
 for ($i=0; $i<$alert_amount; $i++)
 {
+    if ($alert_eventTone[$i] == 0) $eventTone = "neutral";
+    else $eventTone = "negative";
+
     $messageComplement = $messageComplement . '<tr>';
     $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventDate[$i] . '</td>';
     $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventEndpoint[$i] .'</td>';
@@ -30,6 +33,7 @@ for ($i=0; $i<$alert_amount; $i++)
     $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventType[$i] .'</td>';
     $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . substr($alert_eventApplication[$i], 0, 30) . ' ...' . '</td>';
     $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . substr($alert_eventPhrase[$i], 0, 30) . ' ...' . '</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $eventTone .'</td>';
     $messageComplement = $messageComplement . '</tr>';
 }
 
@@ -44,6 +48,7 @@ $message = '<html>' .
     '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Vertice</b></td>' .
     '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Application</b></td>' .
     '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Phrase</b></td>' .
+    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Tone</b></td>' .
     '</tr>' .
     $messageComplement .
     '</table>' .
