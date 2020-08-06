@@ -291,9 +291,9 @@ $_SESSION['rulesetScope'] = "ALL";
             </div>
         </div>
 
-        <!-- Modal for Regionalism words -->
+        <!-- Modal for words universe -->
 
-        <div class="modal" id="regionalismWords" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal" id="wordsUniverse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">

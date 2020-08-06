@@ -12,7 +12,7 @@
  * Date: 2020-07
  * Revision: v1.4.6-aim
  *
- * Description: Code for download regionalism
+ * Description: Code for download regionalism and tones
  */
 
 include "../lbs/login/session.php";

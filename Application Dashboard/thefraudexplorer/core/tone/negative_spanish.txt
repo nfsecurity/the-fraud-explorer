@@ -1560,3 +1560,7 @@ zangano
 zanja
 zombi
 zoquete
+malparido
+malparida
+malparidos
+malparidas

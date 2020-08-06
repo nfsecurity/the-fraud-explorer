@@ -188,7 +188,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Regionalism words</div><div class=tooltip-row><div class=tooltip-item>Add or delete a set of words related to<br>specific country, city or ethnic groups<br>to improve fraud detection</div></div></div>"><a href="../mods/regionalismWords" data-toggle="modal" class="regionalism-words-button" data-target="#regionalismWords" href="#" id="elm-regionalism-words"><div class="left-menu-button"><div class="menu-title">reg</div><span class="fa fa-language font-icon-color-gray" style="font-size: 18px;"></span></div></a><span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Words universe</div><div class=tooltip-row><div class=tooltip-item>Add or delete a set of words related to<br>specific country, city, ethnic groups and<br>message tones to improve detections</div></div></div>"><a href="../mods/wordsUniverse" data-toggle="modal" class="words-universe-button" data-target="#wordsUniverse" href="#" id="elm-words-universe"><div class="left-menu-button"><div class="menu-title">wds</div><span class="fa fa-language font-icon-color-gray" style="font-size: 18px;"></span></div></a><span>
                     </center>
                 </td>
             </tr>
@@ -636,11 +636,11 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
     });
 </script>
 
-<!-- Modal for Regionalism Words -->
+<!-- Modal for words universe -->
 
 <script>
-    $('#regionalism-words').on('show.bs.modal', function(e){
-        $(this).find('.regionalism-words-button').attr('href', $(e.relatedTarget).data('href'));
+    $('#words-universe').on('show.bs.modal', function(e){
+        $(this).find('.words-universe-button').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
