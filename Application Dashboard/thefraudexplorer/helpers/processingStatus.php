@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-07
- * Revision: v1.4.6-aim
+ * Date: 2020-08
+ * Revision: v1.4.7-aim
  *
  * Description: Code for Proccess Status
  */

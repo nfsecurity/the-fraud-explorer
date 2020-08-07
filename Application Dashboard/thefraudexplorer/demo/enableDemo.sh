@@ -8,8 +8,8 @@
 # Licensed under GNU GPL v3
 # https://www.thefraudexplorer.com/License
 #
-# Date: 2020-07
-# Revision: v1.4.6-aim
+# Date: 2020-08
+# Revision: v1.4.7-aim
 #
 # Description: Code to enable DEMO platform
 
@@ -30,7 +30,7 @@ SETUPRULESET="$THEFRAUDEXPLORER/mods/setupRuleset.php"
 BACKUPDATA="$THEFRAUDEXPLORER/mods/backupData.php"
 FRAUDTRIANGLEFLOWS="$THEFRAUDEXPLORER/mods/fraudTriangleFlows.php"
 SWUPDATE="$THEFRAUDEXPLORER/mods/swUpdate.php"
-REGIONALISMWORDS="$THEFRAUDEXPLORER/mods/regionalismWords.php"
+WORDSUNIVERSE="$THEFRAUDEXPLORER/mods/wordsUniverse.php"
 ANALYTICSHOLDER="$THEFRAUDEXPLORER/mods/analyticsHolder.php"
 LOGINSESSION="$THEFRAUDEXPLORER/lbs/login/session.php"
 LOGINFORM="$THEFRAUDEXPLORER/lbs/login/form.php"
@@ -57,8 +57,10 @@ DOWNLOADBACKUP="s/id=\"button-download-backup\"/id=\"button-download-backup\" di
 DELFLOW="s/id=\"button-del-workflow\"/id=\"button-del-workflow\" disabled/g"
 ADDFLOW="s/id=\"button-add-workflow\"/id=\"button-add-workflow\" disabled/g"
 UPDATE="s/id=\"btn-update\"/id=\"btn-update\" disabled/g"
-ADDREGIONALISM="s/id=\"button-add-words\"/id=\"button-add-words\" disabled/g"
-DELREGIONALISM="s/id=\"button-del-words\"/id=\"button-del-words\" disabled/g"
+ADDREGIONALISM="s/id=\"button-add-words-regionalism\"/id=\"button-add-words-regionalism\" disabled/g"
+DELREGIONALISM="s/id=\"button-del-words-regionalism\"/id=\"button-del-words-regionalism\" disabled/g"
+ADDTONE="s/id=\"button-add-words-tone\"/id=\"button-add-words-tone\" disabled/g"
+DELTONE="s/id=\"button-del-words-tone\"/id=\"button-del-words-tone\" disabled/g"
 REMOTE="s/REMOTE_ADDR/HTTP_X_REAL_IP/g"
 CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N0FR4UD\")/g"
 
@@ -81,7 +83,7 @@ CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N
 /bin/sed "$SETBACKUP ; $DOWNLOADBACKUP" --in-place $BACKUPDATA
 /bin/sed "$ADDFLOW ; $DELFLOW" --in-place $FRAUDTRIANGLEFLOWS
 /bin/sed "$UPDATE" --in-place $SWUPDATE
-/bin/sed "$ADDREGIONALISM ; $DELREGIONALISM" --in-place $REGIONALISMWORDS
+/bin/sed "$ADDREGIONALISM ; $DELREGIONALISM ; $ADDTONE ; $DELTONE" --in-place $WORDSUNIVERSE
 /bin/sed "$SUBMIT" --in-place $ANALYTICSHOLDER
 /bin/sed "$REMOTE" --in-place $LOGINSESSION
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
