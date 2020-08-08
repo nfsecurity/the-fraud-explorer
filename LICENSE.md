@@ -1,7 +1,6 @@
 # Licencia The Fraud Explorer
 
-Este software está cobijado por la licencia [GNU GPL versión 3](http://www.gnu.org/licenses/gpl-3.0.html). Es un software opensource, gratuito, de libre distribución y modificación. Si usa este software para sus investigaciones debe conservar estas mismas libertades hacia sus clientes finales y nombrar a [NF S.A.S](https://www.nofraud.la) como la empresa que desarrolla el software.
-
+Este software está cobijado por la licencia [GNU GPL versión 3](http://www.gnu.org/licenses/gpl-3.0.html). Es un software opensource, gratuito, de libre distribución y modificación. Si usa este software, sea para usted o terceros, debe conservar estas mismas libertades y nombrar obligatoriamente a [NF S.A.S](https://www.nofraud.la) como la empresa que desarrolla el software.
 
 ## Términos y condiciones
 
@@ -9,6 +8,8 @@ Consideraciones que debe tener en cuenta al usar, distribuir o modificar nuestro
 
 Consideración | Implicación
 ------------- | -----------
+**Créditos** | El uso parcial o total del codigo y recursos del software debe ir acompañado de un aviso por escrito donde se indique que NF S.A.S es el desarrollador.
+**Libreria de frases** | Si va a usar parcial o totalmente la libreria de farses, deberá incluir un aviso por escrito nombrando a NF S.A.S como la empresa desarrolladora.
 **Código fuente** | Cada librería externa usada en el código de _The Fraud Explorer_ deberá ser compatible con la licencia GNU GPL v3.
 **Permisos** | La licencia le da derecho a usar el software de manera ilimitada.
 **Garantía** | No existe ningún tipo de garantía para este software. Se distribuye como está, sin asegurar su funcionamiento o resultados.
