@@ -450,6 +450,7 @@ $('#simulatorForm button').click(function(e) {
                 strString = strString.replace(/Ù|Ú|Û|Ũ|Ū|Ŭ|Ů|Ű|Ų|Ư|Ǔ|Ǖ|Ǘ|Ǚ|Ǜ|Ũ|Ủ|Ụ|Ừ|Ứ|Ữ|Ử|Ự|У/g,'U');
                 strString = strString.replace(/ù|ú|û|ũ|ū|ŭ|ů|ű|ų|ư|ǔ|ǖ|ǘ|ǚ|ǜ|υ|ύ|ϋ|ủ|ụ|ừ|ứ|ữ|ử|ự|у/g,'u');
                 strString = strString.replace(/'/g,'');
+                strString = strString.replace(/-/g,'');
                 $(this).text(strString);
             });
         };
@@ -572,6 +573,10 @@ $('#simulatorForm button').click(function(e) {
                  /* Restore triangulating button */ 
 
                 $('#btnRunCheck').html('Run check');
+
+                /* Restore tone indicator */
+
+                $('#btnTone').html('<span class="fa fa-meh-o fa-lg tone-color"></span>');
             }
             else
             {
