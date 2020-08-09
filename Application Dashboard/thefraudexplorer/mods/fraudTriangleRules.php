@@ -88,6 +88,8 @@ include "../lbs/openDBconn.php";
         width: 513px;
         height: 30px; 
         padding: 5px;
+        margin-left: 0px !important;
+        border-left: 0px;
         border: solid 1px #c9c9c9;
         outline: none;
         font-family: Courier; font-size: 12px;
@@ -440,7 +442,7 @@ include "../lbs/openDBconn.php";
             </div>
 
             <div class="regexp-container">
-                <p class="title-config">Phrase regular expression</p><br>
+                <p class="title-config">Phrase regular expression</p>
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-add" id="regexpression-add" autocomplete="off" placeholder="enter here the regular expression in PCRE format" class="input-value-text-regexp-add">
                 <div class="input-regexp-right">/</div>
@@ -514,7 +516,7 @@ include "../lbs/openDBconn.php";
             </div>
 
             <div class="regexp-container">
-                <p class="title-config">Phrase regular expression</p><br>
+                <p class="title-config">Phrase regular expression</p>
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-delmodify" id="regexpression-delmodify" autocomplete="off" placeholder="you will see here the regular expression" class="input-value-text-regexp-delmodify">
                 <div class="input-regexp-right">/</div>
