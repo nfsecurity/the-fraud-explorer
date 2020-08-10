@@ -70,7 +70,7 @@ $currentversion = $configFile['sw_version'];
         </div>
         <div class="helpers-container">
             <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" rel="noopener noreferrer" id="elm-bugreport">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud triangle simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="logging"><a href="../mods/fraudTriangleLogging" data-toggle="modal" class="logging-button" data-target="#logging" href="#" id="elm-logging">Logging</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-address-card fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Profile [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;

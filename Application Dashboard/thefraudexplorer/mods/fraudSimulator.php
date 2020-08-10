@@ -232,7 +232,7 @@ include "../lbs/elasticsearch.php";
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title window-title" id="myModalLabel">Fraud simulator</h4>
+    <h4 class="modal-title window-title" id="myModalLabel">Fraud triangle simulator</h4>
 </div>
 
 <div class="div-container-simulator">
@@ -286,7 +286,7 @@ include "../lbs/elasticsearch.php";
         <!-- Text speak area -->
 
         <div id="paragraphReference">
-            <div id="simulatorParagraph" name="simulatorPhrases" class="phrase-speak-area" contenteditable="true" maxlength="1024">
+            <div id="simulatorParagraph" name="simulatorPhrases" class="phrase-speak-area" contenteditable="true" maxlength="2048">
                 Hola buenos dias, espero todo ande muy bien, escribo para contarte que estamos algo estresados en el area porque imaginate
                 que un proveedor le hizo una propuesta de trabajo a uno de nuestros colaboradores y eso definitivamente representa una violacion a 
                 nuestro codigo de etica relacionada con conflictos de interes. Aqui todos dicen que cerremos la boca pero yo te estoy contando, saludos.
