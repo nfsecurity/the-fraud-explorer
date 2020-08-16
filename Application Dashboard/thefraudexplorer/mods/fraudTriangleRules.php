@@ -849,6 +849,7 @@ $("#modify-rule").click(function(e) {
             {
                 var data = '<?php if (isset($pureJSONforJS)) echo $pureJSONforJS; else echo " "; ?>'
                 data = JSON.parse(data);
+
                 var search = document.getElementById('phrase-identification-delmodify').value
                 var ruleset = document.getElementById('ruleset-delmodify').value
                 var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
@@ -864,6 +865,7 @@ $("#modify-rule").click(function(e) {
 
                 dataSpanish = JSON.parse(dataSpanish);
                 dataEnglish = JSON.parse(dataEnglish);
+                matched = false;
 
                 var search = document.getElementById('phrase-identification-delmodify').value
                 var ruleset = document.getElementById('ruleset-delmodify').value
@@ -877,6 +879,7 @@ $("#modify-rule").click(function(e) {
                 if (typeof(searchPathSpanish) === "undefined") finalRegexpString = "no regular expression found";
                 else 
                 {
+                    matched = true;
                     finalRegexpString = searchPathSpanish.replace(/\//g, "");
 
                     $(".select-option-styled-language-search option:selected").removeAttr("selected");
@@ -885,15 +888,18 @@ $("#modify-rule").click(function(e) {
                     $('#library-search-language').niceSelect('update');
                 }
 
-                if (typeof(searchPathEnglish) === "undefined") finalRegexpString = "no regular expression found";
-                else 
+                if (matched == false)
                 {
-                    finalRegexpString = searchPathEnglish.replace(/\//g, "");
-                
-                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
-                    $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
-                    $('#library-search-language').val('fta_text_rule_english');
-                    $('#library-search-language').niceSelect('update');
+                    if (typeof(searchPathEnglish) === "undefined") { console.log("not found"); finalRegexpString = "no regular expression found"; }
+                    else 
+                    {
+                        finalRegexpString = searchPathEnglish.replace(/\//g, "");
+                    
+                        $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                        $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
+                        $('#library-search-language').val('fta_text_rule_english');
+                        $('#library-search-language').niceSelect('update');
+                    }
                 }
             }
         
