@@ -301,7 +301,7 @@ include "../lbs/elasticsearch.php";
         <div class="container-simulator-headers" style="margin: 0px 0px 15px 0px;">
                 
             <div class="align-left-footers-simulator">      
-                <p id="deductionPercentage">0% of fraud probability</p>      
+                <p id="deductionPercentage">0% unethical behavior</p>      
             </div>
     
             <div class="align-right-footers-simulator">
@@ -568,7 +568,7 @@ $('#simulatorForm button').click(function(e) {
                 $('#pressureCount').text("0 matched phrases");
                 $('#opportunityCount').text("0 matched phrases");
                 $('#rationalizationCount').text("0 matched phrases");
-                $('#deductionPercentage').text("0% of fraud probability");
+                $('#deductionPercentage').text("0% unethical behavior");
 
                  /* Restore triangulating button */ 
 
@@ -635,17 +635,17 @@ $('#simulatorForm button').click(function(e) {
                 $('#pressureCount').text(pressureCount + " matched phrases");
                 $('#opportunityCount').text(opportunityCount + " matched phrases");
                 $('#rationalizationCount').text(rationalizationCount + " matched phrases");
-                $('#deductionPercentage').text("0% of fraud probability");
+                $('#deductionPercentage').text("0% unethical behavior");
 
                 /* Expert deductions */
 
-                if (pressureCount != 0 && opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("100% of fraud probability");
-                else if (pressureCount != 0 && opportunityCount != 0) $('#deductionPercentage').text("70% of fraud probability");
-                else if (pressureCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("80% of fraud probability");
-                else if (opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("50% of fraud probability");
-                else if (pressureCount != 0) $('#deductionPercentage').text("10% of fraud probability");
-                else if (opportunityCount != 0) $('#deductionPercentage').text("20% of fraud probability");
-                else if (rationalizationCount != 0) $('#deductionPercentage').text("15% of fraud probability");
+                if (pressureCount != 0 && opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("100% unethical behavior");
+                else if (pressureCount != 0 && opportunityCount != 0) $('#deductionPercentage').text("70% unethical behavior");
+                else if (pressureCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("80% unethical behavior");
+                else if (opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("50% unethical behavior");
+                else if (pressureCount != 0) $('#deductionPercentage').text("10% unethical behavior");
+                else if (opportunityCount != 0) $('#deductionPercentage').text("20% unethical behavior");
+                else if (rationalizationCount != 0) $('#deductionPercentage').text("15% unethical behavior");
 
                 /* Restore triangulating button */ 
 
