@@ -46,6 +46,9 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
 
     foreach($matches[0] as $match) $sanitizedPhrases = str_replace($match, strtoupper($match), $sanitizedPhrases);
 
+    $sanitizedPhrases = str_replace(', ,', ',', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace_callback('/\.\s\w/', create_function('$m','return strtoupper($m[0]);'), $sanitizedPhrases);
+
     return ucfirst(trim($sanitizedPhrases));
 }
 

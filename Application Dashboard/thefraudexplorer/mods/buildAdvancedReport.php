@@ -335,6 +335,10 @@ if ($endpointDECSQL == "all")
         $stringHistory = phraseSanitization($stringHistory, $notwantedWords);
         $stringHistory = str_ireplace($wordTyped, "<b>".$wordTyped."</b>", $stringHistory);
 
+        /* Capitalizing */
+
+        $stringHistory = preg_replace_callback('/\.\s<b>\w/', create_function('$m','return strtoupper($m[0]);'), $stringHistory);
+
         if (substr($stringHistory, 0, 3) === "<b>")
         {
             $charUppr = strtoupper(substr($wordTyped, 0, 1));
