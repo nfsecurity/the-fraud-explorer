@@ -60,8 +60,9 @@ function phraseFixes($rawPhrase)
     $sanitizedPhrase = strtolower($sanitizedPhrase);
     $sanitizedPhrase = preg_replace('/[\x80-\xFF]/i', '', $sanitizedPhrase);
     $sanitizedPhrase = preg_replace('/\s+/', ' ', $sanitizedPhrase);
+    $sanitizedPhrase = preg_replace_callback('/\.\s\w/', create_function('$m','return strtoupper($m[0]);'), $sanitizedPhrase);
 
-    return $sanitizedPhrase;
+    return ucfirst($sanitizedPhrase);
 }
 
 /* Check for message tone */

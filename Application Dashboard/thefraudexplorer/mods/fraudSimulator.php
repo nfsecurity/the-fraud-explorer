@@ -417,6 +417,23 @@ $("#simulatorParagraph").on('keyup paste', function (event) {
 
 <script>
 
+/* Capitalizations */
+
+function sentenceCase(input, lowercaseBefore) 
+{
+    input = ( input === undefined || input === null ) ? '' : input;
+    
+    if (lowercaseBefore) 
+    { 
+        input = input.toLowerCase(); 
+    }
+    
+    return input.toString().replace( /(^|\. *)([a-z])/g, function(match, separator, char) 
+    {
+        return separator + char.toUpperCase();
+    });
+}
+
 $('#simulatorForm button').click(function(e) {
 
     // Simulator paragraph empty validation
@@ -537,7 +554,7 @@ $('#simulatorForm button').click(function(e) {
     rawPhrases = rawPhrases.replace(/(\r\n|\n|\r)/gm, " ");
     rawPhrases = rawPhrases.replace(/\s+/g, " ");
     rawPhrases = rawPhrases.trim();
-    $('#simulatorParagraph').text(rawPhrases);
+    $('#simulatorParagraph').text(sentenceCase(rawPhrases));
 
     form.append('simulatorPhrases', rawPhrases);
 
