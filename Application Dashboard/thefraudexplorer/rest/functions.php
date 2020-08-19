@@ -733,7 +733,7 @@ function fraudTrianglePOSTQuery($rawJSON)
             $finaJSON = Array("pressureEvents" => $pressureCount, 
                             "opportunityEvents" => $opportunityCount, 
                             "rationalizationEvents" => $rationalizationCount,
-                            "fraudProbability" => $probability,
+                            "unethicalProbability" => $probability,
                             "messageTone" => $tone,
                             "phrasesMatched" => $replyJSON
                         );
