@@ -1087,3 +1087,19 @@ form
 {
     color: #4B906F;
 }
+
+.modal-backdrop
+{
+    backdrop-filter: blur(1px);
+    background-color: rgba(166, 166, 166, 0.20);
+}
+
+.modal-backdrop.in
+{
+    opacity: 0.8 !important;
+}
+
+.modal-content  
+{
+    border: 1px solid #C1C1C1 !important;
+}
