@@ -34,6 +34,7 @@ WORDSUNIVERSE="$THEFRAUDEXPLORER/mods/wordsUniverse.php"
 ANALYTICSHOLDER="$THEFRAUDEXPLORER/mods/analyticsHolder.php"
 LOGINSESSION="$THEFRAUDEXPLORER/lbs/login/session.php"
 LOGINFORM="$THEFRAUDEXPLORER/lbs/login/form.php"
+DELENDPOINT="$THEFRAUDEXPLORER/helpers/endpointsProcessing.php"
 
 # Replace types
 
@@ -63,6 +64,7 @@ ADDTONE="s/id=\"button-add-words-tone\"/id=\"button-add-words-tone\" disabled/g"
 DELTONE="s/id=\"button-del-words-tone\"/id=\"button-del-words-tone\" disabled/g"
 REMOTE="s/REMOTE_ADDR/HTTP_X_REAL_IP/g"
 CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N0FR4UD\")/g"
+DELETEAGENT="s/#confirm-delete/#/g"
 
 # Replace files
 
@@ -87,3 +89,4 @@ CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N
 /bin/sed "$SUBMIT" --in-place $ANALYTICSHOLDER
 /bin/sed "$REMOTE" --in-place $LOGINSESSION
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
+/bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
