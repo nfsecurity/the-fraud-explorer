@@ -260,7 +260,7 @@ $_SESSION['processingStatus'] = "notstarted";
                
                 <?php
                              
-                echo "Enter the server IP Address";
+                echo "Passphrase between server and client";
 
                 ?>
                 
