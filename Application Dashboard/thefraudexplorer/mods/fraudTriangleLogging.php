@@ -112,6 +112,21 @@ include "../lbs/elasticsearch.php";
         height: 45px;
     }
 
+    .table-th-logging-matches
+    {
+        font-family: 'FFont-Bold', sans-serif; font-size:12px;
+        border-bottom: 0px solid gray;
+        border-top: 0px solid gray;
+        border-left: 0px solid gray;
+        border-right: 0px solid gray;
+        background: white;
+        min-width: 88px;
+        width: 88px;
+        text-align: center;
+        padding: 0px 0px 0px 0px;
+        height: 45px;
+    }
+
     .table-tbody-logging
     {
         display: block;
@@ -190,6 +205,22 @@ include "../lbs/elasticsearch.php";
         font-size: 11px;
     }
 
+    .table-td-logging-matches
+    {
+        width: 88px;
+        min-width: 88px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 0px;
+        text-align: center;
+        background: #e8e9e8; 
+        font-family: 'FFont';
+        border: 0px solid white;
+        border-right: 2px solid white; 
+        border-radius: 0px 0px 0px 0px;
+        font-size: 11px;
+    }
+
     .font-icon-color-green
     {
         color: #4B906F;
@@ -250,7 +281,7 @@ include "../lbs/elasticsearch.php";
             <th class="table-th-logging">START</th>
             <th class="table-th-logging">FINISH</th>
             <th class="table-th-logging">TAKEN</th>
-            <th class="table-th-logging">MATCHES</th>
+            <th class="table-th-logging-matches">MATCHES</th>
         </thead>
         <tbody class="table-tbody-logging">
 
@@ -271,7 +302,7 @@ include "../lbs/elasticsearch.php";
                     echo '<td class="table-td-logging"><span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$startTime.'</td>';
                     echo '<td class="table-td-logging"><span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$endTime.'</td>';
                     echo '<td class="table-td-logging">'.$timeTaken.' min</td>';
-                    echo '<td class="table-td-logging">'.$matchCount.'</td>';
+                    echo '<td class="table-td-logging-matches">'.$matchCount.'</td>';
                     echo '</tr>';
                     
                     $counter++;
