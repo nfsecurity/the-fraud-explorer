@@ -60,13 +60,25 @@ $currentversion = $configFile['sw_version'];
         color: white;
     }
 
+    .svg-container
+    {
+        display: inline-block;
+    }
+
+    .software-name
+    {
+        display: inline;
+        margin-left: 5px;
+    }
+
 </style>
 
 <div id="footer">
     <div class="footer-components">
         <p class="main-text">&nbsp;</p>
         <div class="logo-container">
-            &nbsp;&nbsp;&nbsp;<span class="fa fa-cube fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>The Fraud Explorer</b> &reg; Opensource Fraud Triangle Analytics
+            <div class="svg-container"><img src="images/fta.svg" style="width: 16px; margin-top: -1px;"><img src="images/fta.svg" style="width: 16px; margin-top: -1px;"></div>
+            <div class="software-name">The Fraud Explorer &reg; Opensource Fraud Triangle Analytics</div>
         </div>
         <div class="helpers-container">
             <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" rel="noopener noreferrer" id="elm-bugreport">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
