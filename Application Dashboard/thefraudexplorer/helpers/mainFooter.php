@@ -77,7 +77,7 @@ $currentversion = $configFile['sw_version'];
     <div class="footer-components">
         <p class="main-text">&nbsp;</p>
         <div class="logo-container">
-            <div class="svg-container"><img src="images/fta.svg" style="width: 16px; margin-top: -1px;"><img src="images/fta.svg" style="width: 16px; margin-top: -1px;"></div>
+            <div class="svg-container"><img src="images/fta.svg" style="width: 16px; margin-top: -1px;"></div>
             <div class="software-name">The Fraud Explorer &reg; Opensource Fraud Triangle Analytics</div>
         </div>
         <div class="helpers-container">
