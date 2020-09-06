@@ -16,11 +16,11 @@
 TIME=`date +"%b-%d-%y"`
 FILENAME="backup-data-${TIME}.tar.gz"
 TFEDIR="/var/www/html/thefraudexplorer"
-ANALYTICSDIR="/var/lib/elasticsearch /etc/elasticsearch /etc/nginx /etc/logstash"
+ANALYTICSDIR="/var/lib/elasticsearch /etc/elasticsearch /etc/logstash"
 SYSFILES="/etc/sysconfig /etc/my.cnf /etc/httpd /etc/php.ini /etc/inittab /backup/bin/backup.sh /etc/motd /etc/postfix /etc/hosts"
 DESDIR="/backup"
 ZIP_PASSWORD="mypass"
-DB_TFE_PASSWORD="JhN7CVX87cx977"
+DB_TFE_PASSWORD="Nhb1&lS&"
 
 # Verify if there is free space to do the backup
 
