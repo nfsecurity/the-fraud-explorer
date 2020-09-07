@@ -424,7 +424,10 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
             <div class="container-bottom-left-sub-two">
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
-                        <div class="container-bottom-left-sub-two-sub-one-pressure"></div>
+                        <div class="container-bottom-left-sub-two-sub-one-pressure">
+                            <p>Ps</p><br>
+                            <p style="font-size: 10px; margin-top: -50px;"><?php echo $fraudTerms['pressure']; ?></p>
+                        </div>
                         <div class="block-with-text ellipsis">
                             <p class="title-text">Pressure,</p><p class="content-vertex-text"> personal (addiction, discipline, gambling), corporate (compensation, fear to lose the job) or external (market, ego, image, reputation).</p>
                         </div>
@@ -432,7 +435,10 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 </div>
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
-                        <div class="container-bottom-left-sub-two-sub-one-opportunity"></div>
+                        <div class="container-bottom-left-sub-two-sub-one-opportunity">
+                            <p>Or</p><br>
+                            <p style="font-size: 10px; margin-top: -50px;"><?php echo $fraudTerms['opportunity']; ?></p>
+                        </div>
                         <div class="block-with-text ellipsis">
                             <p class="title-text">Opportunity,</p><p class="content-vertex-text"> araises when the fraudster sees a way to use their position of trust to solve a problem, knowing they are unlikely to be caught.</p>
                         </div>
@@ -440,7 +446,10 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 </div>
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
-                        <div class="container-bottom-left-sub-two-sub-one-rational"></div>
+                        <div class="container-bottom-left-sub-two-sub-one-rational">
+                            <p>Ra</p><br>
+                            <p style="font-size: 10px; margin-top: -50px;"><?php echo $fraudTerms['rationalization']; ?></p>
+                        </div>
                         <div class="block-with-text ellipsis">
                             <p class="title-text">Rationalization,</p><p class="content-vertex-text"> the final component needed to complete the fraud triangle. It's the ability to persuade yourself that something is really ok.</p>
                         </div>
@@ -942,7 +951,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                     },
                     label: function(tooltipItems, data) {
                         var indice = tooltipItems.index;                 
-                        return  "Status " + data.datasets[0].data[indice];
+                        return  "Events: " + data.datasets[0].data[indice];
                     },
                     footer: function(tooltipItems, data) {
                         return data['labels'][tooltipItems[0]['index']] + " Vertice";

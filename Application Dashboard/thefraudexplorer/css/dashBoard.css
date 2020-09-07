@@ -299,6 +299,9 @@ a:active
     height: 55px; 
     float: left;
     border-radius: 5px;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 32px;
+    color: white;
 }
 
 .container-bottom-left-sub-two-sub-one-pressure
@@ -309,6 +312,9 @@ a:active
     height: 55px; 
     float: left;
     border-radius: 5px;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 32px;
+    color: white;
 }
 
 .container-bottom-left-sub-two-sub-one-rational
@@ -319,6 +325,9 @@ a:active
     height: 55px; 
     float: left;
     border-radius: 5px;
+    font-family: 'FFont-Bold', sans-serif; 
+    font-size: 32px;
+    color: white;
 }
 
 .container-bottom-right
@@ -706,9 +715,9 @@ a:active
 
 .footer-logo-container
 {
-    float:left; 
+    float: left; 
     font-family: 'FFont', sans-serif; 
-    font-size:12px; 
+    font-size: 12px; 
     color: white;
 }
 
