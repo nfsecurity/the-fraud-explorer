@@ -436,7 +436,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-opportunity">
-                            <p>Or</p><br>
+                            <p>On</p><br>
                             <p class="vertice-insight"><?php echo $fraudTerms['opportunity']; ?></p>
                         </div>
                         <div class="block-with-text ellipsis">
