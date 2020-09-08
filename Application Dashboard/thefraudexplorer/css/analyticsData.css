@@ -64,17 +64,17 @@ html,body
 
 a 
 {
-    color: black;
+    color: #373737;
 }
 
-a:link
+a:link 
 {
-    color: black;
+    color: #373737;
 }
 
-a:visited
+a:visited 
 {
-    color: black;
+    color: #373737;
 }
 
 a:hover

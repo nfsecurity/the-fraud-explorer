@@ -97,25 +97,23 @@
     overflow: hidden;
     background-color: #e8eaeb;
     border-bottom: 2px solid #d3d3d3;
-    color: #555;
 }
 
 .li 
 {
     float: left;
-    height: 35px;
-    color: #555;
+    height: 42px;
 }
 
 li a 
 {
     display: block;
-    color: white;
     text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-family: 'FFont', sans-serif; font-size:12px; color: #555;
-    outline:0 !important;
+    padding: 13px 16px 14px 16px;
+    color: #373737;
+    font-family: 'FFont', sans-serif; 
+    font-size: 13px;
+    outline: 0 !important;
 }
 
 li a:hover
