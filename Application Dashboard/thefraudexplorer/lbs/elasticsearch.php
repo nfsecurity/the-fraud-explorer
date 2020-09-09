@@ -2199,4 +2199,115 @@ function countSpecificAgentIdEvents($agentID, $index, $alertType, $searchString)
     return $agentIdData;
 }
 
+/* Count specific Fraud Triangle Matches one week before */
+
+function countSpecificFraudTriangleMatchesOneWeekBefore($index, $domain, $samplerStatus, $vertice)
+{
+    if ($domain == "all")
+    {
+        if ($samplerStatus == "enabled")
+        {
+            $matchesParams = [
+                'index' => $index,
+                'type' => 'AlertEvent',
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'minimum_should_match' => '1',
+                            'must' => [
+                                [ 'match_all' => [ 'boost' => 1 ] ],
+                                [ 'range' => [ '@timestamp' => [ 'gte' => 'now-7d/d', 'lte'=> 'now/d' ] ] ]
+                            ],
+                            'should' => [
+                                [ 'match' => [ 'alertType' => $vertice] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+        else
+        {
+            $matchesParams = [
+                'index' => $index,
+                'type' => 'AlertEvent',
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'minimum_should_match' => '1',
+                            'must' => [
+                                [ 'match_all' => [ 'boost' => 1 ] ],
+                                [ 'range' => [ '@timestamp' => [ 'gte' => 'now-7d/d', 'lte'=> 'now/d' ] ] ]
+                            ],
+                            'should' => [
+                                [ 'match' => [ 'alertType' => $vertice ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ],
+                                [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]; 
+        }
+    }
+    else
+    {
+        if ($samplerStatus == "enabled")
+        {
+            $matchesParams = [
+                'index' => $index,
+                'type' => 'AlertEvent',
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'minimum_should_match' => '1',
+                            'should' => [
+                                [ 'match' => [ 'userDomain' => $domain ] ],
+                                [ 'match' => [ 'userDomain' => 'thefraudexplorer.com' ] ],
+                                [ 'match' => [ 'alertType' => $vertice ] ],
+                                [ 'range' => [ '@timestamp' => [ 'gte' => 'now-7d/d', 'lte'=> 'now/d' ] ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+        else
+        {
+            $matchesParams = [
+                'index' => $index,
+                'type' => 'AlertEvent',
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'minimum_should_match' => '1',
+                            'should' => [
+                                'match' => [ 'userDomain' => $domain ],
+                                'match' => [ 'alertType' => $vertice ],
+                                [ 'range' => [ '@timestamp' => [ 'gte' => 'now-7d/d', 'lte'=> 'now/d' ] ] ]
+                            ],
+                            'must_not' => [
+                                [ 'match' => [ 'falsePositive' => '1'] ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];   
+        }
+    }
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $getAlerts = $client->count($matchesParams);
+
+    return $getAlerts;
+}
+
 ?>

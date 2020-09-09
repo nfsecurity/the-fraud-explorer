@@ -266,6 +266,9 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
 
                     <?php
 
+                    $configFile = parse_ini_file("../config.ini");
+                    $ESalerterIndex = $configFile['es_alerter_index'];
+
                     $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 50";
                     $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC LIMIT 50";                  
                     $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC LIMIT 50";
@@ -273,13 +276,37 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                     
                     if ($session->domain == "all")
                     {
-                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL);
-                        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
+                        if (samplerStatus($session->domain) == "enabled") 
+                        {
+                            $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL);
+                            $eventsPressureWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "enabled", "pressure");
+                            $eventsOpportunityWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "enabled", "opportunity");
+                            $eventsRationalizationWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "enabled", "rationalization");
+                        }
+                        else 
+                        {
+                            $queryEndpoints = mysqli_query($connection, $queryEndpointsSQL_wOSampler);
+                            $eventsPressureWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "disabled", "pressure");
+                            $eventsOpportunityWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "disabled", "opportunity");
+                            $eventsRationalizationWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, $session->domain, "disabled", "rationalization");
+                        }
                     }
                     else
                     {
-                        if (samplerStatus($session->domain) == "enabled") $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain);
-                        else $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
+                        if (samplerStatus($session->domain) == "enabled") 
+                        {
+                            $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain);
+                            $eventsPressureWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "enabled", "pressure");
+                            $eventsOpportunityWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "enabled", "opportunity");
+                            $eventsRationalizationWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "enabled", "rationalization");
+                        }
+                        else 
+                        {
+                            $queryEndpoints = mysqli_query($connection, $queryEndpointsSQLDomain_wOSampler);
+                            $eventsPressureWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "disabled", "pressure");
+                            $eventsOpportunityWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "disabled", "opportunity");
+                            $eventsRationalizationWeek = countSpecificFraudTriangleMatchesOneWeekBefore($ESalerterIndex, "all", "disabled", "rationalization");
+                        }
                     }
 
                     if($endpointsFraud = mysqli_fetch_assoc($queryEndpoints))
@@ -327,6 +354,17 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                         }
                         while ($endpointsFraud = mysqli_fetch_assoc($queryEndpoints));
                     }
+
+                    $pressureWeek = $eventsPressureWeek['count'];
+                    $opportunityWeek = $eventsOpportunityWeek['count'];
+                    $rationalizationWeek = $eventsRationalizationWeek['count'];
+
+                    if (strlen($pressureWeek) == 1) $pressureWeek = "00".$pressureWeek;
+                    if (strlen($pressureWeek) == 2) $pressureWeek = "0".$pressureWeek;
+                    if (strlen($opportunityWeek) == 1) $opportunityWeek = "00".$opportunityWeek;
+                    if (strlen($opportunityWeek) == 2) $opportunityWeek = "0".$opportunityWeek;
+                    if (strlen($rationalizationWeek) == 1) $rationalizationWeek = "00".$rationalizationWeek;
+                    if (strlen($rationalizationWeek) == 2) $rationalizationWeek = "0".$rationalizationWeek;       
 
                     ?>
 
@@ -425,7 +463,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-pressure">
-                            <p>Ps</p><br>
+                            <p class="vertice-week"><?php echo $pressureWeek; ?></p><br>
                             <p class="vertice-insight"><?php echo $fraudTerms['pressure']; ?></p>
                         </div>
                         <div class="block-with-text ellipsis">
@@ -436,7 +474,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-opportunity">
-                            <p>On</p><br>
+                            <p class="vertice-week"><?php echo $opportunityWeek; ?></p><br>
                             <p class="vertice-insight"><?php echo $fraudTerms['opportunity']; ?></p>
                         </div>
                         <div class="block-with-text ellipsis">
@@ -447,7 +485,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-rational">
-                            <p>Ra</p><br>
+                            <p class="vertice-week"><?php echo $rationalizationWeek; ?></p><br>
                             <p class="vertice-insight"><?php echo $fraudTerms['rationalization']; ?></p>
                         </div>
                         <div class="block-with-text ellipsis">
@@ -492,13 +530,25 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                 
                     if ($session->domain != "all") 
                     {
-                        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled", "dashboard");
-                        else $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled", "dashboard");
+                        if (samplerStatus($session->domain) == "enabled") 
+                        {
+                            $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "enabled", "dashboard");
+                        }
+                        else 
+                        {
+                            $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, $session->domain, "disabled", "dashboard");
+                        }
                     }
                     else
                     {
-                        if (samplerStatus($session->domain) == "enabled") $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled", "dashboard");
-                        else $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled", "dashboard");
+                        if (samplerStatus($session->domain) == "enabled") 
+                        {
+                            $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "enabled", "dashboard");
+                        }
+                        else 
+                        {
+                            $eventMatches = getAllFraudTriangleMatches($ESalerterIndex, "all", "disabled", "dashboard");
+                        }
                     }
                 
                     $eventData = json_decode(json_encode($eventMatches), true);
@@ -556,9 +606,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
                         echo '<td class="td-vertice td-with-bg">';
                         echo '<center><div class="behavior-button">'.substr(strtoupper($result['_source']['alertType']), 0, 1).'</div></center>';
                         echo '</td>';
-                        
-                        
-                                              
+                                                                     
                         echo '</tr>';
                     }
 

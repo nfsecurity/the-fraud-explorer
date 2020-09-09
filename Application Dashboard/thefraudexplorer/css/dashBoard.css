@@ -293,13 +293,18 @@ a:active
 
 .vertice-insight
 {
-    font-size: 10px; 
-    margin-top: -38px; 
+    font-size: 10px;
+    margin-top: -33px;
     background: white; 
     color: #4f4f4f;
     width: 51px;
     border-radius: 3px;
     margin-left: 2px;
+}
+
+.vertice-week
+{
+    margin-top: 3px;
 }
 
 .container-bottom-left-sub-two-sub-one-opportunity
@@ -311,7 +316,7 @@ a:active
     float: left;
     border-radius: 5px;
     font-family: 'FFont-Bold', sans-serif; 
-    font-size: 28px;
+    font-size: 25px;
     color: white;
 }
 
@@ -324,7 +329,7 @@ a:active
     float: left;
     border-radius: 5px;
     font-family: 'FFont-Bold', sans-serif; 
-    font-size: 28px;
+    font-size: 25px;
     color: white;
 }
 
@@ -337,7 +342,7 @@ a:active
     float: left;
     border-radius: 5px;
     font-family: 'FFont-Bold', sans-serif; 
-    font-size: 28px;
+    font-size: 25px;
     color: white;
 }
 
