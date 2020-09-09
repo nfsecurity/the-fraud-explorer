@@ -294,6 +294,7 @@ a:active
 .vertice-insight
 {
     font-size: 10px;
+    font-family: 'FFont', sans-serif; 
     margin-top: -33px;
     background: white; 
     color: #4f4f4f;
