@@ -120,15 +120,15 @@ a:active
     top: 50px;
     left: 5px; 
     width: 43px;
-    border: 1px solid #d3d3d3;
     border-radius: 5px;
-    padding: 8px 0px 8px 0px;
-    background: #e8eaeb;
+    border-top: 3px solid #5c9678;
+    border-bottom: 3px solid #5c9678;
+    background: transparent;
 }
 
 .dashboard-left-menu td
 {
-    vertical-align: middle; padding-top: 12px;
+    vertical-align: top;
 }
 
 .vertical-menu-icon-padding
@@ -138,6 +138,7 @@ a:active
 
 .menu-table
 {
+    padding-top: 0px;
     height: 100%;
     border: 0px solid red;
 }
@@ -1100,39 +1101,38 @@ a.welcome
 
 .left-menu-button
 {
-    border: 1px solid #d9d9d9;
-    background-color: #F2F2F2; 
+    background-color: #e6e6e6; 
     color: #888888;
-    width: 35px;
-    border-radius: 0px 0px 5px 5px; 
-    padding: 0px 0px 0px 0px !important;
-    height: 28px;
+    width: 42px;
+    border-radius: 5px; 
+    height: 45px;
     font-family: 'FFont-Bold', sans-serif; 
-    font-size: 16px;
     text-align: center;
     display: inline-block;
-    vertical-align: middle;
+}
+
+.left-menu-button:hover
+{
+    background-color: #dbdbdb;
 }
 
 .menu-title
 {
-    width: 35px;
-    height: 12px;
-    margin-top: -10px;
-    padding-top: 0px;
+    width: 38px;
+    position: relative;
+    top: 27px;
+    left: 2px;
+    height: 15px;
+    padding-top: 2px;
     padding-left: 1px;
     padding-right: 1px;
-    margin-bottom: 3px;
-    margin-right: 5px;
-    margin-left: -1px;
-    background: #d9d9d9;
+    background: white;
     text-align: center;
-    font-family: 'FFont-Bold', sans-serif; 
+    font-family: 'FFont', sans-serif; 
     font-size: 8px;
     line-height: 10px;
     float: left;
-    border-radius: 5px 5px 0px 0px;
-    border: 1px solid #d9d9d9;
+    border-radius: 4px;
 }
 
 .spinner

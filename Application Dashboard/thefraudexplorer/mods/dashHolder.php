@@ -160,77 +160,77 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">wfw</div><span class="fa fa-plus font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Workflows</div><div class=tooltip-row><div class=tooltip-item>Create fraud triangle flows based on your<br>business rules defined by audit team,<br>committee or investigations area</div></div></div>"><a href="mods/fraudTriangleFlows" data-toggle="modal" data-target="#fraudFlows" href="#" id="elm-fraud-flows"><div class="left-menu-button"><div class="menu-title">flows</div><span class="fa fa-plus font-icon-color-gray" style="font-size: 20px; position: relative; top: -10px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Report</div><div class=tooltip-row><div class=tooltip-item>Make and download a fraud triangle<br>report for your organization with<br>various filters</div></div></div>"><a href="../mods/advancedReports" data-toggle="modal" class="advanced-reports-button" data-target="#advanced-reports" href="#" id="elm-advanced-reports"><div class="left-menu-button"><div class="menu-title">rep</div><span class="fa fa-file-text-o font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>                    
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Fraud Triangle Report</div><div class=tooltip-row><div class=tooltip-item>Make and download a fraud triangle<br>report for your organization with<br>various filters</div></div></div>"><a href="../mods/advancedReports" data-toggle="modal" class="advanced-reports-button" data-target="#advanced-reports" href="#" id="elm-advanced-reports"><div class="left-menu-button"><div class="menu-title">reports</div><span class="fa fa-file-text-o font-icon-color-gray" style="font-size: 19px; position: relative; top: -10px;"></span></div></a></span>                    
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoint agent</div><div class=tooltip-row><div class=tooltip-item>Make the downloadable and installable<br>agent for your endpoints depending<br>of the platform</div></div></div>"><a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint"><div class="left-menu-button"><div class="menu-title">end</div><span class="fa fa-user-plus fa-2x font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Endpoint agent</div><div class=tooltip-row><div class=tooltip-item>Make the downloadable and installable<br>agent for your endpoints depending<br>of the platform</div></div></div>"><a href="../mods/buildEndpoint" data-toggle="modal" class="build-endpoint-button" data-target="#build-endpoint" href="#" id="elm-build-endpoint"><div class="left-menu-button"><div class="menu-title">agents</div><span class="fa fa-user-plus fa-2x font-icon-color-gray" style="font-size: 19px; position: relative; top: -10px; left: 1px;"></span></div></a></span>
                     <center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Phrase library</div><div class=tooltip-row><div class=tooltip-item>Modify and improve the fraud triangle<br>phrase library with this tool called<br>library workshop</div></div></div>"><a href="../mods/fraudTriangleRules" data-toggle="modal" class="fraud-triangle-phrases-button" data-target="#fraudTriangleRules" href="#" id="elm-fraud-triangle-rules"><div class="left-menu-button"><div class="menu-title">lib</div><span class="fa fa-book font-icon-color-gray" style="font-size: 18px;"></span></div></a><span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Phrase library</div><div class=tooltip-row><div class=tooltip-item>Modify and improve the fraud triangle<br>phrase library with this tool called<br>library workshop</div></div></div>"><a href="../mods/fraudTriangleRules" data-toggle="modal" class="fraud-triangle-phrases-button" data-target="#fraudTriangleRules" href="#" id="elm-fraud-triangle-rules"><div class="left-menu-button"><div class="menu-title">library</div><span class="fa fa-book font-icon-color-gray" style="font-size: 20px; position: relative; top: -11px;"></span></div></a><span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Words universe</div><div class=tooltip-row><div class=tooltip-item>Add or delete a set of words related to<br>specific country, city, ethnic groups and<br>message tones to improve detections</div></div></div>"><a href="../mods/wordsUniverse" data-toggle="modal" class="words-universe-button" data-target="#wordsUniverse" href="#" id="elm-words-universe"><div class="left-menu-button"><div class="menu-title">wds</div><span class="fa fa-language font-icon-color-gray" style="font-size: 18px;"></span></div></a><span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Words universe</div><div class=tooltip-row><div class=tooltip-item>Add or delete a set of words related to<br>specific country, city, ethnic groups and<br>message tones to improve detections</div></div></div>"><a href="../mods/wordsUniverse" data-toggle="modal" class="words-universe-button" data-target="#wordsUniverse" href="#" id="elm-words-universe"><div class="left-menu-button"><div class="menu-title">words</div><span class="fa fa-language font-icon-color-gray" style="font-size: 20px; position: relative; top: -11px;"></span></div></a><span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><div class="left-menu-button"><div class="menu-title">sta</div><span class="fa fa-toggle-on font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><div class="left-menu-button"><div class="menu-title">status</div><span class="fa fa-toggle-on font-icon-color-gray" style="font-size: 20px; position: relative; top: -10px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Vertical analytics</div><div class=tooltip-row><div class=tooltip-item>See the complete table of fraud triangle<br>analytics events with power and<br>useful information</div></div></div>"><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical"><div class="left-menu-button"><div class="menu-title">tab</div><span class="fa fa-table font-icon-color-gray" style="font-size: 20px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Vertical analytics</div><div class=tooltip-row><div class=tooltip-item>See the complete table of fraud triangle<br>analytics events with power and<br>useful information</div></div></div>"><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical"><div class="left-menu-button"><div class="menu-title">sights</div><span class="fa fa-table font-icon-color-gray" style="font-size: 21px; position: relative; top: -10px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Business Departments</div><div class=tooltip-row><div class=tooltip-item>Use this option to upload a file<br>in CSV format indicating all the relevant<br>information to clasify endpoints</div></div></div>"><a href="mods/businessUnits" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#business-units" href="#" id="elm-business-units"><div class="left-menu-button"><div class="menu-title">dep</div><span class="fa fa-sitemap font-icon-color-gray" style="font-size: 19px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Business Departments</div><div class=tooltip-row><div class=tooltip-item>Use this option to upload a file<br>in CSV format indicating all the relevant<br>information to clasify endpoints</div></div></div>"><a href="mods/businessUnits" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#business-units" href="#" id="elm-business-units"><div class="left-menu-button"><div class="menu-title">units</div><span class="fa fa-sitemap font-icon-color-gray" style="font-size: 21px; position: relative; top: -12px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai"><div class="left-menu-button"><div class="menu-title">int</div><span class="fa fa-percent font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Artificial intelligence</div><div class=tooltip-row><div class=tooltip-item>See what are the result of the expert<br>system based on artificial intelligence<br>to prescribe corporate fraud</div></div></div>"><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai"><div class="left-menu-button"><div class="menu-title">robot</div><span class="fa fa-percent font-icon-color-gray" style="font-size: 18px; position: relative; top: -9px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Backup and restore</div><div class=tooltip-row><div class=tooltip-item>Generate and download a copy of the<br>entire system for backup and restore<br>purposes. This procedure can take time</div></div></div>"><a href="mods/backupData" data-toggle="modal" data-target="#backupData" href="#" id="elm-backup"><div class="left-menu-button"><div class="menu-title">bck</div><span class="fa fa-database font-icon-color-gray" style="font-size: 18px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Backup and restore</div><div class=tooltip-row><div class=tooltip-item>Generate and download a copy of the<br>entire system for backup and restore<br>purposes. This procedure can take time</div></div></div>"><a href="mods/backupData" data-toggle="modal" data-target="#backupData" href="#" id="elm-backup"><div class="left-menu-button"><div class="menu-title">backup</div><span class="fa fa-database font-icon-color-gray" style="font-size: 19px; position: relative; top: -10px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email setup</div><div class=tooltip-row><div class=tooltip-item>Define the email configuration for<br>general alerting, system messages and<br>some important announces</div></div></div>"><a href="mods/mailConfig" data-toggle="modal" data-target="#mail-config" href="#" id="elm-mail"><div class="left-menu-button"><div class="menu-title">eml</div><span class="fa fa-wpforms font-icon-color-gray" style="font-size: 19px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Email setup</div><div class=tooltip-row><div class=tooltip-item>Define the email configuration for<br>general alerting, system messages and<br>some important announces</div></div></div>"><a href="mods/mailConfig" data-toggle="modal" data-target="#mail-config" href="#" id="elm-mail"><div class="left-menu-button"><div class="menu-title">mail</div><span class="fa fa-wpforms font-icon-color-gray" style="font-size: 20px; position: relative; top: -11px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
