@@ -136,7 +136,7 @@ if ($simulatorAction == "runCheck")
                 {
                     if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                     {
-                        $phrasesMatched[][$term] = $matches[0][0];
+                        for ($j=0; $j<count($matches[0]); $j++) $phrasesMatched[][$term] = $matches[0][$j];
                     }
                 }
             }

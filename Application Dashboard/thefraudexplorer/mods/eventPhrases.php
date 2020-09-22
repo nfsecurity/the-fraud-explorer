@@ -418,8 +418,11 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
 
 foreach ($phrasesMatched as $key => $value)
 {
-    echo "var matchedPhrase = '" .$value[0][0]. "';";
-    echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event\">'+matchedPhrase+'</span>'));});";
+    for ($i=0; $i<count($value[0]); $i++)
+    {
+        echo "var matchedPhrase = '" .$value[0][$i]. "';";
+        echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle-event\">'+matchedPhrase+'</span>'));});";
+    }
 }
 
 ?>

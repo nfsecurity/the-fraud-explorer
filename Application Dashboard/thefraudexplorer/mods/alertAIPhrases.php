@@ -149,8 +149,11 @@ $alertPhrase = getAlertIdData($alertid, $ESalerterIndex, "AlertEvent");
 
     foreach ($phrasesMatched as $key => $value)
     {
-        echo "var matchedPhrase = '" .$value[0][0]. "';";
-        echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle\">'+matchedPhrase+'</span>'));});";
+        for ($i=0; $i<count($value[0]); $i++)
+        {
+            echo "var matchedPhrase = '" .$value[0][$i]. "';";
+            echo "$('p:contains('+matchedPhrase+')', document.body).each(function() { $(this).html($(this).html().replace(new RegExp(matchedPhrase, 'g'), '<span class=\"matchedStyle\">'+matchedPhrase+'</span>'));});";
+        }
     }
 
     ?>

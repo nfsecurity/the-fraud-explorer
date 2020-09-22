@@ -343,6 +343,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                         $end = substr($end, 0, -3);
                         $matchTime = (string)$end."Z";
                         $domain = getUserDomain($agentID);
+                        $matchCount = count($matches[0]);
                         $tone = "0";
 
                         /* Check phrase tone */
@@ -351,20 +352,23 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
 
                         /* Prepare the message to send through socket */
 
-                        $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".count($matches[0])." p: ".$matches[0][0]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0 n: ".$tone;
-                        $lenData = strlen($msgData);
+                        for ($j=0; $j<$matchCount; $j++)
+                        {
+                            $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".$matchCount." p: ".$matches[0][$j]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0 n: ".$tone;
+                            $lenData = strlen($msgData);
 
-                        /* Send message to Logstash */
+                            /* Send message to Logstash */
 
-                        socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
+                            socket_sendto($sockLT, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_port']);       
+                            
+                            $matchesGlobalCount++;
+
+                            /* Send message to Logfile */
+
+                            logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][$j]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".$matchCount."] Tone[".$tone."]");
                         
-                        $matchesGlobalCount++;
-
-                        /* Send message to Logfile */
-
-                        logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][0]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".count($matches[0])."] Tone[".$tone."]");
-
-                        $countOutput++;
+                            $countOutput++;
+                        }                   
                     }
                 }
                 $rule = $ruleset;
