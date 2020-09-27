@@ -34,6 +34,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+require '../vendor/autoload.php';
+include "../lbs/elasticsearch.php";
 
 $_SESSION['processingStatus'] = "notstarted";
 
@@ -626,6 +628,14 @@ $_SESSION['processingStatus'] = "notstarted";
 
             function get_server_aifta_status()
             {
+                $today = date("Y-m-d");
+                $eventData = extractLastEventFromAlerterStatus();
+                $latestAlerterEvent = json_decode(json_encode($eventData), true);
+                $lastEventDate = date('Y-m-d', strtotime($latestAlerterEvent['hits']['hits'][0]['_source']['@timestamp']));
+                $daysDiff = (strtotime($today) - strtotime($lastEventDate)) / (60 * 60 * 24);
+
+                if ($daysDiff > 0) return "failed";
+
                 $sLock = '/var/www/html/thefraudexplorer/core/FTA.lock';
 
                 if (file_exists($sLock)) 

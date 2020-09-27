@@ -271,7 +271,6 @@ include "../lbs/elasticsearch.php";
     $eventData = extractDataFromAlerterStatus();
     $latestAlerterEvents = json_decode(json_encode($eventData), true);
 
-
 ?>
 
 <div class="div-container-logging">

@@ -1216,6 +1216,30 @@ function extractDataFromAlerterStatus()
     return $latestEvents;
 }
 
+/* Extract las event from alerter status */
+
+function extractLastEventFromAlerterStatus()
+{
+    $endDateParams = [
+        'index' => "tfe-alerter-status",
+        'type' => "AlertStatus",
+        'body' =>[
+            'size' => 1,
+            'query' => [
+                'term' => [ 'host' => '127.0.0.1' ]
+            ],
+            'sort' => [
+                'endTime' => [ 'order' => 'desc' ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $latestEvents = $client->search($endDateParams);
+
+    return $latestEvents;
+}
+
 /* Search all Fraud Triangle Events with size and offset */
 
 function getAllFraudTriangleEvents($index, $domain, $samplerStatus, $context, $size, $offset, $sortOrder, $sortColumn)
