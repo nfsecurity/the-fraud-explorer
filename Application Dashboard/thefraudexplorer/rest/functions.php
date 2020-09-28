@@ -688,22 +688,22 @@ function fraudTrianglePOSTQuery($rawJSON)
 
                                     if ($term == "pressure")
                                     {
-                                        if ($pressureCount == 0) $replyJSON["pressureTerms"] = $matches[0][0];
-                                        else $replyJSON["pressureTerms"] = $replyJSON["pressureTerms"] . ", " . $matches[0][0];
+                                        if ($pressureCount == 0) $replyJSON["pressureTerms"] = $matches[0][$j];
+                                        else $replyJSON["pressureTerms"] = $replyJSON["pressureTerms"] . ", " . $matches[0][$j];
                                         
                                         $pressureCount++;
                                     }
                                     if ($term == "opportunity")
                                     {
-                                        if ($opportunityCount == 0) $replyJSON["opportunityTerms"] = $matches[0][0];
-                                        else $replyJSON["opportunityTerms"] = $replyJSON["opportunityTerms"] . ", " . $matches[0][0];
+                                        if ($opportunityCount == 0) $replyJSON["opportunityTerms"] = $matches[0][$j];
+                                        else $replyJSON["opportunityTerms"] = $replyJSON["opportunityTerms"] . ", " . $matches[0][$j];
                                         
                                         $opportunityCount++;
                                     }
                                     if ($term == "rationalization")
                                     {
-                                        if ($rationalizationCount == 0) $replyJSON["rationalizationTerms"] = $matches[0][0];
-                                        else $replyJSON["rationalizationTerms"] = $replyJSON["rationalizationTerms"] . ", " . $matches[0][0];
+                                        if ($rationalizationCount == 0) $replyJSON["rationalizationTerms"] = $matches[0][$j];
+                                        else $replyJSON["rationalizationTerms"] = $replyJSON["rationalizationTerms"] . ", " . $matches[0][$j];
                                         
                                         $rationalizationCount++;
                                     }
