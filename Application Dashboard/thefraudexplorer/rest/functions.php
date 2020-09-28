@@ -682,28 +682,31 @@ function fraudTrianglePOSTQuery($rawJSON)
                         {
                             if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                             {
-                                $phrasesMatched[][$term] = $matches[0][0];
+                                for ($j=0; $j<count($matches[0]); $j++)
+                                {
+                                    $phrasesMatched[][$term] = $matches[0][$j];
 
-                                if ($term == "pressure")
-                                {
-                                    if ($pressureCount == 0) $replyJSON["pressureTerms"] = $matches[0][0];
-                                    else $replyJSON["pressureTerms"] = $replyJSON["pressureTerms"] . ", " . $matches[0][0];
-                                    
-                                    $pressureCount++;
-                                }
-                                if ($term == "opportunity")
-                                {
-                                    if ($opportunityCount == 0) $replyJSON["opportunityTerms"] = $matches[0][0];
-                                    else $replyJSON["opportunityTerms"] = $replyJSON["opportunityTerms"] . ", " . $matches[0][0];
-                                    
-                                    $opportunityCount++;
-                                }
-                                if ($term == "rationalization")
-                                {
-                                    if ($rationalizationCount == 0) $replyJSON["rationalizationTerms"] = $matches[0][0];
-                                    else $replyJSON["rationalizationTerms"] = $replyJSON["rationalizationTerms"] . ", " . $matches[0][0];
-                                    
-                                    $rationalizationCount++;
+                                    if ($term == "pressure")
+                                    {
+                                        if ($pressureCount == 0) $replyJSON["pressureTerms"] = $matches[0][0];
+                                        else $replyJSON["pressureTerms"] = $replyJSON["pressureTerms"] . ", " . $matches[0][0];
+                                        
+                                        $pressureCount++;
+                                    }
+                                    if ($term == "opportunity")
+                                    {
+                                        if ($opportunityCount == 0) $replyJSON["opportunityTerms"] = $matches[0][0];
+                                        else $replyJSON["opportunityTerms"] = $replyJSON["opportunityTerms"] . ", " . $matches[0][0];
+                                        
+                                        $opportunityCount++;
+                                    }
+                                    if ($term == "rationalization")
+                                    {
+                                        if ($rationalizationCount == 0) $replyJSON["rationalizationTerms"] = $matches[0][0];
+                                        else $replyJSON["rationalizationTerms"] = $replyJSON["rationalizationTerms"] . ", " . $matches[0][0];
+                                        
+                                        $rationalizationCount++;
+                                    }
                                 }
                             }
                         }
