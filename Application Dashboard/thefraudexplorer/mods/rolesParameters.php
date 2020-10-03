@@ -32,7 +32,10 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
+
+$msg = "";
 
 if (!empty($_POST['createmodify']))
 {
@@ -46,8 +49,18 @@ if (!empty($_POST['createmodify']))
 
         if ($row = mysqli_fetch_array($userExists)) $count = $row[0];
 
-        if(!empty($count)) mysqli_query($connection, sprintf("UPDATE t_users SET password='%s', domain='%s' WHERE user='%s'", $userPassword, $userDomain, $userName));
-        else mysqli_query($connection, sprintf("INSERT INTO t_users (user, password, domain) VALUES ('%s', '%s', '%s')", $userName, $userPassword, $userDomain));
+        if(!empty($count))
+        {
+            mysqli_query($connection, sprintf("UPDATE t_users SET password='%s', domain='%s' WHERE user='%s'", $userPassword, $userDomain, $userName));
+
+            $msg = "modification";
+        }
+        else 
+        {
+            mysqli_query($connection, sprintf("INSERT INTO t_users (user, password, domain) VALUES ('%s', '%s', '%s')", $userName, $userPassword, $userDomain));
+
+            $msg = "creation";
+        }
   
         /* Domain config table */
         
@@ -70,28 +83,6 @@ if (!empty($_POST['createmodify']))
             mysqli_query($connection, sprintf("INSERT INTO %s (score_ts_low_from, score_ts_low_to, score_ts_medium_from, score_ts_medium_to, score_ts_high_from, score_ts_high_to, score_ts_critic_from, score_ts_critic_to, sample_data_calculation) VALUES ('0', '10', '11', '20', '21', '30', '31', '100', 'enabled')", $domainConfigTable));
         }
     }
-    else if (!empty($_POST['username']) && !empty($_POST['password']))
-    {
-        $userName = filter($_POST['username']);
-        $userPassword = sha1(filter($_POST['password']));
-        $userDomain = "all";
-
-        $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
-
-        if ($row = mysqli_fetch_array($userExists)) $count = $row[0]; 
-
-        if(!empty($count)) mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $userPassword, $userName));
-        else mysqli_query($connection, sprintf("INSERT INTO t_users (user, password, domain) VALUES ('%s', '%s', '%s')", $userName, $userPassword, $userDomain));
-    }
-    else if (!empty($_POST['username']) && !empty($_POST['domain']))
-    {
-        $userName = filter($_POST['username']);
-        $userDomain = filter($_POST['domain']);
-        $userExists = mysqli_query($connection, sprintf("SELECT * FROM t_users WHERE user='%s'", $userName));
-
-        if ($row = mysqli_fetch_array($userExists)) $count = $row[0];
-        if(!empty($count)) mysqli_query($connection, sprintf("UPDATE t_users SET domain='%s' WHERE user='%s'", $userDomain, $userName));
-    }
 }
 else if (!empty($_POST['delete']))
 {
@@ -105,8 +96,25 @@ else if (!empty($_POST['delete']))
         
         $domainTable = "t_config_".str_replace(".", "_", $row[2]);
         
-        if(mysqli_num_rows(mysqli_query($connection, "SHOW TABLES LIKE '".$domainTable."'")) == 1) mysqli_query($connection, sprintf("DROP TABLE %s", $domainTable));
+        if(mysqli_num_rows(mysqli_query($connection, "SHOW TABLES LIKE '".$domainTable."'")) == 1) 
+        {
+            mysqli_query($connection, sprintf("DROP TABLE %s", $domainTable));
+            $msg = "deletion";
+        }
     }
+}
+
+if ($msg == "") 
+{
+    $msg = "none";
+    $_SESSION['wm'] = encRijndael($msg);
+}
+else
+{
+    $msg = trim($msg, ",");
+    $msg = ltrim($msg, " ");
+
+    $_SESSION['wm'] = encRijndael("Successfully profile ".$msg);
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

@@ -84,7 +84,12 @@ include "lbs/elasticsearch.php";
         <!-- Rangy -->
 
         <script type="text/javascript" src="js/rangy-core.js"></script>
-        <script type="text/javascript" src="js/rangy-textrange.js"></script>  
+        <script type="text/javascript" src="js/rangy-textrange.js"></script>
+
+        <!-- jGrowl -->
+
+        <script type="text/javascript" src="js/jquery.jgrowl.js"></script>
+        <link rel="stylesheet" href="css/jquery.jgrowl.css">
 
         <!-- JS functions -->
 

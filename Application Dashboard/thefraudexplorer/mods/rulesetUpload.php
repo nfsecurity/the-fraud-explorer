@@ -17,6 +17,7 @@
 
 include "../lbs/login/session.php";
 include "../lbs/security.php";
+include "../lbs/cryptography.php";
 
 if(!$session->logged_in)
 {
@@ -38,9 +39,16 @@ $target_dir = "../core/rules/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-if($fileType != "json") exit;
+if($fileType != "json")
+{
+    $_SESSION['wm'] = encRijndael("Invalid ruleset file format structure");
+
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+}
 else
 {
+    $_SESSION['wm'] = encRijndael("Successfully uploaded ruleset file");
+
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
     header('Location: ' . $_SERVER['HTTP_REFERER']);
 }

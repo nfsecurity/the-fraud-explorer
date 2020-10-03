@@ -646,6 +646,20 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=events", function(){
             /* Hide spinner when finish load */
 
             stopSpinner();
+
+            /* Timed Popups Messages */
+
+            var message = "<?php if(isset($_SESSION['wm'])) echo decRijndael($_SESSION['wm']); else echo "none"; unset($_SESSION['wm']); ?>";
+        
+            if (message != "none")
+            {
+                $.jGrowl(message, { 
+                    life: 7500,
+                    header: 'Notification',
+                    corners: '5px',
+                    position: 'top-right'
+                });
+            }
     })
 
     .bind("sortStart",function() {

@@ -39,6 +39,8 @@ include "../lbs/cryptography.php";
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
+$msg = "";
+
 function notempty($var)
 {
     return ($var === "0" || $var);
@@ -48,14 +50,34 @@ if (isset($_POST['key']))
 {
     $keyPass = filter($_POST['key']);
 
-    if (!empty($keyPass)) mysqli_query($connection, sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
+    if (!empty($keyPass)) 
+    {
+        mysqli_query($connection, sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
+
+        $msg = $msg . ", key phrase";
+    }
 }
 
 if (isset($_POST['samplecalculation']))
 {
     $setCalculation = filter($_POST['samplecalculation']);
 
-    if (!empty($setCalculation)) 
+    if($session->domain == "all")
+    {
+        $calculationQuery = mysqli_query($connection, "SELECT sample_data_calculation FROM t_config"); 
+        $sampleQuery = mysqli_fetch_array($calculationQuery);
+        $currentSampler = $sampleQuery[0]; 
+    }
+    else
+    {
+        $domainConfigTable = "t_config_".str_replace(".", "_", $session->domain);
+        $queryCalc = "SELECT sample_data_calculation FROM ".$domainConfigTable;
+        $calculationQuery = mysqli_query($connection, $queryCalc); 
+        $sampleQuery = mysqli_fetch_array($calculationQuery); 
+        $currentSampler = $sampleQuery[0];
+    }
+
+    if (!empty($setCalculation) && ($setCalculation != $currentSampler)) 
     {
         if ($session->domain == "all") mysqli_query($connection, sprintf("UPDATE t_config SET sample_data_calculation='%s'", $setCalculation));
         else 
@@ -65,6 +87,8 @@ if (isset($_POST['samplecalculation']))
             
             mysqli_query($connection, $queryConfigTable);
         }
+
+        $msg = $msg . ", demo sampler";
     }
 }
 
@@ -77,6 +101,8 @@ if (isset($_POST['password']))
     {
         $password = sha1(filter($_POST['password']));
         mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
+
+        $msg = $msg . ", admin password";
     }
 }
 
@@ -84,7 +110,12 @@ if (isset($_POST['encryption']))
 {
     $encryption = filter($_POST['encryption']);
     
-    if (!empty($encryption)) mysqli_query($connection, sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
+    if (!empty($encryption)) 
+    {
+        mysqli_query($connection, sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
+
+        $msg = $msg . ", cipher key";
+    }
 }
 
 if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfrom']) && isset($_POST['mediumto']) && isset($_POST['highfrom']) && isset($_POST['highto']) && isset($_POST['criticfrom']) && isset($_POST['criticto']))
@@ -97,21 +128,47 @@ if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfr
     $highTo = filter($_POST['highto']);
     $criticFrom = filter($_POST['criticfrom']);
     $criticTo = filter($_POST['criticto']);
+                        
+    $scoreQuery = mysqli_query($connection, "SELECT * FROM t_config");
+    $scoreResult = mysqli_fetch_array($scoreQuery);
+
+    $currentlowFrom = $scoreResult[0];
+    $currentlowTo = $scoreResult[1];
+    $currentmediumFrom = $scoreResult[2];
+    $currentmediumTo = $scoreResult[3];
+    $currenthighFrom = $scoreResult[4];
+    $currenthighTo = $scoreResult[5];
+    $currentcriticFrom = $scoreResult[6];
+    $currentcriticTo = $scoreResult[7];
 
     if (notempty($lowFrom) && notempty($lowTo) && notempty($mediumFrom) && notempty($mediumTo) && notempty($highFrom) && notempty($highTo) && notempty($criticFrom) && notempty($criticTo)) 
     {
-        mysqli_query($connection, sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
+        if ($currentlowFrom != $lowFrom || $currentlowTo != $lowTo || $currentmediumFrom != $mediumFrom || $currentmediumTo != $mediumTo || $currenthighFrom != $highFrom || $currenthighTo != $highTo || $currentcriticFrom != $criticFrom || $currentcriticTo != $criticTo)
+        {
+            mysqli_query($connection, sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
+    
+            $msg = $msg . ", criticality levels";
+        }
     }
 }
 
 if (isset($_POST['ftacron']))
 {
-    if (!empty($_POST['ftacron'])) 
+    $ftacronSelected = filter($_POST['ftacron']);
+    $cron_manager = new CronManager();
+    $minutes = $cron_manager->cron_get_minutes("fta-ai-processor");
+
+    if ($minutes == "false") $minutes = "disabled";
+
+    $currentFtacron = $minutes;
+
+    if (!empty($_POST['ftacron']) && ($currentFtacron != $ftacronSelected)) 
     {
         $cronJobMinutes = filter($_POST['ftacron']);
-        $cron_manager = new CronManager();
         $remove_cron_result = $cron_manager->remove_cronjob('fta-ai-processor');
         if($_POST['ftacron'] != "disabled") $cron_add_result = $cron_manager->add_cronjob('*/'.$cronJobMinutes.' * * * * cd /var/www/html/thefraudexplorer/core/ ; /usr/bin/php AIFraudTriangleProcessor.php', 'fta-ai-processor');
+    
+        $msg = $msg . ", scheduler";
     }
 }
 
@@ -155,7 +212,22 @@ if (isset($_POST['librarylanguage']))
         /* Insert sample data */
 
         insertSampleData($configFile);
+
+        $msg = $msg . ", library language";
     }
+}
+
+if ($msg == "") 
+{
+    $msg = "none";
+    $_SESSION['wm'] = encRijndael($msg);
+}
+else
+{
+    $msg = trim($msg, ",");
+    $msg = ltrim($msg, " ");
+
+    $_SESSION['wm'] = encRijndael("Success modification of ".$msg);
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

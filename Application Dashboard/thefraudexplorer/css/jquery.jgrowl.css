@@ -1,0 +1,160 @@
+/*
+* The Fraud Explorer
+* https://www.thefraudexplorer.com/
+*
+* Copyright (c) 2014-2020 The Fraud Explorer
+* email: customer@thefraudexplorer.com
+* Licensed under GNU GPL v3
+* https://www.thefraudexplorer.com/License
+*
+* Date: 2020-08
+* Revision: v1.4.7-aim
+*
+* Description: CSS Code
+*/
+
+@font-face 
+{
+    font-family: 'FFont';
+    src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+@font-face
+{
+    font-family: 'FFont-Bold';
+    src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
+}
+
+.jGrowl 
+{
+  z-index: 9999;
+  color: #fff;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: fixed;
+}
+
+.jGrowl.top-left 
+{
+  left: 0px;
+  top: 50px;
+}
+
+.jGrowl.top-right 
+{
+  right: 0px;
+  top: 0px;
+}
+
+.jGrowl.bottom-left 
+{
+  left: 0px;
+  bottom: 0px;
+}
+
+.jGrowl.bottom-right 
+{
+  right: 0px;
+  bottom: 29px;
+}
+
+.jGrowl.center 
+{
+  top: 0px;
+  width: 50%;
+  left: 25%;
+}
+
+.jGrowl.center .jGrowl-notification,
+.jGrowl.center .jGrowl-closer 
+{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jGrowl-notification 
+{
+  background-color: #abd4bf;
+  opacity: 1;
+  zoom: 1;
+  font-family: 'FFont', sans-serif; 
+  font-size: 12px;
+  width: 305px;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  display: none;
+  border-radius: 5px;
+  min-height: 40px;
+}
+
+.jGrowl-notification .ui-state-highlight,
+.jGrowl-notification .ui-widget-content .ui-state-highlight,
+.jGrowl-notification .ui-widget-header .ui-state-highlight 
+{
+  font-family: 'FFont', sans-serif; 
+  font-size: 12px;
+  border: 1px solid #abd4bf;
+  background: #abd4bf;
+  color: #fff;
+}
+
+.jGrowl-notification .jGrowl-header 
+{
+  font-family: 'FFont-Bold', sans-serif; 
+  font-size: 12px;
+}
+
+.jGrowl-notification .jGrowl-close 
+{
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  z-index: 99;
+  float: right;
+  font-weight: bold;
+  text-decoration: none;
+  outline: 0 !important;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.jGrowl-closer 
+{
+  background-color: #abd4bf;
+  opacity: 1;
+  zoom: 1;
+  width: 250px;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  display: none;
+  border-radius: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: .9em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.jGrowl-closer .ui-state-highlight,
+.jGrowl-closer .ui-widget-content .ui-state-highlight,
+.jGrowl-closer .ui-widget-header .ui-state-highlight 
+{
+  font-family: 'FFont', sans-serif; 
+  font-size: 12px;
+  border: 1px solid #abd4bf;
+  background: #abd4bf;
+  color: #fff;
+}
+
+/** Hide jGrowl when printing **/
+
+@media print 
+{
+  .jGrowl {
+    display: none;
+  }
+}

@@ -1561,6 +1561,27 @@ include "../lbs/cryptography.php";
     });
 </script>
 
+<!-- Timed Popups Messages -->
+
+<script>
+    $(document).ready(function(){
+
+        var message = "<?php if(isset($_SESSION['wm'])) echo decRijndael($_SESSION['wm']); else echo "none"; unset($_SESSION['wm']); ?>";
+        
+        if (message != "none")
+        {
+            $.jGrowl(message, { 
+                life: 7500,
+                header: 'Notification',
+                corners: '5px',
+                position: 'top-right'
+            });
+        }
+
+    });
+
+</script>
+
 <!-- Modal for Artificial Intelligence -->
 
 <div class="modal" id="expertSystem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

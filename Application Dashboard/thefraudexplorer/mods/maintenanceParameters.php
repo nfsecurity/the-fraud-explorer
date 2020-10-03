@@ -33,11 +33,13 @@ if(!isset($_SERVER['HTTP_REFERER']))
 
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
+include "../lbs/cryptography.php";
 require '../vendor/autoload.php';
 include "../lbs/elasticsearch.php";
 
 $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
 $ESAlerterIndex = $configFile['es_alerter_index'];
+$msg = "";
 
 /* Delete dead endpoint sessions */
 
@@ -45,7 +47,12 @@ if ((isset($_POST['deadsessions'])) && ($_POST['deadsessions'] != "preserveall")
 {
     $setDeadSessions = filter($_POST['deadsessions']);
      
-    if (!empty($setDeadSessions) && $setDeadSessions == "1month") mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+    if (!empty($setDeadSessions) && $setDeadSessions == "1month") 
+    {
+        mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
+
+        $msg = $msg . ", dead endpoints";
+    }
 }
 
 /* Delete old phrase indexes (logstash-theraudepxlorer-text-*) */
@@ -57,9 +64,21 @@ if ((isset($_POST['deletephrases'])) && ($_POST['deletephrases'] != "preserveall
     $curate180days = '/usr/bin/sudo /usr/bin/python '.$documentRoot.'lbs/curator/bin/curator --config '.$documentRoot.'lbs/curator/config/curator.yml '.$documentRoot.'lbs/curator/actions/purgePhrases180d.yml';
     $setDeletePhrases = filter($_POST['deletephrases']);
      
-    if (!empty($setDeletePhrases) && $setDeletePhrases == "1month") $commandCurator = shell_exec($curate30days);
-    else if (!empty($setDeletePhrases) && $setDeletePhrases == "3month") $commandCurator = shell_exec($curate90days);
-    else if (!empty($setDeletePhrases) && $setDeletePhrases == "6month") $commandCurator = shell_exec($curate180days);
+    if (!empty($setDeletePhrases) && $setDeletePhrases == "1month") 
+    {
+        $commandCurator = shell_exec($curate30days);
+        $msg = $msg . ", 1 month old phrases";
+    }
+    else if (!empty($setDeletePhrases) && $setDeletePhrases == "3month") 
+    {
+        $commandCurator = shell_exec($curate90days);
+        $msg = $msg . ", 3 month old phrases";
+    }
+    else if (!empty($setDeletePhrases) && $setDeletePhrases == "6month") 
+    {
+        $commandCurator = shell_exec($curate180days);
+        $msg = $msg . ", 6 month old phrases";
+    }
 }
 
 /* Delete old alert indexes (logstash-alerter-*) */
@@ -97,6 +116,8 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
+
+        $msg = $msg . ", 1 month old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "3month") 
     {
@@ -111,6 +132,8 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
+
+        $msg = $msg . ", 3 months old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "6month") 
     {
@@ -125,6 +148,8 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
+
+        $msg = $msg . ", 6 months old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "12month") 
     {
@@ -139,6 +164,8 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $queryDeleteWFAlert = "DELETE FROM t_wtriggers WHERE ids LIKE '%".$regid."%'";        
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
+
+        $msg = $msg . ", 12 months old alerts";
     }
 }
 
@@ -161,7 +188,22 @@ if ((isset($_POST['alertstatus'])) && ($_POST['alertstatus'] != "preserveall"))
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultAlerts = curl_exec($ch);
         curl_close($ch);
+
+        $msg = $msg . ", alert status";
     }
+}
+
+if ($msg == "") 
+{
+    $msg = "none";
+    $_SESSION['wm'] = encRijndael($msg);
+}
+else
+{
+    $msg = trim($msg, ",");
+    $msg = ltrim($msg, " ");
+
+    $_SESSION['wm'] = encRijndael("Success purge of ".$msg);
 }
 
 /* Page return to origin */
