@@ -32,9 +32,11 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 
 $_SESSION['processingStatus'] = "pending";
 $repository = filter($_POST['urlrepo']);
+$msg = "";
 
 if (isset($_POST['urlrepo']))
 {
@@ -54,10 +56,13 @@ if (isset($_POST['urlrepo']))
 
         $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$swVersion_configFile.'/'.$repoVersion[1].'/g" --in-place '.$documentRoot.'config.ini';
         $commandReplacements = shell_exec($replaceParams);
+
+        $msg = $repoVersion[1];
     }
 }
 
 $_SESSION['processingStatus'] = "finished";
+$_SESSION['wm'] = encRijndael("Successfully updated to version ".$msg);
 
 /* Page return to origin */
 

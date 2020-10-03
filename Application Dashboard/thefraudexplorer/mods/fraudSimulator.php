@@ -571,6 +571,13 @@ $('#simulatorForm button').click(function(e) {
                 $(function () {
                     $('#fraud-simulator').modal('toggle');
                 });
+
+                $.jGrowl("The phrases were sent successfully", { 
+                    life: 7500,
+                    header: 'Notification',
+                    corners: '5px',
+                    position: 'top-right'
+                });
             }
             else if (data == "phrasereported")
             {
