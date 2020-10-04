@@ -38,6 +38,7 @@ include "../lbs/openDBconn.php";
 $documentId = filter($_GET['id']);
 $indexId = filter(decRijndael($_GET['ex']));
 $type = "AlertEvent";
+$msg = "";
 
 if (!empty($_POST['review-save']))
 {
@@ -56,6 +57,8 @@ if (!empty($_POST['review-save']))
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         $resultReview = curl_exec($ch);
         curl_close($ch);
+
+        $msg = "Successfully saved redflag event";
     }
 }
 else if (!empty($_POST['delete-event']))
@@ -78,7 +81,9 @@ else if (!empty($_POST['delete-event']))
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_exec($ch); 
-    curl_close($ch); 
+    curl_close($ch);
+
+    $msg = "Successfully removed redflag event";
 }
 
 else if (!empty($_POST['relevancy']))
@@ -112,7 +117,11 @@ else if (!empty($_POST['relevancy']))
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultEvents = curl_exec($ch);
     curl_close($ch);
+
+    $msg = "Successfully changed event relevancy";
 }
+
+$_SESSION['wm'] = encRijndael($msg);
     
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 include "../lbs/closeDBconn.php";

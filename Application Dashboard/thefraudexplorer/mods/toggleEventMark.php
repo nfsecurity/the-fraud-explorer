@@ -41,6 +41,7 @@ $endpoint = filter(decRijndael($_GET['nt']));
 $index = filter(decRijndael($_GET['ex']));
 $type = filter(decRijndael($_GET['pe']));
 $urlrefer = filter($_GET['er']);
+$msg = "";
 
 if (!empty($_POST['toggle-event']))
 {
@@ -75,6 +76,8 @@ if (!empty($_POST['toggle-event']))
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $resultEvents = curl_exec($ch);
     curl_close($ch);
+
+    $msg = "Successfully toggled redflag event";
 }
 else if (!empty($_POST['delete-event']))
 {
@@ -97,7 +100,11 @@ else if (!empty($_POST['delete-event']))
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     curl_exec($ch); 
     curl_close($ch); 
+
+    $msg = "Successfully removed redflag event";
 }
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Return to refering url */
 

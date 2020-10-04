@@ -144,7 +144,7 @@ $_SESSION['instance'] = "endPoints";
                     </div>
 
                     <div class="modal-body" style="margin: 0px 10px 15px 10px;">
-                        <p style="text-align:left; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and delete database entries and files without recovery opportunity. Do you want to proceed ?</p>
+                        <p style="text-align:justify; font-size: 12px;"><br>You are about to delete the endpoint, this procedure is irreversible and will delete database entries and files without recovery opportunity. This is the best option to take when an employeer ask for a complete personal data deletion in the whole company. Do you want to proceed ?</p>
                         <p class="debug-url window-debug"></p>
                     </div>
 

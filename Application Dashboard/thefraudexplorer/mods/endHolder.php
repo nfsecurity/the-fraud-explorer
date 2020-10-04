@@ -393,6 +393,7 @@ $(function() {
 $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
 
     var timer, delay = 500;
+    var message = "<?php if(isset($_SESSION['wm'])) echo decRijndael($_SESSION['wm']); else echo 'none'; unset($_SESSION['wm']); ?>";
 
     $('#search-box').bind('keydown', function(e) {
         var _this = $(this);
@@ -533,8 +534,6 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
 
             /* Timed Popups Messages */
 
-            var message = "<?php if(isset($_SESSION['wm'])) echo decRijndael($_SESSION['wm']); else echo "none"; unset($_SESSION['wm']); ?>";
-        
             if (message != "none")
             {
                 $.jGrowl(message, { 
@@ -544,6 +543,8 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=endpoints", function(){
                     position: 'top-right'
                 });
             }
+
+            message = "none";
     })
 
     .bind("sortStart",function() {

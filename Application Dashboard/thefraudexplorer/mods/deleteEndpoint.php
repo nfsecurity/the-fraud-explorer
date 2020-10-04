@@ -64,6 +64,8 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultDelete=curl_exec($ch);
 curl_close($ch);
 
+$_SESSION['wm'] = encRijndael("Successfully deleted all endpoint data");
+
 /* Referer Return */
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

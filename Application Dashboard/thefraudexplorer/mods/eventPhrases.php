@@ -83,7 +83,7 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
         border: 1px solid #e2e2e2;
         line-height: 20px;
         width: 100%;
-        height: 93px;
+        height: 180px;
         border-radius: 4px;
         text-align: justify;
         font-family: 'FFont', sans-serif; 
