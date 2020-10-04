@@ -34,6 +34,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
 
 if (isset($_POST['min'])) $min = filter($_POST['min']);
@@ -58,6 +59,8 @@ if ($min != "" && $hours != "" && $day != "" && $month != "" && $weekday != "" &
 
     $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$backupPassword.'/'.$pwd.'/g" --in-place '.$documentRoot.'config.ini /backup/bin/backup.sh';
     $commandReplacements = shell_exec($replaceParams);
+
+    $_SESSION['wm'] = encRijndael("Successfully scheduled backup procedure");
 }
 
 header('Location: ' . $_SERVER['HTTP_REFERER']);

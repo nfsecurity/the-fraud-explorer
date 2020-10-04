@@ -42,16 +42,19 @@ $endpointScope = "all";
 $domainScope = "all";
 $enabledPhraseCollection = false;
 $phraseCollectionStatus = decRijndaelRemote($xml->token[0]['arg']);
+$msg = "";
 
 if ($phraseCollectionStatus == "textAnalytics 1") 
 {
     $enabledPhraseCollection = true;
     $com = strip_tags($disableCommand);
+    $msg = "Endpoint phrase collection disabled";
 }
 else 
 {
     $enabledPhraseCollection = false;
     $com = strip_tags($enableCommand);
+    $msg = "Endpoint phrase collection enabled";
 }
 
 $com = str_replace(array('"'),array('\''), $com);
@@ -73,6 +76,8 @@ fputs($fp, $xmlContent);
 fclose($fp);
 
 echo $com;
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Page return to origin */
 

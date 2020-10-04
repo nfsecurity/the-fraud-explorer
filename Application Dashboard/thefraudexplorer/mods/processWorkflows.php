@@ -32,7 +32,10 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
+
+$msg = "";
 
 /* Flows */
 
@@ -52,6 +55,8 @@ if (isset($_POST['delete']))
     {
         mysqli_query($connection, sprintf("DELETE FROM t_workflows WHERE name='%s'", $workflow));
         mysqli_query($connection, sprintf("DELETE FROM t_wtriggers WHERE name='%s'", $workflow));
+
+        $msg = "Successfully deleted workflow";
     }
 }
 else if (isset($_POST['add']))
@@ -80,7 +85,11 @@ else if (isset($_POST['add']))
     /* Flows storage */
 
     mysqli_query($connection, sprintf("INSERT INTO t_workflows values('%s', '%s', '%d', '%s', '%d', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail, $workflowTone));
+
+    $msg = "Successfully added workflow";
 }
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Page return to origin */
 

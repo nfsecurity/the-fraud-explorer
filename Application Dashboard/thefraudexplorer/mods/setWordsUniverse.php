@@ -37,6 +37,8 @@ include "../lbs/cryptography.php";
 if (isset($_GET['se'])) $objective = $_GET['se'];
 else header('Location: ' . $_SERVER['HTTP_REFERER']);
 
+$msg = "";
+
 /* If selected regionalism */
 
 if ($objective == "reg")
@@ -63,6 +65,8 @@ if ($objective == "reg")
 
         $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
         exec($runMultiDictionary, $output, $return);
+
+        $msg = "Successfully added regionalism words";
     }
     if (isset($_POST["removewords"]))
     {
@@ -103,6 +107,8 @@ if ($objective == "reg")
 
         $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /bin/recode ISO-8859-1..UTF8 /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
         exec($runMultiDictionary, $output, $return);
+
+        $msg = "Successfully removed regionalism words";
     }
 }
 
@@ -119,6 +125,8 @@ else
     if (isset($_POST["addwords"])) 
     {
         foreach ($toneWords as $word) file_put_contents($toneFile, $word.PHP_EOL, FILE_APPEND);
+
+        $msg = "Successfully added tone words";
     }
     if (isset($_POST["removewords"]))
     {
@@ -149,8 +157,12 @@ else
         $destinationFile = fopen($toneFile, "w") or exit("Unable to open file!");
         fwrite($destinationFile, $t);
         fclose($destinationFile);
+
+        $msg = "Successfully removed tone words";
     }
 }
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Page return to origin */
 

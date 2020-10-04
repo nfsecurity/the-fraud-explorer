@@ -33,6 +33,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
 
 /* POST Variables */
@@ -54,11 +55,11 @@ if (isset($_POST['smtpserver']) && isset($_POST['smtpuserpass']) && isset($_POST
     $postmapCommand = 'cd /etc/postfix/private ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/canonical ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/sender_relay ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/sasl_passwd';
     $commandPostmap = shell_exec($postmapCommand);
 
-     /* Send message test */
+    /* Send message test */
 
-     $to = $mailAddress;
-     $subject = "[The Fraud Explorer] Test email";
-     $message = '<html>' .
+    $to = $mailAddress;
+    $subject = "[The Fraud Explorer] Test email";
+    $message = '<html>' .
     '<body>Greetings from The Fraud Explorer,<br><br>This is an email test message to verify the server configuration. It is workig so good!<br>' .
     '</body><br>You could receive general messages and Artificial Intelligence alerts, best regards.<br><br><b>The Fraud Explorer Team</b><br><a href="https://www.thefraudexplorer.com">thefraudexplorer.com</a><br>support@thefraudexplorer.com</html>';
     $headers = "From: " . $configFile['mail_address'] . "\r\n" .
@@ -67,8 +68,10 @@ if (isset($_POST['smtpserver']) && isset($_POST['smtpuserpass']) && isset($_POST
     'Content-Type: text/html; charset=ISO-8859-1' . "\r\n" .
     'X-Mailer: PHP/' . phpversion();
 
-     mail($to, $subject, $message, $headers);
+    mail($to, $subject, $message, $headers);
 }
+
+$_SESSION['wm'] = encRijndael("Successfully configured MTA settings";
 
 header ("location: ../dashBoard");
 

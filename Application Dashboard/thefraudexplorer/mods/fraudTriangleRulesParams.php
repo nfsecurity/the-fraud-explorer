@@ -32,6 +32,7 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
 
 $libraryLanguageADDSelected = null;
@@ -56,6 +57,7 @@ $phraseIDSelectedMOD = null;
 $regularExpressionSelectedMOD = null;
 
 $proceedToSave = false;
+$msg = "";
 
 if ($actionTODO == "addrule")
 {
@@ -73,6 +75,7 @@ if ($actionTODO == "addrule")
     {
         $jsonFT['dictionary'][$rulesetSelectedADD][strtolower($fraudVerticeSelectedADD)][$phraseIDSelectedADD] = "/".$regularExpressionSelectedADD."/";
         $proceedToSave = true;
+        $msg = "Successfully added rule to library";
     }
 }
 else if ($actionTODO == "deleterule")
@@ -91,6 +94,7 @@ else if ($actionTODO == "deleterule")
     {
         unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDEL]);
         $proceedToSave = true;
+        $msg = "Successfully removed rule from library";
     }
 }
 else if ($actionTODO == "modifyrule")
@@ -109,6 +113,7 @@ else if ($actionTODO == "modifyrule")
     {
         $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMOD] = "/".$regularExpressionSelectedMOD."/";
         $proceedToSave = true;
+        $msg = "Successfully modified phrase rule";
     }
 }
 
@@ -131,6 +136,8 @@ if ($proceedToSave == true)
         file_put_contents($configFile[$fta_lang], $jsonData);
     }
 }
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Page return to origin */
 

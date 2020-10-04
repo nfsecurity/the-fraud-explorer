@@ -33,13 +33,18 @@ if(!isset($_SERVER['HTTP_REFERER']))
 }
 
 include "../lbs/globalVars.php";
+include "../lbs/cryptography.php";
 include "../lbs/openDBconn.php";
 
 $target_dir = "../core/departments/";
 $target_file = $target_dir . basename($_FILES["departmentsToUpload"]["name"]);
 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);
+$msg = "";
 
-if ($fileType != "csv") exit;
+if ($fileType != "csv") 
+{
+    $msg = "Unable to load department file structure";
+}
 else
 {
     $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
@@ -87,11 +92,18 @@ else
 
                 $result = mysqli_query($connection, $sql);
             }
-			fclose($file);	
+            fclose($file);
+            
+            $msg = "Successfully loaded department structure";
 		}
     } 
-    else exit;
+    else
+    {
+        $msg = "Unable to load department file structure";
+    }
 }
+
+$_SESSION['wm'] = encRijndael($msg);
 
 /* Referer Return */
 
