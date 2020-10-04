@@ -474,6 +474,19 @@ else
             $markColumn
         );
 
+        $recordsFound = count($eventData['hits']['hits']);
+
+        if ($recordsFound == 0) 
+        {
+            /* Return JSON data */
+    
+            header('Content-Type: application/json');
+    
+            $json = Array("total_rows" => intval($totalEvents), "rows" => 0, "headers" => $columns);
+            echo json_encode($json, JSON_PRETTY_PRINT);
+            exit;
+        }
+
         foreach ($eventData['hits']['hits'] as $result)
         {
             if (isset($result['_source']['tags'])) continue;
@@ -604,6 +617,19 @@ else
             $phraseColumn, 
             $markColumn
         );
+
+        $recordsFound = count($endpointData['hits']['hits']);
+
+        if ($recordsFound == 0) 
+        {
+            /* Return JSON data */
+    
+            header('Content-Type: application/json');
+    
+            $json = Array("total_rows" => intval($totalEvents), "rows" => 0, "headers" => $columns);
+            echo json_encode($json, JSON_PRETTY_PRINT);
+            exit;
+        }
 
         foreach ($endpointData['hits']['hits'] as $result)
         {        

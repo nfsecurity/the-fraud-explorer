@@ -342,6 +342,7 @@ else
     }
 
     $totalRecords = mysqli_num_rows($result_a);
+    $recordsFound = mysqli_num_rows($result_b);
 
     /* Column names */
 
@@ -376,6 +377,17 @@ else
         $deleteColumn,
         $setupColumn
     );
+
+    if ($recordsFound == 0) 
+    {
+        /* Return JSON data */
+
+        header('Content-Type: application/json');
+
+        $json = Array("total_rows" => intval($totalRecords), "rows" => 0, "headers" => $columns);
+        echo json_encode($json, JSON_PRETTY_PRINT);
+        exit;
+    }
 
     while($row_a = mysqli_fetch_assoc($result_b)) 
     {
