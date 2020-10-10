@@ -35,6 +35,8 @@ ANALYTICSHOLDER="$THEFRAUDEXPLORER/mods/analyticsHolder.php"
 LOGINSESSION="$THEFRAUDEXPLORER/lbs/login/session.php"
 LOGINFORM="$THEFRAUDEXPLORER/lbs/login/form.php"
 DELENDPOINT="$THEFRAUDEXPLORER/helpers/endpointsProcessing.php"
+DISABLEDOWNPHRASESRULES="$THEFRAUDEXPLORER/mods/fraudTriangleRules.php"
+DISABLEDOWNPHRASESRULESET="$THEFRAUDEXPLORER/mods/setupRuleset.php"
 
 # Replace types
 
@@ -65,6 +67,7 @@ DELTONE="s/id=\"button-del-words-tone\"/id=\"button-del-words-tone\" disabled/g"
 REMOTE="s/REMOTE_ADDR/HTTP_X_REAL_IP/g"
 CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N0FR4UD\")/g"
 DELETEAGENT="s/#confirm-delete/#/g"
+DISABLEDOWNLOAD="s/id=\"download-rules\"/id=\"#\"/g"
 
 # Replace files
 
@@ -90,3 +93,4 @@ DELETEAGENT="s/#confirm-delete/#/g"
 /bin/sed "$REMOTE" --in-place $LOGINSESSION
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
 /bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
+/bin/sed "$DISABLEDOWNLOAD" --in-place $DISABLEDOWNPHRASESRULES $DISABLEDOWNPHRASESRULESET
