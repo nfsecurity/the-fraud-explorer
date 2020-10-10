@@ -36,7 +36,7 @@ include "lbs/elasticsearch.php";
 <html>
     <head>
         <title>Analytics &raquo; The Fraud Explorer</title>
-        <link rel="icon" type="image/x-icon" href="images/favicon.png?v=2" sizes="32x32">
+        <link rel="icon" type="image/x-icon" href="images/nftop.svg" sizes="32x32">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
         <!-- JQuery 11 inclusion -->
