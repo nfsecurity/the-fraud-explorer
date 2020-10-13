@@ -1,0 +1,462 @@
+{
+    "_comment": "The Fraud Explorer - Fraud Triangle Analytics dictionary & rules - version: 0.1.6, language: english",
+    "dictionary": {
+        "BASELINE": {
+            "pressure": {
+                "want no part of this": "/\\b(want no part of this)\\b/",
+                "do make sense": "/\\b(do make sense)\\b/",
+                "exceptional operation": "/\\b(exceptional operation)\\b/",
+                "misappropriation": "/\\b(misappropriation)\\b/",
+                "special case": "/\\b(special case)\\b/",
+                "destroy after reading": "/\\b(destroy after reading)\\b/",
+                "do not say": "/\\b((do not|dont) say)\\b/",
+                "do not use": "/\\b(do not use)\\b/",
+                "do not volunteer": "/\\b((do not|dont|not) volunteer)\\b/",
+                "do the needful": "/\\b(do the needful)\\b/",
+                "without permission": "/\\b(without (permission|authorization))\\b/",
+                "dont forward": "/\\b((dont|do not) forward)\\b/",
+                "should reach the numbers": "/\\b(should reach the numbers)\\b/",
+                "the goal is very high": "/\\b(the goals? (is|are) very high)\\b/",
+                "dont say anything": "/\\b(dont say anything)\\b/",
+                "earnings before interest": "/\\b(earnings before interest)\\b/",
+                "ernst and young": "/\\b(ernst and young)\\b/",
+                "frowned upon": "/\\b(frowned upon)\\b/",
+                "do not share": "/\\b((do not|dont) share)\\b/",
+                "rectify the situation": "/\\b(rectify (the|that) situation)\\b/",
+                "bosses are pushing to do this": "/\\b(bosses are pushing to do (this|that|those|their))\\b/",
+                "high risk": "/\\b(high risk)\\b/",
+                "incorrect information": "/\\b(incorrect (information|data))\\b/",
+                "call me": "/\\b((call me)|(call my cell))\\b/",
+                "last chance": "/\\b(last chance)\\b/",
+                "cover up": "/\\b(cover up)\\b/",
+                "one time opportunity": "/\\b(one time opportunity)\\b/",
+                "available today only": "/\\b(available today only)\\b/",
+                "just get it done": "/\\b(just get it done)\\b/",
+                "need money": "/\\b(need( \\w*)? money)\\b/",
+                "had a lot of expenses": "/\\b(had a lot of expenses)\\b/",
+                "want to buy a new car": "/\\b(want to buy a new car)\\b/",
+                "my bonus depends on this": "/\\b(my bonus depends on this)\\b/",
+                "just a little": "/\\b(just a little)\\b/",
+                "cant fail": "/\\b(cant fail)\\b/",
+                "must reach": "/\\b(must reach)\\b/",
+                "dont want my familty to lack anything": "/\\b((dont|do not) want my family to lack anything)\\b/",
+                "let lapse": "/\\b(let lapse)\\b/",
+                "lose my job": "/\\b(lose my job)\\b/",
+                "make balance": "/\\b(make balance)\\b/",
+                "make numbers": "/\\b(make numbers)\\b/",
+                "make quota": "/\\b(make quota)\\b/",
+                "makes me uncomfortable": "/\\b(makes me uncomfortable)\\b/",
+                "managed earnings": "/\\b(managed earnings)\\b/",
+                "need to get out of the country": "/\\b(need to get out of the country)\\b/",
+                "no part of this": "/\\b((no|(dont|do not) want to be) part of this)\\b/",
+                "no sense": "/\\b(no sense)\\b/",
+                "not for circulation": "/\\b(not for circulation)\\b/",
+                "not legal": "/\\b(not legal)\\b/",
+                "not necessary in this case": "/\\b(not necessary in this case)\\b/"
+            },
+            "opportunity": {
+                "not in compliance with gaap": "/\\b(not in compliance with gaap)\\b/",
+                "quid pro quo": "/\\b(quid pro quo)\\b/",
+                "design deficiency": "/\\b(design deficiency)\\b/",
+                "draw in": "/\\b(draw in)\\b/",
+                "exception approved": "/\\b(exception( \\w*)? approved)\\b/",
+                "nobody asks for additional information": "/\\b(nobody asks for additional information)\\b/",
+                "front running": "/\\b(front running)\\b/",
+                "the boss is not around": "/\\b(the boss is not around)\\b/",
+                "joint venture": "/\\b(joint venture)\\b/",
+                "local processing": "/\\b(local processing)\\b/",
+                "not reviewed": "/\\b(not reviewed)\\b/",
+                "special fees": "/\\b(special fees?)\\b/",
+                "postpone the audit": "/\\b((postpone the audit)|(audit postponed))\\b/",
+                "additional fee": "/\\b(additional fees?)\\b/",
+                "not supported": "/\\b(not supported)\\b/",
+                "off balance sheet transactions": "/\\b(off balance sheet transactions)\\b/",
+                "off book": "/\\b(off book)\\b/",
+                "pull earnings forwards": "/\\b(pull earnings forward)\\b/",
+                "no inspection": "/\\b((no inspection)|(are not going to be inspected))\\b/",
+                "off the record": "/\\b(off the records?)\\b/",
+                "this operation has no internal controls": "/\\b(this operation has no internal controls)\\b/",
+                "no auditor will review it": "/\\b(no auditor will review (it|that))\\b/",
+                "off contract": "/\\b(off contract)\\b/",
+                "nobody asks anything": "/\\b(nobody (asks|will ask) anything)\\b/",
+                "they did not say how the things should be done": "/\\b(they (did not|didnt) say how the things should be done)\\b/",
+                "offshore account": "/\\b(offshore accounts?)\\b/",
+                "operational deficiency": "/\\b((operating|operational) deficiency)\\b/",
+                "the policy does not say anything about it": "/\\b(the policy (does not|doesnt) say anything about (it|that))\\b/",
+                "out of scope": "/\\b(out of( \\w*)? scope)\\b/",
+                "remove all obstacles": "/\\b(remove all obstacles)\\b/",
+                "use all means": "/\\b(use all means)\\b/",
+                "its only a difference in time": "/\\b(its only a difference in time)\\b/",
+                "outside services": "/\\b(outside services)\\b/",
+                "required signatory absent": "/\\b(required signatory absent)\\b/",
+                "special approval": "/\\b(special approval)\\b/",
+                "system error": "/\\b(system error)\\b/",
+                "bosses dont ask": "/\\b(bosses (dont|do not) ask)\\b/",
+                "work schedules": "/\\b(work schedules?)\\b/",
+                "make a selfloan": "/\\b(make a (selfloan|self loan))\\b/",
+                "audit do not review": "/\\b(audit (do not|dont) review)\\b/",
+                "dont look that": "/\\b((dont|do not) look that)\\b/",
+                "i am tempted": "/\\b((i am|i was|we are|we were) tempted)\\b/",
+                "i do that business": "/\\b(i (do|did) that business)\\b/",
+                "a supplier gave me a gift": "/\\b(a supplier gave (me|us) a gift)\\b/",
+                "audit never comes": "/\\b(auditors? never comes?)\\b/",
+                "can help you if you help me": "/\\b(can help you if you help (me|us))\\b/",
+                "enter the business": "/\\b(enter the business)\\b/",
+                "falsify them": "/\\b(falsify (them|it|that))\\b/",
+                "cheating the boss": "/\\b(cheating the boss)\\b/",
+                "will not report it": "/\\b(will not report it)\\b/"
+            },
+            "rationalization": {
+                "not ethical": "/\\b(not ethical)\\b/",
+                "they owe it to me": "/\\b(they owe it to me)\\b/",
+                "find out": "/\\b(find out)\\b/",
+                "figure out": "/\\b(figure out)\\b/",
+                "not sure": "/\\b(not sure)\\b/",
+                "find it": "/\\b(find it)\\b/",
+                "under the gun": "/\\b(under the gun)\\b/",
+                "i deserve": "/\\b(i deserve)\\b/",
+                "gray area": "/\\b(gray area)\\b/",
+                "not comfortable": "/\\b(not comfortable)\\b/",
+                "doesnt make sense": "/\\b((doesnt|does not) make sense)\\b/",
+                "dont tell": "/\\b(dont tell)\\b/",
+                "dont leave a trail": "/\\b(dont leave a trail)\\b/",
+                "fix it later": "/\\b(fix it later)\\b/",
+                "not right": "/\\b(not right)\\b/",
+                "per ceo": "/\\b(per ceo)\\b/",
+                "sounds reasonable": "/\\b(sounds reasonable)\\b/",
+                "suspected fraudulent activity": "/\\b(suspected fraudulent activity)\\b/",
+                "as discussed": "/\\b(as discussed)\\b/",
+                "just an error": "/\\b(just (an error|a mistake))\\b/",
+                "just book it": "/\\b(just book it)\\b/",
+                "low dollar amount": "/\\b(low dollar amount)\\b/",
+                "major hit": "/\\b(major hit)\\b/",
+                "make sense": "/\\b(make sense)\\b/",
+                "make the number": "/\\b(make the numbers?)\\b/",
+                "manage earnings": "/\\b(manage earnings)\\b/",
+                "never know": "/\\b(never knows?)\\b/",
+                "no action": "/\\b(no action)\\b/",
+                "no receipt": "/\\b(no receipt)\\b/",
+                "no way out": "/\\b(no way out)\\b/",
+                "not correct": "/\\b(not correct)\\b/",
+                "not to take into account": "/\\b(not to take into account)\\b/",
+                "pocket money": "/\\b(pocket money)\\b/",
+                "told me to": "/\\b(told me to)\\b/",
+                "wont miss it": "/\\b(wont miss it)\\b/",
+                "additional assessments": "/\\b(additional assessments)\\b/",
+                "appreciation token": "/\\b(appreciation token)\\b/",
+                "bad month": "/\\b(bad month)\\b/",
+                "better than planned": "/\\b(better than planned)\\b/",
+                "between the lines": "/\\b(between the lines)\\b/",
+                "between us": "/\\b(between us)\\b/",
+                "no other description": "/\\b(no other description)\\b/",
+                "can afford": "/\\b(can afford)\\b/",
+                "cannot afford": "/\\b(cannot afford)\\b/",
+                "cant afford": "/\\b(cant afford)\\b/",
+                "clean it": "/\\b(clean it)\\b/",
+                "close eye": "/\\b(close eye)\\b/",
+                "leaving this firm": "/\\b((leaving|will leave) this (firm|company|business))\\b/",
+                "could get fired for this": "/\\b(could get fired for this)\\b/",
+                "do not care": "/\\b((do not|does not| dont) care)\\b/"
+            }
+        },
+        "PURCHASES": {
+            "pressure": {
+                "have to select that provider": "/\\b(have to select that (provider|supplier))\\b/",
+                "has to be that provider": "/\\b(has to be that (provider|supplier))\\b/",
+                "you have to force that provider": "/\\b(you have to force (that|the) (provider|supplier))\\b/",
+                "the supplier must be maintained": "/\\b(the (provider|supplier) must be maintained)\\b/",
+                "awarded another supplier": "/\\b(awarded another (provider|supplier))\\b/"
+            },
+            "opportunity": {
+                "improper evaluation": "/\\b(improper evaluation)\\b/",
+                "double contract": "/\\b(double contract)\\b/",
+                "accelerate contract": "/\\b(accelerate contract)\\b/",
+                "delay the contract": "/\\b(delay the contract)\\b/",
+                "missing contract": "/\\b(missing contract)\\b/"
+            },
+            "rationalization": {
+                "confidential contract": "/\\b(confidential contract)\\b/",
+                "deserve the contract": "/\\b(deserve the contract)\\b/",
+                "need the contract": "/\\b(need the contract)\\b/",
+                "supplier gift": "/\\b(supplier gift)\\b/",
+                "supplier friendship": "/\\b(supplier friendship)\\b/"
+            }
+        },
+        "TECHNOLOGY": {
+            "pressure": {
+                "ordered to spy him": "/\\b(ordered to spy him)\\b/",
+                "information could be leaked": "/\\b(information could be leaked)\\b/",
+                "suspicious software": "/\\b(suspicious software)\\b/",
+                "forced me to install it": "/\\b(forced me to install it)\\b/",
+                "privacy violation": "/\\b(privacy violation)\\b/"
+            },
+            "opportunity": {
+                "spy the team": "/\\b(spy the team)\\b/",
+                "with spyware": "/\\b(with spyware)\\b/",
+                "i am spying": "/\\b((im|i am) spying)\\b/",
+                "install the bug": "/\\b(install the bug)\\b/",
+                "you have to intercept it": "/\\b(you have to intercept it)\\b/"
+            },
+            "rationalization": {
+                "wanted to delete it": "/\\b(wanted to delete it)\\b/",
+                "had to install it": "/\\b(had to install it)\\b/",
+                "had to be manipulated": "/\\b(had to be manipulated)\\b/",
+                "asked me for access": "/\\b(asked me for access)\\b/",
+                "asked the administrator": "/\\b(asked the administrator)\\b/"
+            }
+        },
+        "HUMAN": {
+            "pressure": {
+                "without curriculum": "/\\b(without curriculum)\\b/",
+                "without job references": "/\\b(without job references)\\b/",
+                "bad curriculum": "/\\b(bad curriculum)\\b/",
+                "you have to hire him whatever": "/\\b(you have to hire him whatever)\\b/",
+                "without psychotechnical tests": "/\\b(without psychotechnical tests)\\b/"
+            },
+            "opportunity": {
+                "falsifying diplomas": "/\\b((falsifying|changing|modifying) (diplomas?|certificates?))\\b/",
+                "ficticious experience": "/\\b(ficticious experience)\\b/",
+                "inexistent experience": "/\\b(inexistent experience)\\b/",
+                "this person was recommended": "/\\b(this persona was recommended)\\b/",
+                "comes recommended": "/\\b((comes?|cames?) recommended)\\b/"
+            },
+            "rationalization": {
+                "confidential interview": "/\\b(confidential interview)\\b/",
+                "help you get a job": "/\\b(help you get a job)\\b/",
+                "have been unemployed for a long time": "/\\b(have been unemployed for a long time)\\b/",
+                "very sorry for him": "/\\b(very sorry for him)\\b/",
+                "because he has many debts": "/\\b(because he has many debts)\\b/"
+            }
+        },
+        "FINANCE": {
+            "pressure": {
+                "embezzlement in cash": "/\\b(embezzlement in cash)\\b/",
+                "financial audit": "/\\b(financial audit)\\b/",
+                "temporary loan": "/\\b(temporary loan)\\b/",
+                "get an identity": "/\\b(get an identity)\\b/",
+                "suspicious operation": "/\\b(suspicious operation)\\b/"
+            },
+            "opportunity": {
+                "play with earnings": "/\\b(play with earnings)\\b/",
+                "cover the imbalance": "/\\b(cover(\\w*)? imbalance)\\b/",
+                "account jockeying": "/\\b(account jockeying)\\b/",
+                "exchange it for amortizations": "/\\b(echange it for amortizations)\\b/",
+                "unsupported transaction": "/\\b(unsupported transactions?)\\b/"
+            },
+            "rationalization": {
+                "its just a loan": "/\\b((its|it is) just a loan)\\b/",
+                "urgent payment": "/\\b(urgent payment)\\b/",
+                "need payment": "/\\b(need( \\w*)? payment)\\b/",
+                "recoveries do not need documents": "/\\b(recoveries do not need documents)\\b/",
+                "refund the money later": "/\\b(refund the money later)\\b/"
+            }
+        },
+        "LEGAL": {
+            "pressure": {
+                "above the law": "/\\b(above the (laws?|norms?|rules?))\\b/",
+                "dont know the law": "/\\b(dont know the (laws?|norms?|rules?))\\b/",
+                "must supervise that contract": "/\\b(must supervise that contract)\\b/",
+                "must do the legal study": "/\\b(must do the legal study)\\b/",
+                "officiate the authorities": "/\\b(officiate the authorities)\\b/"
+            },
+            "opportunity": {
+                "brake the rule": "/\\b(brake the rules?)\\b/",
+                "not investigate that case": "/\\b(not investigate (that|the) case)\\b/",
+                "not supervise that": "/\\b(not supervise that)\\b/",
+                "do not report the validity of the standard": "/\\b(do not report the validity of the standard)\\b/",
+                "there is no legal framework": "/\\b(there is no legal framework)\\b/"
+            },
+            "rationalization": {
+                "standards dont matter": "/\\b(standards dont matter)\\b/",
+                "lazy to study that law": "/\\b(lazy to study the law)\\b/",
+                "there was no need to supervise it": "/\\b(there was no need to supervise it)\\b/",
+                "i didnt know it was valid": "/\\b(i didnt know it was valid)\\b/",
+                "cheating is the norm": "/\\b(cheating is the norm)\\b/"
+            }
+        },
+        "SALES": {
+            "pressure": {
+                "we do not deliver what we offer": "/\\b(we do not deliver what we offer)\\b/",
+                "disproportionate performance": "/\\b(disproportionate performance)\\b/",
+                "the product is not ready": "/\\b(the product is not ready)\\b/",
+                "bad advertising campaign": "/\\b(bad advertising campaign)\\b/",
+                "bad business image": "/\\b(bad business image)\\b/"
+            },
+            "opportunity": {
+                "too many technical terms": "/\\b(too many techniacl terms)\\b/",
+                "a lot of technicality": "/\\b(a lot of technicality)\\b/",
+                "we can inflate prices": "/\\b(we can inflate prices)\\b/",
+                "secret agreement": "/\\b(secret agreement)\\b/",
+                "dont charge them": "/\\b(dont charge them)\\b/"
+            },
+            "rationalization": {
+                "needed a payment agreement": "/\\b(needed a payment agreement)\\b/",
+                "secret contact": "/\\b(secret contacts?)\\b/",
+                "bad business decisions": "/\\b(bad business decisions)\\b/",
+                "inappropriate channel": "/\\b(inappropriate channel)\\b/",
+                "poorly made forecasts": "/\\b(poorly made forecasts)\\b/"
+            }
+        },
+        "AUDIT": {
+            "pressure": {
+                "not report it": "/\\b(not report it)\\b/",
+                "without evaluating it first": "/\\b(without evaluating it first)\\b/",
+                "many weaknesses": "/\\b(many weaknesses)\\b/",
+                "big breach": "/\\b(big breach(es)?)\\b/",
+                "controls were skipped": "/\\b(controls were skipped)\\b/"
+            },
+            "opportunity": {
+                "will not make the recommendation": "/\\b(will not make( \\w*)? recommendations?)\\b/",
+                "skip the control": "/\\b((skip|evade) the controls?)\\b/",
+                "know how to evade control": "/\\b(know how to evade controls?)\\b/",
+                "not going to say anything": "/\\b(not going to say anything)\\b/",
+                "i will not give him away": "/\\b(i will not give him away)\\b/"
+            },
+            "rationalization": {
+                "the press needs to know": "/\\b(the press needs to know)\\b/",
+                "the world has to know this": "/\\b(the world has to know this)\\b/",
+                "we have to report it": "/\\b(we have to report it)\\b/",
+                "difficult to detect": "/\\b(difficult to detect)\\b/",
+                "was not detected": "/\\b(was not detected)\\b/"
+            }
+        },
+        "LOGISTIC": {
+            "pressure": {
+                "suspicious schedule": "/\\b(suspicious schedules?)\\b/",
+                "outside normal hours": "/\\b(outside normal hours)\\b/",
+                "different invoice": "/\\b(different invoice)\\b/",
+                "delay delivery": "/\\b(delay delivery)\\b/",
+                "negotiate separately with the client": "/\\b(negotiate separately with the (client|customer))\\b/"
+            },
+            "opportunity": {
+                "unknown phone number": "/\\b(unknown phone numbers?)\\b/",
+                "big order": "/\\b(big orders?)\\b/",
+                "any email": "/\\b(any email)\\b/",
+                "any region": "/\\b(any region)\\b/",
+                "gasoline advance": "/\\b(gasoline advance)\\b/"
+            },
+            "rationalization": {
+                "will realize late": "/\\b(will realize late)\\b/",
+                "for the tip": "/\\b(for the tip)\\b/",
+                "be loyal to the customer": "/\\b(be loyal to the customer)\\b/",
+                "big commission": "/\\b(big commission)\\b/",
+                "win at the end of the year": "/\\b(win at the end of the year)\\b/"
+            }
+        },
+        "CUSTOMER": {
+            "pressure": {
+                "dont listen": "/\\b((dont|do not) listen)\\b/",
+                "dont solve anything": "/\\b((dont|do not) solve anything)\\b/",
+                "press your contact": "/\\b(press your contact)\\b/",
+                "press it for data": "/\\b(press it for data)\\b/",
+                "put conditions": "/\\b(put( \\w*)? conditions)\\b/"
+            },
+            "opportunity": {
+                "without contact details": "/\\b(without contact details)\\b/",
+                "without attention": "/\\b(without attention)\\b/",
+                "lack of means": "/\\b(lack of means)\\b/",
+                "without physical address": "/\\b(without physical address)\\b/",
+                "dont give him information": "/\\b((dont|do not) give him information)\\b/"
+            },
+            "rationalization": {
+                "these data are worth gold": "/\\b(these data are worth gold)\\b/",
+                "thats not private": "/\\b((thats|that is) not private)\\b/",
+                "they pay me for each referral": "/\\b(they pay me for each referral)\\b/",
+                "those data are my withdrawal": "/\\b(those data are my withdrawal)\\b/",
+                "nobody is interested in that complaint": "/\\b(nobody is interested in that complaint)\\b/"
+            }
+        },
+        "TAXES": {
+            "pressure": {
+                "no retention at source": "/\\b(no retention at source)\\b/",
+                "very high statement": "/\\b(very high statement)\\b/",
+                "so much money for taxes": "/\\b(so much money for taxes)\\b/",
+                "pay without holding": "/\\b(pay without holding)\\b/",
+                "reduce taxes": "/\\b(reduce taxes)\\b/"
+            },
+            "opportunity": {
+                "without retention": "/\\b(without retention)\\b/",
+                "do not review certificates": "/\\b((do not|dont) review( \\w*)? certificates?)\\b/",
+                "do not reconcile retentions": "/\\b((do not|dont) reconcile retentions)\\b/",
+                "less taxes": "/\\b(less taxes)\\b/",
+                "hide income": "/\\b(hide incomes?)\\b/"
+            },
+            "rationalization": {
+                "the government also evades": "/\\b(the government also evades)\\b/",
+                "the government takes it all": "/\\b(the government takes it all)\\b/",
+                "work for the government": "/\\b(work for the government)\\b/",
+                "it is common practice": "/\\b((its|it is)( a)? common practice)\\b/",
+                "everybody evade": "/\\b((everybody|everyone) evades?)\\b/"
+            }
+        },
+        "PROJECTS": {
+            "pressure": {
+                "the budget is not enough": "/\\b(the budget is not enough)\\b/",
+                "did not approve the entire advance": "/\\b((did not|didnt) approve the entire advance)\\b/",
+                "outlined with the minutes": "/\\b(outlined with the minutes)\\b/",
+                "very tough contractor": "/\\b(very tough (provider|contractor))\\b/",               
+                "no money no permission": "/\\b(no money no permission)\\b/"
+            },
+            "opportunity": {
+                "major advance": "/\\b(major advance)\\b/",
+                "advance to balance": "/\\b(advance to balance)\\b/",
+                "no traceability of advances": "/\\b(no traceability of advances)\\b/",
+                "we arrange the execution": "/\\b(we arrange the execution)\\b/",
+                "the minutes were very good": "/\\b(the minutes were very good)\\b/"  
+            },
+            "rationalization": {
+                "i am ok with the advance": "/\\b((i am|im) (ok|comfortable) with the advance)\\b/",
+                "i need to meet the dates": "/\\b(i need to meet the dates)\\b/",
+                "i regret the provider": "/\\b(i regret the (provider|contractor))\\b/",
+                "help the contractor": "/\\b(help the (contractor|provider))\\b/",
+                "helping the contractor": "/\\b(helping the (contractor|provider))\\b/"
+            }
+        },
+        "CREDIT": {
+            "pressure": {
+                "credit rejected": "/\\b(credit rejected)\\b/",
+                "bad credit score": "/\\b(bad credit score)\\b/",
+                "poor rating": "/\\b(poor (rating|score))\\b/",             
+                "get two people": "/\\b((get|introduce) two people)\\b/",
+                "more movement": "/\\b(more movement)\\b/"
+            },
+            "opportunity": {
+                "level up": "/\\b(level up)\\b/",                
+                "to go up": "/\\b(to go up)\\b/",
+                "high yields": "/\\b(high yields)\\b/",               
+                "no credit study": "/\\b((no|without) credit study)\\b/",
+                "mandala center": "/\\b(mandala center)\\b/"    
+            },
+            "rationalization": {
+                "they are usurers": "/\\b(they are usurers)\\b/",
+                "guarantee to recover": "/\\b(guarantee to recover)\\b/",                
+                "they are not sales": "/\\b(they are not sales)\\b/",
+                "it is not multilevel": "/\\b((its|it is) not multilevel)\\b/",
+                "no sell": "/\\b(no sell)\\b/"
+            }
+        },
+        "CLEVEL": {
+            "pressure": {
+                "dont have rights": "/\\b((dont|do not|does|doesnt) (have|has)( \\w*)? rights?)\\b/",
+                "exceed my limit": "/\\b(exceed my limit)\\b/",
+                "the board pressures me": "/\\b(the board pressures me)\\b/",
+                "requires board approval": "/\\b(requires board approval)\\b/",
+                "can not retract": "/\\b(can not (retract|regret))\\b/"
+            },
+            "opportunity": {
+                "i will provide services": "/\\b(i will provide( \\w*)? services)\\b/",
+                "im going to bill you": "/\\b(im going to bill you)\\b/",
+                "i can sign it": "/\\b(i can sign it)\\b/",
+                "i can do it alone": "/\\b(i can do it alone)\\b/",
+                "i can approve it": "/\\b(i can approve it)\\b/"
+            },
+            "rationalization": {
+                "i am the authority": "/\\b(i am the (authority|law))\\b/",
+                "i am the one who decides": "/\\b(i am the one who decides)\\b/",
+                "i am the boss": "/\\b(i am the boss)\\b/",
+                "do what i say": "/\\b(do what i say)\\b/",
+                "i want recognition": "/\\b(i want recognition)\\b/"
+            }
+        }
+    }
+}
