@@ -35,6 +35,22 @@ if(!isset($_SERVER['HTTP_REFERER']))
 include "../lbs/globalVars.php";
 include "../lbs/openDBconn.php";
 
+/* Procedure to check internet connection to license server */
+
+function is_internet()
+{
+    $connected = @fsockopen("licensing.thefraudexplorer.com", 443); 
+
+    if ($connected)
+    {
+        $is_conn = true;
+        fclose($connected);
+    }
+    else $is_conn = false;
+
+    return $is_conn;
+}
+
 ?>
 
 <style>
@@ -541,28 +557,57 @@ include "../lbs/openDBconn.php";
                 $phraseNameEnglish = explode("/", $configFile['fta_text_rule_english']);
                 $phraseNameSelectionEnglish = $phraseNameEnglish[7];
 
-                $remotePhraseLibraryURLSpanish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionSpanish;
-                $onlineLibrarySpanish = json_decode(file_get_contents($remotePhraseLibraryURLSpanish), true);
-                $remotePhraseLibraryURLEnglish = "https://raw.githubusercontent.com/nfsecurity/the-fraud-explorer/master/Application%20Dashboard/thefraudexplorer/core/rules/".$phraseNameSelectionEnglish;
-                $onlineLibraryEnglish = json_decode(file_get_contents($remotePhraseLibraryURLEnglish), true);
-
                 preg_match('/version: (.*),/', $localLibrarySpanish["_comment"], $localPhraseLibraryVersionSpanish);
                 preg_match('/version: (.*),/', $localLibraryEnglish["_comment"], $localPhraseLibraryVersionEnglish);
 
-                preg_match('/version: (.*),/', $onlineLibrarySpanish["_comment"], $remotePhraseLibraryVersionSpanish);
-                preg_match('/version: (.*),/', $onlineLibraryEnglish["_comment"], $remotePhraseLibraryVersionEnglish);
+                $configFile = parse_ini_file("../config.ini");
+                $serialNumber = $configFile['pl_serial'];
+
+                /* Query license version */
+
+                $serverAddress = "https://licensing.thefraudexplorer.com/validateSerial.php";
+
+                $postRequest = array(
+                    'serial' => $serialNumber,
+                    'capabilities' => "false",
+                    'retrieve' => "false"
+                );
+
+                $payload = json_encode($postRequest);
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $serverAddress);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
+                $headers = [
+                    'Content-Type: application/json',
+                ];
+
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                $server_output = curl_exec($ch);
+                curl_close($ch);
+                $replyJSON = json_decode($server_output, true);
+                $remotePhraseLibraryVersionEnglish = $replyJSON['englishVersion'];
+                $remotePhraseLibraryVersionSpanish = $replyJSON['spanishVersion'];
 
                 echo '<p class="warning"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;';
 
-                if (isset($localPhraseLibraryVersionSpanish) && isset($remotePhraseLibraryVersionSpanish) && isset($localPhraseLibraryVersionEnglish) && isset($remotePhraseLibraryVersionEnglish))
+                if (is_internet() == true)
                 {
-                    if (($localPhraseLibraryVersionSpanish[1] != $remotePhraseLibraryVersionSpanish[1]) || ($localPhraseLibraryVersionEnglish[1] != $remotePhraseLibraryVersionEnglish[1]))
+                    if (isset($localPhraseLibraryVersionSpanish) && isset($remotePhraseLibraryVersionSpanish) && isset($localPhraseLibraryVersionEnglish) && isset($remotePhraseLibraryVersionEnglish))
                     {
-                        echo 'There are different versions of the phrase libraries at the official repo. ES [loc'. $localPhraseLibraryVersionSpanish[1].'-rem'.$remotePhraseLibraryVersionSpanish[1].'] - EN [loc'.$localPhraseLibraryVersionEnglish[1].'-rem'.$remotePhraseLibraryVersionEnglish[1].']';
+                        if (($localPhraseLibraryVersionSpanish[1] != $remotePhraseLibraryVersionSpanish) || ($localPhraseLibraryVersionEnglish[1] != $remotePhraseLibraryVersionEnglish))
+                        {
+                            echo 'There are different versions of the phrase libraries at the official repo. ES [loc'. $localPhraseLibraryVersionSpanish[1].'-rem'.$remotePhraseLibraryVersionSpanish.'] - EN [loc'.$localPhraseLibraryVersionEnglish[1].'-rem'.$remotePhraseLibraryVersionEnglish.']';
+                        }
+                        else echo 'Your phrase libraries database are up to date, you don\'t need to upgrade your libraries now but pay future attention !';
                     }
-                    else echo 'Your phrase libraries database are up to date, you don\'t need to upgrade your libraries now but pay future attention !';
+                    else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
                 }
-                else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
+                else echo 'You don\'t have internet connection at this time, please stablish permissions to reach the phrase library license server';
 
                 echo '</p>';
 
@@ -574,8 +619,13 @@ include "../lbs/openDBconn.php";
             
             <?php    
             
-            echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize libraries</a>';
-            echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download libraries</a>';
+                if (is_internet() == false)
+                {
+                    echo '<a id="upgrade-library-nointernet" class="btn btn-danger disabled" data-dismiss="modal" style="outline: 0 !important;">Synchronize libraries</a>';
+                }
+                else echo '<a id="upgrade-library" class="btn btn-danger" data-dismiss="modal" style="outline: 0 !important;">Synchronize libraries</a>';
+            
+                echo '<a id="download-rules" class="btn btn-success" style="outline: 0 !important;">Download libraries</a>';
 
             ?>
         
@@ -851,12 +901,15 @@ $("#modify-rule").click(function(e) {
                 data = JSON.parse(data);
 
                 var search = document.getElementById('phrase-identification-delmodify').value
+                var searchCustom = "c:"+search;
                 var ruleset = document.getElementById('ruleset-delmodify').value
                 var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
                 var searchPath = data["dictionary"][ruleset][vertice][search];
+                var searchPathCustom = data["dictionary"][ruleset][vertice][searchCustom];
 
-                if (typeof(searchPath) === "undefined") var finalRegexpString = "no regular expression found";
-                else var finalRegexpString = searchPath.replace(/\//g, "");
+                if (typeof(searchPath) != "undefined") var finalRegexpString = searchPath.replace(/\//g, "");
+                if (typeof(searchPathCustom) != "undefined") var finalRegexpString = searchPathCustom.replace(/\//g, "");
+                else var finalRegexpString = "no regular expression found";
             }
             else
             {
@@ -868,16 +921,18 @@ $("#modify-rule").click(function(e) {
                 matched = false;
 
                 var search = document.getElementById('phrase-identification-delmodify').value
+                var searchCustom = "c:"+search;
                 var ruleset = document.getElementById('ruleset-delmodify').value
                 var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
         
                 var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
+                var searchPathSpanishCustom = dataSpanish["dictionary"][ruleset][vertice][searchCustom];
                 var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
+                var searchPathEnglishCustom = dataEnglish["dictionary"][ruleset][vertice][searchCustom];
 
                 var finalRegexpString = null;
 
-                if (typeof(searchPathSpanish) === "undefined") finalRegexpString = "no regular expression found";
-                else 
+                if (typeof(searchPathSpanish) != "undefined")
                 {
                     matched = true;
                     finalRegexpString = searchPathSpanish.replace(/\//g, "");
@@ -887,11 +942,21 @@ $("#modify-rule").click(function(e) {
                     $('#library-search-language').val('fta_text_rule_spanish');
                     $('#library-search-language').niceSelect('update');
                 }
+                else if (typeof(searchPathSpanishCustom) != "undefined")
+                {
+                    matched = true;
+                    finalRegexpString = searchPathSpanishCustom.replace(/\//g, "");
+
+                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                    $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                    $('#library-search-language').val('fta_text_rule_spanish');
+                    $('#library-search-language').niceSelect('update');
+                }
+                else finalRegexpString = "no regular expression found";
 
                 if (matched == false)
                 {
-                    if (typeof(searchPathEnglish) === "undefined") { console.log("not found"); finalRegexpString = "no regular expression found"; }
-                    else 
+                    if (typeof(searchPathEnglish) != "undefined")
                     {
                         finalRegexpString = searchPathEnglish.replace(/\//g, "");
                     
@@ -900,6 +965,16 @@ $("#modify-rule").click(function(e) {
                         $('#library-search-language').val('fta_text_rule_english');
                         $('#library-search-language').niceSelect('update');
                     }
+                    else if (typeof(searchPathEnglishCustom) != "undefined")
+                    {
+                        finalRegexpString = searchPathEnglishCustom.replace(/\//g, "");
+                    
+                        $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                        $(".select-option-styled-language-search option[value=fta_text_rule_english]").attr('selected', 'selected');
+                        $('#library-search-language').val('fta_text_rule_english');
+                        $('#library-search-language').niceSelect('update');
+                    }
+                    else finalRegexpString = "no regular expression found";
                 }
             }
         

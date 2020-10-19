@@ -81,14 +81,28 @@ $currentversion = $configFile['sw_version'];
             <div class="software-name">The Fraud Explorer &reg; Opensource Fraud Triangle Analytics</div>
         </div>
         <div class="helpers-container">
-            <span class="fa fa-bug fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a style="color: white;" href="https://github.com/nfsecurity/the-fraud-explorer/issues" target="_blank" rel="noopener noreferrer" id="elm-bugreport">Bug Report</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud triangle simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud triangle simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-lock fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a href="../mods/libraryLicense" data-toggle="modal" class="library-license-button" data-target="#library-license" id="elm-library-license">Library license</a></div>&nbsp;&nbsp;&nbsp;&nbsp;            
             <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="logging"><a href="../mods/fraudTriangleLogging" data-toggle="modal" class="logging-button" data-target="#logging" href="#" id="elm-logging">Logging</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-address-card fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Profile [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-codepen fa-lg font-icon-color-footer" id="elm-software-update">&nbsp;&nbsp;</span><div class="software-version"><a href="../mods/swUpdate" data-toggle="modal" class="software-update-button" data-target="#software-update" href="#"><?php echo "Version v".$currentversion; ?></a></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
     </div>  
+</div>
+
+<!-- Modal for Library License -->
+
+<div class="modal" id="library-license" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal for Software Update -->
@@ -132,6 +146,14 @@ $currentversion = $configFile['sw_version'];
         </div>
     </div>
 </div>
+
+<!-- Script for Library License -->
+
+<script>
+    $('#library-license').on('show.bs.modal', function(e){
+        $(this).find('.library-license-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
 
 <!-- Script for Software Update -->
 

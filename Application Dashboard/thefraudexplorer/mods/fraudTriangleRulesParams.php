@@ -66,7 +66,7 @@ if ($actionTODO == "addrule")
 
     if (isset($_POST['ruleset-add'])) $rulesetSelectedADD = $_POST['ruleset-add'];
     if (isset($_POST['fraudvertice-add'])) $fraudVerticeSelectedADD = $_POST['fraudvertice-add'];
-    if (isset($_POST['phrase-identification-add'])) $phraseIDSelectedADD = $_POST['phrase-identification-add'];
+    if (isset($_POST['phrase-identification-add'])) $phraseIDSelectedADD = "c:".$_POST['phrase-identification-add'];
     if (isset($_POST['regexpression-add'])) $regularExpressionSelectedADD = $_POST['regexpression-add'];
 
     /* Add rule */
@@ -92,9 +92,23 @@ else if ($actionTODO == "deleterule")
 
     if ($phraseIDSelectedDEL != null && $regularExpressionSelectedDEL != null) 
     {
-        unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDEL]);
+        $phraseIDSelectedDELCustom = "c:".$phraseIDSelectedDEL;
+        $key = @$jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDEL];
+        $keyCustom = @$jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDELCustom];
+
+        if (isset($key)) 
+        {
+            unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDEL]);
+            $msg = "Successfully removed rule from library";
+        }
+        else if (isset($keyCustom)) 
+        {
+            unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDELCustom]);
+            $msg = "Successfully removed rule from library";
+        }
+        else $msg = "Phrase rule does not exist";
+        
         $proceedToSave = true;
-        $msg = "Successfully removed rule from library";
     }
 }
 else if ($actionTODO == "modifyrule")
@@ -111,9 +125,23 @@ else if ($actionTODO == "modifyrule")
 
     if ($phraseIDSelectedMOD != null && $regularExpressionSelectedMOD != null)
     {
-        $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMOD] = "/".$regularExpressionSelectedMOD."/";
+        $phraseIDSelectedMODCustom = "c:".$phraseIDSelectedMOD;
+        $key = @$jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMOD];
+        $keyCustom = @$jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMODCustom];
+
+        if (isset($key)) 
+        {
+            $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMOD] = "/".$regularExpressionSelectedMOD."/";
+            $msg = "Successfully modified phrase rule";
+        }
+        else if (isset($keyCustom)) 
+        {
+            $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMODCustom] = "/".$regularExpressionSelectedMOD."/";
+            $msg = "Successfully modified phrase rule";
+        }
+        else $msg = "Phrase rule does not exist";
+
         $proceedToSave = true;
-        $msg = "Successfully modified phrase rule";
     }
 }
 
