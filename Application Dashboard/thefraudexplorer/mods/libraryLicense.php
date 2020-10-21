@@ -64,6 +64,8 @@ function is_internet()
         float: left;
         padding-bottom: 10px;
         padding-top: 10px;
+        width: 100%;
+        text-align: left;
     }
 
     .input-value-text
@@ -90,7 +92,8 @@ function is_internet()
 
     .window-footer-config-license
     {
-        padding: 0px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
+        margin-top: 15px;
     }
 
     .div-container-license
@@ -149,6 +152,7 @@ function is_internet()
         display: inline;
         text-align: center;
         background: #f2f2f2;
+        font-family: 'FFont', sans-serif; font-size: 11px;
         border-radius: 5px;
         padding: 10px;
         width: 49.2%;
@@ -162,6 +166,7 @@ function is_internet()
         display: inline;
         text-align: center;
         background: #f2f2f2;
+        font-family: 'FFont', sans-serif; font-size: 11px;
         border-radius: 5px;
         padding: 10px;
         width: 49.2%;
@@ -173,6 +178,7 @@ function is_internet()
     .container-status-license
     {
         display: block;
+        margin-bottom: 15px;
     }
 
     .container-status-license::after 
@@ -280,16 +286,16 @@ function is_internet()
 
             <div class="left-container-license">
                    
-                <p class="title-config">Phrase library serial number</p><br><br>
-                <div style="line-height:9px; border: 1px solid white;"><br></div>
+                <p class="title-config">Phrase library serial number</p>
+                <div style="line-height:9px; border: 1px solid white;"></div>
                 <input type="text" name="serial" id="serial" autocomplete="off" placeholder="<?php echo $serialNumber; ?>" class="input-value-text" style="text-indent:5px;">
             
             </div>
 
             <div class="right-container-license">              
                 
-                <p class="title-config">License capabilities: CLASS-<?php echo $licenseClass; ?></p><br><br>
-                <div style="line-height:9px; border: 1px solid white;"><br></div>
+                <p class="title-config">License capabilities: CLASS-<?php echo $licenseClass; ?></p>
+                <div style="line-height:9px; border: 1px solid white;"></div>
                 <input type="text" disabled="disabled" name="pressure" id="pressure" autocomplete="off" placeholder="<?php echo $pressurePhrases; ?>" class="input-value-text-capabilities">
                 <input type="text" disabled="disabled" name="opportunity" id="opportunity" autocomplete="off" placeholder="<?php echo $opportunityPhrases; ?>" class="input-value-text-capabilities">
                 <input type="text" disabled="disabled" name="rationalization" id="rationalization" autocomplete="off" placeholder="<?php echo $rationalizationPhrases; ?>" class="input-value-text-capabilities">
@@ -312,7 +318,6 @@ function is_internet()
             
     </div>
 
-    <br>
     <a class="downloadfile" href="mods/downloadLicense?le=<?php if ($noBackup == true) echo "nobackupfile"; else echo encRijndael($latestBackup[3]); ?>">
     <button type="button" id="button-download-license" class="btn btn-default" style="width: 100%; outline: 0 !important;">
         Download current phrase library to my computer<br>
@@ -327,11 +332,8 @@ function is_internet()
         </p>
     </button>
     </a>
-    <br>
 
-    <br>
     <div class="modal-footer window-footer-config-license">
-        <br>
         <button type="button" class="btn btn-default" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
         
         <?php    

@@ -45,7 +45,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .title-config
     {
-        font-family: 'FFont', sans-serif; font-size:12px;
+        font-family: 'FFont', sans-serif; font-size: 12px;
         float: left;
         padding-bottom: 10px;
         padding-top: 10px;
@@ -159,6 +159,7 @@ $_SESSION['processingStatus'] = "notstarted";
         line-height: 32px;
         cursor: pointer;
         outline: 0 !important;
+        margin-top: 13px;
     }
 
     .health-section
@@ -174,7 +175,8 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .left-health
     {
-
+        height: 180px;
+        width: 100%;
     }
 
     .right-health
@@ -188,11 +190,13 @@ $_SESSION['processingStatus'] = "notstarted";
     .health-title
     {
         font-family: 'FFont', sans-serif; font-size: 12px;
+        margin-bottom: 27px;
     }
 
     .resource-title
     {
         height: 35px; 
+        font-family: 'FFont', sans-serif; font-size: 11px;
         display: inline-block; 
         vertical-align: middle; 
         margin-top: -10px; 
@@ -202,9 +206,9 @@ $_SESSION['processingStatus'] = "notstarted";
     .ram-container
     {
         display: inline-block; 
-        border: 1px solid #dfdfdf; 
+        border: 1px solid #dfdfdf;
         width: 235px; 
-        height: 34px; 
+        height: 34px;
         border-radius: 8px;
     }
 
@@ -215,7 +219,7 @@ $_SESSION['processingStatus'] = "notstarted";
         width: 235px; 
         height: 34px; 
         border-radius: 8px; 
-        margin-top: 5px;
+        margin-top: 6px;
     }
 
     .disk-container
@@ -240,6 +244,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .ram-status
     {
+        font-family: 'FFont', sans-serif; font-size: 11px;
         display: inline; 
         position: absolute; 
         top: 138px; 
@@ -248,6 +253,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .cpu-status
     {
+        font-family: 'FFont', sans-serif; font-size: 11px;
         display: inline; 
         position: absolute; 
         top: 187px; 
@@ -256,6 +262,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .disk-status
     {
+        font-family: 'FFont', sans-serif; font-size: 11px;
         display: inline; 
         position: absolute; 
         top: 235px; 
@@ -264,6 +271,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
     .total-status
     {
+        font-family: 'FFont', sans-serif; font-size: 11px;
         display: inline; 
         position: absolute; 
         top: 284px; 
@@ -681,23 +689,23 @@ $_SESSION['processingStatus'] = "notstarted";
             <div class="left-container">
                 <div class="left-health">
 
-                    <p class="health-title">Physical resources usage</p><br><br>
+                    <p class="health-title">Physical resources usage</p>
 
                     <div class="resource-title">RAM</div>
                     <div class="ram-container">
                         <div class="ram-status"><?php echo $ram."%"; ?></div>
                         <div class="ram-bar" style="width: <?php echo ($ram+1)."%"; ?>;"></div>
-                    </div><br>
+                    </div>
                     <div class="resource-title">CPU</div>
                     <div class="cpu-container">
                         <div class="cpu-status"><?php echo $cpu."%"; ?></div>
                         <div class="cpu-bar" style="width: <?php echo ($cpu+1)."%"; ?>;"></div>
-                    </div><br>
+                    </div>
                     <div class="resource-title">DSK</div>
                     <div class="disk-container">
                         <div class="disk-status"><?php echo $disk."%"; ?></div>
                         <div class="disk-bar" style="width: <?php echo ($disk+1)."%"; ?>;"></div>
-                    </div><br>
+                    </div>
                     <div class="resource-title">TOT</div>
                     <div class="total-container">
                         <div class="total-status"><?php echo (int)(($disk+$cpu+$ram)/3)."%"; ?></div>
@@ -709,7 +717,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
             <div class="right-container">
 
-                <p class="health-title">Fraud Triangle services status</p><br><br>
+                <p class="health-title">Fraud Triangle services status</p>
 
                 <div class="right-health">
 
@@ -743,8 +751,6 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
 
         </div>
-
-        <br>
         
         <div id="healthButton" class="btn-default health-button">Check The Fraud Explorer health system status</div>
 

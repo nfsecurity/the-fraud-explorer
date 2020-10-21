@@ -71,13 +71,22 @@ if (isset($_POST['serial']))
     curl_close($ch);
     $replyJSON = json_decode($server_output, true);
     $validOrNot = $replyJSON['Valid'];
+    $validUntil = strtotime($replyJSON['Until']);
+    $today = date("Y-m-d H:i:s");
 
     if ($validOrNot == "true")
     {
-        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$currentSerial.'/'.$newSerial.'/g" --in-place '.$documentRoot.'config.ini';
-        $commandReplacements = shell_exec($replaceParams);
+        if ($today < $validUntil)
+        {
+            $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$currentSerial.'/'.$newSerial.'/g" --in-place '.$documentRoot.'config.ini';
+            $commandReplacements = shell_exec($replaceParams);
 
-        $msg = "Serial number successfully activated";
+            $msg = "Serial number successfully activated";
+        }
+        else
+        {
+            $msg = "Your license has expired, contact support";
+        }
     }
     else $msg = "Invalid phrase library serial number";
     
