@@ -152,6 +152,15 @@ $fraudEvents = mysqli_fetch_assoc($queryEvents);
 $fraudScore = ($fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization'])/3;
 $numberOfEndpointWithEvents = $fraudEvents['count'];
 
+/* Phrase collection status */
+
+$xml = simplexml_load_file('../update.xml');
+$enabledPhraseCollection = false;
+$phraseCollectionStatus = decRijndaelRemote($xml->token[0]['arg']);
+
+if ($phraseCollectionStatus == "textAnalytics 1") $enabledPhraseCollection = true;
+else $enabledPhraseCollection = false;
+
 ?>
 
 <div class="dashboard-left-menu">
@@ -195,7 +204,7 @@ $numberOfEndpointWithEvents = $fraudEvents['count'];
             <tr>
                 <td>
                     <center>
-                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><div class="left-menu-button"><div class="menu-title">status</div><span class="fa fa-toggle-on font-icon-color-gray" style="font-size: 20px; position: relative; top: -10px;"></span></div></a></span>
+                    <span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Status of phrase collection</div><div class=tooltip-row><div class=tooltip-item>Enable or disable the phrase collection<br>through a command sent to the<br>endpoints in real time</div></div></div>"><a data-href="mods/switchPhraseCollection" data-toggle="modal" data-target="#switch-phrase-collection" href="#" class="enable-analytics-button" id="elm-switch-phrase-collection"><div class="left-menu-button"><div class="menu-title">status</div><span class="fa <?php if ($enabledPhraseCollection == false) echo "fa-toggle-off"; else echo "fa-toggle-on"; ?> font-icon-color-gray" style="font-size: 20px; position: relative; top: -10px;"></span></div></a></span>
                     </center>
                 </td>
             </tr>
