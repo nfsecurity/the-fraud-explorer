@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for process simulator data
  */
@@ -96,6 +96,10 @@ if (isset($_POST['rulesetSimulator'])) $rulesetSimulator = $_POST['rulesetSimula
 if (isset($_POST['applicationSimulator'])) $applicationSimulator = $_POST['applicationSimulator'];
 if (isset($_POST['simulatorPhrases'])) $simulatorPhrases = $_POST['simulatorPhrases'];
 
+/* Global variables */
+
+$flagStatus = false;
+
 /* Run check button pressed */
 
 if ($simulatorAction == "runCheck") 
@@ -136,6 +140,8 @@ if ($simulatorAction == "runCheck")
                 {
                     if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                     {
+                        if (strpos($field, '*') !== false) $flagStatus = true;
+
                         for ($j=0; $j<count($matches[0]); $j++) $phrasesMatched[][$term] = $matches[0][$j];
                     }
                 }
@@ -156,10 +162,12 @@ if ($simulatorAction == "runCheck")
     else
     {
         $messageTone = checkTone($sanitizedPhrases);
+        $messageFlag = $flagStatus;
 
         $toReturn = Array(
             $messageTone, 
-            $phrasesMatched
+            $phrasesMatched,
+            $messageFlag
         );
 
         $json = $toReturn;

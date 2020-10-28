@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Build Advanced Reports
  */
@@ -85,6 +85,9 @@ else $excluded = "all";
 
 if (isset($_POST['allphrases'])) $allphrases = filter($_POST['allphrases']);
 else $allphrases = "n/a";
+
+if (isset($_POST['flagsonly'])) $flagsonly = filter($_POST['flagsonly']);
+else $flagsonly = "n/a";
 
 if ($alldaterange == "alldaterange")
 {
@@ -242,16 +245,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column;
 $reader = IOFactory::createReader('Xlsx');
 $spreadsheet = $reader->load("templates/Fraud_Triangle_Analytics_Report.xlsx");
 $spreadsheet->getDefaultStyle()->getFont()->setName('Century Gothic')->setSize(10);
-$spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(10204);
+$spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(10204);
 
 /* Dump the report */
 
 $contentStartRow = 20;
 $currentContentRow = 20;
 $endpointCounter = 1;
-$counterPressure = 0;
-$counterOpportunity = 0;
-$counterRationalization = 0;
 
 if ($endpointDECSQL == "all")
 {    
@@ -269,6 +269,14 @@ if ($endpointDECSQL == "all")
         $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
         $endPoint = explode("_", $result['_source']['agentId']);
         $agentId = $result['_source']['agentId'];
+        $messageFlag = "no";
+        
+        if (isset($result['_source']['messageFlag'])) 
+        {
+            if ($result['_source']['messageFlag'] == 0) $messageFlag = "no";
+            else $messageFlag = "yes";
+        }
+        
         $endpointDECSQL = $endPoint[0];
         $regExpression = htmlentities($result['_source']['phraseMatch']);
         $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
@@ -314,6 +322,16 @@ if ($endpointDECSQL == "all")
             }
         }
 
+        /* Flags filter */
+
+        if (strcmp($flagsonly, "flagsonly") == 0)
+        {
+            if (strcmp($messageFlag, "no") == 0) 
+            {
+                continue;
+            }
+        }
+
         /* Ruleset filter */
 
         if (strcmp($alldepartments, "alldepartments") != 0)
@@ -323,12 +341,6 @@ if ($endpointDECSQL == "all")
                 continue;
             }
         }
-
-        /* Fraud vertices count */
-
-        if ($result['_source']['alertType'] == "pressure") $counterPressure++;
-        if ($result['_source']['alertType'] == "opportunity") $counterOpportunity++;
-        if ($result['_source']['alertType'] == "rationalization") $counterRationalization++;
 
         /* Excel report */
 
@@ -357,14 +369,16 @@ if ($endpointDECSQL == "all")
         ->setCellValue('F'.$currentContentRow, $userDomain['domain'])
         ->setCellValue('H'.$currentContentRow, $userDomain['agent']."@".between('@', '.', "@".$userDomain['domain']))
         ->setCellValue('I'.$currentContentRow, $windowTitle)
-        ->setCellValue('K'.$currentContentRow, $richCellValue);
+        ->setCellValue('K'.$currentContentRow, $richCellValue)
+        ->setCellValue('L'.$currentContentRow, $messageFlag);
 
         $spreadsheet->getActiveSheet()->getStyle('I'.$currentContentRow)->getAlignment()->setWrapText(true);
         $spreadsheet->getActiveSheet()->getStyle('K'.$currentContentRow)->getAlignment()->setWrapText(true);
         $spreadsheet->getActiveSheet()->getRowDimension($currentContentRow)->setRowHeight(-1);
         $spreadsheet->getActiveSheet()->getStyle('B'.$currentContentRow)->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME); 
+        $spreadsheet->getActiveSheet()->getStyle('L'.$currentContentRow)->getAlignment()->setHorizontal('center');
 
-        if($currentContentRow % 2 == 0) $spreadsheet->getActiveSheet()->getStyle('A'.$currentContentRow.':'.'K'.$currentContentRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('EDEDED');
+        if($currentContentRow % 2 == 0) $spreadsheet->getActiveSheet()->getStyle('A'.$currentContentRow.':'.'L'.$currentContentRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('EDEDED');
 
         $currentContentRow++;
         $endpointCounter++;
@@ -393,9 +407,6 @@ if ($alldaterange == "alldaterange")
 }
 
 $spreadsheet->getActiveSheet()->setCellValue('H15', "From ".str_replace("-", "/", $daterangefrom)." to ".str_replace("-", "/", $daterangeto));
-$spreadsheet->getActiveSheet()->setCellValue('H6', $counterPressure);
-$spreadsheet->getActiveSheet()->setCellValue('H9', $counterOpportunity);
-$spreadsheet->getActiveSheet()->setCellValue('H12', $counterRationalization);
 
 if (strcmp($alldepartments, "alldepartments") != 0) $spreadsheet->getActiveSheet()->setCellValue('K6', $ruleset); 
 else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
@@ -405,6 +416,7 @@ else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="Fraud_Triangle_Analytics_Report.xlsx"');
 $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+$writer->setPreCalculateFormulas(false);
 $writer->save('php://output');
 
 $_SESSION['processingStatus'] = "finished";

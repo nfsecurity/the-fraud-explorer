@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for paint main endpoints list
  */
@@ -230,7 +230,7 @@ else $totalSystemWords= "0";
             <th class="countcth" id="elm-level-dashboard">L</th>
             <th class="scoreth" id="elm-score-dashboard">SCORE</th>
             <th class="specialth" id="elm-delete-dashboard">DEL</th>
-            <th class="specialth" id="elm-set-dashboard">SET</th>
+            <th class="specialth" id="elm-set-dashboard" style="padding-right: 25px;">SET</th>
         </tr>
     </thead>
     <tbody>
@@ -332,14 +332,6 @@ else $totalSystemWords= "0";
 <script>
     $('#confirm-setup').on('show.bs.modal', function(e){
         $(this).find('.setup').attr('href', $(e.relatedTarget).data('href'));
-    });
-</script>
-
-<!-- Modal for main config -->
-
-<script>
-    $('#confirm-config').on('show.bs.modal', function(e){
-        $(this).find('.config').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 

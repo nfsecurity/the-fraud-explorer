@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Mail events
 */
@@ -26,29 +26,36 @@ for ($i=0; $i<$alert_amount; $i++)
     if ($alert_eventTone[$i] == 0) $eventTone = "neutral";
     else $eventTone = "negative";
 
+    if ($alert_eventFlag[$i] == 0) $eventFlag = "no";
+    else $eventFlag = "yes";
+
+    $applicationXmail = substr($alert_eventApplication[$i], 0, 30) . ' ...';
+    $expressionXmail = substr($alert_eventPhrase[$i], 0, 30) . ' ...';
+
     $messageComplement = $messageComplement . '<tr>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventDate[$i] . '</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventEndpoint[$i] .'</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventCompany[$i] .'</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $alert_eventType[$i] .'</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . substr($alert_eventApplication[$i], 0, 30) . ' ...' . '</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . substr($alert_eventPhrase[$i], 0, 30) . ' ...' . '</td>';
-    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F;">' . $eventTone .'</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $alert_eventDate[$i] . '</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $alert_eventEndpoint[$i] .'</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $alert_eventCompany[$i] .'</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $alert_eventType[$i] .'</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $applicationXmail . '</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $expressionXmail . '</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $eventTone .'</td>';
+    $messageComplement = $messageComplement . '<td style="background-color:#FFFFFF; border:1px solid #4B906F; font-size: 12px; padding: 4px 2px 4px 2px;">' . $eventFlag .'</td>';
     $messageComplement = $messageComplement . '</tr>';
 }
 
 $message = '<html>' .
     '<body>Greetings from The Fraud Explorer,<br><br>The workflow <b>'.$alert_workflowName.'</b> has triggered the following alert:<br><br>' .
-    '<table border="1" style="background-color:#FFFFFF;border-collapse:collapse;border:1px solid #33CC00;color:#000000;width:100%" ' .
-    'cellpadding="8" cellspacing="3"> ' .
+    '<table style="border-collapse: collapse; border: 1px solid #4B906F; width: 100%;">' .
     '<tr>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Date</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Employee</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Company</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Vertice</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Application</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Phrase</b></td>' .
-    '<td style="background-color:#4B906F; border:1px solid #4B906F; color: white;"><b>Tone</b></td>' .
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Date</b></th>' .
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Employee</b></th>' . 
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Company</b></th>' . 
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Vertice</b></th>' . 
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Application</b></th>' .
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Expression</b></th>' . 
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Tone</b></th>' . 
+    '<th style="background-color: #4B906F; color: white; padding: 9px 2px 9px 2px; text-align: left;"><b>Flag</b></th>' . 
     '</tr>' .
     $messageComplement .
     '</table>' .
@@ -57,7 +64,7 @@ $message = '<html>' .
 $headers = "From: " . $configFile['mail_address'] . "\r\n" .
     "Reply-To: " . $configFile['mail_address'] . "\r\n" .
     'MIME-Version: 1.0' . "\r\n" .
-    'Content-Type: text/html; charset=ISO-8859-1' . "\r\n" .
+    'Content-Type: text/html; charset=UTF8' . "\r\n" .
     'X-Mailer: PHP/' . phpversion();
 
 ?>

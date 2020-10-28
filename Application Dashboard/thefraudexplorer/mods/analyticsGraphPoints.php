@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for graph points visualization
  */
@@ -248,16 +248,17 @@ $graphPoints = json_decode($coordinates, true);
             <th class="table-th-graphdata-body">PRESS</th>
             <th class="table-th-graphdata-body">OPPRT</th>
             <th class="table-th-graphdata-body">RATNL</th>
+            <th class="table-th-graphdata-body">FLAGS</th>
             <th class="table-th-graphdata-body">SCORE</th>
         </thead>
         <tbody class="table-tbody-graphdata">
 
             <?php
 
-            $queryEndpointsSQL = "SELECT * FROM (SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
-            $queryEndpointsSQL_wOSampler = "SELECT * FROM (SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";                  
-            $queryEndpointsSQLDomain = "SELECT * FROM (SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
-            $queryEndpointsSQLDomain_wOSampler = "SELECT * FROM (SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
+            $queryEndpointsSQL = "SELECT * FROM (SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
+            $queryEndpointsSQL_wOSampler = "SELECT * FROM (SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";                  
+            $queryEndpointsSQLDomain = "SELECT * FROM (SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
+            $queryEndpointsSQLDomain_wOSampler = "SELECT * FROM (SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' GROUP BY agent ORDER BY score DESC) AS Points WHERE pressure='".(int)$graphPoints['y']."' AND rationalization='".(int)$graphPoints['x']."'";
                     
             if ($session->domain == "all")
             {
@@ -283,6 +284,7 @@ $graphPoints = json_decode($coordinates, true);
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
                     $totalEvents = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
+                    $flagsCount = $endpointsFraud['flags'];
                     
                     if ($totalEvents != 0) 
                     {
@@ -296,6 +298,7 @@ $graphPoints = json_decode($coordinates, true);
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
                     echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countRationalization.'</td>';
+                    echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$flagsCount.'</td>';
                     echo '<td class="table-td-graphdata-score">'.number_format($totalEvents/3, 1).'</td>';
                     echo '</tr>';
                     
@@ -311,7 +314,7 @@ $graphPoints = json_decode($coordinates, true);
     
     <?php
     
-    echo '<div class="footer-statistics-point"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$counter.' endpoints matching this coordinate in the graph</div>';
+    echo '<div class="footer-statistics-point"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$counter.' endpoints matching this coordinate view point in the fraud triangle scatter plot graph</div>';
     
     ?>
     

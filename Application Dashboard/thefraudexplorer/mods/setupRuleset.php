@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for ruleset setup
  */
@@ -249,6 +249,7 @@ include "../lbs/endpointMethods.php";
             <th class="table-th-ruleset">OPPRT</th>
             <th class="table-th-ruleset">RATNL</th>
             <th class="table-th-ruleset">TOTAL</th>
+            <th class="table-th-ruleset">FLAGS</th>
             <th class="table-th-ruleset">ENDPT</th>
         </thead>
         <tbody class="table-tbody-ruleset">
@@ -300,6 +301,8 @@ include "../lbs/endpointMethods.php";
 
             foreach ($jsonFT[1]['dictionary'] as $ruleset => $value)
             {
+                $flagsCount = 0;
+
                 echo '<tr class="table-tr-ruleset">';
                 echo '<td class="table-td-ruleset-name" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-file-text-o font-icon-color-green fa-padding"></span>'.$ruleset.'</td>';
 
@@ -311,6 +314,8 @@ include "../lbs/endpointMethods.php";
                         {
                             @$dictionaryCount[$ruleset][$term]++;
                             $phrasesCount++;
+
+                            if (strpos($field, '*') !== false) $flagsCount++;
                         }
                     }
 
@@ -320,6 +325,8 @@ include "../lbs/endpointMethods.php";
 
                 $total = @$dictionaryCount[$ruleset]['pressure'] + @$dictionaryCount[$ruleset]['opportunity'] + @$dictionaryCount[$ruleset]['rationalization'];	
                 echo '<td class="table-td-ruleset-total">'.$total.'</td>';
+
+                echo '<td class="table-td-ruleset">'.$flagsCount.'</td>';
 
                 $rulesetQuery = mysqli_query($connection, sprintf($countQuery, $ruleset));
                 $rule = mysqli_fetch_array($rulesetQuery);
@@ -336,7 +343,7 @@ include "../lbs/endpointMethods.php";
     
     <?php
     
-    echo '<div class="footer-statistics-ruleset"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$phrasesCount.' fraud triangle rules defined under '.$departmentsCount.' departments </div>';
+    echo '<div class="footer-statistics-ruleset"><span class="fa fa-area-chart font-aw-color fa-padding"></span>There are '.$phrasesCount.' fraud triangle rules (phrase expressions) defined under '.$departmentsCount.' corporate business units </div>';
     
     ?>
 

@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2020-08
-* Revision: v1.4.7-aim
+* Author: jrios@nofraud.la
+* Version code-name: nemesis
 *
 * Description: CSS Code
 */
@@ -123,7 +123,7 @@ html,body
 
 .asterisk-color-high
 {
-    color: #57a881;
+    color: rgba(235, 115, 111, 0.6);
 }
 
 hr 

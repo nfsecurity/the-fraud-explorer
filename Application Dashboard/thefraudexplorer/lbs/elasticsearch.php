@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Functions extension file for elasticsearch querys
  */ 
@@ -1123,7 +1123,7 @@ function createIndex($indexName)
 
 /* Insert a Document */
 
-function insertAlertDocument($indexName, $type, $agentId, $alertType, $matchNumber, $opportunityScore, $pressureScore, $rationalizationScore, $phraseMatch, $windowTitle, $wordTyped, $stringHistory)
+function insertAlertDocument($indexName, $type, $agentId, $alertType, $matchNumber, $opportunityScore, $pressureScore, $rationalizationScore, $phraseMatch, $windowTitle, $wordTyped, $stringHistory, $messageFlag)
 {
     $randHours = rand(10,23);
     $randMinutes = rand(10,59);
@@ -1154,6 +1154,7 @@ function insertAlertDocument($indexName, $type, $agentId, $alertType, $matchNumb
             'windowTitle' => $windowTitle,
             'wordTyped' => $wordTyped,
             'stringHistory' =>  $stringHistory,
+            'messageFlag' => $messageFlag,
             'type' => $type,
             'falsePositive' => '0',
             '@timestamp' => $dateTZ,
@@ -1177,7 +1178,7 @@ function insertSampleData($configFile)
         
         foreach ($data as $row)
         {
-            insertAlertDocument($configFile['es_sample_alerter_index'], "AlertEvent", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], encRijndael($row[9]));
+            insertAlertDocument($configFile['es_sample_alerter_index'], "AlertEvent", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7], $row[8], encRijndael($row[9]), $row[10]);
         }
     }
 }
@@ -1246,7 +1247,7 @@ function getAllFraudTriangleEvents($index, $domain, $samplerStatus, $context, $s
 {
     $querySize = $size;
 
-    if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
+    if ($sortColumn != "@timestamp" && $sortColumn != "messageFlag") $sortColumn = $sortColumn.".keyword";
 
     if ($context != "allalerts")
     {
@@ -1500,7 +1501,7 @@ function getSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $contex
     $querySize = $size;
     $searchString = "*".$searchString."*";
 
-    if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
+    if ($sortColumn != "@timestamp" && $sortColumn != "messageFlag") $sortColumn = $sortColumn.".keyword";
 
     if ($context != "allalerts")
     {
@@ -2098,7 +2099,7 @@ function countSpecificFraudTriangleEvents($index, $domain, $samplerStatus, $cont
 
 function getAgentIdEvents($agentID, $index, $alertType, $size, $offset, $sortOrder, $sortColumn)
 {
-    if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
+    if ($sortColumn != "@timestamp" && $sortColumn != "messageFlag") $sortColumn = $sortColumn.".keyword";
 
     $matchesParams = [
         'index' => $index,
@@ -2148,7 +2149,7 @@ function countAgentIdEvents($agentID, $index, $alertType)
 
 function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, $sortOrder, $sortColumn, $searchString)
 {
-    if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
+    if ($sortColumn != "@timestamp" && $sortColumn != "messageFlag") $sortColumn = $sortColumn.".keyword";
     $searchString = "*".$searchString."*";
 
     $matchesParams = [

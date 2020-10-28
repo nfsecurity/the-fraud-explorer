@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for paint endpoint data table
  */
@@ -164,7 +164,7 @@ if ($endpointDECSQL != "all")
                 <th class="windowtitleth" id="elm-windowtitle-event"><span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE</th>
                 <th class="metricsth" id="elm-endpoint-metrics">&nbsp;METRS</th>
                 <th class="phrasetypedth" id="elm-phrasetyped-event"><span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>
-                <th style="display: none;">EXPRESSION HISTORY</th>
+                <th class="flagsth" id="elm-flags-event"><center>FLAG</center></th>
                 <th class="falseth" id="elm-mark-event">MARK</th>
             </tr>
         </thead>
@@ -196,8 +196,9 @@ else
                 <th class="eventtypeth-all" id="elm-type-event">BEHAVIOR</th>
                 <th class="endpointth-all" id="elm-endpoint-event"><span class="fa fa-briefcase fa-lg font-icon-color-gray-low awfont-padding-right"></span>HUMAN AUDIENCE</th>
                 <th class="windowtitleth-all" id="elm-windowtitle-event"><span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE</th>
-                <th class="metricsth-all" id="elm-endpoint-metrics">&nbsp;METRS</th>
+                <th class="metricsth-all" id="elm-endpoint-metrics">METRS</th>
                 <th class="phrasetypedth-all" id="elm-phrasetyped-event"><span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING</th>
+                <th class="flagsth-all" id="elm-flags-event"><center>FLAG</center></th>
                 <th class="falseth-all" id="elm-mark-event"><center>MARK</center></th>
             </tr>
         </thead>
@@ -440,14 +441,10 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=events", function(){
             {
                 sorter: false
             },
-            6:
-            {
-                sorter: false
-            },
             7:
             {
                 sorter: false
-            },
+            }
         }
     })
 
@@ -504,7 +501,8 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=events", function(){
             $('td:nth-child(4)').addClass("windowtitletd");
             $('td:nth-child(5)').addClass("metricstd");
             $('td:nth-child(6)').addClass("phrasetypedtd");
-            $('td:nth-child(7)').addClass("falsetd");
+            $('td:nth-child(7)').addClass("flagstd");
+            $('td:nth-child(8)').addClass("falsetd");
 
             /* Tooltipster callback */
 
@@ -565,7 +563,7 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=events", function(){
             {
                 sorter: false
             },
-            7:
+            8:
             {
                 sorter: false
             }
@@ -626,7 +624,8 @@ $("#includedTopMenu").load("../helpers/topMenu.php?or=events", function(){
             $('td:nth-child(5)').addClass("windowtitletd-all");
             $('td:nth-child(6)').addClass("metricstd-all");
             $('td:nth-child(7)').addClass("phrasetypedtd-all");
-            $('td:nth-child(8)').addClass("falsetd-all");
+            $('td:nth-child(8)').addClass("flagstd-all");
+            $('td:nth-child(9)').addClass("falsetd-all");
 
             /* Tooltipster callback */
 

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Fraud Simulator
  */
@@ -205,6 +205,17 @@ include "../lbs/elasticsearch.php";
     {
         position: absolute;
         left: 66;
+        width: 42px;
+        bottom: 20;
+        outline: 0 !important;
+        height: 34px;
+    }
+
+    .btn-flagsimulator
+    {
+        position: absolute;
+        left: 116px;
+        width: 42px;
         bottom: 20;
         outline: 0 !important;
         height: 34px;
@@ -332,7 +343,8 @@ include "../lbs/elasticsearch.php";
     </form>
 
     <button class="btn btn-default btn-mic-start" id="btnMic"><span class="fa fa-microphone fa-lg mic-color"></span></button>   
-    <button class="btn btn-default btn-tone" id="btnTone"><span class="fa fa-meh-o fa-lg tone-color"></span></button> 
+    <button class="btn btn-default btn-tone" id="btnTone"><span class="fa fa-meh-o fa-lg tone-color"></span></button>
+    <button class="btn btn-default btn-flagsimulator" id="btnFlag"><span class="fa fa-flag-o fa-lg tone-color"></span></button>
    
 </div>
 
@@ -594,25 +606,35 @@ $('#simulatorForm button').click(function(e) {
                 $('#rationalizationCount').text("0 matched phrases");
                 $('#deductionPercentage').text("0% unethical behavior");
 
-                 /* Restore triangulating button */ 
+                /* Restore triangulating button */ 
 
                 $('#btnRunCheck').html('Run check');
 
-                /* Restore tone indicator */
+                /* Restore tone & flag indicator */
 
                 $('#btnTone').html('<span class="fa fa-meh-o fa-lg tone-color"></span>');
+                $('#btnFlag').html('<span class="fa fa-flag-o fa-lg tone-color"></span>');
             }
             else
             {
                 var resultObject = eval(data);
                 var resultObjectTone = resultObject[0];
                 var resultObjectPhrases = resultObject[1];
+                var resultObjectFlag = resultObject[2];
                 var pressureCount = 0;
                 var opportunityCount = 0; 
                 var rationalizationCount = 0;
+                var pressureHeight = 30;
+                var opportunityHeight = 40;
+                var rationalizationHeight = 20;
+                var flagHeight = 10; 
+                var totalHeight = 0;
 
                 if (resultObjectTone == true) $('#btnTone').html('<span class="fa fa-frown-o fa-lg tone-color"></span>');
                 else $('#btnTone').html('<span class="fa fa-meh-o fa-lg tone-color"></span>');
+
+                if (resultObjectFlag == true) $('#btnFlag').html('<span class="fa fa-flag fa-lg tone-color"></span>');
+                else $('#btnFlag').html('<span class="fa fa-flag-o fa-lg tone-color"></span>');
 
                 for(var i = 0; i < resultObjectPhrases.length; i++) 
                 {
@@ -663,13 +685,62 @@ $('#simulatorForm button').click(function(e) {
 
                 /* Expert deductions */
 
-                if (pressureCount != 0 && opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("100% unethical behavior");
-                else if (pressureCount != 0 && opportunityCount != 0) $('#deductionPercentage').text("70% unethical behavior");
-                else if (pressureCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("80% unethical behavior");
-                else if (opportunityCount != 0 && rationalizationCount != 0) $('#deductionPercentage').text("50% unethical behavior");
-                else if (pressureCount != 0) $('#deductionPercentage').text("10% unethical behavior");
-                else if (opportunityCount != 0) $('#deductionPercentage').text("20% unethical behavior");
-                else if (rationalizationCount != 0) $('#deductionPercentage').text("15% unethical behavior");
+                if (pressureCount != 0 && opportunityCount != 0 && rationalizationCount != 0) 
+                {
+                    totalHeight = pressureHeight + opportunityHeight + rationalizationHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (pressureCount != 0 && opportunityCount != 0) 
+                {
+                    totalHeight = pressureHeight + opportunityHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (pressureCount != 0 && rationalizationCount != 0) 
+                {
+                    totalHeight = pressureHeight + rationalizationHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (opportunityCount != 0 && rationalizationCount != 0) 
+                {
+                    totalHeight = opportunityHeight + rationalizationHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (pressureCount != 0) 
+                {
+                    totalHeight = pressureHeight;;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (opportunityCount != 0) 
+                {
+                    totalHeight = opportunityHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
+                else if (rationalizationCount != 0) 
+                {
+                    totalHeight = rationalizationHeight;
+
+                    if (resultObjectFlag == true) totalHeight = totalHeight + flagHeight;
+
+                    $('#deductionPercentage').text(totalHeight+"% unethical behavior");
+                }
 
                 /* Restore triangulating button */ 
 

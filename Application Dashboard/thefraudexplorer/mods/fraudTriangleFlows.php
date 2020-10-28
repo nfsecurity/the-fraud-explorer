@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Fraud Tree
  */
@@ -48,9 +48,10 @@ include "../lbs/cryptography.php";
         padding-top: 10px;
     }
 
-    .window-footer-config
+    .window-footer-workflow
     {
-        padding: 0px 0px 0px 0px;
+        margin: 15px 0px 0px 0px;
+        padding: 15px 0px 0px 0px;
     }
 
     .master-container-workflows
@@ -135,7 +136,7 @@ include "../lbs/cryptography.php";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
-    .select-option-styled-interval, .select-option-styled-tone
+    .select-option-styled-interval, .select-option-styled-tone, .select-option-styled-flag
     {
         width: 100%;
         height: 30px;
@@ -143,7 +144,7 @@ include "../lbs/cryptography.php";
         padding-left: 10px;
     }
 
-    .select-option-styled-interval .list, .select-option-styled-tone .list
+    .select-option-styled-interval .list, .select-option-styled-tone .list, .select-option-styled-flag .list
     {
         width: 100%;
         max-height: 200px;
@@ -331,8 +332,8 @@ include "../lbs/cryptography.php";
         border-left: 0px solid gray;
         border-right: 0px solid gray;
         background-color: white;
-        min-width: 328px;
-        width: 328px;
+        min-width: 268px;
+        width: 268px;
         text-align: center;
         padding: 0px 0px 0px 5px;
         height: 30px;
@@ -340,7 +341,7 @@ include "../lbs/cryptography.php";
         border-radius: 5px 5px 0px 0px;
     }
 
-    .table-th-flows-interval, .table-th-flows-tone
+    .table-th-flows-interval, .table-th-flows-tone, .table-th-flows-flag
     {
         font-family: 'FFont-Bold', sans-serif; font-size:12px;
         border-bottom: 0px solid gray;
@@ -443,8 +444,8 @@ include "../lbs/cryptography.php";
         border-top: 0px solid white;
         border-left: 0px solid white;
         border-bottom: 0px solid white;
-        width: 328px;
-        max-width: 328px;
+        width: 268px;
+        max-width: 268px;
         height: 30px;
         min-height: 30px;
         padding: 0px 0px 0px 5px;
@@ -461,7 +462,7 @@ include "../lbs/cryptography.php";
         text-overflow: ellipsis;
     }
 
-    .table-td-flows-interval, .table-td-flows-tone
+    .table-td-flows-interval, .table-td-flows-tone, .table-td-flows-flag
     {
         border-right: 2px solid white;
         border-top: 0px solid white;
@@ -646,10 +647,24 @@ include "../lbs/cryptography.php";
         </div>
 
         <div class="master-container-workflows">
-            <div class="left-container-flow">              
+            <div class="left-container-flow">        
+                
+                <div style="width: 70%; display: inline-block; vertical-align: top;">
                     
-                <p class="title-config">Workflow identification</p><br>
-                <input type="text" class="code input-value-text" id="workflowName" name="workflowName" value="" placeholder="Workflow name" />
+                    <p class="title-config">Workflow identification</p><br>
+                    <input type="text" class="code input-value-text" id="workflowName" name="workflowName" value="" placeholder="Workflow name" />
+
+                </div>
+
+                <div style="width: 28%; display: inline-block; vertical-align: top;">
+
+                    <p class="title-config">Flag</p><br>
+                    <select class="select-option-styled-flag wide" name="workflowFlag" id="workflowFlag">
+                        <option value="1">Flag</option>
+                        <option value="0" selected="selected">All types</option>
+                    </select>  
+
+                </div>
                     
             </div>
 
@@ -726,6 +741,7 @@ include "../lbs/cryptography.php";
                 <th class="table-th-flows-name" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Workflow name</th>
                 <th class="table-th-flows-workflow" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Fraud Triangle Flow</th>
                 <th class="table-th-flows-interval" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Range</th>
+                <th class="table-th-flows-flag" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Flag</th>
                 <th class="table-th-flows-tone" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Tone</th>
                 <th class="table-th-flows-custodian" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Custodian</th>
                 <th class="table-th-flows-triggers" style="text-align: left;"><span class="fa fa-bookmark-o font-icon-color fa-padding"></span>Hits</th>
@@ -745,6 +761,7 @@ include "../lbs/cryptography.php";
                     echo '<td class="table-td-flows-name"><div class="workflowCheck"><input type="checkbox" id="'.$labelCheckbox.'" name="workflowSelection[]" value="'.$workflowEntry['name'].'"><label for="'.$labelCheckbox.'"><span></span>'.$workflowEntry['name'].'</label></div></td>';
                     echo '<td class="table-td-flows-workflow"><p class="mightOverflow"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['workflow'].'</p></td>';
                     echo '<td class="table-td-flows-interval"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['interval'].'</td>';
+                    echo '<td class="table-td-flows-flag"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['flag'].'</td>';
                     echo '<td class="table-td-flows-tone"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['tone'].'</td>';
                     echo '<td class="table-td-flows-custodian"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$workflowEntry['custodian'].'</td>';
 
@@ -770,10 +787,8 @@ include "../lbs/cryptography.php";
 
             </tbody>
         </table>
-        <br>
 
-        <div class="modal-footer window-footer-config">
-            <br>
+        <div class="modal-footer window-footer-workflow">
                 
                 <?php    
                 

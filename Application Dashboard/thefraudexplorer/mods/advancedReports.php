@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Advanced Reports
  */
@@ -370,9 +370,15 @@ $_SESSION['processingStatus'] = "notstarted";
                 <input type="text" name="excluded" disabled="disabled" id="excluded" autocomplete="off" placeholder="me parece injusto, por una buena causa" class="input-value-text" style="text-indent:5px;">   
                 <div style="line-height:6px; border: 1px solid white;"><br></div>
 
-                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
-                    <label class="btn btn-default btn-sm active" id="button-all-phrases" style="width: 100%; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: left; width: 133px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm active" id="button-all-phrases" style="float: left; width: 133px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
                         <input type="checkbox" name="allphrases" onchange="checkboxAllPhrasesButton()" id="checkbox-all-phrases" value="allphrases" autocomplete="off" checked>I want all phrases
+                    </label>
+                </div>
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="float: right; width: 133px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="btn btn-default btn-sm" id="button-all-flags" style="float: right; width: 133px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important; font-family: Verdana, sans-serif; font-size: 12px !important;">
+                        <input type="checkbox" name="flagsonly" onchange="checkboxFlagsButton()" id="checkbox-flags" value="flagsonly" autocomplete="off">I want flags only
                     </label>
                 </div>
 
@@ -639,6 +645,23 @@ function getstatus()
     {
         var checkbox = document.getElementById('checkbox-all-phrases');
         var checkboxGeneral = document.getElementById('button-all-phrases');
+
+        if(checkbox.checked === true)
+        {
+            $('#excluded').attr("disabled", "disabled");
+            checkboxGeneral.style.background = "#E0E0E0";
+        }
+        else
+        {
+            $('#excluded').removeAttr("disabled");
+            checkboxGeneral.style.background = "white";
+        }
+    }
+
+    function checkboxFlagsButton()
+    {
+        var checkbox = document.getElementById('checkbox-flags');
+        var checkboxGeneral = document.getElementById('button-all-flags');
 
         if(checkbox.checked === true)
         {

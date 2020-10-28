@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for top menu
  */
@@ -101,7 +101,7 @@ include "../lbs/closeDBconn.php";
         <a href="../endPoints" id="elm-endpoints">Endpoints</a>
     </li>
     <li class="li">
-        <a href="../mods/setupRuleset" data-toggle="modal" data-target="#ruleset" href="#" id="elm-ruleset">Rules</a>
+        <a href="../mods/setupRuleset" data-toggle="modal" data-target="#ruleset" class="topmenu-ruleset" href="#" id="elm-ruleset">Rules</a>
     </li>
 
     <?php
@@ -112,18 +112,18 @@ include "../lbs/closeDBconn.php";
     if ($session->domain == "all")
     {
         echo '<li class="li">';
-        echo '<a href="../mods/rolesConfig" data-toggle="modal" data-target="#roles" href="#" id="elm-roles">Roles</a>';
+        echo '<a href="../mods/rolesConfig" data-toggle="modal" data-target="#roles" class="topmenu-roles" href="#" id="elm-roles">Roles</a>';
         echo '</li>';
     }
     
     ?>
     
     <li class="li">
-        <a href="../mods/mainConfig" data-toggle="modal" data-target="#confirm-config" href="#" id="elm-configuration">Setup</a>
+        <a href="../mods/mainConfig" data-toggle="modal" data-target="#confirm-config" class="topmenu-setup" href="#" id="elm-configuration">Setup</a>
     </li>
     
     <li class="li">
-        <a href="../mods/maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" href="#" id="elm-maintenance">Maintenance</a>
+        <a href="../mods/maintenancePurge" data-toggle="modal" data-target="#confirm-maintenance" class="topmenu-maintenance" href="#" id="elm-maintenance">Maintenance</a>
     </li>
 
     <li style="float:right">
@@ -177,7 +177,7 @@ include "../lbs/closeDBconn.php";
 
 <div class="modal" id="ruleset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog vertical-align-center" style="width: 690px;">
             <div class="modal-content">
                 <div class="modal-body">
                     <p class="debug-url window-debug"></p>
@@ -213,3 +213,39 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
 }
 
 ?>
+
+<!-- Modal for setup dialog -->
+
+<script>
+    $('#confirm-config').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.topmenu-setup').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for maintenance -->
+
+<script>
+    $('#confirm-maintenance').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.topmenu-maintenance').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for ruleset -->
+
+<script>
+    $('#ruleset').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.topmenu-ruleset').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for roles -->
+
+<script>
+    $('#roles').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.topmenu-roles').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>

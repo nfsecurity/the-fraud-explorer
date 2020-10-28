@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for dashboard
  */
@@ -314,7 +314,7 @@ $_SESSION['rulesetScope'] = "ALL";
 
         <div class="modal" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
+                <div class="modal-dialog vertical-align-center" style="width: 683px;">
                     <div class="modal-content">
                         <div class="modal-body">
                             <p class="debug-url window-debug"></p>

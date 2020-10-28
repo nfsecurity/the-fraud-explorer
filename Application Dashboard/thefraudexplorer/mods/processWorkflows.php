@@ -8,8 +8,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for process Worlflows
  */
@@ -68,6 +68,7 @@ else if (isset($_POST['add']))
 
     if (isset($_POST['workflowInterval']) && $_POST['workflowInterval'] != "") $workflowInterval = filter($_POST['workflowInterval']);
     if (isset($_POST['workflowTone']) && $_POST['workflowTone'] != "") $workflowTone = filter($_POST['workflowTone']);
+    if (isset($_POST['workflowFlag']) && $_POST['workflowFlag'] != "") $workflowFlag = filter($_POST['workflowFlag']);
     if (isset($_POST['workflowDomain'])) $workflowDomain = filter($_POST['workflowDomain']);
 
     if (isset($_POST['custodianEmail']) && $_POST['custodianEmail'] != "") $custodianEmail = filter($_POST['custodianEmail']);
@@ -84,7 +85,7 @@ else if (isset($_POST['add']))
 
     /* Flows storage */
 
-    mysqli_query($connection, sprintf("INSERT INTO t_workflows values('%s', '%s', '%d', '%s', '%d', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail, $workflowTone));
+    mysqli_query($connection, sprintf("INSERT INTO t_workflows (`name`, `workflow`, `interval`, `custodian`, `tone`, `flag`, `triggers`) values('%s', '%s', '%d', '%s', '%d', '%d', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail, $workflowTone, $workflowFlag));
 
     $msg = "Successfully added workflow";
 }

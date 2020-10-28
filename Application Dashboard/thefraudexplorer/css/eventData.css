@@ -7,8 +7,8 @@
 * Licensed under GNU GPL v3
 * https://www.thefraudexplorer.com/License
 *
-* Date: 2020-08
-* Revision: v1.4.7-aim
+* Author: jrios@nofraud.la
+* Version code-name: nemesis
 *
 * Description: CSS Code
 */
@@ -263,8 +263,8 @@ th
     width: 82px;
     display: table-cell;
     white-space: nowrap;
-    text-align: left;
-    padding: 0px 0px 0px 10px;
+    text-align: center;
+    padding: 0px 10px 0px 0px;
 }
 
 .phrasetypedth
@@ -277,7 +277,21 @@ th
     display: table-cell;
     white-space: nowrap;
     text-align: left;
-    padding: 0px 0px 0px 10px;
+    padding: 0px 0px 0px 15px;
+}
+
+.flagsth
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+    white-space: nowrap;
+    color: #555555;
+    text-align: left;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
+    padding-right: 18px;
 }
 
 .falseth
@@ -287,11 +301,11 @@ th
     font-family: 'FFont-Bold', sans-serif; font-size: 12px;
     white-space: nowrap;
     color: #555555;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
-    padding-right: 10px;
+    width: 50px;
+    min-width: 50px;
+    padding-right: 17px;
 }
 
 .detailstd
@@ -404,6 +418,21 @@ th
     text-decoration: none;
 }
 
+.flagstd
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    white-space: nowrap;
+    background:#f7f7f7;
+    height: 66px;
+    text-align: left;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
+    padding-left: 4px;
+}
+
 .falsetd
 {
     overflow: hidden;
@@ -412,10 +441,11 @@ th
     white-space: nowrap;
     background:#f7f7f7;
     height: 66px;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
+    width: 50px;
+    min-width: 50px;
+    padding-left: 2px;
 }
 
 .detailsth-all
@@ -490,8 +520,8 @@ th
     width: 82px;
     display: table-cell;
     white-space: nowrap;
-    text-align: left;
-    padding: 0px 0px 0px 10px;
+    text-align: center;
+    padding: 0px 8px 0px 0px;
 }
 
 .phrasetypedth-all
@@ -504,7 +534,20 @@ th
     display: table-cell;
     white-space: nowrap;
     text-align: left;
-    padding: 0px 0px 0px 10px;
+    padding: 0px 0px 0px 15px;
+}
+
+.flagsth-all
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+    white-space: nowrap;
+    color: #555555;
+    padding-right: 18px;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
 }
 
 .falseth-all
@@ -516,9 +559,9 @@ th
     color: #555555;
     text-align: center;
     vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
-    padding-right: 10px;
+    width: 50px;
+    min-width: 50px;
+    padding-right: 17px;
 }
 
 .detailstd-all
@@ -640,6 +683,20 @@ th
     text-decoration: none;
 }
 
+.flagstd-all
+{
+    overflow: hidden;
+    display: table-cell;
+    font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
+    white-space: nowrap;
+    background:#f7f7f7;
+    text-align: left;
+    vertical-align: middle;
+    width: 50px;
+    min-width: 50px;
+    padding-left: 4px;
+}
+
 .falsetd-all
 {
     overflow: hidden;
@@ -647,10 +704,11 @@ th
     font-family: 'FFont', sans-serif; font-size: 12px; color: #474747;
     white-space: nowrap;
     background:#f7f7f7;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
-    width: 100px;
-    min-width: 100px;
+    width: 50px;
+    min-width: 50px;
+    padding-left: 2px;
 }
 
 #footer
@@ -1013,9 +1071,11 @@ th
     color: #808080;
 }
 
-.btn-metrics
+.btn-metrics, .btn-flag, .btn-mark
 {
     height: 30px;
+    width: 42px;
+    max-width: 42px;
     vertical-align: middle;
 }
 

@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Phrase viewer
  */
@@ -235,6 +235,17 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
         bottom: 20;
         outline: 0 !important;
         height: 34px;
+        width: 42px;
+    }
+
+    .btn-flagphrases
+    {
+        position: absolute;
+        left: 62;
+        bottom: 20;
+        outline: 0 !important;
+        height: 34px;
+        width: 42px;
     }
 
 </style>
@@ -398,11 +409,16 @@ $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
         <?php
 
             $messageTone = "0";
+            $messageFlag = "0";
 
             if (isset($eventPhrase['hits']['hits'][0]['_source']['messageTone'])) $messageTone = $eventPhrase['hits']['hits'][0]['_source']['messageTone'];
+            if (isset($eventPhrase['hits']['hits'][0]['_source']['messageFlag'])) $messageFlag = $eventPhrase['hits']['hits'][0]['_source']['messageFlag'];
 
             if ($messageTone == 0) echo '<button class="btn btn-default btn-tone"><span class="fa fa-meh-o fa-lg tone-color"></span></button>';
             else echo '<button class="btn btn-default btn-tone"><span class="fa fa-frown-o fa-lg tone-color"></span></button>';
+
+            if ($messageFlag == 0) echo '<button class="btn btn-default btn-flagphrases"><span class="fa fa-flag-o fa-lg tone-color"></span></button>';
+            else echo '<button class="btn btn-default btn-flagphrases"><span class="fa fa-flag fa-lg tone-color"></span></button>';
 
         ?>
 

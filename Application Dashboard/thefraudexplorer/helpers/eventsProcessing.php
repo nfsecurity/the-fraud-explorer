@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for paint main events list
  */
@@ -89,6 +89,9 @@ if ($_GET['col'] != "")
             case "3":
                 $sortColumnSelected = "agentId";
                 break;
+            case "7":
+                $sortColumnSelected = "messageFlag";
+                break;
         }
     }
     else
@@ -100,6 +103,9 @@ if ($_GET['col'] != "")
                 break;
             case "2":
                 $sortColumnSelected = "alertType";
+                break;
+            case "6":
+                $sortColumnSelected = "messageFlag";
                 break;
         }
     }
@@ -175,6 +181,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
         $windowColumn = '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
         $metricsColumn = '&nbsp;METRS';
         $phraseColumn = '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
+        $flagsColumn = '<center>FLAG</center>';
         $markColumn = '<center>MARK</center>';
 
         $columns = Array(
@@ -185,6 +192,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             $windowColumn, 
             $metricsColumn, 
             $phraseColumn, 
+            $flagsColumn,
             $markColumn
         );
 
@@ -205,6 +213,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
             $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+            $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $endPoint = explode("_", $result['_source']['agentId']);
@@ -213,7 +223,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
             $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
             $regExpression = htmlentities($result['_source']['phraseMatch']);
-            $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, gender, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, gender, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+            $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, gender, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, gender, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
             $userDomain = mysqli_fetch_assoc($queryUserDomain);
                         
             /* Details */
@@ -239,22 +249,23 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             $countOpportunity = $userDomain['opportunity'];
             $countRationalization = $userDomain['rationalization'];
             $score = $userDomain['score'];
+            $flags = $userDomain['flags'];
                                 
             if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
             else $dataRepresentation = "0";
 
             if ($userDomain["name"] == NULL || $userDomain["name"] == "NULL")
             {
-                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
             }
             else
             {
                 $endpointName = $userDomain['name']."@".$userDomain['domain'];
-                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
             }
             
             /* Application title */
@@ -269,6 +280,10 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
         
             $phraseColumnData = '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
             
+            /* Show flag */
+
+            $flagsColumnData = '<div class="btn btn-default btn-flag" style="cursor: default;"><span class="'.$flagStyles.'" style="font-size: 16px;"></span></div>';
+
             /* Mark false positive */
             
             $index = $result['_index'];
@@ -291,8 +306,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
 
             $markColumnData = '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
             
-            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a>';
-            else $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-gray"></span></a>';
+            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-on fa-lg font-icon-color-gray"></span></div></a>';
+            else $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-off fa-lg font-icon-color-gray"></span></div></a>';
 
             /* Final ROW constructor */
 
@@ -304,6 +319,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
                 $windowColumn => $windowColumnData,
                 $metricsColumn => $metricsColumnData,
                 $phraseColumn => $phraseColumnData,
+                $flagsColumn => $flagsColumnData,
                 $markColumn => $markColumnData
             );
         }
@@ -318,6 +334,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
         $windowColumn = '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
         $metricsColumn = '&nbsp;METRS';
         $phraseColumn = '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
+        $flagsColumn = '<center>FLAG</center>';
         $markColumn = '<center>MARK</center>';
 
         $columns = Array(
@@ -326,7 +343,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             $eventTypeColumn,
             $windowColumn, 
             $metricsColumn, 
-            $phraseColumn, 
+            $phraseColumn,
+            $flagsColumn,
             $markColumn
         );
 
@@ -346,6 +364,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));   
             $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
             $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+            $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
             $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
@@ -385,6 +405,10 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
 
             $phraseColumnData = '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
 
+            /* Show flag */
+
+            $flagsColumnData = '<div class="btn btn-default btn-flag" style="cursor: default;"><span class="'.$flagStyles.'" style="font-size: 16px;"></span></div>';
+
             /* Mark false positive */
         
             $urlEventValue="http://127.0.0.1:9200/".$index."/".$type."/".$regid;
@@ -402,8 +426,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             
             $markColumnData = '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
         
-            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
-            else $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
+            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-on fa-lg font-icon-color-gray"></span></div></a>';
+            else $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-off fa-lg font-icon-color-gray"></span></div></a>';
 
             /* Final ROW constructor */
 
@@ -414,6 +438,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
                 $windowColumn => $windowColumnData,
                 $metricsColumn => $metricsColumnData,
                 $phraseColumn => $phraseColumnData,
+                $flagsColumn => $flagsColumnData,
                 $markColumn => $markColumnData
             );
         }
@@ -459,8 +484,9 @@ else
         $eventTypeColumn = 'BEHAVIOR';
         $endpointColumn = '<span class="fa fa-briefcase fa-lg font-icon-color-gray-low awfont-padding-right"></span>HUMAN AUDIENCE';
         $windowColumn = '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
-        $metricsColumn = '&nbsp;METRS';
+        $metricsColumn = 'METRS';
         $phraseColumn = '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
+        $flagsColumn = '<center>FLAG</center>';
         $markColumn = '<center>MARK</center>';
 
         $columns = Array(
@@ -471,6 +497,7 @@ else
             $windowColumn, 
             $metricsColumn, 
             $phraseColumn, 
+            $flagsColumn,
             $markColumn
         );
 
@@ -497,11 +524,13 @@ else
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $endPoint = explode("_", $result['_source']['agentId']);
             $agentId = $result['_source']['agentId'];
+            $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+            $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $endpointDECSQL = $endPoint[0];
             $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
             $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
             $regExpression = htmlentities($result['_source']['phraseMatch']);
-            $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, gender, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, gender, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
+            $queryUserDomain = mysqli_query($connection, sprintf("SELECT agent, name, gender, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, gender, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) as tbl WHERE agent='%s' group by agent order by score desc", $endPoint[0]));
             $userDomain = mysqli_fetch_assoc($queryUserDomain);
                         
             /* Details */
@@ -527,22 +556,23 @@ else
             $countOpportunity = $userDomain['opportunity'];
             $countRationalization = $userDomain['rationalization'];
             $score = $userDomain['score'];
+            $flags = $userDomain['flags'];
                                 
             if ($totalSystemWords != "0") $dataRepresentation = ($totalWordHits * 100)/$totalSystemWords;
             else $dataRepresentation = "0";
 
             if ($userDomain["name"] == NULL || $userDomain["name"] == "NULL")
             {
-                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
             }
             else
             {
                 $endpointName = $userDomain['name']."@".$userDomain['domain'];
-                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
-                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName);
+                if ($userDomain["gender"] == "male") $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else if ($userDomain["gender"] == "female") $endpointColumnData = endpointInsights("eventData", "female", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
+                else $endpointColumnData = endpointInsights("eventData", "male", $endpointDec, $totalWordHits, $countPressure, $countOpportunity, $countRationalization, $score, $dataRepresentation, $endpointName, $flags);
             }
             
             /* Application title */
@@ -557,6 +587,10 @@ else
         
             $phraseColumnData = '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
             
+            /* Show flag */
+
+            $flagsColumnData = '<div class="btn btn-default btn-flag" style="cursor: default;"><span class="'.$flagStyles.'" style="font-size: 16px;"></span></div>';
+
             /* Mark false positive */
             
             $index = $result['_index'];
@@ -579,8 +613,8 @@ else
 
             $markColumnData = '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=allevents" data-toggle="modal" data-target="#eventMarking" href="#">';
             
-            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a>';
-            else $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-gray"></span></a>';
+            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-on fa-lg font-icon-color-gray"></span></div></a>';
+            else $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-off fa-lg font-icon-color-gray"></span></div></a>';
 
             /* Final ROW constructor */
 
@@ -592,6 +626,7 @@ else
                 $windowColumn => $windowColumnData,
                 $metricsColumn => $metricsColumnData,
                 $phraseColumn => $phraseColumnData,
+                $flagsColumn => $flagsColumnData,
                 $markColumn => $markColumnData
             );
         }
@@ -606,6 +641,7 @@ else
         $windowColumn = '<span class="fa fa-list-alt fa-lg font-icon-color-gray-low awfont-padding-right"></span>APPLICATION AND INSTANCE';
         $metricsColumn = '&nbsp;METRS';
         $phraseColumn = '<span class="fa fa-wpforms fa-lg font-icon-color-gray-low awfont-padding-right"></span>IS/EXPRESSING';
+        $flagsColumn = '<center>FLAG</center>';
         $markColumn = '<center>MARK</center>';
 
         $columns = Array(
@@ -614,7 +650,8 @@ else
             $eventTypeColumn,
             $windowColumn, 
             $metricsColumn, 
-            $phraseColumn, 
+            $phraseColumn,
+            $flagsColumn,
             $markColumn
         );
 
@@ -636,6 +673,8 @@ else
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));   
             $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
             $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+            $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";                 
             $searchResult = searchJsonFT($jsonFT, $searchValue, $endpointDECSQL, $queryRuleset);
@@ -675,6 +714,10 @@ else
 
             $phraseColumnData = '<a class="event-phrase-viewer" href="mods/eventPhrases?id='.$result['_id'].'&ex='.encRijndael($result['_index']).'&xp='.encRijndael($regExpression).'&se='.encRijndael($wordTyped).'&te='.encRijndael($date).'&nt='.encRijndael($endpointId).'&pe='.encRijndael(strtoupper($result['_source']['alertType'])).'&le='.encRijndael($windowTitle).'" data-toggle="modal" data-target="#event-phrases" href="#"><span class="fa fa-pencil-square-o fa-lg font-icon-color-gray fa-padding"></span>'.$wordTyped.'</a>';
 
+            /* Show flag */
+
+            $flagsColumnData = '<div class="btn btn-default btn-flag" style="cursor: default;"><span class="'.$flagStyles.'" style="font-size: 16px;"></span></div>';
+
             /* Mark false positive */
         
             $urlEventValue="http://127.0.0.1:9200/".$index."/".$type."/".$regid;
@@ -692,8 +735,8 @@ else
             
             $markColumnData = '<a class="false-positive" href="mods/eventMarking?id='.encRijndael($result['_id']).'&nt='.encRijndael($agentId).'&ex='.encRijndael($result['_index']).'&pe='.encRijndael($result['_type']).'&er=singleevents" data-toggle="modal" data-target="#eventMarking" href="#">';
         
-            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-color-green"></span></a></td>';
-            else $markColumnData = $markColumnData.'<span class="fa fa-check-square fa-lg font-icon-gray"></span></a></td>';
+            if ($falsePositiveValue == "0") $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-on fa-lg font-icon-color-gray"></span></div></a>';
+            else $markColumnData = $markColumnData.'<div class="btn btn-default btn-mark" style="padding: 8px 0px 0px 0px;"><span class="fa fa-toggle-off fa-lg font-icon-color-gray"></span></div></a>';
 
             /* Final ROW constructor */
 
@@ -704,6 +747,7 @@ else
                 $windowColumn => $windowColumnData,
                 $metricsColumn => $metricsColumnData,
                 $phraseColumn => $phraseColumnData,
+                $flagsColumn => $flagsColumnData,
                 $markColumn => $markColumnData
             );
         }

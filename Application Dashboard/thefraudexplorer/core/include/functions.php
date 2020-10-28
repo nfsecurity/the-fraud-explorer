@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  * 
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Functions extension file
  */
@@ -345,16 +345,21 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
                         $domain = getUserDomain($agentID);
                         $matchCount = count($matches[0]);
                         $tone = "0";
+                        $flag = "0"; 
 
                         /* Check phrase tone */
 
                         if (checkTone($stringOfWords, $lib) == true) $tone = "1";
 
+                        /* Check phrase flag */
+
+                        if (strpos($field, '*') !== false) $flag = "1";
+
                         /* Prepare the message to send through socket */
 
                         for ($j=0; $j<$matchCount; $j++)
                         {
-                            $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".$matchCount." p: ".$matches[0][$j]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0 n: ".$tone;
+                            $msgData = $matchTime." ".$agentID." ".$domain." TextEvent - ".$term." e: ".$timeStamp." w: ".str_replace('/', '', $termPhrase)." s: ".$value." m: ".$matchCount." p: ".$matches[0][$j]." t: ".$windowTitle." z: ".encRijndael($stringOfWords)." f: 0 n: ".$tone . " g: ".$flag;
                             $lenData = strlen($msgData);
 
                             /* Send message to Logstash */
@@ -365,7 +370,7 @@ function parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stri
 
                             /* Send message to Logfile */
 
-                            logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][$j]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".$matchCount."] Tone[".$tone."]");
+                            logToFileAndSyslog("LOG_ALERT", $configFile['log_file'], "[INFO] - MatchTime[".$matchTime."] - EventTime[".$timeStamp."] AgentID[".$agentID."] TextEvent - Term[".$term."] Window[".$windowTitle."] Word[".$matches[0][$j]."] Phrase[".str_replace('/', '', $termPhrase)."] Score[".$value."] TotalMatches[".$matchCount."] Tone[".$tone."] Flag[".$flag."]");
                         
                             $countOutput++;
                         }                   
@@ -540,12 +545,14 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
                 $matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
                 $matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);
                 $matchesPressure = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['p'], $configFile_es_alerter_index);
+                $messageFlags = countMessageFlags($row_a['agent'], $configFile_es_alerter_index);
                 $totalWords = $totalWordCount['count'];
                 $totalPressure = $matchesPressure['count'];
                 $totalOpportunity = $matchesOpportunity['count'];
                 $totalRationalization = $matchesRationalization['count'];
+                $totalFlags = $messageFlags['count'];
 
-                $result = mysqli_query($connection, "UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.' WHERE agent='".$row_a['agent']."'");
+                $result = mysqli_query($connection, "UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.', flags='.$totalFlags.' WHERE agent='".$row_a['agent']."'");
 
                 exit();
             }
@@ -589,10 +596,23 @@ function checkPhrases($string, $language)
     pspell_config_mode($config_dic, PSPELL_FAST);
     $dictionary = pspell_new_config($config_dic);
     $replacement_suggest = false;
+    $comma = false;
+    $dot = false;
     $string = explode(' ', $string);
 
     foreach ($string as $key => $value)
     {
+        if (strpos($value, ',') !== false)
+        {
+            $comma = true;
+            $value = str_replace(",", "", $value);
+        }
+        else if (strpos($value, '.') !== false)
+        {
+            $dot = true;
+            $value = str_replace(".", "", $value);
+        }
+
         if(!pspell_check($dictionary, $value))
         {
             $suggestion = pspell_suggest($dictionary, $value);
@@ -601,8 +621,8 @@ function checkPhrases($string, $language)
             {
                 if(strtolower($suggestion[0]) != strtolower($value))
                 {
-                    if (strpos($value, ',') !== false) $string[$key] = $suggestion[0] . ",";
-                    else if (strpos($value, '.') !== false) $string[$key] = $suggestion[0] . ".";
+                    if ($comma == true) $string[$key] = $suggestion[0] . ",";
+                    else if ($dot == true) $string[$key] = $suggestion[0] . ".";
                     else $string[$key] = $suggestion[0];
                     $replacement_suggest = true;
                 }
@@ -809,14 +829,16 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
 
     /* Expert System Inference Engine */
 
-    $fraudTriangleHeight = ['pressure' => 50, 
-                            'opportunity' => 20, 
-                            'rationalization' => 30];
+    $fraudTriangleHeight = ['pressure' => 30, 
+                            'opportunity' => 40, 
+                            'rationalization' => 20];
+
+    $flagHeight = 10;
 
     $fraudProbability = ['almost' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['opportunity'] + $fraudTriangleHeight['rationalization'], 
-                        'very' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['rationalization'], 
+                        'very' => $fraudTriangleHeight['opportunity'] + $fraudTriangleHeight['rationalization'], 
                         'maybe' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['opportunity'], 
-                        'less' => $fraudTriangleHeight['opportunity'] + $fraudTriangleHeight['rationalization']];
+                        'less' => $fraudTriangleHeight['pressure'] + $fraudTriangleHeight['rationalization']];
 
     /* Main Logic */
 
@@ -839,6 +861,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                 $application = decRijndael($result['_source']['windowTitle']);
                 $timeStamp = date('Y-m-d h:i:s', strtotime($result['_source']['sourceTimestamp']));
                 $domain = $result['_source']['userDomain'];
+                $flag = $result['_source']['messageFlag'];
                 $alertID = $result['_id'];
                 $countTriangleMatch = AIparseFraudTrianglePhrases($fraudTriangleTerms, $stringOfWords, $jsonFT, $ruleset);
                 $deductionMatch = false;
@@ -853,6 +876,13 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                     $deductionMatch = true;
                     $matchReason = "POR";
                     $fraudProbDeduction = $fraudProbability['almost'];
+
+                    if ($flag != "0") 
+                    {
+                        $matchReason = $matchReason . "*";
+                        $fraudProbDeduction = $fraudProbDeduction + $flagHeight;
+                    }
+                    
                     $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
                 }
                 else if ($countTriangleMatch['pressure'] != 0 && $countTriangleMatch['opportunity'] != 0) 
@@ -864,6 +894,13 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                     $deductionMatch = true;
                     $matchReason = "PO";
                     $fraudProbDeduction = $fraudProbability['maybe'];
+
+                    if ($flag != "0") 
+                    {
+                        $matchReason = $matchReason . "*";
+                        $fraudProbDeduction = $fraudProbDeduction + $flagHeight;
+                    }
+
                     $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
                 }
                 else if ($countTriangleMatch['pressure'] != 0 && $countTriangleMatch['rationalization'] != 0)
@@ -875,6 +912,13 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                     $deductionMatch = true;
                     $matchReason = "PR";
                     $fraudProbDeduction = $fraudProbability['very'];
+
+                    if ($flag != "0") 
+                    {
+                        $matchReason = $matchReason . "*";
+                        $fraudProbDeduction = $fraudProbDeduction + $flagHeight;
+                    }
+
                     $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
                 }
                 else if ($countTriangleMatch['opportunity'] != 0 && $countTriangleMatch['rationalization'] != 0)
@@ -886,6 +930,13 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                     $deductionMatch = true;
                     $matchReason = "OR";
                     $fraudProbDeduction = $fraudProbability['less'];
+
+                    if ($flag != "0") 
+                    {
+                        $matchReason = $matchReason . "*";
+                        $fraudProbDeduction = $fraudProbDeduction + $flagHeight;
+                    }
+
                     $stringHistoryArchive = [$counter => [ 'phrase' => substr($stringOfWords, 0, 256)]];
                 }
 
@@ -926,7 +977,7 @@ function startWorkflows($ESAlerterIndex)
     /* Database */
 
     mysqli_query($connection, "DROP TABLE t_wevents"); 
-    mysqli_query($connection, "CREATE TABLE t_wevents (alertId varchar(512) PRIMARY KEY, indexId varchar(256) not null, department varchar(256) not null, agentId varchar(256) not null, alertType varchar(256) not null, eventTime datetime DEFAULT NULL, falsePositive int DEFAULT 0, messageTone int DEFAULT 0, domain varchar(256) not null, application varchar(1024) not null, phrase varchar(512) not null)");
+    mysqli_query($connection, "CREATE TABLE t_wevents (alertId varchar(512) PRIMARY KEY, indexId varchar(256) not null, department varchar(256) not null, agentId varchar(256) not null, alertType varchar(256) not null, eventTime datetime DEFAULT NULL, falsePositive int DEFAULT 0, messageTone int DEFAULT 0, messageFlag int DEFAULT 0, domain varchar(256) not null, application varchar(1024) not null, phrase varchar(512) not null)");
 
     /* Start */
 
@@ -940,10 +991,12 @@ function startWorkflows($ESAlerterIndex)
         $departmentQuery = mysqli_query($connection, sprintf("SELECT ruleset from t_agents WHERE agent='%s'", $result["_source"]["agentId"])); 
         $departmentResult = mysqli_fetch_assoc($departmentQuery);
         $messageTone = 0;
+        $messageFlag = 0;
 
         if (isset($result["_source"]["messageTone"])) $messageTone = $result["_source"]["messageTone"];
+        if (isset($result["_source"]["messageFlag"])) $messageFlag = $result["_source"]["messageFlag"];
 
-        mysqli_query($connection, sprintf("INSERT INTO t_wevents values('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s')", $result["_id"], $result["_index"], $departmentResult["ruleset"], $result["_source"]["agentId"], $result["_source"]["alertType"], $result["_source"]["eventTime"], $result["_source"]["falsePositive"], $result["_source"]["messageTone"], $result["_source"]["userDomain"], decRijndael($result['_source']['windowTitle']), decRijndael($result['_source']['wordTyped'])));    
+        mysqli_query($connection, sprintf("INSERT INTO t_wevents values('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%s', '%s', '%s')", $result["_id"], $result["_index"], $departmentResult["ruleset"], $result["_source"]["agentId"], $result["_source"]["alertType"], $result["_source"]["eventTime"], $result["_source"]["falsePositive"], $result["_source"]["messageTone"], $result["_source"]["messageFlag"], $result["_source"]["userDomain"], decRijndael($result['_source']['windowTitle']), decRijndael($result['_source']['wordTyped'])));    
     }
 
     $queryWorkflows = mysqli_query($connection, "SELECT * FROM t_workflows");
@@ -1062,15 +1115,16 @@ function startWorkflows($ESAlerterIndex)
                         $queryTrueWorkflow[$name][] = $query[1];
                         $superFinalQuery[$name] = $query[1];
 
-                        /* Search the workflow interval, custodian and tone */
+                        /* Search the workflow interval, custodian, flag and tone */
 
-                        $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                        $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                        while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                        while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                         {
                             $interval = $row["interval"];
                             $custodian = $row["custodian"];
                             $tone = $row["tone"];
+                            $flag = $row["flag"];
                         }      
 
                         /* Finally execute the query and populate triggered table */
@@ -1107,6 +1161,7 @@ function startWorkflows($ESAlerterIndex)
                                         $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
                                         $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                        $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                         $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                         $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                         $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1118,16 +1173,20 @@ function startWorkflows($ESAlerterIndex)
                                         $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                                     }
 
-                                    /* Check if the event was tone negative */
+                                    /* Check if the event was tone negative and have flags */
 
                                     $sumTones = 0;
                                     $proceedTones = false;
+                                    $sumFlags = 0;
+                                    $proceedFlags = false;
 
                                     foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                                    
-                                    if ($sumTones >= $tone) $proceedTones = true;
+                                    foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
 
-                                    if ($proceedTones == true)
+                                    if ($sumTones >= $tone) $proceedTones = true;
+                                    if ($sumFlags >= $flag) $proceedFlags = true;
+
+                                    if ($proceedTones == true && $proceedFlags == true)
                                     {
                                         $realMatches++;
 
@@ -1137,7 +1196,7 @@ function startWorkflows($ESAlerterIndex)
 
                                         $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                         include $mailEventWFPath;
-                                        mail($to, $subject, $message, $headers);
+                                        mail($to, $subject, wordwrap($message), $headers);
                                     }
                                 }
                             }
@@ -1173,16 +1232,17 @@ function startWorkflows($ESAlerterIndex)
 
             if(count($query) == 2)
             {
-                /* Search the workflow interval, custodian and tone */
+                /* Search the workflow interval, custodian, flag and tone */
 
-                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
                     $tone = $row["tone"];
-                }
+                    $flag = $row["flag"];
+                }      
 
                 /* Join the final query */
 
@@ -1222,6 +1282,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
                                 $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1233,16 +1294,20 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            /* Check at leat one event with specified tone if selected was negative */
+                            /* Check at least one event with specified tone if selected was negative and flag */
 
                             $sumTones = 0;
                             $proceedTones = false;
+                            $sumFlags = 0;
+                            $proceedFlags = false;
 
                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                            
-                            if ($sumTones >= $tone) $proceedTones = true;
+                            foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
 
-                            if ($proceedTones == true)
+                            if ($sumTones >= $tone) $proceedTones = true;
+                            if ($sumFlags >= $flag) $proceedFlags = true;
+
+                            if ($proceedTones == true && $proceedFlags == true)
                             {
                                 mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
@@ -1250,7 +1315,7 @@ function startWorkflows($ESAlerterIndex)
 
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
-                                mail($to, $subject, $message, $headers);
+                                mail($to, $subject, wordwrap($message), $headers);
                             }
                         }
                     }
@@ -1262,16 +1327,17 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 3)
             {
-                /* Search the workflow interval, custodian and tone */
+                /* Search the workflow interval, custodian, flag and tone */
 
-                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
                     $tone = $row["tone"];
-                }    
+                    $flag = $row["flag"];
+                }      
 
                 /* Join the final query */
 
@@ -1311,6 +1377,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
                                 $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1322,25 +1389,29 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                             /* Check at leat one event with specified tone if selected was negative */
+                            /* Check at least one event with specified tone if selected was negative and flag */
 
-                             $sumTones = 0;
-                             $proceedTones = false;
- 
-                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                             
-                             if ($sumTones >= $tone) $proceedTones = true;
- 
-                             if ($proceedTones == true)
-                             {
-                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s', '%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"]));
+                            $sumTones = 0;
+                            $proceedTones = false;
+                            $sumFlags = 0;
+                            $proceedFlags = false;
+
+                            foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
+                            foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
+
+                            if ($sumTones >= $tone) $proceedTones = true;
+                            if ($sumFlags >= $flag) $proceedFlags = true;
+
+                            if ($proceedTones == true && $proceedFlags == true)
+                            {
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                                 /* Send message alert */
 
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
-                                mail($to, $subject, $message, $headers);
-                             }
+                                mail($to, $subject, wordwrap($message), $headers);
+                            }
                         }
                     }
 
@@ -1351,16 +1422,17 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 4)
             {
-                /* Search the workflow interval, custodian and tone */
+                /* Search the workflow interval, custodian, flag and tone */
 
-                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
                     $tone = $row["tone"];
-                }      
+                    $flag = $row["flag"];
+                }
 
                 /* Join the final query */
 
@@ -1400,6 +1472,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
                                 $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1411,24 +1484,28 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            /* Check at leat one event with specified tone if selected was negative */
+                            /* Check at least one event with specified tone if selected was negative and flag */
 
                             $sumTones = 0;
                             $proceedTones = false;
+                            $sumFlags = 0;
+                            $proceedFlags = false;
 
                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                            
-                            if ($sumTones >= $tone) $proceedTones = true;
+                            foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
 
-                            if ($proceedTones == true)
+                            if ($sumTones >= $tone) $proceedTones = true;
+                            if ($sumFlags >= $flag) $proceedFlags = true;
+
+                            if ($proceedTones == true && $proceedFlags == true)
                             {
-                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"]));
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                                 /* Send message alert */
 
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
-                                mail($to, $subject, $message, $headers);
+                                mail($to, $subject, wordwrap($message), $headers);
                             }
                         }
                     }
@@ -1440,16 +1517,17 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 5)
             {
-                /* Search the workflow interval, custodian and tone */
+                /* Search the workflow interval, custodian, flag and tone */
 
-                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
                     $tone = $row["tone"];
-                } 
+                    $flag = $row["flag"];
+                }
 
                 /* Join the final query */
 
@@ -1489,6 +1567,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
     
                                 $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1500,24 +1579,28 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            /* Check at leat one event with specified tone if selected was negative */
+                            /* Check at least one event with specified tone if selected was negative and flag */
 
                             $sumTones = 0;
                             $proceedTones = false;
+                            $sumFlags = 0;
+                            $proceedFlags = false;
 
                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                            
-                            if ($sumTones >= $tone) $proceedTones = true;
+                            foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
 
-                            if ($proceedTones == true)
+                            if ($sumTones >= $tone) $proceedTones = true;
+                            if ($sumFlags >= $flag) $proceedFlags = true;
+
+                            if ($proceedTones == true && $proceedFlags == true)
                             {
-                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"]));
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                                 /* Send message alert */
 
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
-                                mail($to, $subject, $message, $headers);
+                                mail($to, $subject, wordwrap($message), $headers);
                             }
                         }
                     }
@@ -1529,16 +1612,17 @@ function startWorkflows($ESAlerterIndex)
             }
             else if(count($query) == 6)
             {
-                /* Search the workflow interval, custodian and tone */
+                /* Search the workflow interval, custodian, flag and tone */
 
-                $intervalCustodianToneQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
+                $intervalCustodianToneFlagQuery = mysqli_query($connection, sprintf("SELECT * FROM t_workflows WHERE name='%s'", $name));
 
-                while ($row = mysqli_fetch_array($intervalCustodianToneQuery)) 
+                while ($row = mysqli_fetch_array($intervalCustodianToneFlagQuery)) 
                 {
                     $interval = $row["interval"];
                     $custodian = $row["custodian"];
                     $tone = $row["tone"];
-                }  
+                    $flag = $row["flag"];
+                }
 
                 /* Join the final query */
 
@@ -1578,6 +1662,7 @@ function startWorkflows($ESAlerterIndex)
                                 $allEventsQueryResult = mysqli_fetch_assoc($allEventsQuery);
 
                                 $alert_eventTone[$i] = $allEventsQueryResult['messageTone'];
+                                $alert_eventFlag[$i] = $allEventsQueryResult['messageFlag'];
                                 $alert_eventDate[$i] = $allEventsQueryResult['eventTime'];
                                 $alert_eventAgentId = preg_split('/_/', $allEventsQueryResult['agentId']);
                                 $alert_eventEndpoint[$i] = $alert_eventAgentId[0];
@@ -1589,24 +1674,28 @@ function startWorkflows($ESAlerterIndex)
                                 $alert_eventPhrase[$i] = $allEventsQueryResult['phrase'];
                             }
 
-                            /* Check at leat one event with specified tone if selected was negative */
+                            /* Check at least one event with specified tone if selected was negative and flag */
 
                             $sumTones = 0;
                             $proceedTones = false;
+                            $sumFlags = 0;
+                            $proceedFlags = false;
 
                             foreach ($alert_eventTone as $key => $value) $sumTones = $sumTones + $value;
-                            
-                            if ($sumTones >= $tone) $proceedTones = true;
+                            foreach ($alert_eventFlag as $key => $value) $sumFlags = $sumFlags + $value;
 
-                            if ($proceedTones == true)
+                            if ($sumTones >= $tone) $proceedTones = true;
+                            if ($sumFlags >= $flag) $proceedFlags = true;
+
+                            if ($proceedTones == true && $proceedFlags == true)
                             {
-                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $row["alertIdA"] . " " . $row["alertIdB"] . " " . $row["alertIdC"] . " " . $row["alertIdD"] . " " . $row["alertIdE"] . " " . $row["alertIdF"]));
+                                mysqli_query($connection, sprintf("INSERT INTO t_wtriggers(date, name, ids) values('%s','%s','%s')", date('Y-m-d H:i:s.u'), $name, $idS));
 
                                 /* Send message alert */
 
                                 $mailEventWFPath = $configFile['php_document_root']."/lbs/mailEventWF.php";
                                 include $mailEventWFPath;
-                                mail($to, $subject, $message, $headers);
+                                mail($to, $subject, wordwrap($message), $headers);
                             }
                         }
                     }

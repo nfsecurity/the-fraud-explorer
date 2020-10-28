@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for graphic data
  */
@@ -270,17 +270,17 @@ include "../lbs/cryptography.php";
 
     if ($_SESSION['rulesetScope'] == "ALL")
     {
-        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";
-        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";                  
-        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
-        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE trianglesum > 0 GROUP BY agent ORDER BY score DESC";                  
+        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
     }
     else
     {
-        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
-        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
-        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
-        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQL_wOSampler = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' OR domain='thefraudexplorer.com' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
+        $queryEndpointsSQLDomain_wOSampler = "SELECT agent, name, ruleset, domain, flags, totalwords, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization, (SUM(pressure) + SUM(opportunity) + SUM(rationalization)) / 3 AS score, trianglesum FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, name, ruleset, heartbeat, domain, flags, totalwords, pressure, opportunity, rationalization, (pressure + opportunity + rationalization) AS trianglesum FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS tbl WHERE domain='".$session->domain."' AND ruleset = '".$_SESSION['rulesetScope']."' AND trianglesum > 0 GROUP BY agent ORDER BY score DESC";
     }
      
     if ($session->domain == "all")
@@ -318,6 +318,7 @@ include "../lbs/cryptography.php";
             <th class="table-th-graphdata-body">PRESS</th>
             <th class="table-th-graphdata-body">OPPRT</th>
             <th class="table-th-graphdata-body">RATNL</th>
+            <th class="table-th-graphdata-body">FLAGS</th>
             <th class="table-th-graphdata-body">SCORE</th>
         </thead>
         <tbody class="table-tbody-graphdata">
@@ -337,6 +338,7 @@ include "../lbs/cryptography.php";
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
                     $totalEvents = $endpointsFraud['pressure'] + $endpointsFraud['opportunity'] + $endpointsFraud['rationalization'];
+                    $countFlags = $endpointsFraud['flags'];
                                     
                     if ($totalEvents != 0) 
                     {
@@ -350,6 +352,7 @@ include "../lbs/cryptography.php";
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
                     echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countRationalization.'</td>';
+                    echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countFlags.'</td>';
                     echo '<td class="table-td-graphdata-score">'.number_format($totalEvents/3, 1).'</td>';
                     echo '</tr>';
                     
@@ -365,7 +368,7 @@ include "../lbs/cryptography.php";
     
     <?php
     
-    echo '<div class="footer-statistics-graphic"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the analytics graph</div>';
+    echo '<div class="footer-statistics-graphic"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the scatter plot analytics graph reflecting fraud triangle events</div>';
     
     ?>
     

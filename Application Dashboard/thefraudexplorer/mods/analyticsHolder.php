@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for Chart
  */
@@ -102,14 +102,14 @@ include "../lbs/cryptography.php";
                 if (samplerStatus($session->domain) == "enabled")
                 {
                     $queryEndpointsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryEndpointsGraphSQL = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQL = "SELECT agent, ruleset, pressure, rationalization, flags FROM (SELECT agent, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization, flags FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization, flags FROM (SELECT agent, flags, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization, flags FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
                 else
                 {
                     $queryEndpointsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryEndpointsGraphSQL = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQL = "SELECT agent, domain, ruleset, pressure, rationalization, flags FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization, flags FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
             }
             else
@@ -117,18 +117,18 @@ include "../lbs/cryptography.php";
                 if (samplerStatus($session->domain) == "enabled")
                 {
                     $queryEndpointsGraphSQLLeyend = "SELECT * FROM t_config";
-                    $queryEndpointsGraphSQLDomain = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE (domain='thefraudexplorer.com' OR domain='".$session->domain."') AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQL = "SELECT agent, ruleset, pressure, rationalization FROM (SELECT agent, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLDomain = "SELECT agent, ruleset, pressure, rationalization, flags FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='thefraudexplorer.com' OR domain='".$session->domain."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE (domain='thefraudexplorer.com' OR domain='".$session->domain."') AND ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQL = "SELECT agent, ruleset, pressure, rationalization, flags FROM (SELECT agent, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset, flags, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
                 else
                 {
                     $queryEndpointsGraphSQLLeyend = "SELECT * FROM t_config_".str_replace(".", "_", $session->domain);                                     
-                    $queryEndpointsGraphSQLDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";            
-                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";  
-                    $queryEndpointsGraphSQL = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
-                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, ruleset, pressure, rationalization FROM (SELECT agent, domain, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLDomain = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";            
+                    $queryEndpointsGraphSQLRulesetDomain = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE domain='".$session->domain."' AND ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";  
+                    $queryEndpointsGraphSQL = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, rationalization FROM t_agents GROUP BY agent) AS agents GROUP BY agent) AS duplicates WHERE domain NOT LIKE 'thefraudexplorer.com' GROUP BY pressure, rationalization";
+                    $queryEndpointsGraphSQLRuleset = "SELECT agent, domain, flags, ruleset, pressure, rationalization FROM (SELECT agent, domain, flags, ruleset, SUM(pressure) AS pressure, SUM(opportunity) AS opportunity, SUM(rationalization) AS rationalization FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, domain, flags, ruleset, pressure, opportunity, rationalization FROM t_agents GROUP BY agent) AS agents WHERE ruleset='".$_SESSION['rulesetScope']."' AND domain NOT LIKE 'thefraudexplorer.com' GROUP BY agent) AS duplicates GROUP BY pressure, rationalization";
                 }
             }
                    
@@ -146,8 +146,8 @@ include "../lbs/cryptography.php";
             <table class="table-leyend" id="elm-legend" style="margin-top: 4px;">
                 <th colspan=2 class="table-leyend-header"><span class="fa fa-folder-o fa-lg font-aw-color">&nbsp;&nbsp;</span>Plot Graphic legend</th>
                 <tr>
-                    <td class="table-leyend-point-left"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br>low</td>
-                    <td class="table-leyend-point-right"><span class="fa fa-3x fa-asterisk asterisk-color-high"></span><br>high</td>
+                    <td class="table-leyend-point-left"><span class="fa fa-3x fa-asterisk asterisk-color-low"></span><br>review</td>
+                    <td class="table-leyend-point-right"><span class="fa fa-3x fa-asterisk asterisk-color-high"></span><br>urgent</td>
                 </tr>
             </table>
             <span style="line-height: 0.1"><br></span>
@@ -342,9 +342,9 @@ include "../lbs/cryptography.php";
             /* Data Table & Events */
             
             echo '<div class="data-table-icon"><br>';
-            echo '<span class="fa fa-th-large fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" data-target="#expertSystem" href="#" id="elm-ai">Artificial intelligence expert deductions</a>&nbsp;&nbsp;&nbsp;';
+            echo '<span class="fa fa-th-large fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/expertSystem" data-toggle="modal" class="expertsystem-vertical" data-target="#expertSystem" href="#" id="elm-ai">Artificial intelligence expert deductions</a>&nbsp;&nbsp;&nbsp;';
             echo '<span class="fa fa-th-list fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="eventData?nt='.encRijndael("all").'" id="elm-analyticsaccess">All fraud triangle events</a>&nbsp;&nbsp;&nbsp;';
-            echo '<span class="fa fa-table fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
+            echo '<span class="fa fa-table fa-lg font-aw-color">&nbsp;&nbsp;</span><a href="mods/graphicData" data-toggle="modal" class="graphicdata-vertical" data-target="#graphicdata" href="#" id="elm-vertical">Vertical analytics</a>';
             echo '</div>';
                     
             ?>
@@ -364,11 +364,30 @@ include "../lbs/cryptography.php";
     </div>
 </center>
 
-<!-- Modal for Fraud Triangle Rulest -->
+<!-- Modal for Fraud Triangle Rules -->
 
 <script>
     $('#fraudTriangleRules').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
         $(this).find('.fraud-triangle-rules-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for GraphicData -->
+
+<script>
+    $('#graphicdata').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.graphicdata-vertical').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
+<!-- Modal for ExpertSystem -->
+
+<script>
+    $('#expertSystem').on('show.bs.modal', function(e){
+        $(".modal-body").html("");
+        $(this).find('.expertsystem-vertical').attr('href', $(e.relatedTarget).data('href'));
     });
 </script>
 
@@ -435,6 +454,7 @@ include "../lbs/cryptography.php";
             $countRationalization = $row_a['rationalization'];
             $countOpportunity = $opportunityValue['opportunity'];
             $countPressure = $row_a['pressure'];
+            $countFlags = $row_a['flags'];
         
             /*  Draw axis units */
             
@@ -488,12 +508,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -501,12 +525,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -514,12 +542,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -527,12 +559,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -541,19 +577,23 @@ include "../lbs/cryptography.php";
 
                 if ($countOpportunity >= $scoreResult['score_ts_medium_from'] && $countOpportunity <= ($scoreResult['score_ts_medium_to'])) 
                 {
-                    /* Rationalization*/
+                    /* Rationalization */
 
                     if ($countRationalization >= $scoreResult['score_ts_low_from'] && $countRationalization <= ($scoreResult['score_ts_low_to'])) 
                     {
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -561,12 +601,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -574,12 +618,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -587,12 +635,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -608,12 +660,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -621,12 +677,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -634,12 +694,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -647,12 +711,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -668,12 +736,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -681,12 +753,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -694,12 +770,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -707,12 +787,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -733,12 +817,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -746,12 +834,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -759,12 +851,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -772,12 +868,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -793,12 +893,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -806,12 +910,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -819,12 +927,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -832,12 +944,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -853,12 +969,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -866,12 +986,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -879,12 +1003,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -892,12 +1020,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -913,12 +1045,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -926,12 +1062,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -939,12 +1079,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -952,12 +1096,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -978,12 +1126,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -991,12 +1143,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1004,12 +1160,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1017,12 +1177,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1038,12 +1202,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1051,12 +1219,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1064,12 +1236,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1077,12 +1253,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1098,12 +1278,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1111,12 +1295,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1124,12 +1312,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1137,12 +1329,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1158,12 +1354,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1171,12 +1371,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1184,12 +1388,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1197,12 +1405,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1223,12 +1435,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1236,12 +1452,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1249,12 +1469,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1262,12 +1486,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1283,12 +1511,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1296,12 +1528,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1309,12 +1545,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1322,12 +1562,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1343,12 +1587,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1356,12 +1604,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1369,12 +1621,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1382,12 +1638,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1403,12 +1663,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_medium_from'] && $countRationalization <= ($scoreResult['score_ts_medium_to'])) 
@@ -1416,12 +1680,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_high_from'] && $countRationalization <= ($scoreResult['score_ts_high_to'])) 
@@ -1429,12 +1697,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                     if ($countRationalization >= $scoreResult['score_ts_critic_from']) 
@@ -1442,12 +1714,16 @@ include "../lbs/cryptography.php";
                         if ($xAxis >= ($GLOBALS['maxXAxis']/2) || $yAxis >= ($GLOBALS['maxYAxis']/2)) 
                         {
                             $radiusPoint = 12;
-                            echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgb(75, 144, 111, 0.9)", borderWidth: 4, borderColor: "rgb(75, 144, 111, 0.9)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                         else 
                         {
                             $radiusPoint = 10;
-                            echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+
+                            if ($countFlags != 0) echo '{ backgroundColor: "rgba(235, 115, 111, 0.6)", borderWidth: 4, borderColor: "rgb(235, 115, 111, 0.6)", hoverBackgroundColor: "rgba(235, 115, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
+                            else echo '{ backgroundColor: "rgba(75, 144, 111, 0.5)", borderWidth: 4, borderColor: "rgba(75, 144, 111, 0.5)", hoverBackgroundColor: "rgba(75, 144, 111, 1)", hoverBorderWidth: 5, pointStyle: \'star\', data: [{ x: '.$xAxis.', y: '.$yAxis.', r: '.$radiusPoint.' } ]},';
                         }
                     }
                 }
@@ -1600,7 +1876,7 @@ include "../lbs/cryptography.php";
 
 <div class="modal" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog vertical-align-center" style="width: 683px;">
             <div class="modal-content">
                 <div class="modal-body">
                     <p class="debug-url window-debug"></p>
@@ -1614,11 +1890,11 @@ include "../lbs/cryptography.php";
 
 <div class="modal" id="bubble-clicking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog vertical-align-center" style="width: 675px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title window-title" id="myModalLabel">Coordinate zoom</h4>
+                    <h4 class="modal-title window-title" id="myModalLabel">Coordinate point view</h4>
                 </div>
                 <div class="modal-body"></div>
             </div>

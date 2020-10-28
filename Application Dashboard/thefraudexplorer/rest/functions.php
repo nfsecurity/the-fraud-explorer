@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: REST functions
  */
@@ -344,6 +344,7 @@ function ftaEventsGETQuery($username, $endpoint)
     global $dbConnection;
     $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
     $ESAlerterIndex = $configFile['es_alerter_index'];
+    
     if ($endpoint == "all")
     {
         if (getUserContext($username) == "all")
@@ -362,14 +363,19 @@ function ftaEventsGETQuery($username, $endpoint)
                 $domain = $result['_source']['userDomain'];
                 $endPoint = explode("_", $result['_source']['agentId']);
                 $endpointDECSQL = $endPoint[0];
+                $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+                $messageFlag = ($flagNumber != "0") ? 'yes' : 'no';
+                $toneNumber = (isset($result['_source']['messageTone'])) ? $result['_source']['messageTone'] : '0';
+                $messageTone = ($toneNumber != "0") ? 'negative' : 'neutral';
                 $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
                 $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
                 $ruleset = mysqli_fetch_array($rulesetquery);
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+                $eventsMatrix[][$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Message tone"=>$messageTone, "Message flag"=>$messageFlag, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
+
             echo json_encode($eventsMatrix);
         }
         else
@@ -388,14 +394,19 @@ function ftaEventsGETQuery($username, $endpoint)
                 $endpointID = $result['_source']['agentId'];
                 $endPoint = explode("_", $result['_source']['agentId']);
                 $endpointDECSQL = $endPoint[0];
+                $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+                $messageFlag = ($flagNumber != "0") ? 'yes' : 'no';
+                $toneNumber = (isset($result['_source']['messageTone'])) ? $result['_source']['messageTone'] : '0';
+                $messageTone = ($toneNumber != "0") ? 'negative' : 'neutral';
                 $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
                 $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
                 $ruleset = mysqli_fetch_array($rulesetquery);
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+                $eventsMatrix[][$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Message tone"=>$messageTone, "Message flag"=>$messageFlag, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
+
             echo json_encode($eventsMatrix);
         }
     }
@@ -406,6 +417,7 @@ function ftaEventsGETQuery($username, $endpoint)
             $endpointWildcard = $endpoint."*";
             $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
             $eventData = json_decode(json_encode($matchesDataEndpoint), true);
+
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
@@ -417,14 +429,19 @@ function ftaEventsGETQuery($username, $endpoint)
                 $endpointDECSQL = $endPoint[0];
                 $wordTyped = decRijndael($result['_source']['wordTyped']);
                 $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+                $messageFlag = ($flagNumber != "0") ? 'yes' : 'no';
+                $toneNumber = (isset($result['_source']['messageTone'])) ? $result['_source']['messageTone'] : '0';
+                $messageTone = ($toneNumber != "0") ? 'negative' : 'neutral';
                 $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
                 $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
                 $ruleset = mysqli_fetch_array($rulesetquery);
                 if (is_null($ruleset[0])) $ruleset[0] = "BASELINE";
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
-                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+                $eventsMatrix[][$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Message tone"=>$messageTone, "Message flag"=>$messageFlag, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
+
             echo json_encode($eventsMatrix); 
         }
         else
@@ -433,6 +450,7 @@ function ftaEventsGETQuery($username, $endpoint)
             $matchesDataEndpoint = getAgentIdData($endpointWildcard, $ESAlerterIndex, "AlertEvent");
             $eventData = json_decode(json_encode($matchesDataEndpoint), true);
             $endpointsMatched = false;
+
             foreach ($eventData['hits']['hits'] as $result)
             {
                 if (isset($result['_source']['tags'])) continue;
@@ -445,6 +463,10 @@ function ftaEventsGETQuery($username, $endpoint)
                 $endpointDECSQL = $endPoint[0];
                 $wordTyped = decRijndael($result['_source']['wordTyped']);
                 $stringHistory = decRijndael($result['_source']['stringHistory']);
+                $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
+                $messageFlag = ($flagNumber != "0") ? 'yes' : 'no';
+                $toneNumber = (isset($result['_source']['messageTone'])) ? $result['_source']['messageTone'] : '0';
+                $messageTone = ($toneNumber != "0") ? 'negative' : 'neutral';
                 $queryRuleset = "SELECT ruleset FROM (SELECT SUBSTRING_INDEX(agent, '_', 1) AS agent, ruleset FROM t_agents GROUP BY agent ORDER BY heartbeat DESC) AS agents WHERE agent='%s' GROUP BY agent";
                 $rulesetquery = mysqli_query($dbConnection, sprintf($queryRuleset, $endpointDECSQL));
                 $ruleset = mysqli_fetch_array($rulesetquery);
@@ -452,8 +474,9 @@ function ftaEventsGETQuery($username, $endpoint)
                 $rule = $ruleset[0];
                 $regExpression = htmlentities($result['_source']['phraseMatch']);
                 $endpointsMatched = true;
-                $eventsMatrix[$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
+                $eventsMatrix[][$endpointID] = ["Alert date"=>$date, "Domain"=>$domain, "Message tone"=>$messageTone, "Message flag"=>$messageFlag, "Phrase typed"=>$wordTyped, "Paragraph"=>$stringHistory, "Application Title"=>$windowTitle, "Ruleset"=>$rule, "Regular expression"=>$regExpression];
             }
+
             if ($endpointsMatched == true) echo json_encode($eventsMatrix); 
             else echo json_encode("No events with your criteria");      
         }
@@ -552,8 +575,10 @@ function workflowsList($username)
                 $interval = $row['interval'];
                 $custodian = $row['custodian'];
                 $triggers = $row['triggers'];
+                $tone = $row['tone'];
+                $flag = $row['flag'];
                     
-                $workflowsMatrix[] = ["Name"=>$name, "Workflow"=>$workflow, "Interval"=>$interval, "Custodian"=>$custodian, "Triggers"=>$triggers];
+                $workflowsMatrix[] = ["Name"=>$name, "Workflow"=>$workflow, "Interval"=>$interval, "Tone"=>$tone, "Flag"=>$flag, "Custodian"=>$custodian, "Triggers"=>$triggers];
             }
             while ($row = mysqli_fetch_array($resultQuery));
 
@@ -599,9 +624,13 @@ function workflowsGet($username, $workflowName)
                     $agent = $alertDocument['hits']['hits'][0]['_source']['agentId'];
                     preg_match('/([a-z0-9]*)_/', $agent, $endpoint);
                     $application = decRijndael($alertDocument['hits']['hits'][0]['_source']['windowTitle']);
-                    $phrase = decRijndael($alertDocument['hits']['hits'][0]['_source']['stringHistory']);
+                    $phrase = decRijndael($alertDocument['hits']['hits'][0]['_source']['stringHistory']);      
+                    $flagNumber = (isset($alertDocument['hits']['hits'][0]['_source']['messageFlag'])) ? $alertDocument['hits']['hits'][0]['_source']['messageFlag'] : '0';
+                    $messageFlag = ($flagNumber != "0") ? 'yes' : 'no';
+                    $toneNumber = (isset($alertDocument['hits']['hits'][0]['_source']['messageTone'])) ? $alertDocument['hits']['hits'][0]['_source']['messageTone'] : '0';
+                    $messageTone = ($toneNumber != "0") ? 'negative' : 'neutral';
 
-                    $workflowsMatrix[$name][] = ["Event time"=>$eventTime[1] . " " .$eventTime[2], "Endpoint"=>$endpoint[1], "Application"=>$application, "Phrase"=>$phrase];
+                    $workflowsMatrix[$name][] = ["Event time"=>$eventTime[1] . " " .$eventTime[2], "Endpoint"=>$endpoint[1], "Application"=>$application, "Phrase"=>$phrase, "Flag"=>$messageFlag, "Tone"=>$messageTone];
                 }
             }
             while ($row = mysqli_fetch_array($resultQuery));
@@ -637,6 +666,11 @@ function fraudTrianglePOSTQuery($rawJSON)
             $pressureCount = 0;
             $opportunityCount = 0;
             $rationalizationCount = 0;
+            $flagStatus = false;
+            $pressureHeight = 30;
+            $opportunityHeight = 40;
+            $rationalizationHeight = 20;
+            $flagHeight = 10;
 
             if (strlen($receivedJSON['businessUnit']) > 65535 || strlen($receivedJSON['application']) > 65535 || strlen($receivedJSON['phrases']) > 65535)
             {
@@ -682,6 +716,8 @@ function fraudTrianglePOSTQuery($rawJSON)
                         {
                             if (preg_match_all($termPhrase."i", $sanitizedPhrases, $matches))
                             {
+                                if (strpos($field, '*') !== false) $flagStatus = true;
+
                                 for ($j=0; $j<count($matches[0]); $j++)
                                 {
                                     $phrasesMatched[][$term] = $matches[0][$j];
@@ -717,13 +753,62 @@ function fraudTrianglePOSTQuery($rawJSON)
 
             /* Expert deductions */
 
-            if ($pressureCount != 0 && $opportunityCount != 0 && $rationalizationCount != 0) $probability = "100%";
-            else if ($pressureCount != 0 && $opportunityCount != 0) $probability = "70%";
-            else if ($pressureCount != 0 && $rationalizationCount != 0) $probability = "80%";
-            else if ($opportunityCount != 0 && $rationalizationCount != 0) $probability = "50%";
-            else if ($pressureCount != 0) $probability = "10%";
-            else if ($opportunityCount != 0) $probability = "20%";
-            else if ($rationalizationCount != 0) $probability = "15%";
+            if ($pressureCount != 0 && $opportunityCount != 0 && $rationalizationCount != 0) 
+            {
+                $probability = $pressureHeight + $opportunityHeight + $rationalizationHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+                
+                $probability = $probability."%";
+            }
+            else if ($pressureCount != 0 && $opportunityCount != 0) 
+            {
+                $probability = $pressureHeight + $opportunityHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
+            else if ($pressureCount != 0 && $rationalizationCount != 0) 
+            {
+                $probability = $pressureHeight + $rationalizationHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
+            else if ($opportunityCount != 0 && $rationalizationCount != 0) 
+            {
+                $probability = $opportunityHeight + $rationalizationHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
+            else if ($pressureCount != 0) 
+            {
+                $probability = $pressureHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
+            else if ($opportunityCount != 0) 
+            {
+                $probability = $opportunityHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
+            else if ($rationalizationCount != 0) 
+            {
+                $probability = $rationalizationHeight;
+
+                if ($flagStatus == true) $probability = $probability + $flagHeight;
+
+                $probability = $probability."%";
+            }
 
             /* Message tone */
 
@@ -733,11 +818,17 @@ function fraudTrianglePOSTQuery($rawJSON)
             if ($messageTone == true) $tone = "negative";
             else $tone = "neutral";
 
+            /* Message Flag */
+
+            if ($flagStatus == true) $flagMessage = "yes";
+            else $flagMessage = "no";
+
             $finaJSON = Array("pressureEvents" => $pressureCount, 
                             "opportunityEvents" => $opportunityCount, 
                             "rationalizationEvents" => $rationalizationCount,
                             "unethicalProbability" => $probability,
                             "messageTone" => $tone,
+                            "messageFlag" => $flagMessage,
                             "phrasesMatched" => $replyJSON
                         );
 

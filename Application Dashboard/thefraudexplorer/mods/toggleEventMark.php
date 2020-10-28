@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for false positive marking
  */
@@ -77,7 +77,7 @@ if (!empty($_POST['toggle-event']))
     $resultEvents = curl_exec($ch);
     curl_close($ch);
 
-    $msg = "Successfully toggled redflag event";
+    $msg = "Successfully toggled event";
 }
 else if (!empty($_POST['delete-event']))
 {
@@ -101,7 +101,7 @@ else if (!empty($_POST['delete-event']))
     curl_exec($ch); 
     curl_close($ch); 
 
-    $msg = "Successfully removed redflag event";
+    $msg = "Successfully removed event";
 }
 
 $_SESSION['wm'] = encRijndael($msg);

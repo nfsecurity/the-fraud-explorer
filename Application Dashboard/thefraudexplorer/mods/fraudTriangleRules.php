@@ -9,8 +9,8 @@
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v1.4.7-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Code for fraud triangle rules
  */
@@ -291,14 +291,23 @@ function is_internet()
 
     .rule-button-add
     {
-        width: 137px;
+        width: 102px;
         height: 30px;
         min-height: 30px;
         border-radius: 5px;
         outline: 0 !important;
         background: white;
         border: 1px solid #BFC0BF;
-        font-family: Verdana, sans-serif; font-size: 11px !important;
+        font-family: 'FFont', sans-serif; font-size: 11px !important;
+        color: #525252;
+    }
+
+    .flag-enable-disable-button
+    {
+        border-radius: 5px;
+        outline: 0 !important;
+        background: white;
+        border: 1px solid #BFC0BF;
     }
 
     .rule-button-searchdelmodify
@@ -310,7 +319,8 @@ function is_internet()
         border: 1px solid #BFC0BF;
         border-radius: 5px;
         outline: 0 !important;
-        font-family: Verdana, sans-serif; font-size: 11px !important;
+        font-family: 'FFont', sans-serif; font-size: 11px !important;
+        color: #525252;
     }
 
     .regexp-container
@@ -381,6 +391,11 @@ function is_internet()
     .blink-check
     {
         -webkit-animation: blink .1s step-end 6 alternate;
+    }
+
+    .font-icon-color-gray 
+    { 
+        color: #B4BCC2; 
     }
 
 </style>
@@ -461,7 +476,14 @@ function is_internet()
                 <p class="title-config">Phrase regular expression</p>
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-add" id="regexpression-add" autocomplete="off" placeholder="enter here the regular expression in PCRE format" class="input-value-text-regexp-add">
-                <div class="input-regexp-right">/</div>
+                <div class="input-regexp-right">/</div>        
+
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 30px; height: 32px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                    <label class="flag-enable-disable-button btn btn-default" id="add-flag" style="width: 30px; height: 30px; padding: 7px 5px 0px 5px; outline: 0 !important; -webkit-box-shadow: none !important; box-shadow: none !important;">
+                        <input type="checkbox" name="addflag" onchange="checkboxAddFlag()" id="checkbox-addflag" value="addflag"><span id="flag-changer" class="fa fa-flag-o font-icon-color-gray" style="font-size: 14px;"></span>
+                    </label>
+                </div>
+               
                 <button type="submit" class="rule-button-add btn-default" id="add-rule" name="action" value="addrule">Add rule</button>
             </div>
 
@@ -902,13 +924,20 @@ $("#modify-rule").click(function(e) {
 
                 var search = document.getElementById('phrase-identification-delmodify').value
                 var searchCustom = "c:"+search;
+                var searchFlag = search+":*";
+                var searchFlagCustom = "c:"+search+":*";
+
                 var ruleset = document.getElementById('ruleset-delmodify').value
                 var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
                 var searchPath = data["dictionary"][ruleset][vertice][search];
                 var searchPathCustom = data["dictionary"][ruleset][vertice][searchCustom];
+                var searchPathFlag = data["dictionary"][ruleset][vertice][searchFlag];
+                var searchPathFlagCustom = data["dictionary"][ruleset][vertice][searchFlagCustom];
 
                 if (typeof(searchPath) != "undefined") var finalRegexpString = searchPath.replace(/\//g, "");
                 if (typeof(searchPathCustom) != "undefined") var finalRegexpString = searchPathCustom.replace(/\//g, "");
+                if (typeof(searchPathFlag) != "undefined") var finalRegexpString = searchPathFlag.replace(/\//g, "");
+                if (typeof(searchPathFlagCustom) != "undefined") var finalRegexpString = searchPathFlagCustom.replace(/\//g, "");
                 else var finalRegexpString = "no regular expression found";
             }
             else
@@ -922,13 +951,24 @@ $("#modify-rule").click(function(e) {
 
                 var search = document.getElementById('phrase-identification-delmodify').value
                 var searchCustom = "c:"+search;
+                var searchFlag = search+":*";
+                var searchFlagCustom = "c:"+search+":*";
                 var ruleset = document.getElementById('ruleset-delmodify').value
                 var vertice = document.getElementById('fraudvertice-delmodify').value.toLowerCase();
         
+                /* Spanish */
+
                 var searchPathSpanish = dataSpanish["dictionary"][ruleset][vertice][search];
                 var searchPathSpanishCustom = dataSpanish["dictionary"][ruleset][vertice][searchCustom];
+                var searchPathSpanishFlag = dataSpanish["dictionary"][ruleset][vertice][searchFlag];
+                var searchPathSpanishFlagCustom = dataSpanish["dictionary"][ruleset][vertice][searchFlagCustom];
+
+                /* English */
+
                 var searchPathEnglish = dataEnglish["dictionary"][ruleset][vertice][search];
                 var searchPathEnglishCustom = dataEnglish["dictionary"][ruleset][vertice][searchCustom];
+                var searchPathEnglishFlag = dataEnglish["dictionary"][ruleset][vertice][searchFlag];
+                var searchPathEnglishFlagCustom = dataEnglish["dictionary"][ruleset][vertice][searchFlagCustom];
 
                 var finalRegexpString = null;
 
@@ -946,6 +986,26 @@ $("#modify-rule").click(function(e) {
                 {
                     matched = true;
                     finalRegexpString = searchPathSpanishCustom.replace(/\//g, "");
+
+                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                    $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                    $('#library-search-language').val('fta_text_rule_spanish');
+                    $('#library-search-language').niceSelect('update');
+                }
+                else if (typeof(searchPathSpanishFlag) != "undefined")
+                {
+                    matched = true;
+                    finalRegexpString = searchPathSpanishFlag.replace(/\//g, "");
+
+                    $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                    $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                    $('#library-search-language').val('fta_text_rule_spanish');
+                    $('#library-search-language').niceSelect('update');
+                }
+                else if (typeof(searchPathSpanishFlagCustom) != "undefined")
+                {
+                    matched = true;
+                    finalRegexpString = searchPathSpanishFlagCustom.replace(/\//g, "");
 
                     $(".select-option-styled-language-search option:selected").removeAttr("selected");
                     $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
@@ -974,6 +1034,26 @@ $("#modify-rule").click(function(e) {
                         $('#library-search-language').val('fta_text_rule_english');
                         $('#library-search-language').niceSelect('update');
                     }
+                    else if (typeof(searchPathEnglishFlag) != "undefined")
+                    {
+                        matched = true;
+                        finalRegexpString = searchPathEnglishFlag.replace(/\//g, "");
+
+                        $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                        $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                        $('#library-search-language').val('fta_text_rule_spanish');
+                        $('#library-search-language').niceSelect('update');
+                    }
+                    else if (typeof(searchPathEnglishFlagCustom) != "undefined")
+                    {
+                        matched = true;
+                        finalRegexpString = searchPathEnglishFlagCustom.replace(/\//g, "");
+
+                        $(".select-option-styled-language-search option:selected").removeAttr("selected");
+                        $(".select-option-styled-language-search option[value=fta_text_rule_spanish]").attr('selected', 'selected');
+                        $('#library-search-language').val('fta_text_rule_spanish');
+                        $('#library-search-language').niceSelect('update');
+                    }
                     else finalRegexpString = "no regular expression found";
                 }
             }
@@ -992,4 +1072,31 @@ $("#modify-rule").click(function(e) {
     $(document).ready(function() {
         $('select').niceSelect();
     });
+</script>
+
+<!-- Flag button -->
+
+<script>
+
+function checkboxAddFlag()
+{
+    var checkbox = document.getElementById('checkbox-addflag');
+    var checkboxGeneral = document.getElementById('add-flag');
+
+    if(checkbox.checked === true)
+    {
+        $('#flag-changer').removeClass('fa-flag-o');
+        $('#flag-changer').addClass('fa-flag');
+        checkboxGeneral.style.background = "white";
+        $('#add-flag').css('border', '1px solid #B1B3B1');
+    }
+    else
+    {
+        $('#flag-changer').removeClass('fa-flag');
+        $('#flag-changer').addClass('fa-flag-o');
+        checkboxGeneral.style.background = "white";
+        $('#add-flag').css('border', '1px solid #B1B3B1');
+    }
+}
+
 </script>

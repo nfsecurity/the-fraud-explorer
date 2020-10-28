@@ -8,8 +8,8 @@
 # Licensed under GNU GPL v3
 # https://www.thefraudexplorer.com/License
 #
-# Date: 2020-08
-# Revision: v1.4.7-aim
+# Author: jrios@nofraud.la
+# Version code-name: nemesis
 #
 # Description: Code to enable DEMO platform
 
@@ -37,6 +37,7 @@ LOGINFORM="$THEFRAUDEXPLORER/lbs/login/form.php"
 DELENDPOINT="$THEFRAUDEXPLORER/helpers/endpointsProcessing.php"
 DISABLEDOWNPHRASESRULES="$THEFRAUDEXPLORER/mods/fraudTriangleRules.php"
 DISABLEDOWNPHRASESRULESET="$THEFRAUDEXPLORER/mods/setupRuleset.php"
+LICENSE="$THEFRAUDEXPLORER/mods/libraryLicense.php"
 
 # Replace types
 
@@ -68,6 +69,8 @@ REMOTE="s/REMOTE_ADDR/HTTP_X_REAL_IP/g"
 CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N0FR4UD\")/g"
 DELETEAGENT="s/#confirm-delete/#/g"
 DISABLEDOWNLOAD="s/id=\"download-rules\"/id=\"#\"/g"
+DISABLEDOWNLOADLICENSE="s/id=\"button-download-license\"/id=\"#\"/g"
+DISABLEACTIVATELICENSE="s/id=\"button-activate-license\"/id=\"#\"/g"
 
 # Replace files
 
@@ -94,3 +97,4 @@ DISABLEDOWNLOAD="s/id=\"download-rules\"/id=\"#\"/g"
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
 /bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
 /bin/sed "$DISABLEDOWNLOAD" --in-place $DISABLEDOWNPHRASESRULES $DISABLEDOWNPHRASESRULESET
+/bin/sed "$DISABLEDOWNLOADLICENSE ; $DISABLEACTIVATELICENSE" --in-place $LICENSE
