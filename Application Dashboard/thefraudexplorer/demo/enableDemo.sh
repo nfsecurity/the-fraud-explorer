@@ -70,6 +70,7 @@ CREDENTIALS="s/values = array()/values = array(\"user\"=>\"admin\",\"pass\"=>\"N
 DELETEAGENT="s/#confirm-delete/#/g"
 DISABLEDOWNLOAD="s/id=\"download-rules\"/id=\"#\"/g"
 DISABLEDOWNLOADLICENSE="s/id=\"button-download-license\"/id=\"#\"/g"
+DISABLEDOWNLOADLICENSEHREF="s/mods\/downloadLicense?le=<?php if (\$noBackup == true) echo \"nobackupfile\"; else echo encRijndael(\$latestBackup\[3\]); ?>/#/g"
 DISABLEACTIVATELICENSE="s/id=\"button-activate-license\"/id=\"#\"/g"
 
 # Replace files
@@ -97,4 +98,4 @@ DISABLEACTIVATELICENSE="s/id=\"button-activate-license\"/id=\"#\"/g"
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
 /bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
 /bin/sed "$DISABLEDOWNLOAD" --in-place $DISABLEDOWNPHRASESRULES $DISABLEDOWNPHRASESRULESET
-/bin/sed "$DISABLEDOWNLOADLICENSE ; $DISABLEACTIVATELICENSE" --in-place $LICENSE
+/bin/sed "$DISABLEDOWNLOADLICENSE ; $DISABLEACTIVATELICENSE ; $DISABLEDOWNLOADLICENSEHREF" --in-place $LICENSE
