@@ -1,6 +1,6 @@
 # Cómo contribuir
 
-[NF Cybersecurity and Antifraud](https://nfsec.company) Firm está abierta a recibir mejoras y correcciones al código en beneficio de todos aquellos investigadores que usan de forma gratuita nuestra solución. Siga estos pasos para hacer el ```submit``` de su contribución:  
+[NF S.A.S](https://www.nofraud.la) está abierta a recibir mejoras y correcciones al código en beneficio de todos aquellos investigadores que usan de forma gratuita nuestra solución. Siga estos pasos para hacer el ```submit``` de su contribución:  
 
 1. Haga un Fork del proyecto *The Fraud Explorer*
 2. Cree su brach con las mejoras (```git checkout -b mi-nueva-funcionalidad```)
@@ -8,9 +8,9 @@
 4. Haga Push de su branch (```git push origin mi-nueva-funcionalidad```)
 5. Cree un nuevo Pull Request
 
-# CLA (Constributor License Agreement)
+# CLA (Contributor License Agreement)
 
-Esto sólo es un acuerdo de licencia: no transfiere la propiedad intelectual y no cambia tus derechos a usar tus propias contribuciones para cualquier otro propósito. Cuando contribuyes a este proyecto das garantía perpetua, mundial, no exclusiva, sin cargo, libre de royalties por derechos de autor y de manera irrevocable para reproducir, hacer trabajos derivados, mostrar públicamente, sublicenciary distribuir las contribuciones y los trabajos derivados.
+Esto sólo es un acuerdo de licencia: no transfiere la propiedad intelectual y no cambia sus derechos a usar sus propias contribuciones para cualquier otro propósito. Cuando usted contribuye a este proyecto da garantía perpetua, mundial, no exclusiva, sin cargo, libre de royalties por derechos de autor y de manera irrevocable para reproducir, hacer trabajos derivados, mostrar públicamente, distribuir las contribuciones y los trabajos derivados.
 
 ## Guía para hacer Pull Requests
 
