@@ -4,7 +4,7 @@
 
 Las instrucciones de instalación y configuración las encontrará en la [Wiki](https://github.com/nfsecurity/the-fraud-explorer/wiki). Lo invitamos a que [ingrese al demo hoy](https://demo.thefraudexplorer.com), así puede saber rápidamente si *The Fraud Explorer* es lo que está buscando para combatir el fraude corporativo. Digite el usuario ```admin``` y contraseña ```N0FR4UD```. 
 
-## Desarrollado en NF, Medellín, Colombia
+## Desarrollado por NOFRAUD Latam LLC, Chicago, USA
 
 *The Fraud Explorer* está siendo desarrollado por [NF S.A.S](https://www.nofraud.la). El sitio oficial es https://www.thefraudexplorer.com.
 
