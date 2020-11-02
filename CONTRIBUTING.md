@@ -1,6 +1,6 @@
 # Cómo contribuir
 
-[NF S.A.S](https://www.nofraud.la) está abierta a recibir mejoras y correcciones al código en beneficio de todos aquellos investigadores que usan de forma gratuita nuestra solución. Siga estos pasos para hacer el ```submit``` de su contribución:  
+[NOFRAUD Latam](https://www.nofraud.la) está abierta a recibir mejoras y correcciones al código en beneficio de todos aquellos investigadores que usan de forma gratuita nuestra solución. Siga estos pasos para hacer el ```submit``` de su contribución:  
 
 1. Haga un Fork del proyecto *The Fraud Explorer*
 2. Cree su brach con las mejoras (```git checkout -b mi-nueva-funcionalidad```)
