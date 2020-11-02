@@ -8,8 +8,8 @@ Consideraciones que debe tener en cuenta al usar, distribuir o modificar nuestro
 
 Consideración | Implicación
 ------------- | -----------
-**Créditos** | El uso parcial o total del codigo y recursos del software debe ir acompañado de un aviso donde se indique que [NF S.A.S](https://www.nofraud.la) es el desarrollador.
-**Libreria de frases** | Si va a usar parcial o totalmente la libreria de frases, deberá incluir un aviso nombrando a [NF S.A.S](https://www.nofraud.la) como la empresa desarrolladora.
+**Créditos** | El uso parcial o total del codigo y recursos del software debe ir acompañado de un aviso donde se indique que [NOFRAUD Latam](https://www.nofraud.la) es el desarrollador.
+**Libreria de frases** | Si va a usar parcial o totalmente la libreria de frases, deberá incluir un aviso nombrando a [NOFRAUD Latam](https://www.nofraud.la) como la empresa desarrolladora.
 **Código fuente** | Cada librería externa usada en el código de _The Fraud Explorer_ deberá ser compatible con la licencia GNU GPL v3.
 **Permisos** | La licencia le da derecho a usar el software de manera ilimitada.
 **Garantía** | No existe ningún tipo de garantía para este software. Se distribuye como está, sin asegurar su funcionamiento o resultados.
