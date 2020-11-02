@@ -6,7 +6,7 @@ Las instrucciones de instalación y configuración las encontrará en la [Wiki](
 
 ## Desarrollado por NOFRAUD Latam LLC, Chicago, USA
 
-*The Fraud Explorer* está siendo desarrollado por [NOFRAUD Latam LLC](https://www.nofraud.la). El sitio oficial es https://www.thefraudexplorer.com.
+*The Fraud Explorer* está siendo desarrollado por [NOFRAUD Latam LLC](https://www.nofraud.la). Visite el sitio oficial del producto en https://www.thefraudexplorer.com.
 
 ![The Fraud Explorer Footer](https://www.thefraudexplorer.com/img/mainPicture.png)
 
