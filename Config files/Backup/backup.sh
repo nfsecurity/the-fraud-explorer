@@ -36,7 +36,7 @@ function SPACEUSED()
 
 SPACEOCCUPED="$(SPACEUSED)"
 
-while [ $SPACEOCCUPED -gt 80 ]
+while [ $SPACEOCCUPED -gt 65 ]
 do
  
  OLDESTCOMMAND="ls /backup/*.zip -t | tail -1" 
