@@ -21,8 +21,24 @@ $sLock = '/var/www/html/thefraudexplorer/core/FTA.lock';
 
 if (file_exists($sLock)) 
 {
-    die("Already running another instance, exiting ...\n");
-    exit;
+    $createdSecondsAgo = shell_exec('/usr/bin/date -d "now - $( /usr/bin/stat -c "%Y" '.$sLock.' ) seconds" +%s');
+    $createdSecondsAgo = intval($createdSecondsAgo);
+
+    if ($createdSecondsAgo > 14400)
+    {
+        echo "\n[WARN] Recovering from failed state ...\n";
+        echo "[WARN] Releasing lock and killing old processes ...\n";
+        echo "[INFO] FTA Processor restored, please run it again ...\n";
+        
+        unlink($sLock);
+        $killAllFTAProcess = shell_exec('/usr/bin/killall -9 php');
+        exit;
+    }
+    else
+    {
+        die("Already running another instance, exiting ...\n");
+        exit;
+    }
 }
 
 file_put_contents($sLock, 1);
