@@ -457,6 +457,48 @@ else $enabledPhraseCollection = false;
         </div>
     </div>
 
+    <!-- Behavior score & week score digits reduction -->
+
+    <?php
+
+        /* Total score */
+
+        $fraudScoreReduced = null;
+        $fraudScore = round($fraudScore, 0);
+
+        if (strlen($fraudScore) == 5) $fraudScoreReduced = substr($fraudScore, 0,2) . "k";
+        else if (strlen($fraudScore) == 6) $fraudScoreReduced = substr($fraudScore, 0,3) . "k";
+        else if (strlen($fraudScore) == 7) $fraudScoreReduced = substr($fraudScore, 0,2)/10 . "m";
+        else if (strlen($fraudScore) == 8) $fraudScoreReduced = substr($fraudScore, 0,2) . "m";
+        else if (strlen($fraudScore) == 9) $fraudScoreReduced = substr($fraudScore, 0,3) . "m";
+        else $fraudScoreReduced = $fraudScore;
+
+        /* Pressure last week score */
+
+        $pressureWeekReduced = null;
+
+        if (strlen($pressureWeek) == 4) $pressureWeekReduced = substr($pressureWeek, 0,1) . "k";
+        else if (strlen($pressureWeek) == 5) $pressureWeekReduced = substr($pressureWeek, 0,2) . "k";
+        else $pressureWeekReduced = $pressureWeek;
+
+        /* Opportunity last week score */
+
+        $opportunityWeekReduced = null;
+
+        if (strlen($opportunityWeek) == 4) $opportunityWeekReduced = substr($opportunityWeek, 0,1) . "k";
+        else if (strlen($opportunityWeek) == 5) $opportunityWeekReduced = substr($opportunityWeek, 0,2) . "k";
+        else $opportunityWeekReduced = $opportunityWeek;
+
+        /* Rationalization last week score */
+
+        $rationalizationWeekReduced = null;
+
+        if (strlen($rationalizationWeek) == 4) $rationalizationWeekReduced = substr($rationalizationWeek, 0,1) . "k";
+        else if (strlen($rationalizationWeek) == 5) $rationalizationWeekReduced = substr($rationalizationWeek, 0,2) . "k";
+        else $rationalizationWeekReduced = $rationalizationWeek;
+        
+    ?>
+
     <div class="container-bottom-left" id="elm-termstatistics">
         <h2>
             <p class="container-title"><span class="fa fa-chevron-right fa-lg font-icon-color-gray">&nbsp;&nbsp;</span>Fraud triangle term statistics</p>
@@ -468,8 +510,8 @@ else $enabledPhraseCollection = false;
         <div class="container-bottom-left-sub">
             <div class="container-bottom-left-sub-one">
                 <div class="container-bottom-left-sub-one-sub">
-                    <p class="container-bottom-left-fraud-score"><?php echo round($fraudScore,1); ?></p>
-                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Behavior score
+                    <p class="container-bottom-left-fraud-score"><?php echo $fraudScoreReduced; ?></p>
+                    </b><i class="fa fa-thermometer-quarter fa-lg font-icon-color-gray" aria-hidden="true">&nbsp;&nbsp;</i>Total score
                 </div>
                 <canvas id="bottom-left" style="z-index:1;"></canvas>
             </div>
@@ -477,7 +519,7 @@ else $enabledPhraseCollection = false;
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-pressure">
-                            <p class="vertice-week"><?php echo $pressureWeek; ?></p><br>
+                            <p class="vertice-week"><?php echo $pressureWeekReduced; ?></p><br>
                             <p class="vertice-insight">last week</p>
                         </div>
                         <div class="block-with-text ellipsis">
@@ -488,7 +530,7 @@ else $enabledPhraseCollection = false;
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-opportunity">
-                            <p class="vertice-week"><?php echo $opportunityWeek; ?></p><br>
+                            <p class="vertice-week"><?php echo $opportunityWeekReduced; ?></p><br>
                             <p class="vertice-insight">last week</p>
                         </div>
                         <div class="block-with-text ellipsis">
@@ -499,7 +541,7 @@ else $enabledPhraseCollection = false;
                 <div class="container-bottom-left-sub-two-sub">
                     <div class="container-bottom-left-sub-two-sub-one">
                         <div class="container-bottom-left-sub-two-sub-one-rational">
-                            <p class="vertice-week"><?php echo $rationalizationWeek; ?></p><br>
+                            <p class="vertice-week"><?php echo $rationalizationWeekReduced; ?></p><br>
                             <p class="vertice-insight">last week</p>
                         </div>
                         <div class="block-with-text ellipsis">
