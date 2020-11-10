@@ -510,6 +510,34 @@ function countWordsTypedByAgent($agentID, $alertType, $index)
     return $agentIdMatches;
 }
 
+/* Count Message Flags per Endpoint */
+
+function countMessageFlags($agentID, $index)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertEvent', 
+        'body' => [ 
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'term' => [ 'agentId' => $agentID ] ],
+                        [ 'term' => [ 'messageFlag' => '1' ] ]
+                    ],
+                    'must_not' => [
+                            [ 'match' => [ 'falsePositive' => '1'] ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $agentIdMatches = $client->count($matchesParams);
+
+    return $agentIdMatches;
+}
+
 /* Populate SQL Database with Fraud Triangle Data */
 
 function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
