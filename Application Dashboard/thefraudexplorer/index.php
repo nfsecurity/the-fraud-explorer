@@ -43,7 +43,7 @@
 
         <div align="center">
             <table class="login-table">
-            <th>Let's get login</th>
+            <th>Let's get logged in</th>
                 <tbody>
                     <tr>
                         <td class="login-container">

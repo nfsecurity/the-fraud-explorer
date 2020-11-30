@@ -183,6 +183,7 @@ th
 {
     background-color: #C0C0C0;
     color: white;
+    cursor: pointer;
 }
 
 .sign-in-button:active 
