@@ -201,6 +201,8 @@ include "../lbs/closeDBconn.php";
     </div>
 </div>
 
+<!-- Search box status -->
+
 <?php
 
 if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_SESSION['instance'] != "eventData"))
@@ -210,6 +212,40 @@ if (isset($_SESSION['instance']) && ($_SESSION['instance'] != "endPoints" && $_S
     echo 'document.getElementById("search-box").style.backgroundColor = "#e2e2e2";';
     echo 'document.getElementById("search-box").value = "Disabled search ...";';
     echo '</script>';
+}
+
+?>
+
+<!-- Mdule highlight -->
+
+<?php
+
+if (isset($_SESSION['instance']))
+{
+    if ($_SESSION['instance'] == "dashBoard")
+    {
+        echo '<script>';
+        echo '$("#elm-dashboard").css({"font-family": "\'FFont-Bold\'", "color": "#4B906F"});';
+        echo '</script>';
+    }
+    else if ($_SESSION['instance'] == "eventData")
+    {
+        echo '<script>';
+        echo '$("#elm-eventmodule").css({"font-family": "\'FFont-Bold\'", "color": "#4B906F"});';
+        echo '</script>';
+    }
+    else if ($_SESSION['instance'] == "endPoints")
+    {
+        echo '<script>';
+        echo '$("#elm-endpoints").css({"font-family": "\'FFont-Bold\'", "color": "#4B906F"});';
+        echo '</script>';
+    }
+    else if ($_SESSION['instance'] == "analyticsData")
+    {
+        echo '<script>';
+        echo '$("#elm-analytics").css({"font-family": "\'FFont-Bold\'", "color": "#4B906F"});';
+        echo '</script>';
+    }
 }
 
 ?>
