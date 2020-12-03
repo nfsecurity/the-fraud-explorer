@@ -397,7 +397,6 @@ $spreadsheet->getActiveSheet()->setAutoFilter('D'.($contentStartRow-2).':H'.$cur
 
 $spreadsheet->getActiveSheet()->setCellValue('K9', $totalQueryWords);
 $uniqueEndpoints = array_unique($multipleEndpoints);
-$spreadsheet->getActiveSheet()->setCellValue('K12', count($uniqueEndpoints));
 $spreadsheet->getActiveSheet()->setCellValue('K15', count($uniqueEndpoints) ." reporting from a total of ". $countTyping['total']);
 
 if ($alldaterange == "alldaterange")
