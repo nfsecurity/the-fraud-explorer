@@ -38,6 +38,7 @@ DELENDPOINT="$THEFRAUDEXPLORER/helpers/endpointsProcessing.php"
 DISABLEDOWNPHRASESRULES="$THEFRAUDEXPLORER/mods/fraudTriangleRules.php"
 DISABLEDOWNPHRASESRULESET="$THEFRAUDEXPLORER/mods/setupRuleset.php"
 LICENSE="$THEFRAUDEXPLORER/mods/libraryLicense.php"
+WEEKDATA="$THEFRAUDEXPLORER/mods/dashHolder.php"
 
 # Replace types
 
@@ -72,6 +73,7 @@ DISABLEDOWNLOAD="s/id=\"download-rules\"/id=\"#\"/g"
 DISABLEDOWNLOADLICENSE="s/id=\"button-download-license\"/id=\"#\"/g"
 DISABLEDOWNLOADLICENSEHREF="s/mods\/downloadLicense?le=<?php if (\$noBackup == true) echo \"nobackupfile\"; else echo encRijndael(\$latestBackup\[3\]); ?>/#/g"
 DISABLEACTIVATELICENSE="s/id=\"button-activate-license\"/id=\"#\"/g"
+WEEK="s/echo \$pressureWeekReduced/echo \"073\"/g ; s/echo \$opportunityWeekReduced/echo \"012\"/g ; s/echo \$rationalizationWeekReduced/echo \"091\"/g"
 
 # Replace files
 
@@ -99,3 +101,4 @@ DISABLEACTIVATELICENSE="s/id=\"button-activate-license\"/id=\"#\"/g"
 /bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
 /bin/sed "$DISABLEDOWNLOAD" --in-place $DISABLEDOWNPHRASESRULES $DISABLEDOWNPHRASESRULESET
 /bin/sed "$DISABLEDOWNLOADLICENSE ; $DISABLEACTIVATELICENSE ; $DISABLEDOWNLOADLICENSEHREF" --in-place $LICENSE
+/bin/sed "$WEEK" --in-place $WEEKDATA
