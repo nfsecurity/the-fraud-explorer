@@ -1876,7 +1876,7 @@ include "../lbs/cryptography.php";
 
 <div class="modal" id="graphicdata" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center" style="width: 683px;">
+        <div class="modal-dialog vertical-align-center" style="width: 833px;">
             <div class="modal-content">
                 <div class="modal-body">
                     <p class="debug-url window-debug"></p>

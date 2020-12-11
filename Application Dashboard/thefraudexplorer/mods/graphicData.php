@@ -111,6 +111,21 @@ include "../lbs/cryptography.php";
         height: 45px;
     }
 
+    .table-th-graphdata-domain
+    {
+        font-family: 'FFont-Bold', sans-serif; font-size: 12px;
+        border-bottom: 0px solid gray;
+        border-top: 0px solid gray;
+        border-left: 0px solid gray;
+        border-right: 0px solid gray;
+        background: white;
+        min-width: 150px;
+        width: 150px;
+        text-align: left;
+        padding: 0px 0px 0px 5px;
+        height: 45px;
+    }
+
     .table-tbody-graphdata
     {
         display: block;
@@ -196,6 +211,25 @@ include "../lbs/cryptography.php";
         font-size: 11px;
     }
 
+    .table-td-graphdata-domain
+    {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+        border: 0px solid gray;
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+        height: 30px;
+        min-height: 30px;
+        padding: 0px 0px 0px 5px;
+        border-radius: 0px 0px 0px 0px; 
+        text-align: left; 
+        border-right: 2px solid white;
+        font-size: 11px;
+    }
+
     .not-ruleset
     {
         text-align: justify;
@@ -250,6 +284,12 @@ include "../lbs/cryptography.php";
         outline: none;
         cursor: pointer;
         font-size: 11px;
+    }
+
+    .pseudolink:hover 
+    {
+        color: #4B906F;
+        text-decoration: none;
     }
 
     .font-aw-color
@@ -311,9 +351,10 @@ include "../lbs/cryptography.php";
 ?>
 
 <div class="div-container">
-    <table class="table-graphdata">
+    <table class="table-graphdata tablesorter" id="tablesights">
         <thead class="table-thead-graphdata">
             <th class="table-th-graphdata-endpoint">ENDPOINT</th>
+            <th class="table-th-graphdata-domain">DOMAIN</th>
             <th class="table-th-graphdata-body">WORDS</th>
             <th class="table-th-graphdata-body">PRESS</th>
             <th class="table-th-graphdata-body">OPPRT</th>
@@ -334,6 +375,7 @@ include "../lbs/cryptography.php";
                     $endpointName = (strlen($endpointsFraud['agent']) > 12) ? substr($endpointsFraud['agent'], 0, 12) . ' ...' : $endpointsFraud['agent'];
                     $endpointEncoded = encRijndael($endpointsFraud['agent']);
                     $totalWordHits = $endpointsFraud['totalwords'];
+                    $endpointDomain = $endpointsFraud['domain'];
                     $countPressure = $endpointsFraud['pressure'];
                     $countOpportunity = $endpointsFraud['opportunity'];
                     $countRationalization = $endpointsFraud['rationalization'];
@@ -348,6 +390,7 @@ include "../lbs/cryptography.php";
                     }
                     else continue;
                         
+                    echo '<td class="table-td-graphdata-domain"><span class="fa fa-globe font-icon-gray fa-padding"></span>'.$endpointDomain.'</td>';
                     echo '<td class="table-td-graphdata-body">'.$totalWordHits.'</td>';
                     echo '<td class="table-td-graphdata-body"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countPressure.'</td>';
                     echo '<td class="table-td-graphdata-body-opportunity"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$countOpportunity.'</td>';
@@ -365,16 +408,69 @@ include "../lbs/cryptography.php";
 
         </tbody>
     </table>
-    
-    <?php
-    
-    echo '<div class="footer-statistics-graphic"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are '.$counter.' endpoints with a point in the scatter plot analytics graph reflecting fraud triangle events</div>';
-    
-    ?>
-    
+
+    <!-- Pager -->
+
+    <div id="pagerSG" class="pager pagerSG pager-screen footer-statistics-graphic">
+        <div style="float:left;">
+            <span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>There are <?php echo $counter; ?> endpoints with a point in the scatter graph reflecting fraud triangle events
+        </div>
+        <div style="float: right;">
+            <form>
+                <span class="fa fa-fast-backward fa-lg first" id="backward"></span>&nbsp;
+                <span class="fa fa-arrow-circle-o-left fa-lg prev" id="left"></span>&nbsp;
+                <span class="pagedisplay"></span>&nbsp;
+                <span class="fa fa-arrow-circle-o-right fa-lg next" id="right"></span>&nbsp;
+                <span class="fa fa-fast-forward fa-lg last" id="forward"></span>&nbsp;&nbsp;
+                <select id="pagerSelect" class="pagesize select-styled right" style="display: none;">
+                    <option value="4" id="opt4">4</option>
+                    <option value="5" id="opt5">5</option>
+                    <option value="6" id="opt6">6</option>
+                </select>    
+            </form>
+        </div>
+    </div>
+        
     <div class="modal-footer window-footer-graphic">
         <a class="btn btn-default" style="outline: 0 !important;" href="eventData?nt=<?php echo encRijndael("all"); ?>">Access all events</a>
         <button type="button" class="btn btn-success" data-dismiss="modal" style="outline: 0 !important;">Return to back</button>
     </div>
 
 </div>
+
+<!-- Tablesorter script -->
+
+<script>
+
+$(function() {
+
+    $("#tablesights")
+    .tablesorter({
+        sortLocaleCompare: true,
+        widgets: ['filter'],
+        sortList: [[6,1],[7,1]], 
+        widgetOptions : 
+        {
+            filter_columnFilters : false,
+            pager_size: 20
+        },
+        headers:
+        {
+            0:
+            {
+                sorter: false
+            }
+
+        }
+    })
+
+    .tablesorterPager({
+        container: $(".pagerSG"),
+        output: '{startRow} to {endRow} ({totalRows})',
+        page: 0,
+        size: 20
+    })
+
+});
+
+</script>
