@@ -33,7 +33,7 @@ if [ $? -eq 0 ]; then
 
     # Sync remote files with local files
 
-    /usr/bin/rsync -aq --exclude config.ini --exclude 'core/rules/*.json' "$REPODATA" "$TFEDIRECTORY" 
+    /usr/bin/rsync -aq --exclude config.ini --exclude update.xml --exclude 'core/rules/*.json' "$REPODATA" "$TFEDIRECTORY" 
     chown -R apache:apache /var/www/html/thefraudexplorer
 
     # Remove temporary directory and files
