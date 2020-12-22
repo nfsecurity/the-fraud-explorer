@@ -264,9 +264,9 @@ if ($endpointDECSQL == "all")
         /* Event Details */
 
         $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
-        $wordTyped = decRijndael($result['_source']['wordTyped']);
+        $wordTyped = $result['_source']['wordTyped'];
         $stringHistory = decRijndael($result['_source']['stringHistory']);
-        $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+        $windowTitle = htmlentities($result['_source']['windowTitle']);
         $endPoint = explode("_", $result['_source']['agentId']);
         $agentId = $result['_source']['agentId'];
         $messageFlag = "no";

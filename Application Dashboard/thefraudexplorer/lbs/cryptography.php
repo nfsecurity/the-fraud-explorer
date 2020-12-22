@@ -45,12 +45,7 @@ function decRijndael($encrypted)
     $toreturn = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode(str_replace("_","/",str_replace("-","+",$encrypted))), MCRYPT_MODE_CBC, $iv_utf);
     $toreturn = filter_var($toreturn, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     
-    /* Check if string is encrypted or not */
-
-    preg_match_all('/[\x80-\xFF]/i', $toreturn, $results);
-
-    if (count($results[0]) > 0 || $toreturn == "") return $encrypted;
-    else return $toreturn;
+    return $toreturn;
 }
 
 function encRijndaelRemote($unencrypted)

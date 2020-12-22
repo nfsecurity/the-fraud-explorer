@@ -100,7 +100,7 @@ if ($row_a = mysqli_fetch_array($result_a))
 
             $agent = $alertDocument['hits']['hits'][0]['_source']['agentId'];
             preg_match('/([a-z0-9]*)_/', $agent, $endpoint);
-            $application = decRijndael($alertDocument['hits']['hits'][0]['_source']['windowTitle']);
+            $application = $alertDocument['hits']['hits'][0]['_source']['windowTitle'];
 
             $dateColumnData = '&nbsp;<span class="fa fa-calendar font-icon-gray fa-padding"></span>'.$dateOne . ", ". $eventTime[2];
             $endpointColumnData = '<span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$endpoint[1];

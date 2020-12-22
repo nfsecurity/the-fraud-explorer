@@ -615,8 +615,8 @@ else $enabledPhraseCollection = false;
                         echo '<td class="td-endpoints">';
                     
                         $date = date('Y/m/d, H:i', strtotime($result['_source']['sourceTimestamp']));
-                        $wordTyped = decRijndael($result['_source']['wordTyped']);
-                        $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+                        $wordTyped = $result['_source']['wordTyped'];
+                        $windowTitle = htmlentities($result['_source']['windowTitle']);
                         $searchValue = "/".$result['_source']['phraseMatch']."/";
                         $endPoint = explode("_", $result['_source']['agentId']);
                         $endpointDECSQL = $endPoint[0];

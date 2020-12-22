@@ -122,7 +122,7 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
 {
     /* Elasticsearch queries */
 
-    $searchString = filter($search[8]);
+    $searchString = filter($search[9]);
 
     /* View selector */
 
@@ -212,10 +212,10 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
             if (isset($result['_source']['tags'])) continue;
             
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
-            $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $wordTyped = $result['_source']['wordTyped'];
             $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
             $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
-            $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+            $windowTitle = htmlentities($result['_source']['windowTitle']);
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $endPoint = explode("_", $result['_source']['agentId']);
             $agentId = $result['_source']['agentId'];
@@ -362,8 +362,8 @@ if (isset($_GET['filter']) && $_GET['filter'] != "")
         foreach ($endpointData['hits']['hits'] as $result)
         {        
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));   
-            $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
-            $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $windowTitle = htmlentities($result['_source']['windowTitle']);
+            $wordTyped = $result['_source']['wordTyped'];
             $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
             $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $searchValue = "/".$result['_source']['phraseMatch']."/";
@@ -519,8 +519,8 @@ else
             if (isset($result['_source']['tags'])) continue;
             
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));
-            $wordTyped = decRijndael($result['_source']['wordTyped']);
-            $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
+            $wordTyped = $result['_source']['wordTyped'];
+            $windowTitle = htmlentities($result['_source']['windowTitle']);
             $searchValue = "/".$result['_source']['phraseMatch']."/";
             $endPoint = explode("_", $result['_source']['agentId']);
             $agentId = $result['_source']['agentId'];
@@ -671,8 +671,8 @@ else
         foreach ($endpointData['hits']['hits'] as $result)
         {        
             $date = date('Y-m-d H:i', strtotime($result['_source']['sourceTimestamp']));   
-            $windowTitle = decRijndael(htmlentities($result['_source']['windowTitle']));
-            $wordTyped = decRijndael($result['_source']['wordTyped']);
+            $windowTitle = htmlentities($result['_source']['windowTitle']);
+            $wordTyped = $result['_source']['wordTyped'];
             $flagNumber = (isset($result['_source']['messageFlag'])) ? $result['_source']['messageFlag'] : '0';
             $flagStyles = ($flagNumber != "0") ? 'fa fa-flag font-icon-color-gray' : 'fa fa-flag-o font-icon-color-gray';
             $searchValue = "/".$result['_source']['phraseMatch']."/";
