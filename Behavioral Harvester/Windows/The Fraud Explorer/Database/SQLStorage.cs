@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v2.0.3-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: SQL Storage
  */
@@ -84,7 +84,7 @@ namespace TFE_core.Database
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('aesKey', '" + globalConfigParams.aesKey + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
-                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('excludedApps', '" + globalConfigParams.excludedApps + "')", connection);
+                insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('onlyApps', '" + globalConfigParams.onlyApps + "')", connection);
                 insertSQL.ExecuteNonQuery();
 
                 insertSQL = new SqliteCommand("insert into config (parameter, value) VALUES ('aesIV', '" + globalConfigParams.aesIV + "')", connection);
@@ -197,7 +197,7 @@ namespace TFE_core.Database
                     globalConfigParams.aesKey = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.aesIV = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/cryptkey").ToString()).Replace("\0", String.Empty);
                     globalConfigParams.serverPassword = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/srvpwd").ToString()).Replace("\0", String.Empty);
-                    globalConfigParams.excludedApps = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/apps").ToString()).Replace("\0", String.Empty);
+                    globalConfigParams.onlyApps = InstallerClass.DecRijndaelMSI(navConfigMSI.SelectSingleNode("/ConfigParameters/apps").ToString()).Replace("\0", String.Empty);
 
                     SQLStorage db = new SQLStorage();
                     db.CreateDB();

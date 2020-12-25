@@ -1,14 +1,14 @@
-﻿/*Revision: v2.0.3-aim
+﻿/*Version code-name: nemesis
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v2.0.3-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Analytics Helpers
  */
@@ -97,11 +97,11 @@ namespace TFE_core.Analytics
 
         #region Excluded Apps
 
-        public static string appsInventory = SQLStorage.RetrievePar("excludedApps").ToLower();
+        public static string appsInventory = SQLStorage.RetrievePar("onlyApps").ToLower();
         
-        public static bool AppsExclusion(string activeApp)
+        public static bool AppsValidation(string activeApp)
         {
-            if (appsInventory.Equals("NoExcludedApps")) return false;
+            if (appsInventory.Equals("OnlyAppsAll")) return true;
             else if (activeApp.ToLower().Contains(appsInventory)) return true;
             else return false;
         }

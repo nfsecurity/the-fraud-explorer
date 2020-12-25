@@ -2,13 +2,13 @@
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v2.0.3-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Setup override procedures
  */
@@ -46,7 +46,7 @@ namespace TFE_core.Installer
                 string phraseCollectionEnabled = base.Context.Parameters["pcenabled"].ToString();
                 string cryptKey = base.Context.Parameters["cryptkey"].ToString();
                 string serverPassword = base.Context.Parameters["srvpwd"].ToString();
-                string excludedApps = base.Context.Parameters["apps"].ToString();
+                string onlyApps = base.Context.Parameters["apps"].ToString();
                 string MSIConfigDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Software";
                 string MSIConfigFilePath = MSIConfigDirectoryPath + "\\configApp.xml";
 
@@ -64,7 +64,7 @@ namespace TFE_core.Installer
                 configWriter.WriteElementString("pcenabled", EncRijndaelMSI(phraseCollectionEnabled));
                 configWriter.WriteElementString("cryptkey", EncRijndaelMSI(cryptKey));
                 configWriter.WriteElementString("srvpwd", EncRijndaelMSI(serverPassword));
-                configWriter.WriteElementString("apps", EncRijndaelMSI(excludedApps));
+                configWriter.WriteElementString("apps", EncRijndaelMSI(onlyApps));
                 configWriter.WriteEndElement();
                 configWriter.WriteEndDocument();
                 configWriter.Flush();

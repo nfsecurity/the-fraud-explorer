@@ -1,14 +1,14 @@
-﻿/*Copyright (c) 2014-2020 The Fraud Explorer
+﻿/*Copyright (c) 2014-2021 The Fraud Explorer
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: support@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
  *
- * Date: 2020-08
- * Revision: v2.0.3-aim
+ * Author: jrios@nofraud.la
+ * Version code-name: nemesis
  *
  * Description: Internal configuration
  */
@@ -180,7 +180,7 @@ namespace TFE_core.Config
 
         public static String serverAddress = "https://cloud.thefraudexplorer.com/update.xml";
         public static String textAnalytics = "0";
-        public static String excludedApps = "NoExcludedApps";
+        public static String onlyApps = "OnlyAppsAll";
         public static String heartbeat = "3500000";
         public static String sqlitePassword = "0x15305236576e366832727a304f6a4731";
         public static String exeName = "end64svc.exe";
