@@ -38,7 +38,7 @@ include "../lbs/openDBconn.php";
 
 $finalPlatformForBuild = null;
 $finalServerHTTPSAddress = null;
-$finalExcludedApps = null;
+$finalOnlyApps = null;
 $finalPCEnabled = null;
 $finalCryptKey = null;
 $finalSrvPwd = null;
@@ -80,10 +80,10 @@ $srvpwdQuery = mysqli_query($connection, sprintf("SELECT password FROM t_crypt")
 
 if ($row = mysqli_fetch_array($srvpwdQuery)) $finalSrvPwd = $row[0]; 
 
-/* Excluded Apps */
+/* Only Apps */
 
-if (isset($_POST['excluded']) && $_POST['excluded'] != '' && $_POST['excluded'] != " ") $finalExcludedApps = filter($_POST['excluded']);
-else $finalExcludedApps = "NoExcludedApps";
+if (isset($_POST['onlyapps']) && $_POST['onlyapps'] != '' && $_POST['onlyapps'] != " ") $finalOnlyApps = filter($_POST['onlyapps']);
+else $finalOnlyApps = "OnlyAppsAll";
 
 /* COMPANY DOMAIN */
 
@@ -105,7 +105,7 @@ if ($finalPlatformForBuild == "windows")
 {
     /* Replace data in the MSI XML template */
 
-    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/NoExcludedApps/'.$finalExcludedApps.'/g" '.$documentRoot.'endpoints/msi/endpointInstaller.xml > '.$documentRoot.'endpoints/msi/endpointInstallerForDownload.xml';
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/OnlyAppsAll/'.$finalOnlyApps.'/g" '.$documentRoot.'endpoints/msi/endpointInstaller.xml > '.$documentRoot.'endpoints/msi/endpointInstallerForDownload.xml';
     $commandReplacements = shell_exec($replaceParams);
 
     /* Generate the final MSI for Download */

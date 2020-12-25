@@ -276,8 +276,8 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
             <div class="right-container">
                    
-                <p class="title-config">Do not capture phrases on</p><br>
-                <input type="text" name="excluded" id="excluded" autocomplete="off" placeholder="Whatsapp, Skype, Gmail" class="input-value-text">   
+                <p class="title-config">Only capture phrases on</p><br>
+                <input type="text" name="onlyapps" id="onlyapps" autocomplete="off" placeholder="Whatsapp, Skype, Gmail" class="input-value-text">   
                     
             </div>
         </div>
@@ -366,10 +366,10 @@ $("#btn-build-endpoint").click(function() {
 
     var platform = $("#platform option:selected").val();
     var address = $('#address').val();
-    var excluded = $('#excluded').val();
+    var onlyapps = $('#onlyapps').val();
     var domain = $('#companydomain').val();
     var rest = $('#restcredentials').val();
-    var allvalues = new Array(address, excluded, domain, rest);
+    var allvalues = new Array(address, onlyapps, domain, rest);
     var continueSubmit = true;
 
     if (platform == "windows")
@@ -510,21 +510,21 @@ function getstatus()
             document.getElementById("companydomain").disabled=true;
             document.getElementById("restcredentials").disabled=true;
             document.getElementById("pcenabled").disabled=false;
-            document.getElementById("excluded").disabled=false;
+            document.getElementById("onlyapps").disabled=false;
         } 
         else if (document.getElementById("platform").value == "android") 
         {
             document.getElementById("companydomain").disabled=false;
             document.getElementById("restcredentials").disabled=false;
             document.getElementById("pcenabled").disabled=false;
-            document.getElementById("excluded").disabled=true;
+            document.getElementById("onlyapps").disabled=true;
         }
         else if (document.getElementById("platform").value == "pbx") 
         {
             document.getElementById("companydomain").disabled=true;
             document.getElementById("restcredentials").disabled=false;
             document.getElementById("pcenabled").disabled=true;
-            document.getElementById("excluded").disabled=true;
+            document.getElementById("onlyapps").disabled=true;
         }
     }
 </script> 
