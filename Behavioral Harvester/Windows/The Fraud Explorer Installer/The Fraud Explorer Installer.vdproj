@@ -160,7 +160,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_05BF24B4_970A_40CD_8C47_A3705EA90C30"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:/address=[ADDRESS] /pcenabled=[PCENABLED]  /cryptkey=[CRYPTKEY] /srvpwd=[SRVPWD] /apps=[APPS]"
+            "CustomActionData" = "8:/address=[ADDRESS] /pcenabled=[PCENABLED]  /cryptkey=[CRYPTKEY] /srvpwd=[SRVPWD] /apps=\"[APPS]\""
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B06B9EE38FF34EA7B0893E3D2297AC57"
             {
@@ -362,15 +362,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Analytics Explorer"
-        "ProductCode" = "8:{6E3E608A-F92C-4E56-B4EF-3AB9D2B18E42}"
-        "PackageCode" = "8:{0E451942-7AE4-4FC8-934E-0B3CA7B84A54}"
-        "UpgradeCode" = "8:{C0DC7C39-1D2F-4422-AFF1-EBF10B2DF93B}"
+        "ProductCode" = "8:{845789DC-6774-4BDC-9A6B-538C830D8065}"
+        "PackageCode" = "8:{AB35427F-AA95-496E-B1E2-B18B7405932D}"
+        "UpgradeCode" = "8:{C0DC7C30-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.3"
+        "ProductVersion" = "8:2.0.4"
         "Manufacturer" = "8:NF"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -948,7 +948,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             {
-            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Release\\end64svc.exe"
+            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Debug\\end64svc.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"
