@@ -92,18 +92,23 @@ namespace TFE_core.Analytics
         #endregion
 
         /// <summary>
-        /// Excluded Apps
+        /// Only Apps
         /// </summary>
 
-        #region Excluded Apps
+        #region Only Apps
 
         public static string appsInventory = SQLStorage.RetrievePar("onlyApps").ToLower();
-        
+        public static string[] appList = appsInventory.Split(',');
+
         public static bool AppsValidation(string activeApp)
         {
-            if (appsInventory.Equals("OnlyAppsAll")) return true;
-            else if (activeApp.ToLower().Contains(appsInventory)) return true;
-            else return false;
+            if (appsInventory.Contains("onlyappsall")) return true;
+
+            foreach (string app in appList)
+            {       
+                if (activeApp.Contains(app.Trim())) return true;
+            }
+            return false;
         }
 
         #endregion

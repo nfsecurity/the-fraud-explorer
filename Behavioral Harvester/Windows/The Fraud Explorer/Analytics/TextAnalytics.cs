@@ -172,7 +172,7 @@ namespace TFE_core.Analytics
                         
                             // Send whole word
 
-                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && TextHelpers.AppsValidation(ActiveApplTitle()))
+                            if (KeyboardWord.Length >= 1 && TextHelpers.WordsSanitizer(KeyboardWord) && TextHelpers.AppsValidation(ActiveApplTitle().ToLower()))
                             {
                                 log4net.GlobalContext.Properties["TextWindow"] = Cryptography.EncRijndael(TextHelpers.RemoveDiacritics(ActiveApplTitle()));
                                 log4net.GlobalContext.Properties["Word"] = Cryptography.EncRijndael(KeyboardWord);
