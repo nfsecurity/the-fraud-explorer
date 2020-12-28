@@ -2,7 +2,7 @@
  * The Fraud Explorer 
  * https://www.thefraudexplorer.com/
  *
- * Copyright (c) 2014-2020 The Fraud Explorer
+ * Copyright (c) 2014-2021 The Fraud Explorer
  * email: customer@thefraudexplorer.com
  * Licensed under GNU GPL v3
  * https://www.thefraudexplorer.com/License
