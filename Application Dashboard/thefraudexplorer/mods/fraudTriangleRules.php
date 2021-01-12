@@ -625,9 +625,9 @@ function is_internet()
                         {
                             echo 'There are different versions of the phrase libraries at the official repo. ES [loc'. $localPhraseLibraryVersionSpanish[1].'-rem'.$remotePhraseLibraryVersionSpanish.'] - EN [loc'.$localPhraseLibraryVersionEnglish[1].'-rem'.$remotePhraseLibraryVersionEnglish.']';
                         }
-                        else echo 'Your phrase libraries database are up to date, you don\'t need to upgrade your libraries now but pay future attention !';
+                        else echo 'Your phrase libraries database are up to date, you don\'t need to upgrade your libraries now but pay future attention';
                     }
-                    else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing !';
+                    else echo 'Warning, the phrase library database modification could cause unwanted results due to a bad regular expression writing';
                 }
                 else echo 'You don\'t have internet connection at this time, please stablish permissions to reach the phrase library license server';
 
