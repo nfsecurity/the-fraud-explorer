@@ -274,11 +274,9 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         }
         else
         {
-            if ($dictEna == "yes") 
-            {
-                $stringOfWords = processBackspaces($stringOfWords);
-                $stringOfWords = checkPhrases($stringOfWords, $dictLan);
-            }
+	    $stringOfWords = processBackspaces($stringOfWords);
+
+            if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
 
             $totalMatches = $totalMatches + parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
             $counter = 0;
@@ -293,12 +291,9 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         {            
             $lastWindowTitle = $windowTitle;
             $lastTimeStamp = $timeStamp; 
+	    $stringOfWords = processBackspaces($stringOfWords);
 
-            if ($dictEna == "yes") 
-            {
-                $stringOfWords = processBackspaces($stringOfWords);
-                $stringOfWords = checkPhrases($stringOfWords, $dictLan);
-            }
+            if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
 
             $totalMatches = $totalMatches + parseFraudTrianglePhrases($agentID, $sockLT, $fraudTriangleTerms, $stringOfWords, $lastWindowTitle, $lastTimeStamp, $configFile, $jsonFT, $ruleset, $lastArrayElement);
         }
