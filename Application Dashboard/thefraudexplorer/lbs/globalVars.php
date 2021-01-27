@@ -43,7 +43,7 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     $sanitizedPhrases = preg_replace('/(next){2,}/', ' ', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/(ja){2,}/', ' jaja ', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/(je){2,}/', ' jeje ', $sanitizedPhrases);
-    $sanitizedPhrases = preg_replace('/(ha){2,}/', ' ha ', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/(ha){2,}/', ' haha ', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/(.)\1{2,}/', ' ', $sanitizedPhrases);
 
     /* Remove multiple dots ans spaces and left one */
