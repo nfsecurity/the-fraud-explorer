@@ -217,6 +217,29 @@ if (isset($_POST['librarylanguage']))
     }
 }
 
+if (isset($_POST['spellchecker']))
+{
+    $spellSelected = filter($_POST['spellchecker']);
+    $configFile = parse_ini_file("../config.ini");
+    $currentSpell = $configFile['wc_enabled'];
+
+    if (!empty($_POST['spellchecker']) && ($currentSpell != $spellSelected))
+    {
+        $spellCheckertoSet = "wc_enabled = \\\"";
+
+        if ($spellSelected == "yes") $spellCheckertoSet = $spellCheckertoSet . "yes\\\"";
+        else if ($spellSelected == "no") $spellCheckertoSet = $spellCheckertoSet . "no\\\"";
+     
+        /* Change spell checker in config.ini file */
+ 
+        $wcSpell= "wc_enabled = \\\"" . $configFile['wc_enabled'] . "\\\"";
+        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcSpell.'/'.$spellCheckertoSet.'/g" --in-place '.$documentRoot.'config.ini';
+        $commandReplacements = exec($replaceParams);
+
+        $msg = $msg . ", spelling corrector";
+    }
+}
+
 if ($msg == "") 
 {
     $msg = "none";

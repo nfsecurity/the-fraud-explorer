@@ -243,6 +243,20 @@ $_SESSION['processingStatus'] = "notstarted";
         float: right;
     }
 
+    .language-subcontainer
+    {
+        height: 100%; 
+        width: 132px; 
+        float: left;"
+    }    
+
+    .spellchecker-subcontainer
+    {
+        height: 100%; 
+        width: 132px; 
+        float: right;
+    }
+
     .btn-default, .btn-default:active, .btn-default:visited, .btn-danger, .btn-danger:active, .btn-danger:visited
     {
         font-family: Verdana, sans-serif; font-size: 14px !important;
@@ -344,36 +358,69 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
 
             <div class="librarylanguage-container">
-                <p class="title-config">Phrase Library language</p><br>
-                <select class="select-librarylanguage-styled wide" name="librarylanguage" id="librarylanguage" <?php if ($session->domain != "all") echo 'disabled'; ?>>
 
-                    <?php
+                <div class="language-subcontainer">
 
-                        $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+                    <p class="title-config">Library language</p><br>
+                    <select class="select-librarylanguage-styled wide" name="librarylanguage" id="librarylanguage" <?php if ($session->domain != "all") echo 'disabled'; ?>>
 
-                        if ($configFile["wc_language"] == "es")
-                        {
-                            echo '<option value="es" selected="selected">Spanish</option>';
-                            echo '<option value="en">English</option>';
-                            echo '<option value="hu">Multi language</option>';
-                        }
-                        else if ($configFile["wc_language"] == "en")
-                        {
-                            echo '<option value="es">Spanish</option>';
-                            echo '<option value="en" selected="selected">English</option>';
-                            echo '<option value="hu">Multi language</option>';
-                        }
-                        else
-                        {
-                            echo '<option value="es">Spanish</option>';
-                            echo '<option value="en">English</option>';
-                            echo '<option value="hu" selected="selected">Multi language</option>';
-                        }
+                        <?php
 
-                    ?>
-                  
-                </select>    
+                            $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+
+                            if ($configFile["wc_language"] == "es")
+                            {
+                                echo '<option value="es" selected="selected">Spanish</option>';
+                                echo '<option value="en">English</option>';
+                                echo '<option value="hu">Multi language</option>';
+                            }
+                            else if ($configFile["wc_language"] == "en")
+                            {
+                                echo '<option value="es">Spanish</option>';
+                                echo '<option value="en" selected="selected">English</option>';
+                                echo '<option value="hu">Multi language</option>';
+                            }
+                            else
+                            {
+                                echo '<option value="es">Spanish</option>';
+                                echo '<option value="en">English</option>';
+                                echo '<option value="hu" selected="selected">Multi language</option>';
+                            }
+
+                        ?>
+                    
+                    </select>    
+
+                </div>
+
+                <div class="spellchecker-subcontainer">
+
+                    <p class="title-config">Spelling corrector</p><br>
+                    <select class="select-librarylanguage-styled wide" name="spellchecker" id="spellchecker"> 
+
+                        <?php
+
+                            $configFile = parse_ini_file("/var/www/html/thefraudexplorer/config.ini");
+
+                            if ($configFile["wc_enabled"] == "yes")
+                            {
+                                echo '<option value="yes" selected="selected">active</option>';
+                                echo '<option value="no">de-activate</option>';
+                            }
+                            else
+                            {
+                                echo '<option value="yes">activate</option>';
+                                echo '<option value="no" selected="selected">inactive</option>';
+                            }
+
+                        ?>
+
+                    </select>
+
+                </div>
+
             </div>
+
         </div>
 
         <?php
