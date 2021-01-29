@@ -108,7 +108,7 @@ include "../lbs/elasticsearch.php";
         min-width: 180px;
         width: 180px;
         text-align: left;
-        padding: 0px 0px 0px 5px;
+        padding: 0px 0px 0px 9px;
         height: 45px;
     }
 
@@ -276,10 +276,11 @@ include "../lbs/elasticsearch.php";
 <div class="div-container-logging">
     <table class="table-logging">
         <thead class="table-thead-logging">
-            <th class="table-th-logging-date">FTA LAUNCH DATE</th>
+            <th class="table-th-logging-date"><span class="fa fa-calendar font-icon-gray fa-padding"></span>FTA LAUNCH DATE</th>
             <th class="table-th-logging">START</th>
             <th class="table-th-logging">FINISH</th>
-            <th class="table-th-logging">TAKEN</th>
+            <th class="table-th-logging">TOOK</th>
+            <th class="table-th-logging"><span class="fa fa-file-text-o font-icon-gray fa-padding"></span>WORDS</th>
             <th class="table-th-logging-matches">MATCHES</th>
         </thead>
         <tbody class="table-tbody-logging">
@@ -295,12 +296,14 @@ include "../lbs/elasticsearch.php";
                     $endTime = date('H:i', strtotime($result['_source']['@timestamp']));
                     $timeTaken = round(($result['_source']['timeTaken']/60));
                     $timeTaken = ($timeTaken < 10) ? "0{$timeTaken}" : $timeTaken;
+                    $wordCount = (isset($result['_source']['wordCount'])) ? $result['_source']['wordCount'] : "0";
                     $matchCount = $result['_source']['matchCount'];
                         
                     echo '<td class="table-td-logging-date">&nbsp;<span class="fa fa-calendar font-icon-gray fa-padding"></span>'.$date.'</td>';
                     echo '<td class="table-td-logging"><span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$startTime.'</td>';
                     echo '<td class="table-td-logging"><span class="fa fa-clock-o font-icon-gray fa-padding"></span>'.$endTime.'</td>';
                     echo '<td class="table-td-logging">'.$timeTaken.' min</td>';
+                    echo '<td class="table-td-logging">'.number_format($wordCount).'</td>';
                     echo '<td class="table-td-logging-matches">'.$matchCount.'</td>';
                     echo '</tr>';
                     
@@ -314,7 +317,7 @@ include "../lbs/elasticsearch.php";
     
     <?php
     
-    echo '<div class="footer-statistics-logging"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>Showing the last '.$counter.' Fraud Triangle Analytics AI-NLP/NLU processor executions</div>';
+    echo '<div class="footer-statistics-logging"><span class="fa fa-area-chart font-aw-color">&nbsp;&nbsp;</span>System and audit log - showing the last '.$counter.' Fraud Triangle Analytics AI-NLP/NLU processor executions</div>';
     
     ?>
     

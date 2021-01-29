@@ -247,6 +247,12 @@ if (indexExist($configFile['es_alerter_status_index'], $configFile))
         while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
         
         echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";       
+
+        /* Compute number of words processed */
+
+        $numberOfWordsPCS = countTypedWordsWithDate($ESindex, $GLOBALS['lastAlertDate'][0], $GLOBALS['currentTime']);
+
+        echo "[INFO] Number of words processed: ".$numberOfWordsPCS['count']."\n";
     }
     else
     {
@@ -345,6 +351,13 @@ else
         while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
         
         echo "[INFO] Number of endpoints processed: ".$effectiveEndpointCounter."\n";
+
+        /* Compute number of words processed */
+
+        $numberOfWordsPCS = countAllTypedWords($ESindex);
+
+        echo "[INFO] Number of words processed: ".$numberOfWordsPCS['count']."\n";
+        
     }
     else
     {
@@ -404,7 +417,7 @@ foreach($socketIPC as $agent => $value)
 echo "[INFO] Indexing ".$matchesCount." Fraud Triangle matches ...\n";
 
 if ($firstTimeIndex = true) $GLOBALS['lastAlertDate'][0] = $endTime;
-$msgData = $endTime." - ".$GLOBALS['lastAlertDate'][0]." TextEvent ".$timeTaken." ".$matchesCount;
+$msgData = $endTime." - ".$GLOBALS['lastAlertDate'][0]." TextEvent ".$timeTaken." ".$matchesCount." ".$numberOfWordsPCS['count'];
 
 $lenData = strlen($msgData);
 socket_sendto($sockAlerter, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_alerter_status_port']);
@@ -412,7 +425,7 @@ socket_close($sockAlerter);
 
 echo "[INFO] Sending this alert status to log file ...\n";
 
-logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$matchesCount."]");
+logToFileAndSyslog("LOG_INFO", $configFile['log_file'], "[INFO] - Sending alert-status to index, StartTime[".$GLOBALS['lastAlertDate'][0]."], EndTime[".$endTime."] TimeTaken[".$timeTaken."] Triggered[".$matchesCount."] wordsProcessed[".$numberOfWordsPCS['count']."]");
 include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";
 
 $time_end = microtime(true);

@@ -115,6 +115,50 @@ function extractTypedWordsFromAgentIDWithDate($agentID, $index, $from, $to)
     return $agentIdTypedWords;
 }
 
+/* Count words typed depending of the last date */
+
+function countTypedWordsWithDate($index, $from, $to)
+{
+    $entireTypedWordsParams = [
+        'index' => $index, 
+        'body' =>[
+            'query' => [
+                'bool' => [
+                    'filter' => [
+                        'range' => [
+                            '@timestamp' => [ 'gte' => $from, 'lte' => $to ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $typedWords = $client->count($entireTypedWordsParams);
+
+    return $typedWords;
+}
+
+/* Count words typed */
+
+function countAllTypedWords($index)
+{
+    $entireTypedWordsParams = [
+        'index' => $index, 
+        'body' =>[
+            'query' => [
+                'match_all' => []
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $typedWords = $client->count($entireTypedWordsParams);
+
+    return $typedWords;
+}
+
 /* Check if Elasticsearch alerter index exists */
 
 function indexExist($indexName, $configFile)

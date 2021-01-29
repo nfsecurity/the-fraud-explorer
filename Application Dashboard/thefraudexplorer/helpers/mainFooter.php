@@ -137,7 +137,7 @@ $currentversion = $configFile['sw_version'];
 
 <div class="modal" id="logging" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center">
+        <div class="modal-dialog vertical-align-center" style="width: 693px;">
             <div class="modal-content">
                 <div class="modal-body">
                     <p class="debug-url window-debug"></p>
@@ -176,5 +176,9 @@ $currentversion = $configFile['sw_version'];
 <script>
     $('#logging').on('show.bs.modal', function(e){
         $(this).find('.logging-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#logging').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
     });
 </script>
