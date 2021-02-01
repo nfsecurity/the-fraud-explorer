@@ -169,6 +169,10 @@ $currentversion = $configFile['sw_version'];
     $('#fraud-simulator').on('show.bs.modal', function(e){
         $(this).find('.fraud-simulator-button').attr('href', $(e.relatedTarget).data('href'));
     });
+
+    $('#fraud-simulator').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
+    });
 </script>
 
 <!-- Script for Logging -->
