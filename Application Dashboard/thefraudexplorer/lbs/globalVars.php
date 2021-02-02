@@ -22,7 +22,7 @@ $documentRoot = $configFile['php_document_root'];
 
 /* Unwanted words */
 
-$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin");
+$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin", "oemquestio", "oemquestion");
 
 /* Set TimeZone */
 
@@ -57,7 +57,7 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     $sanitizedPhrases = str_replace('.', '. ', $sanitizedPhrases);
     $sanitizedPhrases = str_replace(' .', '.', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/^,\s?/', '', $sanitizedPhrases);
-    $sanitizedPhrases = preg_replace('/^.\s?/', '', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/^\.\s?/', '', $sanitizedPhrases);
 
     /* Remove multiple spaces */
 
