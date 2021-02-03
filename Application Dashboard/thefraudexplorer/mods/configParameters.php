@@ -232,11 +232,31 @@ if (isset($_POST['spellchecker']))
      
         /* Change spell checker in config.ini file */
  
-        $wcSpell= "wc_enabled = \\\"" . $configFile['wc_enabled'] . "\\\"";
+        $wcSpell = "wc_enabled = \\\"" . $configFile['wc_enabled'] . "\\\"";
         $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcSpell.'/'.$spellCheckertoSet.'/g" --in-place '.$documentRoot.'config.ini';
         $commandReplacements = exec($replaceParams);
 
         $msg = $msg . ", spelling corrector";
+    }
+}
+
+if (isset($_POST['defaultruleset']))
+{
+    $ruleSelected = filter($_POST['defaultruleset']);
+    $configFile = parse_ini_file("../config.ini");
+    $currentRule = $configFile['singup_ruleset'];
+
+    if (!empty($_POST['defaultruleset']) && ($currentRule != $ruleSelected))
+    {
+        $ruletoSet = "singup_ruleset = \\\"" . $ruleSelected . "\\\"";
+     
+        /* Change default ruleset in config.ini file */
+ 
+        $singupRule = "singup_ruleset = \\\"" . $configFile['singup_ruleset'] . "\\\"";
+        $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$singupRule.'/'.$ruletoSet.'/g" --in-place '.$documentRoot.'config.ini';
+        $commandReplacements = exec($replaceParams);
+
+        $msg = $msg . ", default ruleset";
     }
 }
 

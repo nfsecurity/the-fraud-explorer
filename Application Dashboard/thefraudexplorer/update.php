@@ -20,6 +20,8 @@ include $documentRoot."lbs/openDBconn.php";
 include $documentRoot."lbs/cryptography.php";
 include "lbs/security.php";
 
+/* Validate SQL connection */
+
 function queryOrDie($query)
 {
     global $connection;
@@ -28,6 +30,8 @@ function queryOrDie($query)
     if (! $query) exit(mysqli_error($connection));
     return $query;
 }
+
+/* Get endpoint IP address */
 
 function getEndpointIP() 
 {
@@ -41,6 +45,14 @@ function getEndpointIP()
     else if(isset($_SERVER['REMOTE_ADDR'])) $ipaddress = $_SERVER['REMOTE_ADDR'];
     else $ipaddress = 'UNKNOWN';
     return $ipaddress;
+}
+
+/* Get default entry ruleset to be assinged to the endpoint at singup */
+
+function singupRuleset()
+{
+    $configFile = parse_ini_file("config.ini");
+    return $configFile['singup_ruleset'];
 }
 
 $endpointIdentification = strtolower(decRijndaelRemote(filter($_GET['token'])));
@@ -68,7 +80,7 @@ if ($key == $keypass[0])
     {
         date_default_timezone_set($configFile['php_timezone']);
         $datecalendar = date('Y-m-d');
-        $result = mysqli_query($connection, "Update t_agents set heartbeat=now(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' where agent='".$endpoint."'");
+        $result = mysqli_query($connection, "UPDATE t_agents SET heartbeat=NOW(), system='" . $os . "', version='" . $version . "', domain='" . $domain . "', ipaddress='" . $ipAddress . "' WHERE agent='".$endpoint."'");
     }
     else
     {
@@ -76,7 +88,7 @@ if ($key == $keypass[0])
         {
             /* Heartbeat data */
 
-            $query = "INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $endpoint . "', now() ,'" . $os . "','" . $version . "','BASELINE','" . $domain ."','" . $ipAddress ."')";
+            $query = "INSERT INTO t_agents (agent, heartbeat, system, version, ruleset, domain, ipaddress) VALUES ('" . $endpoint . "', NOW() ,'" . $os . "','" . $version . "','" . singupRuleset() . "','" . $domain ."','" . $ipAddress ."')";
             queryOrDie($query);
 
             /* Primary endpoint table */

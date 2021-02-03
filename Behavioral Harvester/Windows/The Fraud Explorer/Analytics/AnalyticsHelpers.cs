@@ -1,4 +1,4 @@
-﻿/*Version code-name: nemesis
+﻿/*
  * The Fraud Explorer
  * https://www.thefraudexplorer.com/
  *
@@ -13,8 +13,6 @@
  * Description: Analytics Helpers
  */
 
-using System;
-using System.Collections.Concurrent;
 using System.Globalization;
 using System.Linq;
 using System.Text;

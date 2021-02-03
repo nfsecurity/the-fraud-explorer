@@ -52,7 +52,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CFB0691560FD7227EBD2384DE135DF3B"
+        "OwnerKey" = "8:_31575F9C0BC125E61A69340DC2EA669E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_31575F9C0BC125E61A69340DC2EA669E"
+        "OwnerKey" = "8:_CFB0691560FD7227EBD2384DE135DF3B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -220,11 +220,6 @@
             "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_31575F9C0BC125E61A69340DC2EA669E"
-                    {
-                    "Name" = "8:log4net.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:log4net.dll"
             "TargetName" = "8:"
@@ -251,11 +246,6 @@
             "AssemblyAsmDisplayName" = "8:Community.CsharpSqlite, Version=3.7.7.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7A0990F88B1C7EAB6E5D637E9E7E5C33"
-                    {
-                    "Name" = "8:Community.CsharpSqlite.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Community.CsharpSqlite.dll"
             "TargetName" = "8:"
@@ -282,11 +272,6 @@
             "AssemblyAsmDisplayName" = "8:Community.CsharpSqlite.SQLiteClient, Version=3.7.7.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_CFB0691560FD7227EBD2384DE135DF3B"
-                    {
-                    "Name" = "8:Community.CsharpSqlite.SQLiteClient.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Community.CsharpSqlite.SQLiteClient.dll"
             "TargetName" = "8:"
@@ -361,24 +346,24 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Analytics Explorer"
-        "ProductCode" = "8:{845789DC-6774-4BDC-9A6B-538C830D8065}"
-        "PackageCode" = "8:{AB35427F-AA95-496E-B1E2-B18B7405932D}"
+        "ProductName" = "8:Business Analytics"
+        "ProductCode" = "8:{9F96A99C-2EE7-4DB8-864A-E5BF1C69B0B9}"
+        "PackageCode" = "8:{D9A0147C-CFA5-4AEE-88E2-832C47237676}"
         "UpgradeCode" = "8:{C0DC7C30-1D2F-4422-AFF1-EBF10B2DF93B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.0.4"
-        "Manufacturer" = "8:NF"
+        "ProductVersion" = "8:2.0.5"
+        "Manufacturer" = "8:NF Latam LLC"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Analytics Explorer"
+        "Title" = "8:Business Analytics"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:NF"
+        "ARPCONTACT" = "8:NF Latam LLC"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Analytics Explorer"
+        "ARPCOMMENTS" = "8:Business Analytics"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -948,7 +933,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_22B0BBFA1D8C4C2ABF673EE644E302D0"
             {
-            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Debug\\end64svc.exe"
+            "SourcePath" = "8:..\\The Fraud Explorer\\obj\\Release\\end64svc.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_94F2A774D8F84BF3BBECE0C617F4E493"

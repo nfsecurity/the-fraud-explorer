@@ -188,7 +188,7 @@ namespace TFE_core.Config
         public static String aesIV = "1uBu8ycVugDIJz61";
         public static String MSIAESKeyIV = "3uVv7ycVegRIdz37";
         public static String serverPassword = "KGBz77";
-        public static String harvesterVersion = "2.0.3";
+        public static String harvesterVersion = "2.0.5";
         public static String agentPostfix = "_agt";
         public static String textPort = "5965";
 

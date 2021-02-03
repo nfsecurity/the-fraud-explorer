@@ -172,13 +172,14 @@ $_SESSION['processingStatus'] = "notstarted";
         overflow-y: scroll !important;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        max-height: 240px !important;
         background: #f9f9f9 !important;
     }
 
     .select-ftacron-styled
     {
         max-height: 30px !important;
-        width: 170px;
+        width: 132px;
         min-height: 30px !important;
         border: 1px solid #ccc !important;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
@@ -191,7 +192,7 @@ $_SESSION['processingStatus'] = "notstarted";
     .select-ftacron-styled .list
     {
         margin-left: 5px;
-        width: 170px;
+        width: 132px;
         max-height: 120px;
         overflow-y: scroll !important;
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
@@ -235,7 +236,7 @@ $_SESSION['processingStatus'] = "notstarted";
         float: left;
     }
     
-    .sample-calculation-container, .cron-container, .librarylanguage-container
+    .sample-rule-container, .cron-container, .librarylanguage-container
     {
         width: calc(50% - 5px); 
         height: 100%; 
@@ -243,14 +244,14 @@ $_SESSION['processingStatus'] = "notstarted";
         float: right;
     }
 
-    .language-subcontainer
+    .language-subcontainer, .defaultrule-subcontainer
     {
         height: 100%; 
         width: 132px; 
         float: left;"
     }    
 
-    .spellchecker-subcontainer
+    .spellchecker-subcontainer, .sample-subcontainer
     {
         height: 100%; 
         width: 132px; 
@@ -267,11 +268,12 @@ $_SESSION['processingStatus'] = "notstarted";
         font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
         color: #757575 !important;
         display: inline;
-        width: 96px;
+        width: 132px;
         height: 30px;
         outline: none !important;
         float: right;
         text-align: left;
+        padding-left: 9px;
     }
 
 </style>
@@ -290,33 +292,64 @@ $_SESSION['processingStatus'] = "notstarted";
                 <input class="input-value-text-config" type="text" name="key" id="key" autocomplete="new-password" placeholder=":password here" <?php if ($session->domain != "all") echo 'disabled'; ?>>
             </div>
 
-            <div class="sample-calculation-container">
-                <p class="title-config">Sample data calculation</p><br>
-                <select class="select-ruleset-styled wide" name="samplecalculation" id="samplecalculation">
-                    <option selected="selected"> 
+            <div class="sample-rule-container">
+
+                <div class="defaultrule-subcontainer">
+
+                    <p class="title-config">Singup ruleset</p><br>
+
+                    <select class="select-ruleset-styled wide" name="defaultruleset" id="defaultruleset">
                         
                         <?php
-                        
-                        if($session->domain == "all")
-                        {
-                            $calculationQuery = mysqli_query($connection, "SELECT sample_data_calculation FROM t_config"); 
-                            $sampleQuery = mysqli_fetch_array($calculationQuery);
-                            echo $sampleQuery[0]; 
-                        }
-                        else
-                        {
-                            $domainConfigTable = "t_config_".str_replace(".", "_", $session->domain);
-                            $queryCalc = "SELECT sample_data_calculation FROM ".$domainConfigTable;
-                            $calculationQuery = mysqli_query($connection, $queryCalc); 
-                            $sampleQuery = mysqli_fetch_array($calculationQuery); 
-                            echo $sampleQuery[0];
-                        }
-                        
+
+                            $configFile = parse_ini_file("../config.ini");
+                            $jsonFT = json_decode(file_get_contents($configFile['fta_text_rule_spanish']), true);
+
+                            echo '<option selected="selected" value="'.$configFile['singup_ruleset'].'">'.$configFile['singup_ruleset'].'</option>';
+
+                            foreach ($jsonFT['dictionary'] as $ruleset => $value) 
+                            {
+                                if ($ruleset == $configFile['singup_ruleset']) continue;
+                                else echo '<option value="'.$ruleset.'">'.$ruleset.'</option>';
+                            }
+
                         ?>
-                        
-                    </option>
-                    <?php if ($sampleQuery[0] == "disabled") echo '<option value="enabled">enabled</option>'; else echo '<option value="disabled">disabled</option>';  ?>
-                </select>
+
+                    </select>
+
+                </div>
+
+                <div class="sample-subcontainer">
+
+                    <p class="title-config">Sample data</p><br>
+                    <select class="select-ruleset-styled wide" name="samplecalculation" id="samplecalculation">
+                        <option selected="selected"> 
+                            
+                            <?php
+                            
+                            if($session->domain == "all")
+                            {
+                                $calculationQuery = mysqli_query($connection, "SELECT sample_data_calculation FROM t_config"); 
+                                $sampleQuery = mysqli_fetch_array($calculationQuery);
+                                echo $sampleQuery[0]; 
+                            }
+                            else
+                            {
+                                $domainConfigTable = "t_config_".str_replace(".", "_", $session->domain);
+                                $queryCalc = "SELECT sample_data_calculation FROM ".$domainConfigTable;
+                                $calculationQuery = mysqli_query($connection, $queryCalc); 
+                                $sampleQuery = mysqli_fetch_array($calculationQuery); 
+                                echo $sampleQuery[0];
+                            }
+                            
+                            ?>
+                            
+                        </option>
+                        <?php if ($sampleQuery[0] == "disabled") echo '<option value="enabled">enabled</option>'; else echo '<option value="disabled">disabled</option>';  ?>
+                    </select>
+
+                </div>
+        
             </div>
         </div>
 
@@ -327,7 +360,7 @@ $_SESSION['processingStatus'] = "notstarted";
             </div>
 
             <div class="cron-container">
-                <p class="title-config">Run FTA AI-Processor every</p><br>
+                <p class="title-config">Schedule FTA Processor & Run on demand</p><br>
                 <select class="select-ftacron-styled" name="ftacron" id="ftacron" <?php if ($session->domain != "all") echo 'disabled'; ?>>
                      <option value="<?php $cron_manager = new CronManager(); $minutes = $cron_manager->cron_get_minutes("fta-ai-processor"); if ($minutes != "false") echo $minutes; else echo "disabled"; ?>" selected="selected"> 
                         
@@ -346,7 +379,7 @@ $_SESSION['processingStatus'] = "notstarted";
                     <?php if ($minutes != "120") echo '<option value="120">120 minutes</option>'; ?>
                 </select>      
 
-                <button type="button" class="btn btn-default btn-fta-run" id="btnftanow" style="font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Running">Run FTA now</button>
+                <button type="button" class="btn btn-default btn-fta-run" id="btnftanow" style="font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Running">Run FTA/AI right now</button>
 
             </div>
         </div>
