@@ -1267,10 +1267,6 @@ function startWorkflows($ESAlerterIndex)
                                     }
                                 }
                             }
-
-                            /* Trigger for table t_workflows */
-
-                            mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $realMatches, $name));
                         }
                     }
                     else
@@ -1386,10 +1382,6 @@ function startWorkflows($ESAlerterIndex)
                             }
                         }
                     }
-
-                    /* Trigger for table t_workflows */
-
-                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
             }
             else if(count($query) == 3)
@@ -1481,10 +1473,6 @@ function startWorkflows($ESAlerterIndex)
                             }
                         }
                     }
-
-                    /* Trigger for table t_workflows */
-
-                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
             }
             else if(count($query) == 4)
@@ -1576,10 +1564,6 @@ function startWorkflows($ESAlerterIndex)
                             }
                         }
                     }
-
-                    /* Trigger for table t_workflows */
-
-                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
             }
             else if(count($query) == 5)
@@ -1671,10 +1655,6 @@ function startWorkflows($ESAlerterIndex)
                             }
                         }
                     }
-
-                    /* Trigger for table t_workflows */
-
-                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
             }
             else if(count($query) == 6)
@@ -1766,10 +1746,6 @@ function startWorkflows($ESAlerterIndex)
                             }
                         }
                     }
-
-                    /* Trigger for table t_workflows */
-
-                    mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $rowCount, $name));
                 }
             }
         }
@@ -1781,7 +1757,23 @@ function startWorkflows($ESAlerterIndex)
 
     /* Troubleshooting for validation queries */
 
-    //var_dump($validation); var_dump($sqlQuery); var_dump($queryTrueWorkflow); var_dump($superFinalQuery);
+    // var_dump($validation); var_dump($sqlQuery); var_dump($queryTrueWorkflow); var_dump($superFinalQuery);
+
+    /* Compute workflow triggers */
+
+    $workflowNameQuery = mysqli_query($connection, "SELECT name FROM t_workflows");
+
+    while ($row = mysqli_fetch_array($workflowNameQuery))
+    {
+        $flowName = $row["name"];
+        $countFlowQuery = mysqli_query($connection, "SELECT COUNT(*) AS workflowCount FROM t_wtriggers WHERE name=\"" . $flowName . "\"");
+        $countFlowFetch = mysqli_fetch_assoc($countFlowQuery);
+        $flowCount = $countFlowFetch['workflowCount'];
+    
+        /* Put trigger count in main Workflows table */
+    
+        mysqli_query($connection, sprintf("UPDATE t_workflows SET triggers='%s' WHERE name='%s'", $flowCount, $flowName));
+    }
 }
 
 /* Search all Fraud Triangle Matches */
