@@ -750,7 +750,7 @@ function processBackspaces($strInput)
     }
 
     $finalString = str_replace("_"," ", $finalString);
-    $finalString = str_replace("^","", $finalString);
+    $finalString = str_replace("^",". ", $finalString);
     $finalString = str_replace("|","", $finalString);
     $finalString = str_replace(",",", ", $finalString);
 
