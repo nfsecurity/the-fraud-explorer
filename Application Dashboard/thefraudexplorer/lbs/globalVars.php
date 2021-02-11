@@ -22,7 +22,7 @@ $documentRoot = $configFile['php_document_root'];
 
 /* Unwanted words */
 
-$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin", "oemquestio", "oemquestion");
+$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin", "oemquestio", "oemquestion", "medianexttrack");
 
 /* Set TimeZone */
 
@@ -46,7 +46,7 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     $sanitizedPhrases = preg_replace('/(ha){2,}/', ' haha ', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/(.)\1{2,}/', ' ', $sanitizedPhrases);
 
-    /* Remove multiple dots ans spaces and left one */
+    /* Remove multiple dots and spaces and left one */
 
     $sanitizedPhrases = preg_replace('/\.+/', '.', $sanitizedPhrases);
 
@@ -54,24 +54,27 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
 
     $sanitizedPhrases = str_replace(' ,', ',', $sanitizedPhrases);
     $sanitizedPhrases = str_replace(',', ', ', $sanitizedPhrases);
-    $sanitizedPhrases = str_replace('.', '. ', $sanitizedPhrases);
-    $sanitizedPhrases = str_replace(' .', '.', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace('.', ', ', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(' .', ',', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/^,\s?/', '', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/^\.\s?/', '', $sanitizedPhrases);
 
     /* Remove multiple spaces */
 
     $sanitizedPhrases = preg_replace('/\s+/', ' ', $sanitizedPhrases);
-    preg_match_all("/\.\s*\w/", $sanitizedPhrases, $matches);
-    foreach($matches[0] as $match) $sanitizedPhrases = str_replace($match, strtoupper($match), $sanitizedPhrases);
 
     /* Remove space between commas */
 
-    $sanitizedPhrases = str_replace(', ,', ',', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/(,\s){1,}/', ', ', $sanitizedPhrases);
+
+    /* Remove last point or comma character */
+
+    $sanitizedPhrases = preg_replace('/(, )$/', '', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/(\. )$/', '', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/(,)$/', '', $sanitizedPhrases);
+    $sanitizedPhrases = preg_replace('/(\.)$/', '', $sanitizedPhrases);
 
     /* Ajust upper cases */
-
-    $sanitizedPhrases = preg_replace_callback('/\.\s\w/', create_function('$m','return strtoupper($m[0]);'), $sanitizedPhrases);
 
     return ucfirst(trim($sanitizedPhrases));
 }
