@@ -58,6 +58,8 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     $sanitizedPhrases = str_replace(' .', ',', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/^,\s?/', '', $sanitizedPhrases);
     $sanitizedPhrases = preg_replace('/^\.\s?/', '', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(' , ', ', ', $sanitizedPhrases);
+    $sanitizedPhrases = str_replace(' . ', ', ', $sanitizedPhrases);
 
     /* Remove multiple spaces */
 
