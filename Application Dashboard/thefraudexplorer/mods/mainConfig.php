@@ -296,7 +296,7 @@ $_SESSION['processingStatus'] = "notstarted";
 
                 <div class="defaultrule-subcontainer">
 
-                    <p class="title-config">Singup ruleset</p><br>
+                    <p class="title-config">Rule enrollment</p><br>
 
                     <select class="select-ruleset-styled wide" name="defaultruleset" id="defaultruleset">
                         
