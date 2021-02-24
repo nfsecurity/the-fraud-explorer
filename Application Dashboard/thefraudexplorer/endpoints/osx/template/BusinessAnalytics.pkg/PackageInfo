@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pkg-info overwrite-permissions="true" relocatable="false" identifier="org.BusinessAnalytics.0.0.1" postinstall-action="none" version="0.0.1" format-version="2" generator-version="InstallCmds-761 (20C69)" install-location="/Applications/BusinessAnalytics" auth="root">
+    <payload numberOfFiles="11" installKBytes="46"/>
+    <bundle-version/>
+    <upgrade-bundle/>
+    <update-bundle/>
+    <atomic-update-bundle/>
+    <strict-identifier/>
+    <relocate/>
+    <scripts>
+        <postinstall file="./postinstall"/>
+    </scripts>
+</pkg-info>

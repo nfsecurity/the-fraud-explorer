@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-script minSpecVersion="1">
+    <title>BusinessAnalytics</title>
+    <background mime-type="image/png" file="banner.png" scaling="proportional"/>
+    <welcome file="welcome.html" mime-type="text/html"/>
+    <conclusion file="conclusion.html" mime-type="text/html"/>
+    <license file="LICENSE.txt"/>
+    <options customize="never" allow-external-scripts="no"/>
+    <domains enable_localSystem="true"/>
+    <installation-check script="installCheck();"/>
+    <script>
+function installCheck() {
+    if(!(system.compareVersions(system.version.ProductVersion, '10.6.0') &gt;= 0)) {
+        my.result.title = 'Unable to install';
+        my.result.message = 'BusinessAnalytics requires Mac OS X 10.6 or later.';
+        my.result.type = 'Fatal';
+        return false;
+    }
+    if(system.files.fileExistsAtPath('/Applications/BusinessAnalytics/0.0.1/')) {
+        my.result.title = 'Previous Installation Detected';
+        my.result.message = 'A previous installation of BusinessAnalytics exists at /Applications/BusinessAnalytics/0.0.1/. This installer will remove the previous installation prior to installing. Please back up any data before proceeding.';
+        my.result.type = 'Warning';
+        return false;
+    }
+    return true;
+}
+    </script>
+    <choices-outline>
+        <line choice="BusinessAnalytics"/>
+    </choices-outline>
+    <choice id="BusinessAnalytics" title="BusinessAnalytics">
+        <pkg-ref id="BusinessAnalytics.pkg"/>
+    </choice>
+    <pkg-ref id="BusinessAnalytics.pkg" auth="Root" packageIdentifier="org.BusinessAnalytics.0.0.1" version="0.0.1" installKBytes="46">#BusinessAnalytics.pkg</pkg-ref>
+    <pkg-ref id="BusinessAnalytics.pkg">
+        <bundle-version/>
+    </pkg-ref>
+</installer-script>

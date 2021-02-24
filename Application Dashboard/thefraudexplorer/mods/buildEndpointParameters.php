@@ -54,7 +54,7 @@ if (isset($_POST['platform'])) $finalPlatformForBuild = filter($_POST['platform'
 /* HTTPS Address */
 
 if (isset($_POST['address'])) $finalServerHTTPSAddress = filter($_POST['address']);
-if ($finalPlatformForBuild == "windows") $finalServerHTTPSAddress = $finalServerHTTPSAddress . "/update.xml";
+if ($finalPlatformForBuild == "windows" || $finalPlatformForBuild == "macosx") $finalServerHTTPSAddress = $finalServerHTTPSAddress . "/update.xml";
 
 $finalServerHTTPSAddress = str_replace('/', '\/', $finalServerHTTPSAddress);
 
@@ -177,6 +177,45 @@ else if ($finalPlatformForBuild == "pbx")
     {
         $original_filename = $documentRoot.'endpoints/pbx/thefraudexplorer.agi';
         $new_filename = 'thefraudexplorer.agi';
+
+        header("Content-Type: application/octet-stream");
+        header('Content-Transfer-Encoding: binary');
+        header("Content-Length: " . filesize($original_filename));
+        header('Content-Disposition: attachment; filename="' . $new_filename . '"');
+
+        readfile($original_filename);
+        exit;
+    }
+}
+else if ($finalPlatformForBuild == "macosx")
+{
+    /* Replace data in the unpacked PKG template */
+
+    $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/1337/'.$finalPCEnabled.'/g;s/1uBu8ycVugDIJz61/'.$finalCryptKey.'/g;s/KGBz77/'.$finalSrvPwd.'/g;s/https:\/\/cloud.thefraudexplorer.com\/update.xml/'.$finalServerHTTPSAddress.'/g;s/OnlyAppsAll/'.$finalOnlyApps.'/g ; s/applemacosx.loc/'.$finalCompanyDomain.'/g" '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/InstallationFiles/BusinessAnalytics/0.0.1/config.ini --in-place';
+    $commandReplacements = shell_exec($replaceParams);
+
+    /* Generate the final PKG Download */
+
+    $buildPKG = 'cd '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/ ; /usr/bin/sudo /usr/bin/cat '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/Payload | /usr/bin/gunzip -dc | /usr/bin/cpio -i';
+    $commandPKG = shell_exec($buildPKG);
+
+    $buildPKG = 'cd '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/ ; /usr/bin/sudo /usr/bin/find ./InstallationFiles | /usr/bin/cpio -o --format odc --owner 0:80 | /usr/bin/gzip -c > '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/Payload';
+    $commandPKG = shell_exec($buildPKG);
+
+    $buildPKG = 'cd '.$documentRoot.'endpoints/osx/template/BusinessAnalytics.pkg/ ; /usr/bin/sudo /usr/bin/mkbom -u0 -g 80 InstallationFiles Bom';
+    $commandPKG = shell_exec($buildPKG);
+
+    $buildPKG = 'cd '.$documentRoot.'endpoints/osx/template/ ; /usr/bin/sudo /usr/bin/xar --compression none -cf '.$documentRoot.'endpoints/osx/endpointInstaller.pkg .';
+    $commandPKG = shell_exec($buildPKG);
+
+    /* Auto download */
+
+    $pkgFile = $documentRoot.'endpoints/osx/endpointInstaller.pkg';
+
+    if (file_exists($pkgFile)) 
+    {
+        $original_filename = $documentRoot.'endpoints/osx/endpointInstaller.pkg';
+        $new_filename = 'endpointInstaller.pkg';
 
         header("Content-Type: application/octet-stream");
         header('Content-Transfer-Encoding: binary');

@@ -195,7 +195,7 @@ $_SESSION['processingStatus'] = "notstarted";
                     <option value="windows" selected="selected">Microsoft Windows</option>
                     <option value="android">Android Devices</option>
                     <option value="pbx">Asterisk VoIP PBX</option>
-                    <option value="macosx" disabled>Apple macOSX</option>
+                    <option value="macosx">Apple macOSX</option>
                 </select>            
                 
             </div>
@@ -471,6 +471,39 @@ $("#btn-build-endpoint").click(function() {
 
         return;
     }
+    if (platform == "macosx")
+    {    
+        var addressfield = "#address,";
+        var domainfield = "#companydomain,";
+        var finalfield = "";
+
+        if (allvalues[0] == "") 
+        {
+            finalfield = addressfield;
+            continueSubmit = false;
+        }
+        if (allvalues[2] == "") 
+        {
+            finalfield = finalfield + domainfield;
+            continueSubmit = false;
+        }
+
+        finalfield = finalfield.replace(/(,$)/g, "");
+
+        setTimeout("$('"+finalfield+"').addClass('blink-check');", 100);
+        setTimeout("$('"+finalfield+"').removeClass('blink-check');", 1000);
+
+        if (continueSubmit == true) 
+        {
+            $('#formEndpoint').submit();
+
+            $btn = $('#btn-build-endpoint');
+            $btn.button('loading');
+            setTimeout('getstatus()', 1000);
+        }
+
+        return;
+    }
  
 });
 
@@ -526,5 +559,12 @@ function getstatus()
             document.getElementById("pcenabled").disabled=true;
             document.getElementById("onlyapps").disabled=true;
         }
+        if (document.getElementById("platform").value == "macosx") 
+        {
+            document.getElementById("companydomain").disabled=false;
+            document.getElementById("restcredentials").disabled=true;
+            document.getElementById("pcenabled").disabled=false;
+            document.getElementById("onlyapps").disabled=false;
+        } 
     }
 </script> 
