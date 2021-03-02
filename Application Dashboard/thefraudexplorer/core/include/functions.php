@@ -925,7 +925,7 @@ function startAI($ESAlerterIndex, $fraudTriangleTerms, $jsonFT, $configFile)
                 if (isset($result['_source']['tags'])) continue;
 
                 $stringOfWords = decRijndael($result['_source']['stringHistory']); 
-                $application = decRijndael($result['_source']['windowTitle']);
+                $application = $result['_source']['windowTitle'];
                 $timeStamp = date('Y-m-d h:i:s', strtotime($result['_source']['sourceTimestamp']));
                 $domain = $result['_source']['userDomain'];
                 $flag = $result['_source']['messageFlag'];

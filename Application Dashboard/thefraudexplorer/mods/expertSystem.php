@@ -37,6 +37,7 @@ include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
 require '../vendor/autoload.php';
 include "../lbs/elasticsearch.php";
+include "../lbs/cryptography.php";
 
 ?>
 
@@ -242,6 +243,18 @@ include "../lbs/elasticsearch.php";
         font-size: 15px;
     }
 
+    .pseudolink 
+    {
+        outline: none;
+        cursor: pointer;
+    }
+
+    .pseudolink:hover 
+    {
+        color: #4B906F;
+        text-decoration: none;
+    }
+
 </style>
 
 <div class="modal-header">
@@ -361,12 +374,13 @@ include "../lbs/elasticsearch.php";
             {
                 do
                 {
-                    $application = (strlen($row_a['application']) > 12) ? substr($row_a['application'], 0, 7) . " ..." : $endpointsFraud['agent'] ;
+                    $application = (strlen($row_a['application']) > 12) ? substr($row_a['application'], 0, 7) . " ..." : $row_a['endpoint'] ;
                     $timeDate = substr($row_a['date'], 0, 10);
-                    $endpoint = (strlen($row_a['endpoint']) > 12) ? substr($row_a['endpoint'], 0, 12) . " ..." : $row_a['endpoint'];
+                    $endpoint = (strlen($row_a['endpoint']) > 10) ? substr($row_a['endpoint'], 0, 9) . " ..." : $row_a['endpoint'];
+                    $endpointEncoded = encRijndael($row_a['endpoint']);
 
                     echo '<tr class="table-tr-expert">';
-                    echo '<td class="table-td-expert-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span>'.$endpoint.'</td>';
+                    echo '<td class="table-td-expert-endpoint" style="text-align: left; border-right: 2px solid white;"><span class="fa fa-user-circle font-icon-color-green fa-padding"></span><span class="pseudolink" onclick="javascript:location.href=\'eventData?nt='.$endpointEncoded.'\'">'.$endpoint.'</span></td>';
                     echo '<td class="table-td-expert"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$row_a['deduction'].' %</td>';
                     echo '<td class="table-td-expert"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$timeDate.'</td>';
                     echo '<td class="table-td-expert-app"><span class="fa fa-bookmark-o font-icon-gray fa-padding"></span>'.$application.'</td>';
