@@ -287,6 +287,8 @@ function deleteAlertIndex()
 
 function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $configFile, $jsonFT, $ruleset, $lastArrayElement, $socketIPC)
 {   
+    global $connection;
+
     $GLOBALS['arrayPosition'] = 0;
     getMultiArrayData($typedWords, "typedWord", "applicationTitle", "sourceTimestamp", "userDomain", $agentID."_typedWords");
     $arrayOfWordsAndWindows = $GLOBALS[$agentID."_typedWords"];
@@ -303,6 +305,14 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
     $dictEna = $configFile['wc_enabled'];
     $totalMatches = 0;
 
+    /* Populate number of words (totalwords count) for the agent */
+
+    $resultQuery = sprintf("SELECT totalwords FROM t_agents WHERE agent='%s'", $agentID);
+    $totalwordsExecution = mysqli_query($connection, $resultQuery);
+    $rowTotalWords = mysqli_fetch_assoc($totalwordsExecution);
+    $totalWords = $rowTotalWords['totalwords'] + $typedWords['hits']['total'];
+    $result = mysqli_query($connection, "UPDATE t_agents SET totalwords='.$totalWords.' WHERE agent='".$agentID."'");
+
     foreach($arrayOfWordsAndWindows as $key=>$value)
     {
         $windowTitle = decRijndael($value[1]);
@@ -318,7 +328,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         }
         else
         {
-	    $stringOfWords = processBackspaces($stringOfWords);
+            $stringOfWords = processBackspaces($stringOfWords);
 
             if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
 
@@ -335,7 +345,7 @@ function startFTAProcess($agentID, $typedWords, $sockLT, $fraudTriangleTerms, $c
         {            
             $lastWindowTitle = $windowTitle;
             $lastTimeStamp = $timeStamp; 
-	    $stringOfWords = processBackspaces($stringOfWords);
+            $stringOfWords = processBackspaces($stringOfWords);
 
             if ($dictEna == "yes") $stringOfWords = checkPhrases($stringOfWords, $dictLan);
 
@@ -608,18 +618,16 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
                 include "../lbs/openDBconn.php";
                                
                 $fraudTriangleTerms = array('r'=>'rationalization','o'=>'opportunity','p'=>'pressure');
-                $totalWordCount = countWordsTypedByAgent($row_a['agent'], "TextEvent", $ESindex);
                 $matchesRationalization = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['r'], $configFile_es_alerter_index);
                 $matchesOpportunity = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['o'], $configFile_es_alerter_index);
                 $matchesPressure = countFraudTriangleMatches($row_a['agent'], $fraudTriangleTerms['p'], $configFile_es_alerter_index);
-                $messageFlags = countMessageFlags($row_a['agent'], $configFile_es_alerter_index);
-                $totalWords = $totalWordCount['count'];
+                $messageFlags = countMessageFlags($row_a['agent'], $configFile_es_alerter_index);                
                 $totalPressure = $matchesPressure['count'];
                 $totalOpportunity = $matchesOpportunity['count'];
                 $totalRationalization = $matchesRationalization['count'];
                 $totalFlags = $messageFlags['count'];
 
-                $result = mysqli_query($connection, "UPDATE t_agents SET totalwords='.$totalWords.', pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.', flags='.$totalFlags.' WHERE agent='".$row_a['agent']."'");
+                $result = mysqli_query($connection, "UPDATE t_agents SET pressure='.$totalPressure.', opportunity='.$totalOpportunity.', rationalization='.$totalRationalization.', flags='.$totalFlags.' WHERE agent='".$row_a['agent']."'");
 
                 exit();
             }
@@ -639,6 +647,8 @@ function populateTriangleByAgent($ESindex, $configFile_es_alerter_index)
         while (pcntl_waitpid(0, $status) != -1) $status = pcntl_wexitstatus($status);
     }
 }
+
+/* Get user domain */
 
 function getUserDomain($agentID)
 {
@@ -2038,4 +2048,29 @@ function countFraudTriangleMatchesWithDateRangeWithTermWithAgentID($fraudTerms, 
 
     return $eventMatches;
 }
+
+/* Apply retention policy regards to the words */
+
+function wordsRetentionPolicy($configFile, $endTime)
+{
+    echo "[INFO] Applying words retention policy for ".$configFile['store_words_days']." days ...\n";
+
+    $days = $configFile['store_words_days'];
+
+    if ($days == 0) $retainDays = $endTime;
+    else $retainDays = "now-".$days."d";
+
+    $urlWords = "http://localhost:9200/logstash-thefraudexplorer-text-*/_delete_by_query";
+    $params = '{ "query": { "range": { "@timestamp": { "lte": "'.$retainDays.'" } } } }';
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $urlWords);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $resultWords = curl_exec($ch);
+    curl_close($ch);
+}
+
 ?>

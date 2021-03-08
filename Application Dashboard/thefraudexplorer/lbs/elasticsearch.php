@@ -1000,6 +1000,37 @@ function getAllFraudTriangleMatchesMonthsBack($index, $monthsBack)
     return $getAlerts;
 }
 
+/* Sum word count by date range */
+
+function sumWordsWithDateRange($index, $from, $to)
+{
+    $matchesParams = [
+        'index' => $index, 
+        'type' => 'AlertStatus', 
+        'body' => [
+            'query' => [
+                'bool' => [
+                    'must' => [
+                        [ 'range' => [ '@timestamp' => ['gte' => $from.'T00:00:00.000', 'lte'=> $to ] ] ]
+                    ]
+                ]
+            ],
+            'aggs' => [
+                'sumQuantity' => [
+                    'sum' => [
+                        'field' => 'wordCount'
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $sumMatches = $client->search($matchesParams);
+
+    return $sumMatches;
+}
+
 /* Count All Typed Words by date range */
 
 function countWordsWithDateRange($index, $from, $to)

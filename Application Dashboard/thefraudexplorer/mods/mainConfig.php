@@ -91,6 +91,7 @@ $_SESSION['processingStatus'] = "notstarted";
         margin: 0 0 1rem;
         border: 1px solid #c9c9c9;
         padding: .2rem;
+        padding-left: 10px;
         width: 120px;
         height: 30px;
         outline: 0 !important;

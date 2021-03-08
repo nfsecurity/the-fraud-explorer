@@ -460,7 +460,6 @@ $(function() {
             {
                 sorter: false
             }
-
         }
     })
 

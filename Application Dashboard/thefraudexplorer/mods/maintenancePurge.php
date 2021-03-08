@@ -123,6 +123,11 @@ $_SESSION['processingStatus'] = "notstarted";
         background: #f9f9f9 !important;
     }
 
+    .age-text
+    {
+        font-family: 'FFont', sans-serif; font-size:11.5px;
+    }
+
     .master-container
     {
         width: 100%; 
@@ -405,14 +410,59 @@ $_SESSION['processingStatus'] = "notstarted";
         color: white
     }
 
+    .btn-words-age, .btn-words-age:active, .btn-words-age:visited
+    {
+        font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;
+        color: #757575 !important;
+        display: inline;
+        width: 132px;
+        height: 30px;
+        outline: none !important;
+        float: right;
+        text-align: left;
+        padding-left: 9px;
+    }
+
+    input[name="wordsage"] 
+    {
+        position: relative;
+        line-height: 11.6px !important;
+        border: 1px solid #c9c9c9;
+        padding: .2rem;
+        padding-left: 10px;
+        width: 132px;
+        height: 30px;
+        outline: 0 !important;
+        border-radius: 5px;
+        float: left;
+    }
+
+    input[name="wordsage"].mod::-webkit-outer-spin-button, input[name="wordsage"].mod::-webkit-inner-spin-button 
+    {
+        -webkit-appearance: none;
+        background: #FFF url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKUlEQVQYlWNgwAT/sYhhKPiPT+F/LJgEsHv37v+EMGkmkuImoh2NoQAANlcun/q4OoYAAAAASUVORK5CYII=) no-repeat center center;
+        width: 15px;
+        height: 28px;
+        border-left: 1px solid #BBB;
+        opacity: .5; 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    input[name="wordsage"].mod::-webkit-inner-spin-button:hover, input[name="wordsage"].mod::-webkit-inner-spin-button:active
+    {
+        box-shadow: 0 0 2px #0CF;
+        opacity: .8;
+    }
+
 </style>
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title window-title" id="myModalLabel">Maintenance & Health</h4>
 </div>
-
-
 
 <div class="div-container-maintenance">
     <form id="formPurge" name="formPurge" method="post" action="mods/maintenanceParameters">
@@ -422,13 +472,9 @@ $_SESSION['processingStatus'] = "notstarted";
             <div class="master-container">
                 <div class="left-container">              
                     
-                    <p class="title-config">Purge old endpoint phrases</p><br>
-                    <select class="select-option-styled wide" name="deletephrases" id="deletephrases">
-                        <option value="1month">Preserve last month</option>
-                        <option value="3month">Preserve last 3 months</option>
-                        <option value="6month">Preserve last 6 months</option>
-                        <option value="preserveall" selected="selected">Preserve all</option>
-                    </select>            
+                    <p class="title-config">Words data retention policy (days)</p><br>
+                    <input class="mod age-text" type="number" name="wordsage" id="wordsage" min="0" max="180" value="<?php echo $configFile['store_words_days']; ?>" required>
+                    <button type="button" class="btn btn-default btn-words-age" id="btnsetwordsage" style="font-family: 'FFont', 'Awesome-Font', sans-serif; font-size: 11.6px !important;" data-loading-text="<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;Modifying age ...">Set words age now !</button>
                     
                 </div>
 
@@ -466,7 +512,7 @@ $_SESSION['processingStatus'] = "notstarted";
                         $dataSize = $resultSize['_all']['total']['store']['size_in_bytes']/1024/1024/1024;
                         $dataCount = $resultSize['_all']['total']['docs']['count'];
 
-                        echo "You have ".number_format($dataCount)." regs in ".round($dataSize, 1)." GB";
+                        echo "You have ".number_format($dataCount)." words in ".round($dataSize, 1)." GB";
                     }
                     else
                     {
@@ -830,5 +876,29 @@ $("#healthButton").click(function() {
     tab++;
 
 });
+
+</script>
+
+<!-- Button set words age -->
+
+<script>
+
+$(document).ready(function () {
+        $("#btnsetwordsage").click(function () {
+            var $btn = $(this);
+            var $wordsAge = $("#wordsage").val();
+            $btn.button('loading');
+            $.ajax({
+                    type: "POST",
+                    url: "../mods/setWordsAge.php",
+                    data: {
+                        wordsage : $wordsAge
+                    }
+                })
+                .done(function () {
+                    $btn.button('reset');
+                });
+        });
+    });
 
 </script>

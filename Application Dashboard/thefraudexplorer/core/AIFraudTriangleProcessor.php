@@ -157,6 +157,17 @@ if (isset($argv[1]))
         unlink($sLock);
         exit;
     }
+    else if ($argv[1] == "applyWordsRetentionPolicy")
+    {
+        wordsRetentionPolicy($configFile, $GLOBALS['currentTime']);
+
+        echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";
+
+        /* Release the lock */
+
+        unlink($sLock);
+        exit;
+    }
 }
 
 if (indexExist($configFile['es_alerter_status_index'], $configFile))
@@ -430,6 +441,10 @@ include "/var/www/html/thefraudexplorer/lbs/closeDBconn.php";
 
 $time_end = microtime(true);
 $execution_time = ($time_end - $time_start)/60;
+
+/* Apply words retention policy */
+
+wordsRetentionPolicy($configFile, $endTime);
 
 echo "[INFO] Total execution time in minutes: ".round($execution_time, 2)."\n";
 echo "[INFO] Exiting Artificial Intelligence Fraud Triangle Analytics phrase matching processor ...\n\n";

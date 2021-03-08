@@ -39,72 +39,26 @@ include "../lbs/endpointMethods.php";
 include "../lbs/elasticsearch.php";
 include "../lbs/openDBconn.php";
 
-/* Global data variables */
+/* Graph data calculation - The Fraud Explorer general statistics */
 
-if ($session->domain == "all")
+$ESalerterStatusIndex = $configFile['es_alerter_status_index'];
+$countWordsLastMonths = 0;
+$numberOfMonthsBack = 5;
+
+for ($i = 0; $i <= $numberOfMonthsBack; $i++) 
 {
-    if (samplerStatus($session->domain) == "enabled")
-    {
-        $urlWords="http://localhost:9200/logstash-thefraudexplorer-text-*/_count";
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$urlWords);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-    else
-    {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-}
-else
-{
-    if (samplerStatus($session->domain) == "enabled")
-    {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query": { "bool": { "should" : [ { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-    else
-    {
-        $urlWords='http://localhost:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "must" : [ { "term" : { "userDomain" : "'.$session->domain.'" } } ], "must_not" : [ { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } ] } } }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL,$urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-}
+    $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
+    $daterangefrom = $months[$i] . "-01";
+    $daterangeto = $months[$i] . "-18||/M";
+    $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
+                    
+    $resultSumWords[] = sumWordsWithDateRange($ESalerterStatusIndex, $daterangefrom, $daterangeto);
+    $sumPhrases[] = json_decode(json_encode($resultSumWords), true);
+}    
 
-$resultWords = json_decode($resultWords, true);
+for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLastMonths + $sumPhrases[$numberOfMonthsBack][$i]['aggregations']['sumQuantity']['value'];
 
-if (array_key_exists('count', $resultWords)) $totalSystemWords = $resultWords['count'];
-else $totalSystemWords= "0";
+$totalSystemWords = $countWordsLastMonths;
 
 /* Event statistics */
 
@@ -446,7 +400,7 @@ else $enabledPhraseCollection = false;
 
         ?>
 
-        <div class="statistics-container"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total words</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $totalSystemWords; ?><br>words stored in our database.</div></div></div>"><?php echo $totalWordsReduced; ?><br><div class="statistics-label-container">Words</div></span></div>   
+        <div class="statistics-container"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total words</div><div class=tooltip-row><div class=tooltip-item>Were processed <?php echo number_format($totalSystemWords); ?><br>words in the last 6 months.</div></div></div>"><?php echo $totalWordsReduced; ?><br><div class="statistics-label-container">Words</div></span></div>   
         <div class="separator-line"></div>
         <div class="statistics-container" style="top: 137px;"><span class="tooltip-custom" title="<div class=tooltip-container><div class=tooltip-title>Total events</div><div class=tooltip-row><div class=tooltip-item>There are a total of <?php echo $fraudTerms['pressure'] + $fraudTerms['opportunity'] + $fraudTerms['rationalization']; ?> fraud<br>triangle events triggered by AI.</div></div></div>"><?php echo $totalEventsReduced; ?><br><div class="statistics-label-container">Events</div></span></div>
         <div class="separator-line" style="top: 181px;"></div>
@@ -694,45 +648,6 @@ else $enabledPhraseCollection = false;
     </div>
 </div>
 
-<?php
-
-/* Graph data calculation - The Fraud Explorer general statistics */
-
-$ESWordsIndex = $configFile['es_words_index'];
-$countWordsLastMonths = 0;
-$numberOfMonthsBack = 5;
-
-if ($session->domain == "all")
-{
-    for ($i = 0; $i <= $numberOfMonthsBack; $i++) 
-    {
-        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-        $daterangefrom = $months[$i] . "-01";
-        $daterangeto = $months[$i] . "-18||/M";
-        $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
-                
-        $resultWords[] = countWordsWithDateRange($ESWordsIndex, $daterangefrom, $daterangeto);
-        $countPhrases[] = json_decode(json_encode($resultWords), true);
-    }    
-}
-else
-{
-    for ($i = 0; $i <= $numberOfMonthsBack; $i++) 
-    {
-        $months[] = date("Y-m", strtotime( date( 'Y-m-01' )." -$i months"));
-        $daterangefrom = $months[$i] . "-01";
-        $daterangeto = $months[$i] . "-18||/M";
-        $monthName[] = substr(date("F", strtotime($months[$i])), 0, 3);
-                
-        $resultWords[] = countWordsWithDateRangeWithDomain($ESWordsIndex, $daterangefrom, $daterangeto, $session->domain);
-        $countPhrases[] = json_decode(json_encode($resultWords), true);
-    }    
-}
-
-for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLastMonths + $countPhrases[$numberOfMonthsBack][$i]['count'];
-
-?>
-
 <!-- Modal for Phrase viewer -->
 
 <script>
@@ -889,7 +804,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                             if (samplerStatus($session->domain) == "enabled") echo 'data: ["539", "480", "522", "612", "430", "480"],';
                             else echo 'data: ["0", "0", "0", "0", "0", "0"],';
                         }
-                        else echo 'data: [ "'.$countPhrases[5][5]['count'] . '","' . $countPhrases[4][4]['count'] . '","' . $countPhrases[3][3]['count'] . '","' . $countPhrases[2][2]['count'] . '","' . $countPhrases[1][1]['count'] . '","' . $countPhrases[0][0]['count'] . '" ],'; 
+                        else echo 'data: [ "'. $sumPhrases[5][5]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[4][4]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[3][3]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[2][2]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[1][1]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[0][0]['aggregations']['sumQuantity']['value'] . '" ],'; 
                         
                     ?>
                     
@@ -917,7 +832,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                             if (samplerStatus($session->domain) == "enabled") echo 'data: ["539", "480", "522", "612", "430", "480"],';
                             else echo 'data: ["0", "0", "0", "0", "0", "0"],';
                         }
-                        else echo 'data: [ "'.$countPhrases[5][5]['count'] . '","' . $countPhrases[4][4]['count'] . '","' . $countPhrases[3][3]['count'] . '","' . $countPhrases[2][2]['count'] . '","' . $countPhrases[1][1]['count'] . '","' . $countPhrases[0][0]['count'] . '" ],'; 
+                        else echo 'data: [ "'.$sumPhrases[5][5]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[4][4]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[3][3]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[2][2]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[1][1]['aggregations']['sumQuantity']['value'] . '","' . $sumPhrases[0][0]['aggregations']['sumQuantity']['value'] . '" ],'; 
                         
                     ?>
                 }
@@ -935,7 +850,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                         return "Word statistics"
                     },
                     label: function(tooltipItems, data) {
-                        return "Words: " + parseInt(tooltipItems.yLabel);
+                        return "Words: " + parseInt(tooltipItems.yLabel).toLocaleString();
                     },
                     footer: function(tooltipItems, data) {
                         return "Month: " + data['labels'][tooltipItems[0]['index']];
@@ -1004,6 +919,11 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
 <!-- Fraud Triangle graph -->
 
 <script>
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     var defaultOptions = {
         global: {
             defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'CFont'"
@@ -1059,7 +979,7 @@ for ($i=0; $i<=$numberOfMonthsBack; $i++) $countWordsLastMonths = $countWordsLas
                     },
                     label: function(tooltipItems, data) {
                         var indice = tooltipItems.index;                 
-                        return  "Events: " + data.datasets[0].data[indice];
+                        return  "Events: " + numberWithCommas(data.datasets[0].data[indice]);
                     },
                     footer: function(tooltipItems, data) {
                         return data['labels'][tooltipItems[0]['index']] + " Vertice";
