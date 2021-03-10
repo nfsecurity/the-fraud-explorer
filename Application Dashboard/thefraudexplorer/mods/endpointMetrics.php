@@ -450,6 +450,10 @@ for ($i = 0; $i <= 11; $i++)
 
 <script>
 
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     var defaultOptions = {
         global: {
             defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'FFont'"
@@ -541,7 +545,7 @@ for ($i = 0; $i <= 11; $i++)
                         return "Fraud metrics"
                     },
                     label: function(tooltipItems, data) {
-                        return "Events: " + parseInt(tooltipItems.yLabel);
+                        return "Events: " + numberWithCommas(parseInt(tooltipItems.yLabel));
                     },
                     footer: function(tooltipItems, data) {
                         return "Month: " + data['labels'][tooltipItems[0]['index']];
