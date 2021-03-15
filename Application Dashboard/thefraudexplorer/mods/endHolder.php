@@ -39,6 +39,8 @@ include "../lbs/elasticsearch.php";
 include "../lbs/openDBconn.php";
 include "../lbs/cryptography.php";
 
+auditTrail("endpoints", "access to the dashboard general executive data");
+
 /* Local styles */
 
 echo '<style>';

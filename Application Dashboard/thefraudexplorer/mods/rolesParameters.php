@@ -53,12 +53,14 @@ if (!empty($_POST['createmodify']))
         {
             mysqli_query($connection, sprintf("UPDATE t_users SET password='%s', domain='%s' WHERE user='%s'", $userPassword, $userDomain, $userName));
 
+            auditTrail("roles", "successfully modified role entry for the user ".$userName);
             $msg = "modification";
         }
         else 
         {
             mysqli_query($connection, sprintf("INSERT INTO t_users (user, password, domain) VALUES ('%s', '%s', '%s')", $userName, $userPassword, $userDomain));
 
+            auditTrail("roles", "successfully created role for the user named ".$userName);
             $msg = "creation";
         }
   
@@ -99,6 +101,8 @@ else if (!empty($_POST['delete']))
         if(mysqli_num_rows(mysqli_query($connection, "SHOW TABLES LIKE '".$domainTable."'")) == 1) 
         {
             mysqli_query($connection, sprintf("DROP TABLE %s", $domainTable));
+
+            auditTrail("roles", "successfully deleted role for the user named ".$userName);
             $msg = "deletion";
         }
     }

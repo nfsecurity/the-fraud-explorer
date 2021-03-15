@@ -66,6 +66,7 @@ if ($objective == "reg")
         $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
         exec($runMultiDictionary, $output, $return);
 
+        auditTrail("regionalism", "successfully added regionalism words to local dictionary");
         $msg = "Successfully added regionalism words";
     }
     if (isset($_POST["removewords"]))
@@ -108,6 +109,7 @@ if ($objective == "reg")
         $runMultiDictionary = '/usr/bin/sudo /usr/bin/aspell --lang=en --master=en.multi dump master | aspell -l en expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' > /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=es --master=es.multi dump master | aspell -l es expand | perl -e \'while(<>){ print join("\n", split), "\n";}\' >> /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /bin/recode ISO-8859-1..UTF8 /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt ; /usr/bin/sudo /usr/bin/aspell --lang=hu --encoding=utf-8 create master /usr/lib64/aspell-0.60/hu.rws < /var/www/html/thefraudexplorer/core/spell/multilingualSEdictionary.txt';
         exec($runMultiDictionary, $output, $return);
 
+        auditTrail("regionalism", "successfully removed regionalism words from local dictionary");
         $msg = "Successfully removed regionalism words";
     }
 }
@@ -126,6 +128,7 @@ else
     {
         foreach ($toneWords as $word) file_put_contents($toneFile, $word.PHP_EOL, FILE_APPEND);
 
+        auditTrail("regionalism", "successfully added tone words to the sentimental database");
         $msg = "Successfully added tone words";
     }
     if (isset($_POST["removewords"]))
@@ -158,6 +161,7 @@ else
         fwrite($destinationFile, $t);
         fclose($destinationFile);
 
+        auditTrail("regionalism", "successfully removed tone words from sentimental database");
         $msg = "Successfully removed tone words";
     }
 }

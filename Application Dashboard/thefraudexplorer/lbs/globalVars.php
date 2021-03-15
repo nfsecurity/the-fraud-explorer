@@ -22,7 +22,7 @@ $documentRoot = $configFile['php_document_root'];
 
 /* Unwanted words */
 
-$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin", "oemquestio", "oemquestion", "medianexttrack");
+$notwantedWords = array("rwin", "lwin", "decimal", "snapshot", "cv", "zwin", "oemquestio", "oemquestion", "medianexttrack", "oemplus");
 
 /* Set TimeZone */
 
@@ -79,6 +79,29 @@ function phraseSanitization($sanitizedPhrases, $notwantedWords)
     /* Ajust upper cases */
 
     return ucfirst(trim($sanitizedPhrases));
+}
+
+/* Audit Trail */
+
+function auditTrail($eventModule, $eventAction)
+{
+    global $session, $configFile;
+
+    $now = DateTime::createFromFormat('U.u', microtime(true));
+    $time = $now->format("Y-m-d\TH:i:s.u");
+    $time = substr($time, 0, -3);
+    
+    $eventDate = (string)$time."Z";
+    $eventUser = $session->username;
+    $eventIP = $_SERVER["REMOTE_ADDR"];
+    $eventBrowser = $_SERVER['HTTP_USER_AGENT'];
+    
+    $msgData = $eventDate." - AuditEvent ".$eventUser." i: ".$eventIP." b: ".$eventBrowser." m: ".$eventModule." a: ".$eventAction;
+    $sockAudit = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+
+    $lenData = strlen($msgData);
+    socket_sendto($sockAudit, $msgData, $lenData, 0, $configFile['net_logstash_host'], $configFile['net_logstash_audit_port']);
+    socket_close($sockAudit);
 }
 
 ?>

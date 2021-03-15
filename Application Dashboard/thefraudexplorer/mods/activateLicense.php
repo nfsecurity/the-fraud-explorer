@@ -82,13 +82,19 @@ if (isset($_POST['serial']))
             $commandReplacements = shell_exec($replaceParams);
 
             $msg = "Serial number successfully activated";
+            auditTrail("license", "serial number successfully activated");
         }
         else
         {
             $msg = "Your license has expired, contact support";
+            auditTrail("license", "serial number license has expired");
         }
     }
-    else $msg = "Invalid phrase library serial number";
+    else 
+    {
+        $msg = "Invalid phrase library serial number";
+        auditTrail("license", "invalid phrase library serial number");
+    }
     
 }
 

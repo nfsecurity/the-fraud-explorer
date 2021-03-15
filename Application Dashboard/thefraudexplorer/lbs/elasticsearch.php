@@ -2176,6 +2176,53 @@ function countAgentIdEvents($agentID, $index, $alertType)
     return $agentIdData;
 }
 
+/* Get audit trail events */
+
+function getAuditTrailEvents($view, $index, $alertType, $size, $offset, $sortOrder, $sortColumn)
+{
+    if ($sortColumn != "@timestamp") $sortColumn = $sortColumn.".keyword";
+
+    $matchesParams = [
+        'index' => $index,
+        'type' => $alertType,
+        'body' => [
+            'from' => $offset,
+            'size' => $size,
+            'sort' => [
+                [ $sortColumn => [ 'order' => $sortOrder ] ]
+            ],
+            'query' => [
+                'wildcard' => [ 'eventUser' => $view ] 
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $auditData = $client->search($matchesParams);
+
+    return $auditData;
+}
+
+/* Count audit trail events */
+
+function countAuditTrailEvents($view, $index, $alertType)
+{
+    $matchesParams = [
+        'index' => $index,
+        'type' => $alertType,
+        'body' => [
+            'query' => [
+                'wildcard' => [ 'eventUser' => $view ] 
+            ]
+        ]
+    ];
+
+    $client = Elasticsearch\ClientBuilder::create()->build();
+    $auditData = $client->count($matchesParams);
+
+    return $auditData;
+}
+
 /* Get AgentId alert specific events */
 
 function getSpecificAgentIdEvents($agentID, $index, $alertType, $size, $offset, $sortOrder, $sortColumn, $searchString)

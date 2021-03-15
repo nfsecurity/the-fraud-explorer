@@ -56,6 +56,7 @@ if (isset($_POST['delete']))
         mysqli_query($connection, sprintf("DELETE FROM t_workflows WHERE name='%s'", $workflow));
         mysqli_query($connection, sprintf("DELETE FROM t_wtriggers WHERE name='%s'", $workflow));
 
+        auditTrail("workflows", "deleted the workflow ".$workflow);
         $msg = "Successfully deleted workflow";
     }
 }
@@ -87,6 +88,7 @@ else if (isset($_POST['add']))
 
     mysqli_query($connection, sprintf("INSERT INTO t_workflows (`name`, `workflow`, `interval`, `custodian`, `tone`, `flag`, `triggers`) values('%s', '%s', '%d', '%s', '%d', '%d', '0')", $workflowName, $finalWorkflow, $workflowInterval, $custodianEmail, $workflowTone, $workflowFlag));
 
+    auditTrail("workflows", "added the workflow ".$workflowName);
     $msg = "Successfully added workflow";
 }
 

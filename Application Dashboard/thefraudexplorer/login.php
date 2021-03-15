@@ -16,6 +16,7 @@
  */
 
 include "lbs/login/session.php";
+include "lbs/globalVars.php";
 
 define("LOCATION_INDEX", "Location: index");
 
@@ -46,6 +47,7 @@ class Process
 
         if($retval)
         {
+            auditTrail("login", "successful login to thefraudexplorer web platform");
             header("Location: ".$session->referrer);
         }
         else

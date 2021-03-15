@@ -35,6 +35,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 
 include "../lbs/globalVars.php";
 
+auditTrail("library", "uploaded phrase library file, replacing current one");
+
 $target_dir = "../core/rules/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $fileType = pathinfo($target_file, PATHINFO_EXTENSION);

@@ -58,6 +58,7 @@ if (!empty($_POST['review-save']))
         $resultReview = curl_exec($ch);
         curl_close($ch);
 
+        auditTrail("events", "reviewed event with ID ".$documentId);
         $msg = "Successfully saved redflag event";
     }
 }
@@ -83,6 +84,7 @@ else if (!empty($_POST['delete-event']))
     curl_exec($ch); 
     curl_close($ch);
 
+    auditTrail("events", "removed event with ID ".$documentId);
     $msg = "Successfully removed redflag event";
 }
 
@@ -118,6 +120,7 @@ else if (!empty($_POST['relevancy']))
     $resultEvents = curl_exec($ch);
     curl_close($ch);
 
+    auditTrail("events", "relevancy changed for event ID ".$documentId);
     $msg = "Successfully changed event relevancy";
 }
 

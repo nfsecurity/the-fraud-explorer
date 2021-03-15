@@ -48,12 +48,16 @@ if ($phraseCollectionStatus == "textAnalytics 1")
 {
     $enabledPhraseCollection = true;
     $com = strip_tags($disableCommand);
+
+    auditTrail("collection", "the endpoint phrase collection capability was disabled");
     $msg = "Endpoint phrase collection disabled";
 }
 else 
 {
     $enabledPhraseCollection = false;
     $com = strip_tags($enableCommand);
+
+    auditTrail("collection", "the endpoint phrase collection capability was enabled");
     $msg = "Endpoint phrase collection enabled";
 }
 

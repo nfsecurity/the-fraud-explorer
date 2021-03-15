@@ -38,6 +38,8 @@ include "../lbs/endpointMethods.php";
 require "../vendor/autoload.php";
 include "../lbs/elasticsearch.php";
 
+auditTrail("metrics", "successfully query the fraud triangle metrics");
+
 /* Elasticsearch querys for fraud triangle counts and score */
 
 $client = Elasticsearch\ClientBuilder::create()->build();

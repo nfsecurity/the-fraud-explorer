@@ -119,6 +119,8 @@ if ($finalPlatformForBuild == "windows")
 
     if (file_exists($msiFile)) 
     {
+        auditTrail("endpoints", "successfully downloaded the windows endpoint MSI file");
+
         $original_filename = $documentRoot.'endpoints/msi/endpointInstallerForDownload.MSI';
         $new_filename = 'endpointInstaller.msi';
 
@@ -150,6 +152,8 @@ else if ($finalPlatformForBuild == "android")
 
     if (file_exists($apkFile)) 
     {
+        auditTrail("endpoints", "successfully downloaded the android endpoint APK file");
+
         $original_filename = $documentRoot.'endpoints/apk/androidEndpointTemplate/dist/androidEndpointTemplate.apk';
         $new_filename = 'androidEndpoint.apk';
 
@@ -175,6 +179,8 @@ else if ($finalPlatformForBuild == "pbx")
 
     if (file_exists($agiFile)) 
     {
+        auditTrail("endpoints", "successfully downloaded the asterisk endpoint AGI file");
+
         $original_filename = $documentRoot.'endpoints/pbx/thefraudexplorer.agi';
         $new_filename = 'thefraudexplorer.agi';
 
@@ -214,6 +220,8 @@ else if ($finalPlatformForBuild == "macosx")
 
     if (file_exists($pkgFile)) 
     {
+        auditTrail("endpoints", "successfully downloaded the macosx endpoint PKG file");
+
         $original_filename = $documentRoot.'endpoints/osx/endpointInstaller.pkg';
         $new_filename = 'endpointInstaller.pkg';
 

@@ -44,6 +44,8 @@ $queryEndpoint = "SELECT agent, domain, ipaddress, heartbeat, system, version, n
 $endpointQuery = mysqli_query($connection, sprintf($queryEndpoint, $agentId, $domain));
 $queryResult = mysqli_fetch_array($endpointQuery);
 
+auditTrail("events", "access to ".$agentId." endpoint card data");
+
 ?>
 
 <style>

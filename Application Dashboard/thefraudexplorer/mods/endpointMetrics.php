@@ -77,6 +77,8 @@ $zeroQuery = false;
 $resultSQL = mysqli_query($connection, sprintf("SELECT SUM(11P+11O+11R+10P+10O+10R+9P+9O+9R+8P+8O+8R+7P+7O+7R+6P+6O+6R+5P+5O+5R+4P+4O+4R+3P+3O+3R+2P+2O+2R+1P+1O+1R+0P+0O+0R) AS SUM FROM t_metrics WHERE endpoint='%s'", $endpointLogin[0]));
 $resultQuery = mysqli_fetch_assoc($resultSQL);
 
+auditTrail("events", "access to the endpoint ".$endpointLogin[0]." metrics");
+
 if ($resultQuery['SUM'] == "NULL" || $resultQuery['SUM'] == "0" || $fraudTerms == "0 0 0") $zeroQuery = true;
 
 for ($i = 0; $i <= 11; $i++) 

@@ -52,6 +52,8 @@ $windowTitle = filter($_GET['le']);
 
 $date = date('l, M d, Y, H:i', strtotime(decRijndael($alertDate)));
 
+auditTrail("events", "access to ".decRijndael($endPoint)." event ID ".$documentId);
+
 ?>
 
 <script type="text/javascript">

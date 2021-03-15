@@ -143,6 +143,8 @@ $domain = mysqli_fetch_array($domainQuery);
 
 if ($endpointDECSQL != "all")
 {
+    auditTrail("events", "access to ".$endpointDECSQL." events data");
+
     ?>
 
     <div id="wrapper">
@@ -176,6 +178,8 @@ if ($endpointDECSQL != "all")
 }
 else
 {
+    auditTrail("events", "access to the all fraud triangle events");
+
     ?>
 
     <div id="wrapper">

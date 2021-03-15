@@ -55,6 +55,8 @@ if (isset($_POST['smtpserver']) && isset($_POST['smtpuserpass']) && isset($_POST
     $postmapCommand = 'cd /etc/postfix/private ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/canonical ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/sender_relay ; /usr/bin/sudo /usr/sbin/postmap /etc/postfix/private/sasl_passwd';
     $commandPostmap = shell_exec($postmapCommand);
 
+    auditTrail("mail", "successfully configured mail smtp account ".$mailAddress);
+
     /* Send message test */
 
     $to = $mailAddress;

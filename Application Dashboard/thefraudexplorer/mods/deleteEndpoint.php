@@ -64,6 +64,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 $resultDelete=curl_exec($ch);
 curl_close($ch);
 
+auditTrail("endpoints", "deleted all data from the endpoint named ".$endpointID);
 $_SESSION['wm'] = encRijndael("Successfully deleted all endpoint data");
 
 /* Referer Return */

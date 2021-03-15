@@ -94,11 +94,13 @@ else
             }
             fclose($file);
             
+            auditTrail("business", "successfully loaded business units structure to database");
             $msg = "Successfully loaded department structure";
 		}
     } 
     else
     {
+        auditTrail("business", "unable to load business units file structure to database");
         $msg = "Unable to load department file structure";
     }
 }

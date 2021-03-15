@@ -41,4 +41,6 @@ $newerWordsAge = filter($_POST['wordsage']);
 $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/store_words_days = \"'.$currentWordsAge.'\"/store_words_days = \"'.$newerWordsAge.'\"/g" --in-place '.$documentRoot.'config.ini';
 $commandReplacements = shell_exec($replaceParams);
 
+auditTrail("storage", "successfully changed data retention policy to ".$newerWordsAge." days");
+
 ?>

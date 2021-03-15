@@ -58,6 +58,7 @@ if (isset($_POST['urlrepo']))
         $commandReplacements = shell_exec($replaceParams);
 
         $msg = $repoVersion[1];
+        auditTrail("update", "successfully updated thefraudexplorer platform to ".$msg);
     }
 }
 

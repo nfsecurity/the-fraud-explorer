@@ -37,6 +37,9 @@ include "../lbs/openDBconn.php";
 include "../lbs/endpointMethods.php";
 include "../lbs/elasticsearch.php";
 include "../lbs/cryptography.php";
+include "../lbs/globalVars.php";
+
+auditTrail("analytics", "access to the general fraud triangle events data");
 
 ?>
 

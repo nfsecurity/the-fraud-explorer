@@ -77,6 +77,7 @@ if (!empty($_POST['toggle-event']))
     $resultEvents = curl_exec($ch);
     curl_close($ch);
 
+    auditTrail("events", "successfully toggled the event ID ".$regid);
     $msg = "Successfully toggled event";
 }
 else if (!empty($_POST['delete-event']))
@@ -101,6 +102,7 @@ else if (!empty($_POST['delete-event']))
     curl_exec($ch); 
     curl_close($ch); 
 
+    auditTrail("events", "successfully removed the event ID ".$regid);
     $msg = "Successfully removed event";
 }
 

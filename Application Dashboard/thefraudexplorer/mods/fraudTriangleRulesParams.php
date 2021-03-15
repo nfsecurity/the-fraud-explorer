@@ -80,6 +80,8 @@ if ($actionTODO == "addrule")
 
         $jsonFT['dictionary'][$rulesetSelectedADD][strtolower($fraudVerticeSelectedADD)][$phraseIDSelectedADD] = "/".$regularExpressionSelectedADD."/";
         $proceedToSave = true;
+
+        auditTrail("library", "successfully added custom rule to the phrase library");
         $msg = "Successfully added rule to library";
     }
 }
@@ -109,21 +111,29 @@ else if ($actionTODO == "deleterule")
         if (isset($key)) 
         {
             unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDEL]);
+
+            auditTrail("library", "successfully removed rule from the phrase library");
             $msg = "Successfully removed rule from library";
         }
         else if (isset($keyCustom)) 
         {
             unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDELCustom]);
+
+            auditTrail("library", "successfully removed rule from the phrase library");
             $msg = "Successfully removed rule from library";
         }
         else if (isset($keyFlag)) 
         {
             unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDELFlag]);
+
+            auditTrail("library", "successfully removed rule from the phrase library");
             $msg = "Successfully removed rule from library";
         }
         else if (isset($keyFlagCustom)) 
         {
             unset($jsonFT['dictionary'][$rulesetSelectedDEL][strtolower($fraudVerticeSelectedDEL)][$phraseIDSelectedDELFlagCustom]);
+
+            auditTrail("library", "successfully removed rule from the phrase library");
             $msg = "Successfully removed rule from library";
         }
         else $msg = "Phrase rule does not exist";
@@ -156,21 +166,29 @@ else if ($actionTODO == "modifyrule")
         if (isset($key)) 
         {
             $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMOD] = "/".$regularExpressionSelectedMOD."/";
+
+            auditTrail("library", "successfully modified phrase rule from the library");
             $msg = "Successfully modified phrase rule";
         }
         else if (isset($keyCustom)) 
         {
             $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMODCustom] = "/".$regularExpressionSelectedMOD."/";
+
+            auditTrail("library", "successfully modified phrase rule from the library");
             $msg = "Successfully modified phrase rule";
         }
         else if (isset($keyFlag)) 
         {
             $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMODFlag] = "/".$regularExpressionSelectedMOD."/";
+
+            auditTrail("library", "successfully modified phrase rule from the library");
             $msg = "Successfully modified phrase rule";
         }
         else if (isset($keyFlagCustom)) 
         {
             $jsonFT['dictionary'][$rulesetSelectedMOD][strtolower($fraudVerticeSelectedMOD)][$phraseIDSelectedMODFlagCustom] = "/".$regularExpressionSelectedMOD."/";
+
+            auditTrail("library", "successfully modified phrase rule from the library");
             $msg = "Successfully modified phrase rule";
         }
         else $msg = "Phrase rule does not exist";

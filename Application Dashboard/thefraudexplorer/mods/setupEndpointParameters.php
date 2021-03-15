@@ -69,6 +69,7 @@ if (isset($_POST['gender']) && strpos($_POST['gender'], 'Choose the gender') ===
     }
 }
 
+auditTrail("endpoints", "successfully changed ".$endpointDec." profile information");
 $_SESSION['wm'] = encRijndael("Successfully changed endpoint profile");
 
 header ("location: ../endPoints");

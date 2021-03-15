@@ -32,8 +32,21 @@ if(!isset($_SERVER['HTTP_REFERER']))
     exit;
 }
 
+require '../vendor/autoload.php';
+include "../lbs/elasticsearch.php";
+
 $configFile = parse_ini_file("../config.ini");
 $currentversion = $configFile['sw_version'];
+
+/* Query if there are audit events for the user */
+
+$client = Elasticsearch\ClientBuilder::create()->build();
+$ESAuditIndex = $configFile['es_audit_trail_index'];
+$view = $session->username;
+$showAuditLink = false;
+$eventCount = countAuditTrailEvents($view."*", $ESAuditIndex, "AuditEvent");
+
+if (isset($eventCount['count']) && $eventCount['count'] != 0) $showAuditLink = true;
 
 ?>
 
@@ -49,13 +62,13 @@ $currentversion = $configFile['sw_version'];
         color: #FFFFFF; 
     }
 
-    .software-version, .logging, .simulator
+    .software-version, .logging, .simulator, .audit
     {
         display: inline-block;
         color: white;
     }
 
-    .software-version a, .software-version a:link, .software-version a:hover, .software-version a:visited, .logging a, .logging a:link, .logging a:hover, .logging a:visited, .simulator a, .simulator a:link, .simulator a:hover, .simulator a:visited
+    .software-version a, .software-version a:link, .software-version a:hover, .software-version a:visited, .logging a, .logging a:link, .logging a:hover, .logging a:visited, .simulator a, .simulator a:link, .simulator a:hover, .simulator a:visited, .audit a, .audit a:link, .audit a:hover, .audit a:visited
     {
         color: white;
     }
@@ -82,9 +95,10 @@ $currentversion = $configFile['sw_version'];
         </div>
         <div class="helpers-container">
             <span class="fa fa-globe fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><a href="#" onclick="startTour()" style="color: white;">Take tour</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Fraud triangle simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-file-text fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a href="../mods/fraudSimulator" data-toggle="modal" class="fraud-simulator-button" data-target="#fraud-simulator" id="elm-fraud-simulator">Semantic simulator</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-lock fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="simulator"><a href="../mods/libraryLicense" data-toggle="modal" class="library-license-button" data-target="#library-license" id="elm-library-license">Library license</a></div>&nbsp;&nbsp;&nbsp;&nbsp;            
             <span class="fa fa-medkit fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="logging"><a href="../mods/fraudTriangleLogging" data-toggle="modal" class="logging-button" data-target="#logging" href="#" id="elm-logging">Logging</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-coffee fa-lg font-icon-color-footer">&nbsp;&nbsp;</span><div class="audit"><a href="../mods/viewAudit" data-toggle="modal" class="audit-button" data-target="<?php if ($showAuditLink == true) echo '#audit'; else echo '#noaudit'; ?>" href="#" id="elm-audit">Audit</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-address-card fa-lg font-icon-color-footer">&nbsp;&nbsp;</span>Profile [<?php echo $session->username ." - ".$session->domain; ?>]&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-codepen fa-lg font-icon-color-footer" id="elm-software-update">&nbsp;&nbsp;</span><div class="software-version"><a href="../mods/swUpdate" data-toggle="modal" class="software-update-button" data-target="#software-update" href="#"><?php echo "Version v".$currentversion; ?></a></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
@@ -147,6 +161,20 @@ $currentversion = $configFile['sw_version'];
     </div>
 </div>
 
+<!-- Modal for Audit -->
+
+<div class="modal" id="audit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center" style="width: 890px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="debug-url window-debug"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Script for Library License -->
 
 <script>
@@ -183,6 +211,18 @@ $currentversion = $configFile['sw_version'];
     });
 
     $('#logging').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
+    });
+</script>
+
+<!-- Script for Audit -->
+
+<script>
+    $('#audit').on('show.bs.modal', function(e){
+        $(this).find('.audit-button').attr('href', $(e.relatedTarget).data('href'));
+    });
+
+    $('#audit').on('hidden.bs.modal', function () {
         $(this).removeData('bs.modal');
     });
 </script>

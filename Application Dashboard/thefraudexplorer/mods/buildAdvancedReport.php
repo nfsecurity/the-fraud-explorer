@@ -95,79 +95,14 @@ if ($alldaterange == "alldaterange")
     $daterangeto = date('Y-m-d');
 }
 
-/* Global data variables */
+/* Words count */
 
-if ($session->domain == "all")
-{
-    if (samplerStatus($session->domain) == "enabled")
-    {
-        $urlWords="http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count";
-        $params = '{ "query" : { "bool" : { "should" : { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, "must_not" : { "wildcard" : { "userDomain.raw" : "*" } } } } }';
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-    else
-    {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "should" : { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, "must_not" : { "match" : { "userDomain.raw" : "thefraudexplorer.com" } } } } }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords = curl_exec($ch);
-        curl_close($ch);
-    }
-}
-else
-{
-    if (samplerStatus($session->domain) == "enabled")
-    {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query": { "bool": { "should" : [ { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }, { "term" : { "userDomain" : "'.$session->domain.'" } }, { "term" : { "userDomain" : "thefraudexplorer.com" } } ] } } }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-    else
-    {
-        $urlWords='http://127.0.0.1:9200/logstash-thefraudexplorer-text-*/_count';
-        $params = '{ "query" : { "bool" : { "must" : [{ "term" : { "userDomain" : "'.$session->domain.'" } }, { "range" : { "@timestamp" : { "gte" : "'.$daterangefrom.'T00:00:00.000", "lte" : "'.$daterangeto.'T23:59:59.999" } } }]}} }';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $urlWords);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_ENCODING, ''); 
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $resultWords=curl_exec($ch);
-        curl_close($ch);
-    }
-}
-
-$resultWords = json_decode($resultWords, true);
+$ESalerterStatusIndex = $configFile['es_alerter_status_index'];
+$resultWords = sumWordsWithDateRange($ESalerterStatusIndex, $daterangefrom, $daterangeto);
+$resultWords = json_decode(json_encode($resultWords), true);
 $allEventsSwitch = false;
 
-if (array_key_exists('count', $resultWords)) $totalQueryWords = $resultWords['count'];
-else $totalQueryWords= "0";
+$totalQueryWords = $resultWords['aggregations']['sumQuantity']['value'];
 
 $wordCounter = 0;
 $eventCounter = 0;
@@ -411,6 +346,8 @@ if (strcmp($alldepartments, "alldepartments") != 0) $spreadsheet->getActiveSheet
 else $spreadsheet->getActiveSheet()->setCellValue('K6', 'ALL');
 
 /* Download XLSX file */
+
+auditTrail("reporting", "downloaded report ".$typereport." from ".$daterangefrom." to ".$daterangeto);
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="Fraud_Triangle_Analytics_Report.xlsx"');

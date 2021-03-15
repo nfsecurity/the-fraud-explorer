@@ -54,6 +54,7 @@ if (isset($_POST['key']))
     {
         mysqli_query($connection, sprintf("UPDATE t_crypt SET password='%s'", $keyPass));
 
+        auditTrail("setup", "successfully modified the endpoints password phrase");
         $msg = $msg . ", key phrase";
     }
 }
@@ -88,6 +89,7 @@ if (isset($_POST['samplecalculation']))
             mysqli_query($connection, $queryConfigTable);
         }
 
+        auditTrail("setup", "successfully changed the demo sampler status feature");
         $msg = $msg . ", demo sampler";
     }
 }
@@ -102,6 +104,7 @@ if (isset($_POST['password']))
         $password = sha1(filter($_POST['password']));
         mysqli_query($connection, sprintf("UPDATE t_users SET password='%s' WHERE user='%s'", $password, $username));
 
+        auditTrail("setup", "successfully modified the master admin password for the platform");
         $msg = $msg . ", admin password";
     }
 }
@@ -114,6 +117,7 @@ if (isset($_POST['encryption']))
     {
         mysqli_query($connection, sprintf("UPDATE t_crypt SET `key`='%s', `iv`='%s'", $encryption, $encryption));
 
+        auditTrail("setup", "successfully modified the master cipher key for the platform");
         $msg = $msg . ", cipher key";
     }
 }
@@ -147,6 +151,7 @@ if (isset($_POST['lowfrom']) && isset($_POST['lowto']) && isset($_POST['mediumfr
         {
             mysqli_query($connection, sprintf("UPDATE t_config SET score_ts_low_from='%s', score_ts_low_to='%s', score_ts_medium_from='%s', score_ts_medium_to='%s', score_ts_high_from='%s', score_ts_high_to='%s', score_ts_critic_from='%s', score_ts_critic_to='%s'", $lowFrom, $lowTo, $mediumFrom, $mediumTo, $highFrom, $highTo, $criticFrom, $criticTo));
     
+            auditTrail("setup", "successfully modified the criticality level intervals");
             $msg = $msg . ", criticality levels";
         }
     }
@@ -168,6 +173,7 @@ if (isset($_POST['ftacron']))
         $remove_cron_result = $cron_manager->remove_cronjob('fta-ai-processor');
         if($_POST['ftacron'] != "disabled") $cron_add_result = $cron_manager->add_cronjob('*/'.$cronJobMinutes.' * * * * cd /var/www/html/thefraudexplorer/core/ ; /usr/bin/php AIFraudTriangleProcessor.php', 'fta-ai-processor');
     
+        auditTrail("setup", "successfully modified the FTA/AI daily schedule");
         $msg = $msg . ", scheduler";
     }
 }
@@ -213,6 +219,7 @@ if (isset($_POST['librarylanguage']))
 
         insertSampleData($configFile);
 
+        auditTrail("setup", "successfully changed the library language");
         $msg = $msg . ", library language";
     }
 }
@@ -236,6 +243,7 @@ if (isset($_POST['spellchecker']))
         $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$wcSpell.'/'.$spellCheckertoSet.'/g" --in-place '.$documentRoot.'config.ini';
         $commandReplacements = exec($replaceParams);
 
+        auditTrail("setup", "successfully changed the main spelling corrector status");
         $msg = $msg . ", spelling corrector";
     }
 }
@@ -256,6 +264,7 @@ if (isset($_POST['defaultruleset']))
         $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$singupRule.'/'.$ruletoSet.'/g" --in-place '.$documentRoot.'config.ini';
         $commandReplacements = exec($replaceParams);
 
+        auditTrail("setup", "successfully changed the default singup for ruleset");
         $msg = $msg . ", default ruleset";
     }
 }

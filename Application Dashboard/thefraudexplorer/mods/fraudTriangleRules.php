@@ -484,7 +484,7 @@ function is_internet()
                     </label>
                 </div>
                
-                <button type="submit" class="rule-button-add btn-default" id="add-rule" name="action" value="addrule">Add rule</button>
+                <button type="submit" class="rule-button-add btn-default" style="font-family: 'FFont', sans-serif; font-size: 11px !important;" id="add-rule" name="action" value="addrule">Add rule</button>
             </div>
 
         </div>
@@ -558,9 +558,9 @@ function is_internet()
                 <div class="input-regexp-left">/</div>
                 <input type="text" name="regexpression-delmodify" id="regexpression-delmodify" autocomplete="off" placeholder="you will see here the regular expression" class="input-value-text-regexp-delmodify">
                 <div class="input-regexp-right">/</div>
-                <button type="button" class="rule-button-searchdelmodify btn-default" id="search-rule">SCH</button>
-                <button type="submit" class="rule-button-searchdelmodify btn-default" id="delete-rule" name="action" value="deleterule">DEL</button>
-                <button type="submit" class="rule-button-searchdelmodify btn-default" id="modify-rule" name="action" value="modifyrule">MOD</button>
+                <button type="button" class="rule-button-searchdelmodify btn-default" style="font-family: 'FFont', sans-serif; font-size: 11px !important;" id="search-rule">SCH</button>
+                <button type="submit" class="rule-button-searchdelmodify btn-default" style="font-family: 'FFont', sans-serif; font-size: 11px !important;" id="delete-rule" name="action" value="deleterule">DEL</button>
+                <button type="submit" class="rule-button-searchdelmodify btn-default" style="font-family: 'FFont', sans-serif; font-size: 11px !important;" id="modify-rule" name="action" value="modifyrule">MOD</button>
             </div>
 
         </div>

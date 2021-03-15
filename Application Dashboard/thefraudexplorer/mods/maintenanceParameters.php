@@ -51,6 +51,7 @@ if ((isset($_POST['deadsessions'])) && ($_POST['deadsessions'] != "preserveall")
     {
         mysqli_query($connection, "DELETE FROM t_agents WHERE heartbeat < (CURRENT_DATE - INTERVAL 30 DAY) AND domain NOT LIKE 'thefraudexplorer.com'");
 
+        auditTrail("health", "successfully purged the dead data endpoints");
         $msg = $msg . ", dead endpoints";
     }
 }
@@ -91,6 +92,7 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
 
+        auditTrail("health", "successfully purged the alerts data, keeping 1 month");
         $msg = $msg . ", 1 month old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "3month") 
@@ -107,6 +109,7 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
 
+        auditTrail("health", "successfully purged the alerts data, keeping 3 months");
         $msg = $msg . ", 3 months old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "6month") 
@@ -123,6 +126,7 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
 
+        auditTrail("health", "successfully purged the alerts data, keeping 6 months");
         $msg = $msg . ", 6 months old alerts";
     }
     else if (!empty($setDeleteAlerts) && $setDeletePhrases == "12month") 
@@ -139,6 +143,7 @@ if ((isset($_POST['deletealerts'])) && ($_POST['deletealerts'] != "preserveall")
             $resultQuery = mysqli_query($connection, $queryDeleteWFAlert);
         }
 
+        auditTrail("health", "successfully purged the alerts data, keeping 12 months");
         $msg = $msg . ", 12 months old alerts";
     }
 }
@@ -163,6 +168,7 @@ if ((isset($_POST['alertstatus'])) && ($_POST['alertstatus'] != "preserveall"))
         $resultAlerts = curl_exec($ch);
         curl_close($ch);
 
+        auditTrail("health", "successfully purged the alert status, keeping 1 month");
         $msg = $msg . ", alert status";
     }
 }

@@ -34,6 +34,8 @@ if(!isset($_SERVER['HTTP_REFERER']))
 
 include "../lbs/globalVars.php";
 
+auditTrail("library", "downloaded phrase library to user local computer");
+
 $pathdir = $documentRoot."/core/rules/";  
 $zipcreated = $documentRoot."/core/ziprules/thefraudexplorer-rules.zip";
 

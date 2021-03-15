@@ -60,6 +60,8 @@ if ($min != "" && $hours != "" && $day != "" && $month != "" && $weekday != "" &
     $replaceParams = '/usr/bin/sudo /usr/bin/sed "s/'.$backupPassword.'/'.$pwd.'/g" --in-place '.$documentRoot.'config.ini /backup/bin/backup.sh';
     $commandReplacements = shell_exec($replaceParams);
 
+    auditTrail("backup", "successfully scheduled the data backup procedure");
+
     $_SESSION['wm'] = encRijndael("Successfully scheduled backup procedure");
 }
 

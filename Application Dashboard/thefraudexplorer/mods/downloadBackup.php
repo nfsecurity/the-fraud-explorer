@@ -39,6 +39,8 @@ include "../lbs/cryptography.php";
 $name = filter($_GET['le']);
 $name = decRijndael($name);
 
+auditTrail("backup", "successfully downloaded the latest available backup data");
+
 header('Content-Description: File Transfer');
 header('Content-Type: application/force-download');
 header("Content-Disposition: attachment; filename=\"" . basename($name) . "\";");
