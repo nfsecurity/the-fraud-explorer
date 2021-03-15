@@ -113,6 +113,8 @@ file_put_contents($localLibraryPathSpanish, $jsonDataSpanish);
 $jsonDataEnglish = json_encode($remoteEnglishLibrary, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 file_put_contents($localLibraryPathEnglish, $jsonDataEnglish);
 
+auditTrail("library", "successfully updated phrase libraries from the core");
+
 $_SESSION['wm'] = encRijndael("Successfully updated phrase libraries");
 
 ?>
