@@ -39,6 +39,7 @@ DISABLEDOWNPHRASESRULES="$THEFRAUDEXPLORER/mods/fraudTriangleRules.php"
 DISABLEDOWNPHRASESRULESET="$THEFRAUDEXPLORER/mods/setupRuleset.php"
 LICENSE="$THEFRAUDEXPLORER/mods/libraryLicense.php"
 WEEKDATA="$THEFRAUDEXPLORER/mods/dashHolder.php"
+AUDITIP="$THEFRAUDEXPLORER/lbs/globalVars.php"
 
 # Replace types
 
@@ -96,7 +97,7 @@ WEEK="s/echo \$pressureWeekReduced/echo \"073\"/g ; s/echo \$opportunityWeekRedu
 /bin/sed "$UPDATE" --in-place $SWUPDATE
 /bin/sed "$ADDREGIONALISM ; $DELREGIONALISM ; $ADDTONE ; $DELTONE" --in-place $WORDSUNIVERSE
 /bin/sed "$SUBMIT" --in-place $ANALYTICSHOLDER
-/bin/sed "$REMOTE" --in-place $LOGINSESSION
+/bin/sed "$REMOTE" --in-place $LOGINSESSION $AUDITIP
 /bin/sed "$CREDENTIALS" --in-place $LOGINFORM
 /bin/sed "$DELETEAGENT" --in-place $DELENDPOINT
 /bin/sed "$DISABLEDOWNLOAD" --in-place $DISABLEDOWNPHRASESRULES $DISABLEDOWNPHRASESRULESET
