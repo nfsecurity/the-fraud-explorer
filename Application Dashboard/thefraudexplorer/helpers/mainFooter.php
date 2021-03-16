@@ -44,7 +44,8 @@ $client = Elasticsearch\ClientBuilder::create()->build();
 $ESAuditIndex = $configFile['es_audit_trail_index'];
 $view = $session->username;
 $showAuditLink = false;
-$eventCount = countAuditTrailEvents($view."*", $ESAuditIndex, "AuditEvent");
+
+if (indexExist($ESAuditIndex, $configFile) == true) $eventCount = countAuditTrailEvents($view."*", $ESAuditIndex, "AuditEvent");
 
 if (isset($eventCount['count']) && $eventCount['count'] != 0) $showAuditLink = true;
 
