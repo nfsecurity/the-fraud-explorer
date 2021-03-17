@@ -161,7 +161,7 @@ foreach ($eventData['hits']['hits'] as $result)
     
     /* Browser */
           
-    $browserColumnData = '<p class="mightOverflow" style="width: 13px;"><span class="fa fa-id-card-o font-icon-gray fa-padding"></span>'.$browser.'</p>';
+    $browserColumnData = '<p class="mightOverflow" style="padding-left: 1px; width: 13px;"><span class="fa fa-id-card-o font-icon-gray fa-padding"></span>'.$browser.'</p>';
 
     /* Module */
 
